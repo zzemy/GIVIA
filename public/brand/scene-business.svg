@@ -1,0 +1,15 @@
+<svg width="520" height="320" viewBox="0 0 520 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="1" y="1" width="518" height="318" rx="22" fill="#1B2840" stroke="#475569"/>
+  <rect x="54" y="92" width="412" height="178" rx="16" fill="#101A2C"/>
+  <rect x="80" y="120" width="146" height="104" rx="12" fill="#243D63"/>
+  <rect x="240" y="120" width="200" height="18" rx="9" fill="#475569"/>
+  <rect x="240" y="149" width="148" height="14" rx="7" fill="#334155"/>
+  <rect x="240" y="173" width="124" height="14" rx="7" fill="#334155"/>
+  <rect x="240" y="198" width="168" height="14" rx="7" fill="#334155"/>
+  <rect x="104" y="146" width="98" height="58" rx="10" fill="#F59E0B"/>
+  <path d="M153 138V212" stroke="#F8FAFC" stroke-width="10"/>
+  <path d="M104 175H202" stroke="#F8FAFC" stroke-width="10"/>
+  <circle cx="96" cy="60" r="22" fill="#38BDF8" fill-opacity="0.23"/>
+  <circle cx="430" cy="62" r="30" fill="#F472B6" fill-opacity="0.2"/>
+  <text x="28" y="38" fill="#E2E8F0" font-family="Manrope, sans-serif" font-size="16">Business Courtesy</text>
+</svg>

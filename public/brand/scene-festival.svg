@@ -1,0 +1,12 @@
+<svg width="520" height="320" viewBox="0 0 520 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="1" y="1" width="518" height="318" rx="22" fill="#1D2B45" stroke="#475569"/>
+  <circle cx="98" cy="88" r="34" fill="#F472B6" fill-opacity="0.26"/>
+  <circle cx="420" cy="86" r="44" fill="#38BDF8" fill-opacity="0.2"/>
+  <rect x="180" y="128" width="160" height="118" rx="14" fill="#FBBF24"/>
+  <rect x="250" y="128" width="18" height="118" fill="#EC4899"/>
+  <rect x="180" y="178" width="160" height="16" fill="#EC4899"/>
+  <path d="M258 106C245 85 219 84 206 102C193 120 201 145 258 177C315 145 323 120 310 102C297 84 271 85 258 106Z" fill="#F472B6"/>
+  <path d="M86 252C126 212 196 214 232 252H86Z" fill="#334A6E"/>
+  <path d="M434 252C394 212 324 214 288 252H434Z" fill="#334A6E"/>
+  <text x="26" y="38" fill="#E2E8F0" font-family="Manrope, sans-serif" font-size="16">Festival Moment</text>
+</svg>

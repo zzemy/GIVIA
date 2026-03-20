@@ -1,0 +1,80 @@
+{
+  "workflow": {
+    "title": "禁忌自由赠礼",
+    "subtitle": "AI驱动的跨文化礼物推荐平台",
+    "steps": {
+      "recognize": "AI识别",
+      "country": "目标国家",
+      "analyze": "文化分析"
+    }
+  },
+  "hero": {
+    "badge": "Global Cultural Gifting Intelligence",
+    "headline": "把每一次送礼，变成被理解的跨文化心意",
+    "description": "上传礼物图片后，你会得到清晰易懂的文化提醒与建议，帮助你在不同国家都送得得体、真诚、体面。",
+    "trust1": "文化禁忌风险防护",
+    "trust2": "国际品牌礼赠体验",
+    "panelTitle": "Cross-Border AI Engine",
+    "panelHeadline": "面向全球用户的礼赠体验引擎",
+    "panelDesc": "不只是给出结论，而是告诉你为什么这样送更合适，让每一份礼物更有温度。",
+    "panelCta": "进入品牌化礼赠流程"
+  },
+  "recognition": {
+    "title": "第一步：上传礼物图片",
+    "description": "通过AI图像识别系统来识别您想要赠送的礼物",
+    "upload": "点击上传或拖拽图片",
+    "placeholder": "支持JPG、PNG格式，最大5MB",
+    "loading": "正在识别图片，请稍候..."
+  },
+  "country": {
+    "title": "第二步：选择目标国家",
+    "description": "选择受礼人所在的国家，以获得准确的文化禁忌和推荐",
+    "search": "搜索国家...",
+    "popular": "热门国家",
+    "regions": {
+      "asia": "亚洲",
+      "europe": "欧洲",
+      "americas": "美洲",
+      "africa": "非洲",
+      "oceania": "大洋洲"
+    }
+  },
+  "analysis": {
+    "title": "第三步：获取文化分析",
+    "description": "AI根据礼物和目标国家文化生成风险评估和个性化建议",
+    "analyze": "开始分析",
+    "loading": "正在生成文化分析，网络波动时可能稍有延迟...",
+    "noRecognition": "请先上传并识别礼物",
+    "noCountry": "请先选择目标国家"
+  },
+  "results": {
+    "title": "分析结果",
+    "culturalFit": "文化契合度",
+    "riskLevel": "文化风险等级",
+    "low": "低风险",
+    "medium": "中等风险",
+    "high": "高风险",
+    "packaging": "包装建议",
+    "greetingCard": "贺卡建议",
+    "metrics": "详细指标",
+    "semanticSignals": "语义信号",
+    "colors": "推荐色彩",
+    "patterns": "推荐图案",
+    "flowers": "推荐花类",
+    "numbers": "吉利数字",
+    "copySuccess": "已复制"
+  },
+  "tooltip": {
+    "culturalFit": "文化契合度是指礼物在目标国家文化背景下的接受度和适合程度，从0-100分评分。分数越高，表示礼物越符合该国文化期望。",
+    "riskLevel": "文化风险等级表示礼物在目标国家是否存在文化禁忌或可能引发不适。包括颜色禁忌、数字禁忌、花卉禁忌等多个维度的综合评估。",
+    "semanticSignals": "语义信号是指礼物在该文化中传递的潜在含义和象征意义。例如，某些花卉可能象征死亡，某些颜色可能不适合特定场合。",
+    "packaging": "包装建议包括推荐的色彩搭配、图案选择和视觉元素，确保整个赠礼体验符合文化期望。",
+    "greetingCard": "贺卡建议提供了适合该文化的问候语、颜色搭配和禁忌文字，帮助您完整传达祝福。"
+  },
+  "errors": {
+    "uploadFailed": "图片上传失败，请重试",
+    "recognitionFailed": "识别失败，请确认是否为有效的礼物图像",
+    "analysisFailed": "分析失败，请检查网络连接后重试",
+    "invalidImage": "无效的图片格式"
+  }
+}
