@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
+const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1];
+const isGitHubPagesBuild =
+  process.env.GITHUB_PAGES === "true" && !!repositoryName;
+const isUserOrOrgPagesRepo = repositoryName?.endsWith(".github.io");
+const pagesBasePath =
+  isGitHubPagesBuild && !isUserOrOrgPagesRepo
+    ? `/${repositoryName}`
+    : undefined;
 
 const internalHost = process.env.TAURI_DEV_HOST || "localhost";
 
@@ -13,7 +21,9 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   // Configure assetPrefix or else the server won't properly resolve your assets.
-  assetPrefix: isProd ? undefined : `http://${internalHost}:3000`,
+  assetPrefix: isProd ? pagesBasePath : `http://${internalHost}:3000`,
+  basePath: pagesBasePath,
+  trailingSlash: isGitHubPagesBuild,
   output: "export",
 };
 

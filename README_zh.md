@@ -61,6 +61,21 @@ pnpm dev
 
 访问 http://localhost:3000（自动跳转 /zh）。
 
+## 部署到 GitHub Pages
+
+仓库已内置 Pages 工作流：`.github/workflows/deploy-pages.yml`。
+
+1. 推送到 `main` 或 `master` 分支。
+2. 在 GitHub 仓库设置中打开 Pages，将 Source 设为 `GitHub Actions`。
+3. 等待 `Deploy GitHub Pages` 工作流完成。
+4. 访问 `https://<你的用户名或组织>.github.io/<仓库名>/`。
+
+GitHub Pages 重要限制：
+
+- Pages 只能托管静态文件。
+- `/api/*` 下的 Next.js API 路由在 Pages 上不可用。
+- 依赖服务端 AI 路由的功能需要部署到有后端能力的平台（如 Vercel 或自建服务）。
+
 ## 环境变量
 
 在根目录创建 .env.local。

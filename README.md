@@ -63,6 +63,21 @@ pnpm dev
 
 Open http://localhost:3000 (auto redirects to /zh).
 
+## Deploy to GitHub Pages
+
+This repository includes a Pages workflow at `.github/workflows/deploy-pages.yml`.
+
+1. Push to `main` or `master`.
+2. In GitHub repo settings, open Pages and set Source to `GitHub Actions`.
+3. Wait for the `Deploy GitHub Pages` workflow to finish.
+4. Visit `https://<your-user-or-org>.github.io/<repo-name>/`.
+
+Important limits on GitHub Pages:
+
+- GitHub Pages serves static files only.
+- API routes under `/api/*` are not available in Pages deployments.
+- Features depending on server-side AI routes require a backend deployment target (for example Vercel or your own server).
+
 ## Environment Variables
 
 Create a .env.local file in project root.
