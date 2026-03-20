@@ -1,0 +1,70 @@
+{
+  "gifts": [
+    {
+      "id": "jp_001",
+      "country": "Japan",
+      "category": "Home",
+      "item_cn": "钟表",
+      "item_en": "Clock",
+      "image": "/gifts/clock.svg",
+      "score": {
+        "phonetic": 10,
+        "symbol": 40,
+        "color": 90
+      },
+      "is_taboo": true,
+      "risk_level": "High",
+      "xray_tags": [
+        "Sound of Death",
+        "Funeral Association"
+      ],
+      "warning_en": "In many Asian cultures, 'giving a clock' sounds exactly like 'attending a funeral'. It's a heavy taboo for elders.",
+      "rescue_item": "Arita-yaki Ceramic Vase",
+      "rescue_reason": "Represents longevity and artisan spirit in Japanese culture."
+    },
+    {
+      "id": "fr_002",
+      "country": "France",
+      "category": "Food",
+      "item_cn": "高端巧克力礼盒",
+      "item_en": "Premium Chocolate Box",
+      "image": "/gifts/chocolate.svg",
+      "score": {
+        "phonetic": 88,
+        "symbol": 82,
+        "color": 86
+      },
+      "is_taboo": false,
+      "risk_level": "Low",
+      "xray_tags": [
+        "Festive Warmth",
+        "Universal Sweetness"
+      ],
+      "warning_en": "This gift is culturally safe in most formal and casual occasions.",
+      "rescue_item": "Handwritten Thank-you Card",
+      "rescue_reason": "Adds personal emotional value and elevates the gifting moment."
+    },
+    {
+      "id": "uk_003",
+      "country": "United Kingdom",
+      "category": "Lifestyle",
+      "item_cn": "雨伞",
+      "item_en": "Umbrella",
+      "image": "/gifts/umbrella.svg",
+      "score": {
+        "phonetic": 70,
+        "symbol": 38,
+        "color": 78
+      },
+      "is_taboo": true,
+      "risk_level": "Medium",
+      "xray_tags": [
+        "Separation Implication",
+        "Bad-Luck Folklore"
+      ],
+      "warning_en": "Umbrellas may imply separation or invite bad luck in some gifting contexts.",
+      "rescue_item": "Merino Wool Scarf",
+      "rescue_reason": "Conveys warmth and care without symbolic ambiguity."
+    }
+  ]
+}
