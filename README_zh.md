@@ -9,10 +9,17 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/zzemy/GIVIA/actions/workflows/ci.yml">
+    <img src="https://github.com/zzemy/GIVIA/actions/workflows/ci.yml/badge.svg" alt="CI 状态" />
+  </a>
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white" alt="React 19" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/License-AGPL--3.0-0b5fff" alt="AGPL-3.0" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/zzemy/GIVIA/actions">查看 GitHub Actions</a>
 </p>
 
 ## 项目定位
