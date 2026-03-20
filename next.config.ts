@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
   basePath: pagesBasePath,
   trailingSlash: isGitHubPagesBuild,
   output: "export",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: pagesBasePath ?? "",
+  },
 };
 
 export default nextConfig;

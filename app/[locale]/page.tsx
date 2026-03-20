@@ -26,6 +26,7 @@ import { CountrySelector } from '@/components/gifting/country-selector'
 import { InteractiveFlowDemo } from '@/components/gifting/interactive-flow-demo'
 import { InfoTooltip } from '@/components/ui/info-tooltip'
 import { getCountryName } from '@/lib/countries'
+import { withBasePath } from '@/lib/asset-path'
 import zhMessages from '@/messages/zh.json'
 import enMessages from '@/messages/en.json'
 
@@ -572,13 +573,13 @@ export default function Home() {
     {
       id: 1,
       label: t('workflow.steps.recognize'),
-      icon: <Image src="/brand/step-vision.svg" alt="vision" width={22} height={22} />,
+      icon: <Image src={withBasePath('/brand/step-vision.svg')} alt="vision" width={22} height={22} />,
       status: (recognition || hasGiftInput ? 'completed' : 'current') as 'completed' | 'current' | 'pending',
     },
     {
       id: 2,
       label: t('workflow.steps.country'),
-      icon: <Image src="/brand/step-country.svg" alt="country" width={22} height={22} />,
+      icon: <Image src={withBasePath('/brand/step-country.svg')} alt="country" width={22} height={22} />,
       status: (selectedCountry ? 'completed' : recognition || hasGiftInput ? 'current' : 'pending') as
         | 'completed'
         | 'current'
@@ -587,7 +588,7 @@ export default function Home() {
     {
       id: 3,
       label: t('workflow.steps.analyze'),
-      icon: <Image src="/brand/step-analysis.svg" alt="analysis" width={22} height={22} />,
+      icon: <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis" width={22} height={22} />,
       status: (analysis ? 'completed' : selectedCountry ? 'current' : 'pending') as 'completed' | 'current' | 'pending',
     },
   ]
@@ -1083,13 +1084,18 @@ export default function Home() {
   return (
     <div className={`relative min-h-screen overflow-x-hidden bg-[#061225] text-white ${isZh ? 'font-sans-zh' : ''}`}>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_14%,rgba(34,211,238,0.14),transparent_36%),radial-gradient(circle_at_84%_22%,rgba(45,212,191,0.12),transparent_34%),radial-gradient(circle_at_50%_84%,rgba(14,165,233,0.08),transparent_44%)]" />
-      <div className="pointer-events-none absolute inset-0 opacity-40 [background-image:url('/brand/world-map.svg'),url('/brand/world-map.svg')] [background-size:1320px_auto,980px_auto] [background-position:center_6%,center_94%] [background-repeat:no-repeat,no-repeat]" />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40 [background-size:1320px_auto,980px_auto] [background-position:center_6%,center_94%] [background-repeat:no-repeat,no-repeat]"
+        style={{
+          backgroundImage: `url('${withBasePath('/brand/world-map.svg')}'),url('${withBasePath('/brand/world-map.svg')}')`,
+        }}
+      />
       <div className="pointer-events-none absolute inset-0 opacity-12 [background-image:repeating-linear-gradient(90deg,rgba(148,163,184,0.11)_0_1px,transparent_1px_58px),repeating-linear-gradient(0deg,rgba(148,163,184,0.08)_0_1px,transparent_1px_52px)]" />
 
       <header className="sticky top-0 z-40 border-b border-cyan-200/15 bg-[#0c1b33]/78 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">
-            <Image src="/brand/logo-mark.svg" alt="GIVIA logo mark" width={44} height={44} priority />
+            <Image src={withBasePath('/brand/logo-mark.svg')} alt="GIVIA logo mark" width={44} height={44} priority />
             <div className="leading-none">
               <p className="text-[1.55rem] font-semibold tracking-[0.18em] text-slate-100">GIVIA</p>
               <p className="mt-1 text-[10px] uppercase tracking-[0.28em] text-slate-300/90">
@@ -1341,7 +1347,7 @@ export default function Home() {
                     : 'Use either image recognition or direct text input for the gift item.'}
                 </p>
               </div>
-              <Image src="/brand/step-vision.svg" alt="vision step" width={36} height={36} />
+              <Image src={withBasePath('/brand/step-vision.svg')} alt="vision step" width={36} height={36} />
             </div>
 
             {/* File upload area */}
@@ -1587,7 +1593,7 @@ export default function Home() {
                 <h2 className="text-xl font-bold mb-2">{t('country.title')}</h2>
                 <p className="text-sm text-gray-400">{t('country.description')}</p>
               </div>
-              <Image src="/brand/step-country.svg" alt="country step" width={36} height={36} />
+              <Image src={withBasePath('/brand/step-country.svg')} alt="country step" width={36} height={36} />
             </div>
 
             {/* Country selector */}
@@ -1739,7 +1745,7 @@ export default function Home() {
                 <h2 className="text-xl font-bold mb-2">{t('analysis.title')}</h2>
                 <p className="text-sm text-gray-400">{t('analysis.description')}</p>
               </div>
-              <Image src="/brand/step-analysis.svg" alt="analysis step" width={36} height={36} />
+              <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis step" width={36} height={36} />
             </div>
 
             {/* Analysis checklist */}
