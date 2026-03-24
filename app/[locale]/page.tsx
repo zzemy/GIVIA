@@ -1707,7 +1707,7 @@ export default function Home() {
         </div>
 
         {/* Three-step workflow panels */}
-        <div className="mb-12 grid items-start gap-6 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.14fr)] lg:grid-rows-[auto_auto]">
+        <div className="mb-8 grid items-start gap-6 lg:mb-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.14fr)] lg:grid-rows-[auto_minmax(0,1fr)]">
           {/* Step 1: Image Recognition */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -2522,9 +2522,9 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-6 backdrop-blur-md transition-colors hover:border-cyan-200/35 lg:col-start-1 lg:row-start-2"
+            className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-6 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-colors hover:border-cyan-200/40 lg:col-start-1 lg:row-start-2 lg:flex lg:h-full lg:flex-col"
           >
-            <div className="flex items-start justify-between mb-4">
+            <div className="mb-5 flex items-start justify-between border-b border-slate-400/15 pb-4">
               <div>
                 <h2 className="text-xl font-bold mb-2">{t('analysis.title')}</h2>
                 <p className="text-sm text-gray-400">{t('analysis.description')}</p>
@@ -2532,7 +2532,7 @@ export default function Home() {
               <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis step" width={36} height={36} />
             </div>
 
-            <div className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-900/26 p-3">
+            <div className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-900/34 p-3.5">
               <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
                 {isZh ? '分析摘要' : 'Analysis summary'}
               </p>
@@ -2606,7 +2606,7 @@ export default function Home() {
             )}
 
             {/* Status messages */}
-            <div className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-700/28 px-4 py-3">
+            <div className="mt-auto mb-5 rounded-2xl border border-slate-200/12 bg-slate-700/30 px-4 py-3">
               <p className="text-sm text-gray-300">
                 {analysis
                   ? locale === 'zh'
@@ -3307,7 +3307,7 @@ export default function Home() {
         </AnimatePresence>
 
         {historyRecords.length > 0 && (
-          <section className="mt-12 rounded-2xl border border-cyan-200/20 bg-[#10243b]/70 p-6">
+          <section className="mt-8 rounded-2xl border border-cyan-200/20 bg-[#10243b]/70 p-6 lg:mt-10">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h2 className="text-2xl font-bold text-slate-100">{locale === 'zh' ? '历史记录' : 'History'}</h2>
