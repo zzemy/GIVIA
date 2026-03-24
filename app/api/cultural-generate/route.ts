@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import {
   buildUnknownRecognition,
+  COUNTRY_OPTIONS,
   type CulturalAnalysis,
   type RecognitionResult,
   type SupportedCountry,
@@ -50,7 +51,8 @@ type GenerateRequest = {
   language?: "zh" | "en";
 };
 
-type ResolvedGenerateRequest = GenerateRequest & {
+type ResolvedGenerateRequest = Omit<GenerateRequest, "country"> & {
+  country: SupportedCountry;
   recognition: RecognitionResult;
   giftContext: {
     name: string;
@@ -454,8 +456,16 @@ function compactLabels(value: string[] | undefined, itemMaxLength: number, maxIt
     .slice(0, maxItems);
 }
 
+function isSupportedCountry(value: string): value is SupportedCountry {
+  return COUNTRY_OPTIONS.some((option) => option.value === value);
+}
+
 function resolveRequestPayload(body: GenerateRequest): ResolvedGenerateRequest | null {
   if (!body?.country) {
+    return null;
+  }
+
+  if (!isSupportedCountry(body.country)) {
     return null;
   }
 
@@ -477,6 +487,7 @@ function resolveRequestPayload(body: GenerateRequest): ResolvedGenerateRequest |
 
   return {
     ...body,
+    country: body.country,
     recognition: resolvedRecognition,
     giftContext: {
       name,
