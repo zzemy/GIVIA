@@ -1,0 +1,64 @@
+{
+  "templates": [
+    {
+      "id": "scene-birthday",
+      "code": "birthday",
+      "nameZh": "生日祝福",
+      "nameEn": "Birthday",
+      "audienceGroup": "peer",
+      "defaultFormality": "casual",
+      "defaultBudgetRange": "medium",
+      "defaultPurpose": "birthday",
+      "defaultOccasion": "personal",
+      "recommendedCategories": ["food", "home", "stationery", "wellness", "accessories"],
+      "avoidCategories": ["clock", "knife", "umbrella"],
+      "promptZh": "适合表达温度、祝福和个人心意。",
+      "promptEn": "Optimized for warmth, celebration, and personal thoughtfulness."
+    },
+    {
+      "id": "scene-business-visit",
+      "code": "business_visit",
+      "nameZh": "商务拜访",
+      "nameEn": "Business Visit",
+      "audienceGroup": "client",
+      "defaultFormality": "formal",
+      "defaultBudgetRange": "high",
+      "defaultPurpose": "business",
+      "defaultOccasion": "business",
+      "recommendedCategories": ["stationery", "tea", "coffee", "desk", "gourmet"],
+      "avoidCategories": ["perfume", "romantic", "knife"],
+      "promptZh": "强调专业、分寸和跨文化稳妥性。",
+      "promptEn": "Designed for professionalism, restraint, and low cultural risk."
+    },
+    {
+      "id": "scene-festival",
+      "code": "festival",
+      "nameZh": "节日送礼",
+      "nameEn": "Festival",
+      "audienceGroup": "family",
+      "defaultFormality": "semi-formal",
+      "defaultBudgetRange": "medium",
+      "defaultPurpose": "festival",
+      "defaultOccasion": "celebration",
+      "recommendedCategories": ["food", "tea", "home", "wellness"],
+      "avoidCategories": ["clock", "knife"],
+      "promptZh": "适合节日表达，重视包装氛围和祝福语气。",
+      "promptEn": "Best for festive gifting with stronger emphasis on packaging and message tone."
+    },
+    {
+      "id": "scene-housewarming",
+      "code": "housewarming",
+      "nameZh": "乔迁新居",
+      "nameEn": "Housewarming",
+      "audienceGroup": "family",
+      "defaultFormality": "semi-formal",
+      "defaultBudgetRange": "medium",
+      "defaultPurpose": "housewarming",
+      "defaultOccasion": "home",
+      "recommendedCategories": ["home", "tea", "wellness", "gourmet"],
+      "avoidCategories": ["clock", "umbrella", "knife"],
+      "promptZh": "偏向居家氛围、实用与体面。",
+      "promptEn": "Balances practicality, warmth, and a polished home-oriented feel."
+    }
+  ]
+}

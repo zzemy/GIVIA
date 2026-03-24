@@ -3,6 +3,7 @@ import {
   buildUnknownRecognition,
   type RecognitionResult,
 } from "@/lib/cultural-analyzer";
+import { buildGiftProfile } from "@/lib/gift-profile";
 
 export const runtime = "nodejs";
 
@@ -60,6 +61,85 @@ type IncomingRecognitionPayload =
       description: string;
       language: UILanguage;
     };
+
+function categoryToTitle(category: string): string {
+  switch (category) {
+    case "stationery":
+      return "Stationery Gift";
+    case "tea":
+      return "Tea Gift";
+    case "coffee":
+      return "Coffee Gift";
+    case "gourmet":
+      return "Gourmet Gift";
+    case "home":
+      return "Home Gift";
+    case "accessories":
+      return "Accessory Gift";
+    case "umbrella":
+      return "Umbrella";
+    case "clock":
+      return "Clock";
+    case "knife":
+      return "Knife Set";
+    case "perfume":
+      return "Perfume";
+    default:
+      return "Gift Item";
+  }
+}
+
+function buildLocalFallbackResponse(input: {
+  language: UILanguage;
+  text: string;
+  name?: string;
+  description?: string;
+  imageName?: string;
+  kind: "text" | "image";
+}): VisionResponse {
+  const profile = buildGiftProfile({
+    giftContext: {
+      name: input.name ?? input.imageName ?? "",
+      description: input.description ?? input.text,
+      visionLabel: input.imageName ?? "",
+      rawLabels: input.text ? [input.text] : [],
+    },
+    recognition: null,
+  });
+
+  const label = input.name?.trim() || profile.displayName || categoryToTitle(profile.category);
+  const normalizedLabel = shortenText(label || categoryToTitle(profile.category), 60);
+  const recognition = buildUnknownRecognition(normalizedLabel);
+  const descriptionParts = [
+    profile.category !== "general" ? categoryToTitle(profile.category) : "",
+    profile.materials.length > 0 ? profile.materials.join(", ") : "",
+    profile.styles.length > 0 ? profile.styles.join(", ") : "",
+    profile.colors.length > 0 ? profile.colors.join(", ") : "",
+  ].filter(Boolean);
+
+  return {
+    recognition: {
+      ...recognition,
+      itemZh: normalizedLabel,
+      itemEn: normalizedLabel,
+      category: profile.category === "general" ? "General" : categoryToTitle(profile.category),
+      confidence: input.kind === "text" ? 0.66 : 0.52,
+    },
+    source: input.kind === "text" ? "local-fallback-text" : "local-fallback",
+    rawLabels: sanitizeRawLabels([
+      normalizedLabel,
+      ...profile.semanticTags,
+      ...(profile.brandTokens ?? []),
+    ]),
+    description: sanitizeDescription(
+      descriptionParts.join(input.language === "en" ? ", " : "，"),
+      input.language === "en"
+        ? "Structured from local fallback parsing."
+        : "已通过本地规则完成结构化识别。",
+    ),
+    detectedLabel: sanitizeLabel(normalizedLabel, normalizedLabel),
+  };
+}
 
 async function readProviderError(response: Response): Promise<string> {
   const raw = await response.text();
@@ -430,11 +510,13 @@ export async function POST(request: Request) {
 
       if (!apiKey) {
         return NextResponse.json(
-          {
-            error:
-              "missing aliyun key: recognition text must come from LLM output, local fallback disabled",
-          },
-          { status: 503 }
+          buildLocalFallbackResponse({
+            kind: "text",
+            language: incomingPayload.language,
+            text: incomingPayload.text,
+            name: incomingPayload.name,
+            description: incomingPayload.description,
+          })
         );
       }
 
@@ -538,11 +620,12 @@ export async function POST(request: Request) {
 
     if (!apiKey) {
       return NextResponse.json(
-        {
-          error:
-            "missing aliyun key: recognition text must come from LLM output, local fallback disabled",
-        },
-        { status: 503 }
+        buildLocalFallbackResponse({
+          kind: "image",
+          language: incomingPayload.language,
+          text: "",
+          imageName: "uploaded-image",
+        })
       );
     }
 

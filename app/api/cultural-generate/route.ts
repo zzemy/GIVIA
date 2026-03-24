@@ -23,7 +23,7 @@ type DashScopeResponse = {
 };
 
 type GenerateRequest = {
-  country: SupportedCountry;
+  country: string;
   recognition?: RecognitionResult;
   giftContext?: {
     name?: string;
@@ -35,7 +35,17 @@ type GenerateRequest = {
   };
   audience?: {
     group?: string;
-    profile?: string;
+    customGroup?: string;
+    sceneTemplate?: string;
+    ageBand?: string;
+    gender?: string;
+    occupation?: string;
+    relationship?: string;
+    occasion?: string;
+    purpose?: string;
+    budgetRange?: string;
+    formality?: string;
+    notes?: string;
   };
   language?: "zh" | "en";
 };
@@ -549,12 +559,22 @@ function buildMessages(request: ResolvedGenerateRequest): ChatMessage[] {
   const languageConstraint = getOutputLanguageConstraint(request.language);
   const audience = {
     group: request.audience?.group?.trim() || "peer",
-    profile: request.audience?.profile?.trim() || "",
+    customGroup: request.audience?.customGroup?.trim() || "",
+    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
+    ageBand: request.audience?.ageBand?.trim() || "",
+    gender: request.audience?.gender?.trim() || "",
+    occupation: request.audience?.occupation?.trim() || "",
+    relationship: request.audience?.relationship?.trim() || "",
+    occasion: request.audience?.occasion?.trim() || "",
+    purpose: request.audience?.purpose?.trim() || "",
+    budgetRange: request.audience?.budgetRange?.trim() || "",
+    formality: request.audience?.formality?.trim() || "",
+    notes: request.audience?.notes?.trim() || "",
   };
   const system = [
     "你是跨文化礼赠顾问。",
     "国家上下文必须严格使用输入中的 country，不允许自行改写国家。",
-    "必须结合 audience（目标群体）调整风险判断与建议语气。",
+    "必须结合 audience（目标群体）完整字段调整风险判断与建议语气，包括群体、场景、关系、预算、正式度、备注。",
     "你必须输出严格 JSON，不要输出 Markdown。",
     "输出字段必须包含：score, riskLevel, isTaboo, warning, rescueItem, rescueReason, semanticSignals, packaging, card。",
     "score 为 phonetic/symbol/color 0-100 的整数。",
@@ -562,6 +582,9 @@ function buildMessages(request: ResolvedGenerateRequest): ChatMessage[] {
     "packaging 必须有 style/colors/materials/avoid。",
     "card 必须有 tone/opener/body/closing。",
     languageConstraint,
+    "如果 riskLevel 为 Low，rescueItem 和 rescueReason 应为空字符串。",
+    "如果 riskLevel 为 High，应给出更稳妥的替代礼物和原因。",
+    "warning 必须明确说明风险触发点或为何整体安全，不能空泛。",
     "不得省略任何字段，不得输出 null。",
   ].join("\n");
 
@@ -595,7 +618,17 @@ function buildRepairMessages(
   const languageConstraint = getOutputLanguageConstraint(request.language);
   const audience = {
     group: request.audience?.group?.trim() || "peer",
-    profile: request.audience?.profile?.trim() || "",
+    customGroup: request.audience?.customGroup?.trim() || "",
+    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
+    ageBand: request.audience?.ageBand?.trim() || "",
+    gender: request.audience?.gender?.trim() || "",
+    occupation: request.audience?.occupation?.trim() || "",
+    relationship: request.audience?.relationship?.trim() || "",
+    occasion: request.audience?.occasion?.trim() || "",
+    purpose: request.audience?.purpose?.trim() || "",
+    budgetRange: request.audience?.budgetRange?.trim() || "",
+    formality: request.audience?.formality?.trim() || "",
+    notes: request.audience?.notes?.trim() || "",
   };
   const system = [
     "你是 JSON 结构修复器。",
@@ -637,7 +670,17 @@ function buildMissingFieldPatchMessages(
   const languageConstraint = getOutputLanguageConstraint(request.language);
   const audience = {
     group: request.audience?.group?.trim() || "peer",
-    profile: request.audience?.profile?.trim() || "",
+    customGroup: request.audience?.customGroup?.trim() || "",
+    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
+    ageBand: request.audience?.ageBand?.trim() || "",
+    gender: request.audience?.gender?.trim() || "",
+    occupation: request.audience?.occupation?.trim() || "",
+    relationship: request.audience?.relationship?.trim() || "",
+    occasion: request.audience?.occasion?.trim() || "",
+    purpose: request.audience?.purpose?.trim() || "",
+    budgetRange: request.audience?.budgetRange?.trim() || "",
+    formality: request.audience?.formality?.trim() || "",
+    notes: request.audience?.notes?.trim() || "",
   };
   const system = [
     "你是 JSON 补全器。",
@@ -679,7 +722,17 @@ function buildStrictTemplateMessages(
   const languageConstraint = getOutputLanguageConstraint(request.language);
   const audience = {
     group: request.audience?.group?.trim() || "peer",
-    profile: request.audience?.profile?.trim() || "",
+    customGroup: request.audience?.customGroup?.trim() || "",
+    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
+    ageBand: request.audience?.ageBand?.trim() || "",
+    gender: request.audience?.gender?.trim() || "",
+    occupation: request.audience?.occupation?.trim() || "",
+    relationship: request.audience?.relationship?.trim() || "",
+    occasion: request.audience?.occasion?.trim() || "",
+    purpose: request.audience?.purpose?.trim() || "",
+    budgetRange: request.audience?.budgetRange?.trim() || "",
+    formality: request.audience?.formality?.trim() || "",
+    notes: request.audience?.notes?.trim() || "",
   };
   const system = [
     "你是严格 JSON 生成器。",

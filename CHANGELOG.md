@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Test suite with coverage reporting
   - Tauri desktop builds for Windows, macOS, and Linux
   - Release workflow for version tags
+- Structured audience profiling for cultural gift analysis, including scene templates, recipient roles, budget, and formality context
+- Local cultural-analysis pipeline with country rules, risk scoring, recommendation ranking, and saved analysis history
 
 ### Documentation
 - Comprehensive README with installation and usage instructions
@@ -29,6 +31,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI/CD setup guide (CI_CD.md)
 - Testing guide (TESTING.md)
 - AI assistant instructions (AGENTS.md, CLAUDE.md, GEMINI.md)
+
+### Changed
+- Refined the step-1 image upload area with a larger preview card, clearer replace/remove actions, and a persistent path to keep editing recognition text
+- Redesigned the step-2 audience form with scene cards and clearer field grouping so recipient context is easier to customize
 
 ## [0.1.0] - 2024-01-28
 

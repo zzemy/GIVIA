@@ -11,6 +11,8 @@ import {
   CheckCircle,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   RotateCcw,
   Zap,
   ShieldCheck,
@@ -19,6 +21,9 @@ import {
   ArrowRight,
   Globe2,
   Users,
+  ImagePlus,
+  PencilLine,
+  Trash2,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { WorkflowProgress } from '@/components/gifting/workflow-progress'
@@ -27,8 +32,26 @@ import { InteractiveFlowDemo } from '@/components/gifting/interactive-flow-demo'
 import { InfoTooltip } from '@/components/ui/info-tooltip'
 import { getCountryName } from '@/lib/countries'
 import { withBasePath } from '@/lib/asset-path'
+import {
+  AGE_BAND_OPTIONS,
+  BUDGET_RANGE_OPTIONS,
+  FORMALITY_OPTIONS,
+  GENDER_OPTIONS,
+  OCCUPATION_OPTIONS,
+  RELATIONSHIP_OPTIONS,
+  SCENE_TEMPLATES,
+  getSceneTemplate,
+} from '@/lib/p0-config'
+import {
+  loadAnalysisHistory,
+  loadFavoriteRecommendationIds,
+  saveAnalysisRecord,
+  toggleFavoriteRecommendation,
+  type StoredAnalysisRecord,
+} from '@/lib/p0-storage'
 import zhMessages from '@/messages/zh.json'
 import enMessages from '@/messages/en.json'
+import { cn } from '@/lib/utils'
 
 interface RecognitionResult {
   itemKey: string
@@ -47,12 +70,13 @@ interface RecognitionResponsePayload {
   error?: string
 }
 
-type RecognitionSource = 'aliyun-dashscope' | 'aliyun-dashscope-text'
+type RecognitionSource = 'aliyun-dashscope' | 'aliyun-dashscope-text' | 'local-fallback' | 'local-fallback-text'
 
 type AudienceGroup = 'peer' | 'client' | 'leader' | 'family' | 'elder' | 'other'
 
 interface AnalysisResult {
   fitScore: number
+  riskScore: number
   scoreBreakdown: {
     phonetic: number
     symbol: number
@@ -79,6 +103,38 @@ interface AnalysisResult {
     tags: string[]
     flowers: string[]
     numbers: number[]
+  }
+  matchedRules: Array<{
+    id: string
+    ruleType: string
+    riskScore: number
+    explanation: string
+    suggestion: string
+  }>
+  recommendations: Array<{
+    id: string
+    nameZh: string
+    nameEn: string
+    category: string
+    score: number
+    reasonZh: string
+    reasonEn: string
+    packagingTipZh: string
+    packagingTipEn: string
+    shippingNoteZh: string
+    shippingNoteEn: string
+    pitchZh: string
+    pitchEn: string
+  }>
+  giftProfile: {
+    displayName: string
+    category: string
+    materials: string[]
+    styles: string[]
+    colors: string[]
+    numbers: number[]
+    brandTokens: string[]
+    semanticTags: string[]
   }
 }
 
@@ -154,13 +210,57 @@ function normalizeAnalysisResult(raw: unknown): AnalysisResult {
       : typeof source.score === 'number' && Number.isFinite(source.score)
         ? toBoundedScore(source.score, 50)
         : Math.round((phonetic + symbol + color) / 3)
+  const riskScore =
+    typeof source.riskScore === 'number' && Number.isFinite(source.riskScore)
+      ? toBoundedScore(source.riskScore, 50)
+      : Math.max(0, 100 - fitScore)
 
   const risk = source.riskLevel === 'Low' || source.riskLevel === 'Medium' || source.riskLevel === 'High'
     ? source.riskLevel
     : 'Medium'
+  const matchedRules = Array.isArray(source.matchedRules)
+    ? source.matchedRules
+        .map(item => {
+          const rule = toRecord(item)
+          return {
+            id: toText(rule.id) || 'rule',
+            ruleType: toText(rule.ruleType),
+            riskScore: toBoundedScore(rule.riskScore, 0),
+            explanation: toText(rule.explanation),
+            suggestion: toText(rule.suggestion),
+          }
+        })
+        .filter(item => item.explanation || item.suggestion)
+        .slice(0, 6)
+    : []
+  const recommendations = Array.isArray(source.recommendations)
+    ? source.recommendations
+        .map(item => {
+          const rec = toRecord(item)
+          return {
+            id: toText(rec.id) || `rec-${Math.random()}`,
+            nameZh: toText(rec.nameZh),
+            nameEn: toText(rec.nameEn),
+            category: toText(rec.category),
+            score: toBoundedScore(rec.score, 50),
+            reasonZh: toText(rec.reasonZh),
+            reasonEn: toText(rec.reasonEn),
+            packagingTipZh: toText(rec.packagingTipZh),
+            packagingTipEn: toText(rec.packagingTipEn),
+            shippingNoteZh: toText(rec.shippingNoteZh),
+            shippingNoteEn: toText(rec.shippingNoteEn),
+            pitchZh: toText(rec.pitchZh),
+            pitchEn: toText(rec.pitchEn),
+          }
+        })
+        .filter(item => item.nameZh || item.nameEn)
+        .slice(0, 3)
+    : []
+  const giftProfile = toRecord(source.giftProfile)
 
   return {
     fitScore,
+    riskScore,
     scoreBreakdown: {
       phonetic,
       symbol,
@@ -188,6 +288,18 @@ function normalizeAnalysisResult(raw: unknown): AnalysisResult {
       flowers: toStringArray(semanticSignals.flowers),
       numbers: toNumberArray(semanticSignals.numbers),
     },
+    matchedRules,
+    recommendations,
+    giftProfile: {
+      displayName: toText(giftProfile.displayName),
+      category: toText(giftProfile.category),
+      materials: toStringArray(giftProfile.materials),
+      styles: toStringArray(giftProfile.styles),
+      colors: toStringArray(giftProfile.colors),
+      numbers: toNumberArray(giftProfile.numbers),
+      brandTokens: toStringArray(giftProfile.brandTokens),
+      semanticTags: toStringArray(giftProfile.semanticTags),
+    },
   }
 }
 
@@ -197,6 +309,12 @@ function buildRiskReasons(analysis: AnalysisResult, locale: 'zh' | 'en'): string
   if (analysis.warning) {
     reasons.push(analysis.warning)
   }
+
+  analysis.matchedRules.forEach(rule => {
+    if (rule.explanation) {
+      reasons.push(rule.explanation)
+    }
+  })
 
   if (analysis.semanticSignals.tags.length > 0) {
     reasons.push(
@@ -220,37 +338,79 @@ function buildRiskReasons(analysis: AnalysisResult, locale: 'zh' | 'en'): string
 function buildMustSendAdvice(analysis: AnalysisResult, locale: 'zh' | 'en'): string[] {
   const tips: string[] = []
 
-  if (analysis.packaging.avoid.length > 0) {
+  if (analysis.riskLevel === 'Low') {
+    if (analysis.packaging.colors.length > 0) {
+      tips.push(
+        locale === 'zh'
+          ? `延续当前安全方向，包装优先用：${analysis.packaging.colors.slice(0, 3).join('、')}`
+          : `Keep the current safe direction and favor: ${analysis.packaging.colors.slice(0, 3).join(', ')}`,
+      )
+    }
+
+    if (analysis.greetingCard.tone) {
+      tips.push(
+        locale === 'zh'
+          ? `贺卡保持 ${analysis.greetingCard.tone} 的语气即可。`
+          : `Keep the card tone ${analysis.greetingCard.tone.toLowerCase()}.`,
+      )
+    }
+
     tips.push(
       locale === 'zh'
-        ? `包装避开：${analysis.packaging.avoid.slice(0, 3).join('、')}`
-        : `Avoid these packaging cues: ${analysis.packaging.avoid.slice(0, 3).join(', ')}`,
+        ? '重点优化包装质感和送礼时机，不需要大幅改动原礼物。'
+        : 'Focus on packaging quality and timing rather than replacing the gift.',
     )
+  } else if (analysis.riskLevel === 'Medium') {
+    if (analysis.packaging.avoid.length > 0) {
+      tips.push(
+        locale === 'zh'
+          ? `先避开这些包装/表达元素：${analysis.packaging.avoid.slice(0, 3).join('、')}`
+          : `First remove these risky packaging cues: ${analysis.packaging.avoid.slice(0, 3).join(', ')}`,
+      )
+    }
+
+    if (analysis.packaging.colors.length > 0) {
+      tips.push(
+        locale === 'zh'
+          ? `包装替换成更稳妥的颜色：${analysis.packaging.colors.slice(0, 3).join('、')}`
+          : `Switch to safer packaging colors: ${analysis.packaging.colors.slice(0, 3).join(', ')}`,
+      )
+    }
+
+    tips.push(
+      locale === 'zh'
+        ? '送出前补一句送礼动机，降低被误读为失礼或不合时宜的概率。'
+        : 'Add one sentence explaining your gifting intent before delivery to reduce misinterpretation.',
+    )
+  } else {
+    if (analysis.packaging.avoid.length > 0) {
+      tips.push(
+        locale === 'zh'
+          ? `高风险触发点先全部避开：${analysis.packaging.avoid.slice(0, 3).join('、')}`
+          : `Remove every high-risk cue first: ${analysis.packaging.avoid.slice(0, 3).join(', ')}`,
+      )
+    }
+
+    tips.push(
+      locale === 'zh'
+        ? '务必弱化原礼物寓意，把重点放在正式致意或感谢场景上。'
+        : 'De-emphasize the original symbolism and frame it around formal appreciation or gratitude.',
+    )
+
+    if (analysis.rescueReason) {
+      tips.push(
+        locale === 'zh'
+          ? `如无法更换，请主动解释选择理由：${analysis.rescueReason}`
+          : `If replacement is impossible, proactively explain the intent: ${analysis.rescueReason}`,
+      )
+    }
   }
 
-  if (analysis.packaging.colors.length > 0) {
-    tips.push(
-      locale === 'zh'
-        ? `优先使用：${analysis.packaging.colors.slice(0, 3).join('、')}`
-        : `Prefer these colors: ${analysis.packaging.colors.slice(0, 3).join(', ')}`,
-    )
-  }
-
-  if (analysis.greetingCard.tone) {
-    tips.push(
-      locale === 'zh'
-        ? `贺卡语气建议：${analysis.greetingCard.tone}`
-        : `Card tone recommendation: ${analysis.greetingCard.tone}`,
-    )
-  }
-
-  if (analysis.rescueReason) {
-    tips.push(
-      locale === 'zh'
-        ? `说明送礼动机并提前解释寓意：${analysis.rescueReason}`
-        : `Explain your gifting intent proactively: ${analysis.rescueReason}`,
-    )
-  }
+  analysis.matchedRules.forEach(rule => {
+    if (rule.suggestion) {
+      tips.push(rule.suggestion)
+    }
+  })
 
   if (tips.length === 0) {
     tips.push(
@@ -263,6 +423,54 @@ function buildMustSendAdvice(analysis: AnalysisResult, locale: 'zh' | 'en'): str
   return tips.slice(0, 4)
 }
 
+function getRiskActionMeta(riskLevel: AnalysisResult['riskLevel'], locale: 'zh' | 'en') {
+  if (riskLevel === 'Low') {
+    return {
+      title: locale === 'zh' ? '怎么把它送得更好' : 'How to send it well',
+      tooltip:
+        locale === 'zh'
+          ? '当前礼物整体可送，重点是优化表达、包装和送礼时机。'
+          : 'The gift is broadly safe. Focus on delivery quality, packaging, and timing.',
+      panelClassName: 'border-emerald-500/30 bg-emerald-500/10',
+      textClassName: 'text-emerald-100',
+    }
+  }
+
+  if (riskLevel === 'Medium') {
+    return {
+      title: locale === 'zh' ? '怎么把风险降下来' : 'How to lower the risk',
+      tooltip:
+        locale === 'zh'
+          ? '当前礼物还能修正，优先处理包装、颜色和表达方式。'
+          : 'This gift can still be salvaged. Prioritize packaging, colors, and delivery tone.',
+      panelClassName: 'border-amber-500/30 bg-amber-500/10',
+      textClassName: 'text-amber-100',
+    }
+  }
+
+  return {
+    title: locale === 'zh' ? '如果必须送，怎么降风险' : 'If you must send it',
+    tooltip:
+      locale === 'zh'
+        ? '当前方案高风险，以下是最低限度的补救动作。'
+        : 'The current option is high risk. These are minimum mitigation steps if you must still send it.',
+    panelClassName: 'border-red-500/30 bg-red-500/10',
+    textClassName: 'text-red-100',
+  }
+}
+
+function formatFileSize(sizeInBytes: number): string {
+  if (!Number.isFinite(sizeInBytes) || sizeInBytes <= 0) {
+    return '0 B'
+  }
+
+  if (sizeInBytes < 1024 * 1024) {
+    return `${(sizeInBytes / 1024).toFixed(sizeInBytes < 10 * 1024 ? 1 : 0)} KB`
+  }
+
+  return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
 export default function Home() {
   const params = useParams<{ locale?: string }>()
   const router = useRouter()
@@ -272,6 +480,11 @@ export default function Home() {
   React.useEffect(() => {
     setLocale(routeLocale)
   }, [routeLocale])
+
+  React.useEffect(() => {
+    setHistoryRecords(loadAnalysisHistory())
+    setFavoriteRecommendationIds(loadFavoriteRecommendationIds())
+  }, [])
 
   const t = React.useCallback(
     (path: string): string => {
@@ -294,8 +507,19 @@ export default function Home() {
   const [selectedCountry, setSelectedCountry] = useState<string>('')
   const [targetGroup, setTargetGroup] = useState<AudienceGroup>('peer')
   const [customAudienceGroup, setCustomAudienceGroup] = useState('')
+  const [sceneTemplate, setSceneTemplate] = useState('birthday')
+  const [ageBand, setAgeBand] = useState('adult')
+  const [gender, setGender] = useState('neutral')
+  const [occupation, setOccupation] = useState('office')
+  const [relationship, setRelationship] = useState('friend')
+  const [budgetRange, setBudgetRange] = useState('medium')
+  const [formality, setFormality] = useState('semi-formal')
+  const [occasion, setOccasion] = useState('')
   const [targetProfile, setTargetProfile] = useState('')
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
+  const [analysisSource, setAnalysisSource] = useState('')
+  const [historyRecords, setHistoryRecords] = useState<StoredAnalysisRecord[]>([])
+  const [favoriteRecommendationIds, setFavoriteRecommendationIds] = useState<string[]>([])
 
   // Loading state
   const [isRecognizing, setIsRecognizing] = useState(false)
@@ -315,6 +539,7 @@ export default function Home() {
   const [visionLabel, setVisionLabel] = useState('')
   const [recognitionRawLabels, setRecognitionRawLabels] = useState<string[]>([])
   const [showGiftInputsAfterImageRecognition, setShowGiftInputsAfterImageRecognition] = useState(false)
+  const [showAdvancedAudienceFields, setShowAdvancedAudienceFields] = useState(false)
   const [activeImpactCard, setActiveImpactCard] = useState(0)
   const [isImpactPaused, setIsImpactPaused] = useState(false)
   const [recognizingElapsedSeconds, setRecognizingElapsedSeconds] = useState(0)
@@ -407,6 +632,78 @@ export default function Home() {
         : audienceOptions.find(option => option.value === targetGroup)?.label ?? targetGroup,
     [audienceOptions, customAudienceGroup, isZh, targetGroup],
   )
+
+  const activeSceneTemplate = useMemo(() => getSceneTemplate(sceneTemplate), [sceneTemplate])
+  const sceneTemplateOptions = useMemo(
+    () =>
+      SCENE_TEMPLATES.map(template => ({
+        value: template.code,
+        label: isZh ? template.nameZh : template.nameEn,
+        hint: isZh ? template.promptZh : template.promptEn,
+      })),
+    [isZh],
+  )
+  const ageBandOptions = useMemo(
+    () => AGE_BAND_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    [isZh],
+  )
+  const genderOptions = useMemo(
+    () => GENDER_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    [isZh],
+  )
+  const occupationOptions = useMemo(
+    () => OCCUPATION_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    [isZh],
+  )
+  const relationshipOptions = useMemo(
+    () => RELATIONSHIP_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    [isZh],
+  )
+  const budgetOptions = useMemo(
+    () => BUDGET_RANGE_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    [isZh],
+  )
+  const formalityOptions = useMemo(
+    () => FORMALITY_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    [isZh],
+  )
+  const ageBandLabel = ageBandOptions.find(option => option.value === ageBand)?.label ?? ageBand
+  const occupationLabel = occupationOptions.find(option => option.value === occupation)?.label ?? occupation
+  const relationshipLabel = relationshipOptions.find(option => option.value === relationship)?.label ?? relationship
+  const budgetLabel = budgetOptions.find(option => option.value === budgetRange)?.label ?? budgetRange
+  const formalityLabel = formalityOptions.find(option => option.value === formality)?.label ?? formality
+  const templateAudienceLabel =
+    audienceOptions.find(option => option.value === activeSceneTemplate?.audienceGroup)?.label ??
+    activeSceneTemplate?.audienceGroup ??
+    ''
+  const templateBudgetLabel =
+    budgetOptions.find(option => option.value === activeSceneTemplate?.defaultBudgetRange)?.label ??
+    activeSceneTemplate?.defaultBudgetRange ??
+    ''
+  const templateFormalityLabel =
+    formalityOptions.find(option => option.value === activeSceneTemplate?.defaultFormality)?.label ??
+    activeSceneTemplate?.defaultFormality ??
+    ''
+  const templateHasAudienceOverride = Boolean(activeSceneTemplate && selectedAudienceLabel !== templateAudienceLabel)
+  const templateHasBudgetOverride = Boolean(activeSceneTemplate && budgetLabel !== templateBudgetLabel)
+  const templateHasFormalityOverride = Boolean(activeSceneTemplate && formalityLabel !== templateFormalityLabel)
+  const advancedAudienceFacts = useMemo(
+    () =>
+      [
+        isZh ? `年龄 ${ageBandLabel}` : `Age ${ageBandLabel}`,
+        isZh ? `职业 ${occupationLabel}` : `Occupation ${occupationLabel}`,
+        isZh ? `关系 ${relationshipLabel}` : `Relationship ${relationshipLabel}`,
+        isZh ? `预算 ${budgetLabel}` : `Budget ${budgetLabel}`,
+        isZh ? `正式度 ${formalityLabel}` : `Formality ${formalityLabel}`,
+      ],
+    [ageBandLabel, budgetLabel, formalityLabel, isZh, occupationLabel, relationshipLabel],
+  )
+  const riskActionMeta = useMemo(() => (analysis ? getRiskActionMeta(analysis.riskLevel, locale) : null), [analysis, locale])
+  const profileFieldClassName =
+    'rounded-2xl border border-cyan-200/14 bg-[#10253f]/62 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]'
+  const profileLabelClassName = 'text-[11px] uppercase tracking-[0.14em] text-slate-400'
+  const profileControlClassName =
+    'mt-2 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2.5 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none'
 
   const impactCards = useMemo(
     () =>
@@ -613,8 +910,44 @@ export default function Home() {
     reader.readAsDataURL(file)
   }
 
+  const clearSelectedImage = () => {
+    setSelectedFile(null)
+    setImagePreview('')
+    setRecognition(null)
+    setRecognitionSource(null)
+    setVisionDescription('')
+    setVisionLabel('')
+    setRecognitionRawLabels([])
+    setShowGiftInputsAfterImageRecognition(false)
+    setAnalysis(null)
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const handleSceneTemplateChange = (nextScene: string) => {
+    const template = getSceneTemplate(nextScene)
+    setSceneTemplate(nextScene)
+
+    if (template) {
+      setTargetGroup(template.audienceGroup as AudienceGroup)
+      if (template.audienceGroup !== 'other') {
+        setCustomAudienceGroup('')
+      }
+      setBudgetRange(template.defaultBudgetRange)
+      setFormality(template.defaultFormality)
+      setOccasion(template.defaultOccasion)
+    }
+
+    setAnalysis(null)
+  }
+
   const isSupportedRecognitionSource = (value: unknown): value is RecognitionSource =>
-    value === 'aliyun-dashscope' || value === 'aliyun-dashscope-text'
+    value === 'aliyun-dashscope' ||
+    value === 'aliyun-dashscope-text' ||
+    value === 'local-fallback' ||
+    value === 'local-fallback-text'
 
   const shortenText = (value: string, maxLength: number) => {
     if (value.length <= maxLength) {
@@ -1016,10 +1349,11 @@ export default function Home() {
         setVisionDescription(polishedVisionDescription)
       }
 
-      const response = await fetch('/api/cultural-generate', {
+      const response = await fetch('/api/analysis/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          countryCode: selectedCountry,
           recognition: recognitionForAnalysis,
           giftContext: {
             name: giftName.trim(),
@@ -1032,9 +1366,19 @@ export default function Home() {
           country: getCountryName(selectedCountry, 'en'),
           audience: {
             group: targetGroup === 'other' ? customAudienceGroup.trim() || 'other' : targetGroup,
-            profile: targetProfile.trim(),
+            customGroup: customAudienceGroup.trim(),
+            sceneTemplate,
+            ageBand,
+            gender,
+            occupation,
+            relationship,
+            occasion: occasion.trim(),
+            purpose: getSceneTemplate(sceneTemplate)?.defaultPurpose ?? '',
+            budgetRange,
+            formality,
+            notes: targetProfile.trim(),
           },
-          language: locale,
+          locale,
         }),
       })
 
@@ -1044,11 +1388,32 @@ export default function Home() {
         throw new Error(typeof data.error === 'string' ? data.error : t('errors.analysisFailed'))
       }
 
-      if (data.source !== 'aliyun-dashscope') {
+      if (typeof data.source !== 'string' || !data.source.includes('engine')) {
         throw new Error(typeof data.error === 'string' ? data.error : t('errors.analysisFailed'))
       }
 
-      setAnalysis(normalizeAnalysisResult(data.analysis))
+      const normalizedAnalysis = normalizeAnalysisResult(data.analysis)
+      setAnalysis(normalizedAnalysis)
+      setAnalysisSource(typeof data.source === 'string' ? data.source : '')
+
+      const record: StoredAnalysisRecord = {
+        id: `${Date.now()}`,
+        createdAt: new Date().toISOString(),
+        locale,
+        countryCode: selectedCountry,
+        countryName: getCountryName(selectedCountry, locale),
+        giftName: giftName.trim() || normalizedAnalysis.giftProfile.displayName || (locale === 'zh' ? '未命名礼物' : 'Unnamed gift'),
+        riskScore: normalizedAnalysis.riskScore,
+        riskLevel: normalizedAnalysis.riskLevel,
+        audienceLabel: selectedAudienceLabel,
+        recommendations: normalizedAnalysis.recommendations.map(item => ({
+          id: item.id,
+          name: locale === 'zh' ? item.nameZh : item.nameEn,
+          category: item.category,
+        })),
+      }
+      saveAnalysisRecord(record)
+      setHistoryRecords(loadAnalysisHistory())
     } catch (err) {
       setError((err as Error).message || t('errors.analysisFailed'))
     } finally {
@@ -1062,8 +1427,17 @@ export default function Home() {
     setSelectedCountry('')
     setTargetGroup('peer')
     setCustomAudienceGroup('')
+    setSceneTemplate('birthday')
+    setAgeBand('adult')
+    setGender('neutral')
+    setOccupation('office')
+    setRelationship('friend')
+    setBudgetRange('medium')
+    setFormality('semi-formal')
+    setOccasion('')
     setTargetProfile('')
     setAnalysis(null)
+    setAnalysisSource('')
     setSelectedFile(null)
     setImagePreview('')
     setGiftName('')
@@ -1072,6 +1446,7 @@ export default function Home() {
     setVisionLabel('')
     setRecognitionRawLabels([])
     setShowGiftInputsAfterImageRecognition(false)
+    setShowAdvancedAudienceFields(false)
     setError('')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
@@ -1079,6 +1454,10 @@ export default function Home() {
   const handleLanguageSwitch = (newLocale: 'en' | 'zh') => {
     setLocale(newLocale)
     router.push(`/${newLocale}`)
+  }
+
+  const handleToggleFavoriteRecommendation = (id: string) => {
+    setFavoriteRecommendationIds(toggleFavoriteRecommendation(id))
   }
 
   return (
@@ -1328,13 +1707,13 @@ export default function Home() {
         </div>
 
         {/* Three-step workflow panels */}
-        <div className="grid lg:grid-cols-3 gap-6 mb-12">
+        <div className="mb-12 grid items-start gap-6 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.14fr)] lg:grid-rows-[auto_auto]">
           {/* Step 1: Image Recognition */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-6 backdrop-blur-md transition-colors hover:border-cyan-200/35"
+            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-6 backdrop-blur-md transition-colors hover:border-cyan-200/35 lg:col-start-1 lg:row-start-1"
           >
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -1352,27 +1731,120 @@ export default function Home() {
 
             {/* File upload area */}
             <div className="mb-6">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full cursor-pointer rounded-xl border-2 border-dashed border-cyan-200/35 p-8 text-center transition-all hover:border-cyan-200/60 hover:bg-cyan-200/5"
-              >
-                {imagePreview ? (
-                  <div className="relative w-full aspect-square rounded-lg overflow-hidden">
-                    <Image
-                      src={imagePreview}
-                      alt="Preview"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-2">
-                    <Upload size={32} className="text-cyan-200" />
-                    <span className="font-medium">{t('recognition.upload')}</span>
-                    <span className="text-xs text-gray-400">{t('recognition.placeholder')}</span>
-                  </div>
-                )}
-              </button>
+              <div className="rounded-[1.4rem] border border-cyan-200/18 bg-[#10233d]/72 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className={cn(
+                    'group w-full cursor-pointer overflow-hidden rounded-[1.1rem] border border-dashed border-cyan-200/28 text-left transition-all hover:border-cyan-200/55 hover:bg-cyan-200/5',
+                    imagePreview ? 'relative aspect-[4/3] bg-slate-950/70 p-0' : 'min-h-[16rem] p-8',
+                  )}
+                >
+                  {imagePreview ? (
+                    <>
+                      <div className="relative h-full w-full">
+                        <Image src={imagePreview} alt="Preview" fill className="object-cover" />
+                      </div>
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#04101d]/96 via-[#04101d]/32 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4">
+                        <div className="flex items-end justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-[11px] uppercase tracking-[0.18em] text-cyan-100/72">
+                              {isZh ? '当前识别图片' : 'Current reference image'}
+                            </p>
+                            <p className="mt-1 truncate text-sm font-medium text-slate-50">
+                              {selectedFile?.name ?? (isZh ? '已上传图片' : 'Uploaded image')}
+                            </p>
+                            <p className="mt-1 text-xs text-slate-300/86">
+                              {recognition
+                                ? isZh
+                                  ? '识别后仍可继续手动修改名称、标签和描述。'
+                                  : 'You can still edit the name, label, and description after recognition.'
+                                : isZh
+                                  ? '点击图片可更换，下面可继续补充礼物文字信息。'
+                                  : 'Click the image to replace it, then keep refining the text details below.'}
+                            </p>
+                          </div>
+                          <div className="rounded-full border border-cyan-100/20 bg-[#071726]/72 px-3 py-1 text-[11px] text-cyan-50/88">
+                            {selectedFile ? formatFileSize(selectedFile.size) : null}
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+                      <div className="flex size-14 items-center justify-center rounded-2xl border border-cyan-200/25 bg-cyan-300/10 text-cyan-100">
+                        <ImagePlus size={26} />
+                      </div>
+                      <div>
+                        <p className="text-base font-semibold text-slate-50">
+                          {isZh ? '上传礼物图片' : 'Upload gift image'}
+                        </p>
+                        <p className="mt-1 text-sm leading-6 text-slate-300/88">
+                          {isZh
+                            ? '支持用图片触发识别，也支持后续继续修改名称、描述和标签。'
+                            : 'Start from an image, then keep editing the name, description, and label after recognition.'}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-300/82">
+                        <span className="rounded-full border border-cyan-100/14 bg-cyan-100/8 px-3 py-1">
+                          JPG / PNG / WEBP
+                        </span>
+                        <span className="rounded-full border border-cyan-100/14 bg-cyan-100/8 px-3 py-1">
+                          {isZh ? '支持替换与移除' : 'Replaceable and removable'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </button>
+
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center gap-2 rounded-full border border-cyan-200/22 bg-cyan-300/12 px-3 py-1.5 text-xs font-medium text-cyan-50 transition hover:border-cyan-200/38 hover:bg-cyan-300/18"
+                  >
+                    <Upload size={14} />
+                    {imagePreview ? (isZh ? '更换图片' : 'Replace image') : (isZh ? '选择图片' : 'Choose image')}
+                  </button>
+
+                  {imagePreview && (
+                    <button
+                      type="button"
+                      onClick={clearSelectedImage}
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-400/18 bg-slate-200/6 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:border-slate-300/34 hover:bg-slate-200/12"
+                    >
+                      <Trash2 size={14} />
+                      {isZh ? '移除图片' : 'Remove image'}
+                    </button>
+                  )}
+
+                  {selectedFile && recognition && (
+                    <button
+                      type="button"
+                      onClick={() => setShowGiftInputsAfterImageRecognition(prev => !prev)}
+                      className="inline-flex items-center gap-2 rounded-full border border-cyan-200/18 bg-slate-200/6 px-3 py-1.5 text-xs font-medium text-slate-100 transition hover:border-cyan-200/38 hover:bg-slate-200/10"
+                    >
+                      <PencilLine size={14} />
+                      {shouldHideGiftInputs
+                        ? isZh
+                          ? '继续编辑文字'
+                          : 'Continue editing text'
+                        : isZh
+                          ? '收起文字编辑'
+                          : 'Collapse text editor'}
+                    </button>
+                  )}
+
+                  {selectedFile && (
+                    <span className="text-[11px] text-slate-400">
+                      {isZh
+                        ? '上传图片只影响识别输入，不会锁定你的后续修改。'
+                        : 'The image only seeds recognition and never locks your later edits.'}
+                    </span>
+                  )}
+                </div>
+              </div>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -1388,28 +1860,13 @@ export default function Home() {
               </div>
 
               {shouldHideGiftInputs ? (
-                <div className="text-right">
-                  <button
-                    type="button"
-                    onClick={() => setShowGiftInputsAfterImageRecognition(true)}
-                    className="text-[11px] font-medium text-cyan-200/90 transition hover:text-cyan-100"
-                  >
-                    {isZh ? '识别完成，点此编辑文字描述' : 'Recognition complete, click to edit text'}
-                  </button>
+                <div className="rounded-xl border border-cyan-200/12 bg-[#0f1f35]/68 px-3 py-2 text-xs leading-5 text-slate-400">
+                  {isZh
+                    ? '图片已识别。你仍然可以用上方“继续编辑文字”来补充或修改礼物名称、描述和标签。'
+                    : 'The image has been recognized. Use “Continue editing text” above to keep refining the name, description, and label.'}
                 </div>
               ) : (
                 <>
-                  {selectedFile && recognition && (
-                    <div className="mb-2 text-right">
-                      <button
-                        type="button"
-                        onClick={() => setShowGiftInputsAfterImageRecognition(false)}
-                        className="text-[11px] font-medium text-cyan-200/90 transition hover:text-cyan-100"
-                      >
-                        {isZh ? '收起文字输入区' : 'Collapse text inputs'}
-                      </button>
-                    </div>
-                  )}
                   <label htmlFor="gift-name" className="mb-2 block text-xs font-medium text-slate-300">
                     {isZh ? '礼物名称（必填其一：名称或图片）' : 'Gift name (required if no image)'}
                   </label>
@@ -1586,7 +2043,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-sky-200/20 bg-gradient-to-br from-[#182843]/88 to-[#141e33]/86 p-6 backdrop-blur-md transition-colors hover:border-sky-200/40"
+            className="rounded-2xl border border-sky-200/20 bg-gradient-to-br from-[#182843]/88 to-[#141e33]/86 p-6 backdrop-blur-md transition-colors hover:border-sky-200/40 lg:col-start-2 lg:row-span-2 lg:row-start-1"
           >
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -1615,56 +2072,357 @@ export default function Home() {
               />
             </div>
 
-            <div className="mb-6 space-y-3 rounded-xl border border-cyan-200/18 bg-[#10253f]/70 p-3">
+            <div className="mb-6 space-y-4">
               <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-100/85">
                 <Users size={14} />
                 {isZh ? '目标群体画像' : 'Target audience profile'}
               </div>
 
-              <select
-                value={targetGroup}
-                onChange={event => {
-                  setTargetGroup(event.target.value as AudienceGroup)
-                  if (event.target.value !== 'other') {
-                    setCustomAudienceGroup('')
-                  }
-                  setAnalysis(null)
-                }}
-                className="w-full rounded-lg border border-cyan-200/20 bg-[#0f1f35] px-3 py-2 text-sm text-slate-100 focus:border-cyan-200/45 focus:outline-none"
-              >
-                {audienceOptions.map(option => (
-                  <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                    {option.label}
-                  </option>
-                ))}
-              </select>
+              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-4 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                      {isZh ? '送礼场景模板' : 'Scene template'}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-300/88">
+                      {isZh ? '先选场景，再微调对象、预算和正式程度。' : 'Pick the scene first, then fine-tune audience, budget, and tone.'}
+                    </p>
+                  </div>
+                  {activeSceneTemplate && (
+                    <div className="rounded-full border border-cyan-200/18 bg-cyan-300/10 px-3 py-1 text-[11px] text-cyan-50/88">
+                      {isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn}
+                    </div>
+                  )}
+                </div>
 
-              {targetGroup === 'other' && (
-                <input
-                  value={customAudienceGroup}
-                  onChange={event => {
-                    setCustomAudienceGroup(event.target.value)
-                    setAnalysis(null)
-                  }}
-                  placeholder={isZh ? '请输入自定义目标群体，如：新婚夫妇、海外导师' : 'Custom audience, e.g. newlyweds, overseas mentor'}
-                  className="w-full rounded-lg border border-cyan-200/20 bg-[#0f1f35] px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-                />
-              )}
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {sceneTemplateOptions.map((option, index) => {
+                    const isActive = sceneTemplate === option.value
 
-              <textarea
-                value={targetProfile}
-                onChange={event => {
-                  setTargetProfile(event.target.value)
-                  setAnalysis(null)
-                }}
-                rows={2}
-                placeholder={
-                  isZh
-                    ? '可补充：年龄、关系、场合正式程度、预算区间'
-                    : 'Optional: age, relationship, formality level, budget range'
-                }
-                className="w-full resize-none rounded-lg border border-cyan-200/20 bg-[#0f1f35] px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-              />
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => handleSceneTemplateChange(option.value)}
+                        className={cn(
+                          'rounded-2xl border px-3 py-3 text-left transition-all',
+                          isActive
+                            ? 'border-cyan-200/42 bg-cyan-300/12 shadow-[0_12px_30px_rgba(34,211,238,0.08)]'
+                            : 'border-cyan-200/12 bg-[#0d1f35]/72 hover:border-cyan-200/28 hover:bg-[#102740]',
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-semibold text-slate-100">{option.label}</p>
+                            <p className="mt-1 text-xs leading-5 text-slate-400 line-clamp-2">{option.hint}</p>
+                          </div>
+                          <span
+                            className={cn(
+                              'inline-flex size-6 items-center justify-center rounded-full border text-[10px] font-medium',
+                              isActive
+                                ? 'border-cyan-100/30 bg-cyan-100/12 text-cyan-50'
+                                : 'border-slate-200/10 bg-slate-200/5 text-slate-400',
+                            )}
+                          >
+                            {isActive ? <CheckCircle size={12} /> : `0${index + 1}`}
+                          </span>
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {activeSceneTemplate && (
+                  <div className="mt-3 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                      {isZh ? '模板预设与当前生效值' : 'Preset and active values'}
+                    </p>
+                    <p className="mt-2 text-xs leading-5 text-slate-300/88">
+                      {isZh
+                        ? `模板只是起点。点击模板会填入默认对象、预算和正式度；下面字段一旦修改，会立刻覆盖模板默认值并用于分析。${activeSceneTemplate.promptZh}`
+                        : `The template is only a starter. Clicking it seeds default audience, budget, and formality values. Any edits below immediately override those defaults for analysis. ${activeSceneTemplate.promptEn}`}
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-300/84">
+                      <span className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
+                        {isZh ? '当前对象：' : 'Active audience: '}
+                        {selectedAudienceLabel}
+                      </span>
+                      <span className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
+                        {isZh ? '当前预算：' : 'Active budget: '}
+                        {budgetLabel}
+                      </span>
+                      <span className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
+                        {isZh ? '当前正式度：' : 'Active formality: '}
+                        {formalityLabel}
+                      </span>
+                      {(templateHasAudienceOverride || templateHasBudgetOverride || templateHasFormalityOverride) && (
+                        <span className="rounded-full border border-amber-200/18 bg-amber-100/8 px-3 py-1 text-amber-100">
+                          {isZh ? '已覆盖模板默认值' : 'Preset overridden'}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-400">
+                      <span className="rounded-full border border-slate-200/10 bg-slate-200/5 px-3 py-1">
+                        {isZh ? '模板默认对象：' : 'Preset audience: '}
+                        {templateAudienceLabel}
+                      </span>
+                      <span className="rounded-full border border-slate-200/10 bg-slate-200/5 px-3 py-1">
+                        {isZh ? '模板默认预算：' : 'Preset budget: '}
+                        {templateBudgetLabel}
+                      </span>
+                      <span className="rounded-full border border-slate-200/10 bg-slate-200/5 px-3 py-1">
+                        {isZh ? '模板默认正式度：' : 'Preset formality: '}
+                        {templateFormalityLabel}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-4 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                      {isZh ? '对象与画像字段' : 'Audience and profile fields'}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-300/88">
+                      {isZh ? '把对象、关系和预算补全，分析会更贴近真实收礼人。' : 'Complete audience, relationship, and budget details for more grounded analysis.'}
+                    </p>
+                  </div>
+                  <div className="rounded-full border border-slate-200/10 bg-slate-100/5 px-3 py-1 text-[11px] text-slate-300/78">
+                    {isZh ? '可继续自定义' : 'Fully customizable'}
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {audienceOptions.map(option => {
+                    const isActive = targetGroup === option.value
+
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => {
+                          setTargetGroup(option.value as AudienceGroup)
+                          if (option.value !== 'other') {
+                            setCustomAudienceGroup('')
+                          }
+                          setAnalysis(null)
+                        }}
+                        className={cn(
+                          'rounded-full border px-3 py-2 text-left text-xs font-medium transition-all',
+                          isActive
+                            ? 'border-cyan-200/42 bg-cyan-300/12 text-cyan-50'
+                            : 'border-cyan-200/12 bg-[#0d1f35]/72 text-slate-200 hover:border-cyan-200/28 hover:bg-[#102740]',
+                        )}
+                      >
+                        {option.label}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {targetGroup === 'other' && (
+                  <div className="mt-3 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3">
+                    <p className={profileLabelClassName}>{isZh ? '自定义群体' : 'Custom audience'}</p>
+                    <input
+                      value={customAudienceGroup}
+                      onChange={event => {
+                        setCustomAudienceGroup(event.target.value)
+                        setAnalysis(null)
+                      }}
+                      placeholder={isZh ? '请输入自定义目标群体，如：新婚夫妇、海外导师' : 'Custom audience, e.g. newlyweds, overseas mentor'}
+                      className={profileControlClassName}
+                    />
+                  </div>
+                )}
+
+                <div className="mt-4 grid gap-3">
+                  <div className={profileFieldClassName}>
+                    <p className={profileLabelClassName}>{isZh ? '场合关键词' : 'Occasion keywords'}</p>
+                    <input
+                      value={occasion}
+                      onChange={event => {
+                        setOccasion(event.target.value)
+                        setAnalysis(null)
+                      }}
+                      placeholder={isZh ? '如：生日晚宴、客户来访、节日问候' : 'e.g. birthday dinner, client visit, festive note'}
+                      className={profileControlClassName}
+                    />
+                  </div>
+
+                  <div className={profileFieldClassName}>
+                    <p className={profileLabelClassName}>{isZh ? '补充备注' : 'Additional notes'}</p>
+                    <textarea
+                      value={targetProfile}
+                      onChange={event => {
+                        setTargetProfile(event.target.value)
+                        setAnalysis(null)
+                      }}
+                      rows={3}
+                      placeholder={
+                        isZh
+                          ? '例如品牌偏好、禁忌颜色、收礼人近期需求'
+                          : 'Brand preferences, colors to avoid, recipient needs'
+                      }
+                      className="mt-2 w-full resize-none rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 transition focus:border-cyan-200/45 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-4 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                        {isZh ? '高级画像' : 'Advanced profile'}
+                      </p>
+                      <p className="mt-1 text-xs leading-5 text-slate-300/82">
+                        {isZh ? '年龄、职业、预算和正式度会影响推荐语气与替代方案。' : 'Age, occupation, budget, and formality refine tone and fallback suggestions.'}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowAdvancedAudienceFields(prev => !prev)}
+                      className="inline-flex items-center gap-2 rounded-full border border-cyan-200/18 bg-cyan-100/6 px-3 py-1.5 text-[11px] font-medium text-cyan-50 transition hover:border-cyan-200/32 hover:bg-cyan-100/10"
+                    >
+                      {showAdvancedAudienceFields ? (
+                        <>
+                          <ChevronUp size={14} />
+                          {isZh ? '收起' : 'Collapse'}
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown size={14} />
+                          {isZh ? '展开' : 'Expand'}
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {!showAdvancedAudienceFields && (
+                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-300/84">
+                      {advancedAudienceFacts.map(fact => (
+                        <span key={fact} className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
+                          {fact}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {showAdvancedAudienceFields && (
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                      <div className={profileFieldClassName}>
+                        <p className={profileLabelClassName}>{isZh ? '年龄' : 'Age'}</p>
+                        <select
+                          value={ageBand}
+                          onChange={event => {
+                            setAgeBand(event.target.value)
+                            setAnalysis(null)
+                          }}
+                          className={profileControlClassName}
+                        >
+                          {ageBandOptions.map(option => (
+                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className={profileFieldClassName}>
+                        <p className={profileLabelClassName}>{isZh ? '性别偏向' : 'Gender tone'}</p>
+                        <select
+                          value={gender}
+                          onChange={event => {
+                            setGender(event.target.value)
+                            setAnalysis(null)
+                          }}
+                          className={profileControlClassName}
+                        >
+                          {genderOptions.map(option => (
+                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className={profileFieldClassName}>
+                        <p className={profileLabelClassName}>{isZh ? '职业' : 'Occupation'}</p>
+                        <select
+                          value={occupation}
+                          onChange={event => {
+                            setOccupation(event.target.value)
+                            setAnalysis(null)
+                          }}
+                          className={profileControlClassName}
+                        >
+                          {occupationOptions.map(option => (
+                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className={profileFieldClassName}>
+                        <p className={profileLabelClassName}>{isZh ? '关系' : 'Relationship'}</p>
+                        <select
+                          value={relationship}
+                          onChange={event => {
+                            setRelationship(event.target.value)
+                            setAnalysis(null)
+                          }}
+                          className={profileControlClassName}
+                        >
+                          {relationshipOptions.map(option => (
+                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className={profileFieldClassName}>
+                        <p className={profileLabelClassName}>{isZh ? '预算' : 'Budget'}</p>
+                        <select
+                          value={budgetRange}
+                          onChange={event => {
+                            setBudgetRange(event.target.value)
+                            setAnalysis(null)
+                          }}
+                          className={profileControlClassName}
+                        >
+                          {budgetOptions.map(option => (
+                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className={profileFieldClassName}>
+                        <p className={profileLabelClassName}>{isZh ? '正式程度' : 'Formality'}</p>
+                        <select
+                          value={formality}
+                          onChange={event => {
+                            setFormality(event.target.value)
+                            setAnalysis(null)
+                          }}
+                          className={profileControlClassName}
+                        >
+                          {formalityOptions.map(option => (
+                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
             {/* Country result */}
@@ -1692,9 +2450,35 @@ export default function Home() {
                             {locale === 'zh' ? '目标群体:' : 'Audience:'}{' '}
                             <span className="font-semibold text-sky-200">{selectedAudienceLabel}</span>
                           </p>
+                          <p className="text-gray-300">
+                            {locale === 'zh' ? '场景模板:' : 'Scene:'}{' '}
+                            <span className="font-semibold text-sky-200">
+                              {activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : sceneTemplate}
+                            </span>
+                          </p>
+                          <p className="text-xs text-slate-300/95">
+                            {locale === 'zh' ? '结构化画像:' : 'Structured profile:'}{' '}
+                            <span className="text-slate-200">
+                              {[
+                                ageBandOptions.find(option => option.value === ageBand)?.label,
+                                occupationOptions.find(option => option.value === occupation)?.label,
+                                relationshipOptions.find(option => option.value === relationship)?.label,
+                                budgetOptions.find(option => option.value === budgetRange)?.label,
+                                formalityOptions.find(option => option.value === formality)?.label,
+                              ]
+                                .filter(Boolean)
+                                .join(isZh ? ' / ' : ' / ')}
+                            </span>
+                          </p>
+                          {occasion.trim() && (
+                            <p className="text-xs text-slate-300/95">
+                              {locale === 'zh' ? '场合说明:' : 'Occasion:'}{' '}
+                              <span className="text-slate-200">{occasion.trim()}</span>
+                            </p>
+                          )}
                           {targetProfile.trim() && (
                             <p className="text-xs text-slate-300/95">
-                              {locale === 'zh' ? '补充信息:' : 'Details:'}{' '}
+                              {locale === 'zh' ? '补充备注:' : 'Notes:'}{' '}
                               <span className="text-slate-200">{targetProfile}</span>
                             </p>
                           )}
@@ -1738,7 +2522,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-6 backdrop-blur-md transition-colors hover:border-cyan-200/35"
+            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-6 backdrop-blur-md transition-colors hover:border-cyan-200/35 lg:col-start-1 lg:row-start-2"
           >
             <div className="flex items-start justify-between mb-4">
               <div>
@@ -1748,58 +2532,81 @@ export default function Home() {
               <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis step" width={36} height={36} />
             </div>
 
+            <div className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-900/26 p-3">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                {isZh ? '分析摘要' : 'Analysis summary'}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
+                  {isZh ? '国家：' : 'Country: '}
+                  {selectedCountry ? getCountryName(selectedCountry, locale) : locale === 'zh' ? '待选择' : 'Pending'}
+                </span>
+                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
+                  {isZh ? '场景：' : 'Scene: '}
+                  {activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : locale === 'zh' ? '未设置' : 'Unset'}
+                </span>
+                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
+                  {isZh ? '识别：' : 'Recognition: '}
+                  {recognition || hasGiftInput || selectedFile
+                    ? locale === 'zh'
+                      ? '已准备'
+                      : 'Ready'
+                    : locale === 'zh'
+                      ? '待输入'
+                      : 'Waiting'}
+                </span>
+                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
+                  {isZh ? '画像：' : 'Audience: '}
+                  {selectedAudienceLabel}
+                </span>
+              </div>
+            </div>
+
             {/* Analysis checklist */}
             {canAnalyze && !analysis && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="mb-6 rounded-xl border border-slate-200/15 bg-slate-800/30 p-4"
+                className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-800/24 p-3"
               >
-                <p className="text-xs uppercase tracking-[0.16em] text-slate-400 mb-4 flex items-center gap-2">
+                <p className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
                   <Sparkles size={14} />
                   {locale === 'zh' ? '分析准备清单' : 'Analysis Checklist'}
                 </p>
-                <div className="space-y-3 text-sm">
-                  {/* Gift info */}
-                  <div className="flex items-start gap-3 rounded-lg bg-slate-900/50 p-3">
-                    <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-900/42 px-3 py-2.5">
+                    <div className="flex items-center gap-2 text-sm text-slate-200">
                       <CheckCircle size={14} className="text-emerald-400" />
+                      <span>{locale === 'zh' ? '礼物信息' : 'Gift info'}</span>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-xs text-slate-400">{locale === 'zh' ? '礼物名称' : 'Gift Name'}</p>
-                      <p className="text-slate-100 font-medium mt-1">
-                        {recognition ? (locale === 'zh' ? recognition.itemZh : recognition.itemEn) : giftName || (locale === 'zh' ? '(输入中)' : '(input)')}
-                      </p>
-                    </div>
+                    <span className="truncate text-right text-xs text-slate-300/84">
+                      {recognition ? (locale === 'zh' ? recognition.itemZh : recognition.itemEn) : giftName || (locale === 'zh' ? '已输入' : 'Entered')}
+                    </span>
                   </div>
 
-                  {/* Country */}
-                  <div className="flex items-start gap-3 rounded-lg bg-slate-900/50 p-3">
-                    <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-900/42 px-3 py-2.5">
+                    <div className="flex items-center gap-2 text-sm text-slate-200">
                       <CheckCircle size={14} className="text-emerald-400" />
+                      <span>{locale === 'zh' ? '目标国家' : 'Target country'}</span>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-xs text-slate-400">{locale === 'zh' ? '目标国家' : 'Target Country'}</p>
-                      <p className="text-slate-100 font-medium mt-1">{getCountryName(selectedCountry, locale)}</p>
-                    </div>
+                    <span className="truncate text-right text-xs text-slate-300/84">
+                      {getCountryName(selectedCountry, locale)}
+                    </span>
                   </div>
 
-                  {/* Audience */}
-                  <div className="flex items-start gap-3 rounded-lg bg-slate-900/50 p-3">
-                    <div className="h-5 w-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-900/42 px-3 py-2.5">
+                    <div className="flex items-center gap-2 text-sm text-slate-200">
                       <CheckCircle size={14} className="text-emerald-400" />
+                      <span>{locale === 'zh' ? '目标群体' : 'Audience'}</span>
                     </div>
-                    <div className="flex-1">
-                      <p className="text-xs text-slate-400">{locale === 'zh' ? '目标群体' : 'Target Audience'}</p>
-                      <p className="text-slate-100 font-medium mt-1">{selectedAudienceLabel}</p>
-                    </div>
+                    <span className="truncate text-right text-xs text-slate-300/84">{selectedAudienceLabel}</span>
                   </div>
                 </div>
               </motion.div>
             )}
 
             {/* Status messages */}
-            <div className="mb-6 p-4 bg-gray-700 border border-gray-600 rounded-lg">
+            <div className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-700/28 px-4 py-3">
               <p className="text-sm text-gray-300">
                 {analysis
                   ? locale === 'zh'
@@ -1937,7 +2744,20 @@ export default function Home() {
             >
               {/* Results header */}
               <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold">{t('results.title')}</h2>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-3xl font-bold">{t('results.title')}</h2>
+                  {analysisSource && (
+                    <div className="rounded-full border border-cyan-200/20 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
+                      {analysisSource === 'hybrid-ai-rules'
+                        ? locale === 'zh'
+                          ? 'AI + 规则引擎'
+                          : 'AI + Rules'
+                        : locale === 'zh'
+                          ? '本地规则回退'
+                          : 'Local rules fallback'}
+                    </div>
+                  )}
+                </div>
                 <Button
                   onClick={handleReset}
                   className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
@@ -1968,6 +2788,169 @@ export default function Home() {
                 )}
                 {targetProfile.trim() && <p className="mt-1 text-xs text-slate-300">{targetProfile.trim()}</p>}
               </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-fuchsia-400/20 bg-white/5 p-6 backdrop-blur-sm">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-bold">{locale === 'zh' ? '综合风险分' : 'Risk Score'}</h3>
+                    <span className="rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-3 py-1 text-xs text-fuchsia-200">
+                      0-100
+                    </span>
+                  </div>
+                  <div className="mt-4 text-5xl font-bold text-fuchsia-200">{analysis.riskScore}</div>
+                  <div className="mt-3 h-2 rounded-full bg-slate-700/80">
+                    <div className="h-full rounded-full bg-gradient-to-r from-fuchsia-400 to-rose-300" style={{ width: `${analysis.riskScore}%` }} />
+                  </div>
+                  <p className="mt-3 text-sm text-slate-300">
+                    {analysis.riskScore >= 72
+                      ? locale === 'zh'
+                        ? '当前礼物存在明显文化误读风险，建议优先考虑替代方案。'
+                        : 'This gift shows significant cultural risk. Prefer a replacement option first.'
+                      : analysis.riskScore >= 40
+                        ? locale === 'zh'
+                          ? '存在一定文化风险，建议配合包装和表达方式降风险。'
+                          : 'There is moderate cultural risk. Use packaging and wording to reduce it.'
+                        : locale === 'zh'
+                          ? '当前礼物整体较稳妥，可继续优化包装与话术。'
+                          : 'The gift is relatively safe. Focus on polishing packaging and messaging.'}
+                  </p>
+                </motion.div>
+
+                <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-cyan-500/20 bg-white/5 p-6 backdrop-blur-sm">
+                  <h3 className="text-xl font-bold">{locale === 'zh' ? '结构化识别画像' : 'Structured gift profile'}</h3>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {analysis.giftProfile.semanticTags.length > 0 ? (
+                      analysis.giftProfile.semanticTags.map(tag => (
+                        <span key={tag} className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-100">
+                          {tag}
+                        </span>
+                      ))
+                    ) : (
+                      <p className="text-sm text-slate-300">
+                        {locale === 'zh' ? '当前未提取到更多结构化标签。' : 'No additional structured tags were extracted.'}
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-4 grid gap-2 text-xs text-slate-300 sm:grid-cols-2">
+                    <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">
+                      {locale === 'zh' ? '类别' : 'Category'}: {analysis.giftProfile.category || '-'}
+                    </div>
+                    <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">
+                      {locale === 'zh' ? '颜色' : 'Colors'}: {analysis.giftProfile.colors.join(isZh ? '、' : ', ') || '-'}
+                    </div>
+                    <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">
+                      {locale === 'zh' ? '材质' : 'Materials'}: {analysis.giftProfile.materials.join(isZh ? '、' : ', ') || '-'}
+                    </div>
+                    <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">
+                      {locale === 'zh' ? '风格' : 'Styles'}: {analysis.giftProfile.styles.join(isZh ? '、' : ', ') || '-'}
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+
+              {analysis.recommendations.length > 0 && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-emerald-400/20 bg-white/5 p-6 backdrop-blur-sm">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-2xl font-bold">
+                        {analysis.riskLevel === 'Low'
+                          ? locale === 'zh'
+                            ? '可选升级推荐'
+                            : 'Optional upgrades'
+                          : locale === 'zh'
+                            ? '更稳妥的替代推荐'
+                            : 'Safer alternatives'}
+                      </h3>
+                      <p className="mt-1 text-sm text-slate-300">
+                        {analysis.riskLevel === 'Low'
+                          ? locale === 'zh'
+                            ? '当前礼物整体可送，以下是更稳、更匹配当前场景的升级选项。'
+                            : 'The current gift is broadly safe. These are stronger upgrades for the same context.'
+                          : locale === 'zh'
+                            ? '当前方案存在风险，以下是结合国家规则、场景模板、预算和目标群体筛出的更稳妥替代项。'
+                            : 'The current option carries risk. These safer replacements are ranked by country rules, scene template, budget, and recipient profile.'}
+                      </p>
+                    </div>
+                    <div className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200">
+                      {analysis.riskLevel === 'Low'
+                        ? locale === 'zh'
+                          ? '升级参考'
+                          : 'Upgrade options'
+                        : locale === 'zh'
+                          ? '替代参考'
+                          : 'Replacement options'}
+                    </div>
+                  </div>
+
+                  <div className="mt-5 grid gap-4 lg:grid-cols-3">
+                    {analysis.recommendations.map(item => {
+                      const isFavorite = favoriteRecommendationIds.includes(item.id)
+                      const name = locale === 'zh' ? item.nameZh : item.nameEn
+                      return (
+                        <div key={item.id} className="rounded-2xl border border-emerald-300/20 bg-[#10253b]/85 p-4">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs uppercase tracking-[0.14em] text-emerald-200/80">{item.category}</p>
+                              <h4 className="mt-2 text-lg font-semibold text-slate-50">{name}</h4>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleFavoriteRecommendation(item.id)}
+                              className={`rounded-full border px-3 py-1 text-xs transition ${
+                                isFavorite
+                                  ? 'border-amber-300/40 bg-amber-400/12 text-amber-100'
+                                  : 'border-slate-500/40 bg-slate-800/70 text-slate-200 hover:border-slate-300/60'
+                              }`}
+                            >
+                              {isFavorite ? (locale === 'zh' ? '已收藏' : 'Saved') : locale === 'zh' ? '收藏' : 'Save'}
+                            </button>
+                          </div>
+
+                          <div className="mt-3 text-3xl font-bold text-emerald-200">{item.score}</div>
+                          <p className="mt-2 text-sm leading-6 text-slate-300">
+                            {locale === 'zh' ? item.reasonZh : item.reasonEn}
+                          </p>
+
+                          <div className="mt-4 space-y-2 text-xs text-slate-300">
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/50 px-3 py-2">
+                              <span className="text-emerald-200">{locale === 'zh' ? '送礼话术：' : 'Pitch: '}</span>
+                              {locale === 'zh' ? item.pitchZh : item.pitchEn}
+                            </div>
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/50 px-3 py-2">
+                              <span className="text-emerald-200">{locale === 'zh' ? '包装建议：' : 'Packaging: '}</span>
+                              {locale === 'zh' ? item.packagingTipZh : item.packagingTipEn}
+                            </div>
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/50 px-3 py-2">
+                              <span className="text-emerald-200">{locale === 'zh' ? '寄送提示：' : 'Shipping: '}</span>
+                              {locale === 'zh' ? item.shippingNoteZh : item.shippingNoteEn}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </motion.div>
+              )}
+
+              {analysis.matchedRules.length > 0 && (
+                <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-amber-400/20 bg-white/5 p-6 backdrop-blur-sm">
+                  <h3 className="text-xl font-bold">{locale === 'zh' ? '命中的文化规则' : 'Matched Cultural Rules'}</h3>
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    {analysis.matchedRules.map(rule => (
+                      <div key={rule.id} className="rounded-xl border border-amber-300/20 bg-[#11263c]/80 p-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="text-xs uppercase tracking-[0.14em] text-amber-200/80">{rule.ruleType}</span>
+                          <span className="rounded-full border border-amber-300/30 bg-amber-500/10 px-2 py-1 text-[11px] text-amber-100">
+                            +{rule.riskScore}
+                          </span>
+                        </div>
+                        <p className="mt-3 text-sm leading-6 text-slate-200">{rule.explanation}</p>
+                        {rule.suggestion && <p className="mt-2 text-xs leading-5 text-slate-400">{rule.suggestion}</p>}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
 
               {/* Score and risk summary */}
               <div className="grid md:grid-cols-2 gap-6">
@@ -2090,12 +3073,24 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-6">
                 <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
                   <div className="flex items-center gap-2 mb-4">
-                    <h3 className="text-xl font-bold">{locale === 'zh' ? '为什么有风险' : 'Why this is risky'}</h3>
+                    <h3 className="text-xl font-bold">
+                      {analysis.riskLevel === 'Low'
+                        ? locale === 'zh'
+                          ? '还需要注意什么'
+                          : 'What to keep an eye on'
+                        : locale === 'zh'
+                          ? '为什么有风险'
+                          : 'Why this is risky'}
+                    </h3>
                     <InfoTooltip
                       content={
-                        locale === 'zh'
-                          ? '这里会列出风险触发点，告诉你问题来自哪里。'
-                          : 'This section lists concrete triggers behind the current risk level.'
+                        analysis.riskLevel === 'Low'
+                          ? locale === 'zh'
+                            ? '即使整体风险较低，也会列出仍需注意的表达或包装细节。'
+                            : 'Even with low overall risk, this section surfaces details still worth watching.'
+                          : locale === 'zh'
+                            ? '这里会列出风险触发点，告诉你问题来自哪里。'
+                            : 'This section lists concrete triggers behind the current risk level.'
                       }
                     />
                   </div>
@@ -2117,29 +3112,30 @@ export default function Home() {
 
                 <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
                   <div className="flex items-center gap-2 mb-4">
-                    <h3 className="text-xl font-bold">{locale === 'zh' ? '如果必须送，怎么降风险' : 'If you must send it'}</h3>
-                    <InfoTooltip
-                      content={
-                        locale === 'zh'
-                          ? '给你可以直接执行的补救动作，而不只是“别送了”。'
-                          : 'Actionable mitigation steps when the original gift must still be delivered.'
-                      }
-                    />
+                    <h3 className="text-xl font-bold">{riskActionMeta?.title}</h3>
+                    <InfoTooltip content={riskActionMeta?.tooltip ?? ''} />
                   </div>
 
                   <div className="space-y-2">
                     {mustSendAdvice.map(tip => (
-                      <div key={tip} className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm text-cyan-100">
+                      <div
+                        key={tip}
+                        className={cn(
+                          'rounded-lg px-3 py-2 text-sm',
+                          riskActionMeta?.panelClassName ?? 'border-cyan-500/30 bg-cyan-500/10',
+                          riskActionMeta?.textClassName ?? 'text-cyan-100',
+                        )}
+                      >
                         {tip}
                       </div>
                     ))}
                   </div>
 
-                  {(analysis.rescueItem || analysis.rescueReason) && (
+                  {(analysis.riskLevel !== 'Low') && (analysis.rescueItem || analysis.rescueReason) && (
                     <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3">
                       {analysis.rescueItem && (
                         <p className="text-sm text-emerald-200">
-                          {locale === 'zh' ? '替代礼物：' : 'Alternative gift: '}
+                          {locale === 'zh' ? '更稳妥的替代礼物：' : 'Safer replacement: '}
                           {analysis.rescueItem}
                         </p>
                       )}
@@ -2309,6 +3305,58 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {historyRecords.length > 0 && (
+          <section className="mt-12 rounded-2xl border border-cyan-200/20 bg-[#10243b]/70 p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-100">{locale === 'zh' ? '历史记录' : 'History'}</h2>
+                <p className="mt-1 text-sm text-slate-300">
+                  {locale === 'zh' ? '最近 8 次分析会保存在本地浏览器，便于复盘和继续筛选。' : 'The latest 8 analyses are stored locally for review and follow-up decisions.'}
+                </p>
+              </div>
+              <span className="rounded-full border border-cyan-200/25 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
+                {historyRecords.length}
+              </span>
+            </div>
+
+            <div className="mt-5 grid gap-3 md:grid-cols-2">
+              {historyRecords.map(record => (
+                <div key={record.id} className="rounded-xl border border-slate-500/30 bg-slate-900/45 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-100">{record.giftName}</p>
+                      <p className="mt-1 text-xs text-slate-400">
+                        {record.countryName} · {record.audienceLabel}
+                      </p>
+                    </div>
+                    <span
+                      className={`rounded-full px-2 py-1 text-[11px] ${
+                        record.riskLevel === 'High'
+                          ? 'bg-red-500/15 text-red-200'
+                          : record.riskLevel === 'Medium'
+                            ? 'bg-amber-500/15 text-amber-200'
+                            : 'bg-emerald-500/15 text-emerald-200'
+                      }`}
+                    >
+                      {record.riskLevel} · {record.riskScore}
+                    </span>
+                  </div>
+                  {record.recommendations.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {record.recommendations.map(item => (
+                        <span key={`${record.id}-${item.id}`} className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[11px] text-cyan-100">
+                          {item.name}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <p className="mt-3 text-[11px] text-slate-500">{new Date(record.createdAt).toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </div>
   )
