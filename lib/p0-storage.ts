@@ -10,7 +10,7 @@ export interface StoredRecommendation {
 export interface StoredAnalysisRecord {
   id: string
   createdAt: string
-  locale: 'zh' | 'en'
+  locale: 'zh' | 'en' | 'ja' | 'fr'
   countryCode: string
   countryName: string
   giftName: string

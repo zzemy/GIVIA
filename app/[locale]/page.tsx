@@ -24,6 +24,8 @@ import {
   ImagePlus,
   PencilLine,
   Trash2,
+  Wallet,
+  Truck,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { WorkflowProgress } from '@/components/gifting/workflow-progress'
@@ -51,7 +53,31 @@ import {
 } from '@/lib/p0-storage'
 import zhMessages from '@/messages/zh.json'
 import enMessages from '@/messages/en.json'
+import jaMessages from '@/messages/ja.json'
+import frMessages from '@/messages/fr.json'
 import { cn } from '@/lib/utils'
+
+type Locale = 'zh' | 'en' | 'ja' | 'fr'
+
+type AssistantCurrency = 'USD' | 'CNY' | 'EUR' | 'JPY' | 'GBP'
+
+type LogisticsAssistantResult = {
+  baseAmount: number
+  baseCurrency: AssistantCurrency
+  rateSource: 'live' | 'fallback'
+  convertedAmounts: Record<string, number>
+  shippingQuotes: Array<{
+    provider: 'DHL' | 'SF Express'
+    service: string
+    currency: AssistantCurrency
+    estimatedCost: number
+    etaDays: string
+    notes: string[]
+    source: 'api' | 'fallback'
+  }>
+  customsNotes: string[]
+  disclaimer: string
+}
 
 interface RecognitionResult {
   itemKey: string
@@ -303,7 +329,7 @@ function normalizeAnalysisResult(raw: unknown): AnalysisResult {
   }
 }
 
-function buildRiskReasons(analysis: AnalysisResult, locale: 'zh' | 'en'): string[] {
+function buildRiskReasons(analysis: AnalysisResult, locale: Locale): string[] {
   const reasons: string[] = []
 
   if (analysis.warning) {
@@ -335,7 +361,7 @@ function buildRiskReasons(analysis: AnalysisResult, locale: 'zh' | 'en'): string
   return Array.from(new Set(reasons)).slice(0, 4)
 }
 
-function buildMustSendAdvice(analysis: AnalysisResult, locale: 'zh' | 'en'): string[] {
+function buildMustSendAdvice(analysis: AnalysisResult, locale: Locale): string[] {
   const tips: string[] = []
 
   if (analysis.riskLevel === 'Low') {
@@ -423,7 +449,7 @@ function buildMustSendAdvice(analysis: AnalysisResult, locale: 'zh' | 'en'): str
   return tips.slice(0, 4)
 }
 
-function getRiskActionMeta(riskLevel: AnalysisResult['riskLevel'], locale: 'zh' | 'en') {
+function getRiskActionMeta(riskLevel: AnalysisResult['riskLevel'], locale: Locale) {
   if (riskLevel === 'Low') {
     return {
       title: locale === 'zh' ? '怎么把它送得更好' : 'How to send it well',
@@ -474,8 +500,12 @@ function formatFileSize(sizeInBytes: number): string {
 export default function Home() {
   const params = useParams<{ locale?: string }>()
   const router = useRouter()
-  const routeLocale = params?.locale === 'en' ? 'en' : 'zh'
-  const [locale, setLocale] = React.useState<'en' | 'zh'>(routeLocale)
+  const routeLocale: Locale =
+    params?.locale === 'zh' || params?.locale === 'en' || params?.locale === 'ja' || params?.locale === 'fr'
+      ? params.locale
+      : 'zh'
+  const [locale, setLocale] = React.useState<Locale>(routeLocale)
+  const apiLanguage: 'zh' | 'en' = locale === 'zh' ? 'zh' : 'en'
 
   React.useEffect(() => {
     setLocale(routeLocale)
@@ -488,7 +518,14 @@ export default function Home() {
 
   const t = React.useCallback(
     (path: string): string => {
-      const source = locale === 'en' ? enMessages : zhMessages
+      const source =
+        locale === 'zh'
+          ? zhMessages
+          : locale === 'ja'
+            ? jaMessages
+            : locale === 'fr'
+              ? frMessages
+              : enMessages
       const value = path.split('.').reduce<unknown>((acc, key) => {
         if (acc && typeof acc === 'object' && key in (acc as Record<string, unknown>)) {
           return (acc as Record<string, unknown>)[key]
@@ -520,6 +557,13 @@ export default function Home() {
   const [analysisSource, setAnalysisSource] = useState('')
   const [historyRecords, setHistoryRecords] = useState<StoredAnalysisRecord[]>([])
   const [favoriteRecommendationIds, setFavoriteRecommendationIds] = useState<string[]>([])
+  const [assistantCurrency, setAssistantCurrency] = useState<AssistantCurrency>('USD')
+  const [assistantAmountInput, setAssistantAmountInput] = useState('120')
+  const [assistantWeightInput, setAssistantWeightInput] = useState('1')
+  const [assistantDeclaredValueInput, setAssistantDeclaredValueInput] = useState('120')
+  const [assistantResult, setAssistantResult] = useState<LogisticsAssistantResult | null>(null)
+  const [assistantError, setAssistantError] = useState('')
+  const [isAssistantLoading, setIsAssistantLoading] = useState(false)
 
   // Loading state
   const [isRecognizing, setIsRecognizing] = useState(false)
@@ -548,6 +592,8 @@ export default function Home() {
   const isLoading = isRecognizing || isAnalyzing
   const isLoadingRecognition = isRecognizing
   const isZh = locale === 'zh'
+  const isJa = locale === 'ja'
+  const isFr = locale === 'fr'
   const hasGiftInput = Boolean(giftName.trim() || giftDescription.trim())
   const canRecognize = Boolean(selectedFile || hasGiftInput)
   const isAudienceReady = targetGroup !== 'other' || customAudienceGroup.trim().length > 0
@@ -698,6 +744,21 @@ export default function Home() {
       ],
     [ageBandLabel, budgetLabel, formalityLabel, isZh, occupationLabel, relationshipLabel],
   )
+  const favoriteGiftChecklist = useMemo(() => {
+    const latestById = new Map<string, { id: string; name: string; category: string }>()
+
+    for (const record of historyRecords) {
+      for (const item of record.recommendations) {
+        if (!latestById.has(item.id)) {
+          latestById.set(item.id, item)
+        }
+      }
+    }
+
+    return favoriteRecommendationIds
+      .map(id => latestById.get(id))
+      .filter((item): item is { id: string; name: string; category: string } => Boolean(item))
+  }, [favoriteRecommendationIds, historyRecords])
   const riskActionMeta = useMemo(() => (analysis ? getRiskActionMeta(analysis.riskLevel, locale) : null), [analysis, locale])
   const profileFieldClassName =
     'rounded-2xl border border-cyan-200/14 bg-[#10253f]/62 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]'
@@ -1237,7 +1298,7 @@ export default function Home() {
         text,
         name: giftName.trim(),
         description: giftDescription.trim(),
-        language: locale,
+        language: apiLanguage,
       }),
     })
 
@@ -1257,7 +1318,7 @@ export default function Home() {
 
     const formData = new FormData()
     formData.append('image', selectedFile)
-    formData.append('language', locale)
+    formData.append('language', apiLanguage)
 
     const response = await fetch('/api/vision-recognize', {
       method: 'POST',
@@ -1378,7 +1439,7 @@ export default function Home() {
             formality,
             notes: targetProfile.trim(),
           },
-          locale,
+          locale: apiLanguage,
         }),
       })
 
@@ -1447,17 +1508,66 @@ export default function Home() {
     setRecognitionRawLabels([])
     setShowGiftInputsAfterImageRecognition(false)
     setShowAdvancedAudienceFields(false)
+    setAssistantResult(null)
+    setAssistantError('')
     setError('')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const handleLanguageSwitch = (newLocale: 'en' | 'zh') => {
+  const handleLanguageSwitch = (newLocale: Locale) => {
     setLocale(newLocale)
     router.push(`/${newLocale}`)
   }
 
   const handleToggleFavoriteRecommendation = (id: string) => {
     setFavoriteRecommendationIds(toggleFavoriteRecommendation(id))
+  }
+
+  const handleRunLogisticsAssistant = async () => {
+    if (!selectedCountry) {
+      setAssistantError(isZh ? '请先选择目标国家后再估算物流。' : 'Select a target country before estimating shipping.')
+      return
+    }
+
+    const amount = Number.parseFloat(assistantAmountInput)
+    const weight = Number.parseFloat(assistantWeightInput)
+    const declared = Number.parseFloat(assistantDeclaredValueInput)
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setAssistantError(isZh ? '请输入有效的礼物价格。' : 'Please enter a valid gift price.')
+      return
+    }
+
+    setIsAssistantLoading(true)
+    setAssistantError('')
+
+    try {
+      const response = await fetch('/api/logistics-assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount,
+          fromCurrency: assistantCurrency,
+          targetCurrencies: ['USD', 'CNY', 'EUR', 'JPY', 'GBP'],
+          destinationCountry: getCountryName(selectedCountry, 'en'),
+          weightKg: Number.isFinite(weight) ? weight : 1,
+          declaredValue: Number.isFinite(declared) ? declared : amount,
+        }),
+      })
+
+      const data = (await response.json().catch(() => null)) as LogisticsAssistantResult | { error?: string } | null
+
+      if (!response.ok || !data || !('shippingQuotes' in data)) {
+        const fallbackMessage = isZh ? '物流助手请求失败，请稍后重试。' : 'Failed to load logistics assistant data.'
+        throw new Error(data && 'error' in data && typeof data.error === 'string' ? data.error : fallbackMessage)
+      }
+
+      setAssistantResult(data)
+    } catch (assistantRequestError) {
+      setAssistantError((assistantRequestError as Error).message)
+    } finally {
+      setIsAssistantLoading(false)
+    }
   }
 
   return (
@@ -1483,27 +1593,25 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleLanguageSwitch('zh')}
-              className={`rounded-lg px-3 py-1 text-sm font-medium transition-all ${
-                locale === 'zh'
-                  ? 'border border-amber-200/45 bg-amber-100/12 text-amber-100'
-                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80'
-              }`}
-            >
-              中文
-            </button>
-            <button
-              onClick={() => handleLanguageSwitch('en')}
-              className={`rounded-lg px-3 py-1 text-sm font-medium transition-all ${
-                locale === 'en'
-                  ? 'border border-amber-200/45 bg-amber-100/12 text-amber-100'
-                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80'
-              }`}
-            >
-              English
-            </button>
+          <div className="flex flex-wrap gap-2">
+            {([
+              { value: 'zh' as const, label: '中文' },
+              { value: 'en' as const, label: 'English' },
+              { value: 'ja' as const, label: '日本語' },
+              { value: 'fr' as const, label: 'Français' },
+            ]).map(languageOption => (
+              <button
+                key={languageOption.value}
+                onClick={() => handleLanguageSwitch(languageOption.value)}
+                className={`rounded-lg px-3 py-1 text-sm font-medium transition-all ${
+                  locale === languageOption.value
+                    ? 'border border-amber-200/45 bg-amber-100/12 text-amber-100'
+                    : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80'
+                }`}
+              >
+                {languageOption.label}
+              </button>
+            ))}
           </div>
         </div>
       </header>
@@ -1583,7 +1691,7 @@ export default function Home() {
             <h2 className={`relative mt-3 text-2xl text-slate-100 ${isZh ? 'font-sans-zh font-semibold tracking-tight' : 'font-semibold tracking-tight [font-family:var(--app-font-sans)]'}`}>{t('hero.panelHeadline')}</h2>
             <p className="relative mt-3 text-sm leading-7 text-slate-300">{t('hero.panelDesc')}</p>
 
-            <InteractiveFlowDemo locale={locale} />
+            <InteractiveFlowDemo locale={apiLanguage} />
           </motion.div>
         </section>
 
@@ -2061,7 +2169,7 @@ export default function Home() {
                   setSelectedCountry(value)
                   setAnalysis(null)
                 }}
-                locale={locale}
+                locale={apiLanguage}
                 regionLabels={{
                   asia: locale === 'zh' ? '亚洲' : 'Asia',
                   europe: locale === 'zh' ? '欧洲' : 'Europe',
@@ -2932,6 +3040,152 @@ export default function Home() {
                 </motion.div>
               )}
 
+              <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-cyan-400/20 bg-white/5 p-6 backdrop-blur-sm">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <Wallet size={18} className="text-cyan-200" />
+                    <h3 className="text-xl font-bold">
+                      {isZh
+                        ? '跨境物流与支付助手'
+                        : isJa
+                          ? '越境配送・決済アシスタント'
+                          : isFr
+                            ? 'Assistant logistique et paiement'
+                            : 'Cross-border Logistics & Payment Assistant'}
+                    </h3>
+                  </div>
+                  <span className="rounded-full border border-cyan-300/25 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-100">
+                    {assistantResult?.rateSource === 'live'
+                      ? isZh
+                        ? '实时汇率'
+                        : isJa
+                          ? 'リアルタイム為替'
+                          : isFr
+                            ? 'Taux en direct'
+                            : 'Live FX'
+                      : isZh
+                        ? '汇率回退'
+                        : isJa
+                          ? '為替フォールバック'
+                          : isFr
+                            ? 'Taux de secours'
+                            : 'Fallback FX'}
+                  </span>
+                </div>
+
+                <div className="mt-4 grid gap-3 md:grid-cols-4">
+                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '礼物价格' : isJa ? '商品価格' : isFr ? 'Prix du cadeau' : 'Gift price'}</p>
+                    <input
+                      value={assistantAmountInput}
+                      onChange={event => setAssistantAmountInput(event.target.value)}
+                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+                    />
+                  </div>
+
+                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '币种' : isJa ? '通貨' : isFr ? 'Devise' : 'Currency'}</p>
+                    <select
+                      value={assistantCurrency}
+                      onChange={event => setAssistantCurrency(event.target.value as AssistantCurrency)}
+                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+                    >
+                      {['USD', 'CNY', 'EUR', 'JPY', 'GBP'].map(currency => (
+                        <option key={currency} value={currency} className="bg-[#0f1f35] text-slate-100">
+                          {currency}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '重量(kg)' : isJa ? '重量(kg)' : isFr ? 'Poids (kg)' : 'Weight (kg)'}</p>
+                    <input
+                      value={assistantWeightInput}
+                      onChange={event => setAssistantWeightInput(event.target.value)}
+                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+                    />
+                  </div>
+
+                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '申报价值' : isJa ? '申告価格' : isFr ? 'Valeur déclarée' : 'Declared value'}</p>
+                    <input
+                      value={assistantDeclaredValueInput}
+                      onChange={event => setAssistantDeclaredValueInput(event.target.value)}
+                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <Button
+                    type="button"
+                    onClick={handleRunLogisticsAssistant}
+                    disabled={isAssistantLoading}
+                    className="border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22"
+                  >
+                    <Truck size={16} className="mr-2" />
+                    {isAssistantLoading
+                      ? isZh
+                        ? '估算中...'
+                        : isJa
+                          ? '計算中...'
+                          : isFr
+                            ? 'Calcul...'
+                            : 'Estimating...'
+                      : isZh
+                        ? '估算物流与支付'
+                        : isJa
+                          ? '配送と決済を見積もる'
+                          : isFr
+                            ? 'Estimer logistique & paiement'
+                            : 'Estimate logistics & payment'}
+                  </Button>
+                  {assistantError && <p className="text-sm text-red-300">{assistantError}</p>}
+                </div>
+
+                {assistantResult && (
+                  <div className="mt-5 space-y-4">
+                    <div className="grid gap-3 md:grid-cols-5">
+                      {Object.entries(assistantResult.convertedAmounts).map(([currency, value]) => (
+                        <div key={currency} className="rounded-xl border border-slate-500/30 bg-slate-900/45 p-3">
+                          <p className="text-xs text-slate-400">{currency}</p>
+                          <p className="mt-1 text-lg font-semibold text-slate-100">{value.toFixed(2)}</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid gap-3 md:grid-cols-2">
+                      {assistantResult.shippingQuotes.map(quote => (
+                        <div key={`${quote.provider}-${quote.service}`} className="rounded-xl border border-cyan-300/20 bg-[#10253b]/80 p-4">
+                          <div className="flex items-center justify-between">
+                            <p className="text-sm font-semibold text-cyan-100">{quote.provider}</p>
+                            <span className="text-xs text-slate-300">{quote.etaDays} {isZh ? '天' : isJa ? '日' : isFr ? 'jours' : 'days'}</span>
+                          </div>
+                          <p className="mt-1 text-xs text-slate-400">{quote.service}</p>
+                          <p className="mt-3 text-lg font-bold text-slate-100">{quote.currency} {quote.estimatedCost.toFixed(2)}</p>
+                          <ul className="mt-2 space-y-1 text-xs text-slate-300">
+                            {quote.notes.map(note => (
+                              <li key={note}>• {note}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="rounded-xl border border-amber-300/20 bg-amber-500/8 p-3">
+                      <p className="text-sm font-semibold text-amber-200">{isZh ? '清关注意事项' : isJa ? '通関の注意点' : isFr ? 'Points de douane' : 'Customs notes'}</p>
+                      <ul className="mt-2 space-y-1 text-xs text-amber-100/90">
+                        {assistantResult.customsNotes.map(note => (
+                          <li key={note}>• {note}</li>
+                        ))}
+                      </ul>
+                      <p className="mt-2 text-[11px] text-amber-100/80">{assistantResult.disclaimer}</p>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+
               {analysis.matchedRules.length > 0 && (
                 <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-amber-400/20 bg-white/5 p-6 backdrop-blur-sm">
                   <h3 className="text-xl font-bold">{locale === 'zh' ? '命中的文化规则' : 'Matched Cultural Rules'}</h3>
@@ -3352,6 +3606,39 @@ export default function Home() {
                     </div>
                   )}
                   <p className="mt-3 text-[11px] text-slate-500">{new Date(record.createdAt).toLocaleString()}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {favoriteGiftChecklist.length > 0 && (
+          <section className="mt-6 rounded-2xl border border-emerald-200/20 bg-[#102b3d]/70 p-4 sm:p-6">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-100">
+                  {isZh ? '收藏礼物清单' : isJa ? 'お気に入りギフトリスト' : isFr ? 'Liste de cadeaux favoris' : 'Favorite Gift List'}
+                </h2>
+                <p className="mt-1 text-sm text-slate-300">
+                  {isZh
+                    ? '来自你的收藏记录，可作为后续送礼候选池。'
+                    : isJa
+                      ? '保存済み候補を次回のギフト検討リストとして再利用できます。'
+                      : isFr
+                        ? 'Vos articles enregistrés pour préparer vos prochaines listes cadeaux.'
+                        : 'Saved picks from your previous analyses for future gifting checklists.'}
+                </p>
+              </div>
+              <span className="rounded-full border border-emerald-200/25 bg-emerald-300/10 px-3 py-1 text-xs text-emerald-100">
+                {favoriteGiftChecklist.length}
+              </span>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {favoriteGiftChecklist.map(item => (
+                <div key={item.id} className="rounded-xl border border-emerald-300/20 bg-[#0f2235]/75 p-3">
+                  <p className="text-sm font-semibold text-slate-100">{item.name}</p>
+                  <p className="mt-1 text-xs text-slate-400">{item.category}</p>
                 </div>
               ))}
             </div>

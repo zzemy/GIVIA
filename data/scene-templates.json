@@ -46,6 +46,36 @@
       "promptEn": "Best for festive gifting with stronger emphasis on packaging and message tone."
     },
     {
+      "id": "scene-christmas",
+      "code": "christmas",
+      "nameZh": "圣诞节",
+      "nameEn": "Christmas",
+      "audienceGroup": "family",
+      "defaultFormality": "semi-formal",
+      "defaultBudgetRange": "medium",
+      "defaultPurpose": "christmas",
+      "defaultOccasion": "celebration",
+      "recommendedCategories": ["food", "home", "wellness", "accessories"],
+      "avoidCategories": ["knife"],
+      "promptZh": "突出节日氛围、温暖表达和家庭友好感。",
+      "promptEn": "Focused on holiday warmth, inclusive tone, and family-friendly presentation."
+    },
+    {
+      "id": "scene-spring-festival",
+      "code": "spring_festival",
+      "nameZh": "春节",
+      "nameEn": "Spring Festival",
+      "audienceGroup": "family",
+      "defaultFormality": "formal",
+      "defaultBudgetRange": "high",
+      "defaultPurpose": "spring_festival",
+      "defaultOccasion": "celebration",
+      "recommendedCategories": ["tea", "gourmet", "home", "wellness"],
+      "avoidCategories": ["clock", "umbrella", "knife"],
+      "promptZh": "适合春节拜访与团圆场景，强调吉祥寓意与礼序感。",
+      "promptEn": "Designed for Lunar New Year visits with auspicious symbolism and formal etiquette."
+    },
+    {
       "id": "scene-housewarming",
       "code": "housewarming",
       "nameZh": "乔迁新居",
