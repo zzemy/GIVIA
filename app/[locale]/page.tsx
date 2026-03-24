@@ -1707,20 +1707,20 @@ export default function Home() {
         </div>
 
         {/* Three-step workflow panels */}
-        <div className="mb-8 grid items-start gap-6 lg:mb-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.14fr)] lg:grid-rows-[auto_minmax(0,1fr)]">
+        <div className="mb-8 grid items-start gap-4 sm:gap-6 lg:mb-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.14fr)] lg:grid-rows-[auto_minmax(0,1fr)]">
           {/* Step 1: Image Recognition */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-6 backdrop-blur-md transition-colors hover:border-cyan-200/35 lg:col-start-1 lg:row-start-1"
+            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/35 sm:p-6 lg:col-start-1 lg:row-start-1"
           >
-            <div className="flex items-start justify-between mb-4">
+            <div className="mb-3 flex items-start justify-between sm:mb-4">
               <div>
-                <h2 className="text-xl font-bold mb-2">
+                <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">
                   {isZh ? '第一步：上传图片或输入礼物' : 'Step 1: Upload Image or Type the Gift'}
                 </h2>
-                <p className="text-sm text-gray-400">
+                <p className="text-xs text-gray-400 sm:text-sm">
                   {isZh
                     ? '支持图片识别，也支持直接输入礼物名称或场景描述。'
                     : 'Use either image recognition or direct text input for the gift item.'}
@@ -1737,7 +1737,7 @@ export default function Home() {
                   onClick={() => fileInputRef.current?.click()}
                   className={cn(
                     'group w-full cursor-pointer overflow-hidden rounded-[1.1rem] border border-dashed border-cyan-200/28 text-left transition-all hover:border-cyan-200/55 hover:bg-cyan-200/5',
-                    imagePreview ? 'relative aspect-[4/3] bg-slate-950/70 p-0' : 'min-h-[16rem] p-8',
+                    imagePreview ? 'relative aspect-[4/3] bg-slate-950/70 p-0' : 'min-h-[12rem] p-5 sm:min-h-[16rem] sm:p-8',
                   )}
                 >
                   {imagePreview ? (
@@ -1798,11 +1798,11 @@ export default function Home() {
                   )}
                 </button>
 
-                <div className="mt-3 flex flex-wrap items-center gap-2">
+                <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center gap-2 rounded-full border border-cyan-200/22 bg-cyan-300/12 px-3 py-1.5 text-xs font-medium text-cyan-50 transition hover:border-cyan-200/38 hover:bg-cyan-300/18"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-200/22 bg-cyan-300/12 px-3 py-2 text-xs font-medium text-cyan-50 transition hover:border-cyan-200/38 hover:bg-cyan-300/18 sm:justify-start sm:py-1.5"
                   >
                     <Upload size={14} />
                     {imagePreview ? (isZh ? '更换图片' : 'Replace image') : (isZh ? '选择图片' : 'Choose image')}
@@ -1812,7 +1812,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={clearSelectedImage}
-                      className="inline-flex items-center gap-2 rounded-full border border-slate-400/18 bg-slate-200/6 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:border-slate-300/34 hover:bg-slate-200/12"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-400/18 bg-slate-200/6 px-3 py-2 text-xs font-medium text-slate-200 transition hover:border-slate-300/34 hover:bg-slate-200/12 sm:justify-start sm:py-1.5"
                     >
                       <Trash2 size={14} />
                       {isZh ? '移除图片' : 'Remove image'}
@@ -1823,7 +1823,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={() => setShowGiftInputsAfterImageRecognition(prev => !prev)}
-                      className="inline-flex items-center gap-2 rounded-full border border-cyan-200/18 bg-slate-200/6 px-3 py-1.5 text-xs font-medium text-slate-100 transition hover:border-cyan-200/38 hover:bg-slate-200/10"
+                      className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-200/18 bg-slate-200/6 px-3 py-2 text-xs font-medium text-slate-100 transition hover:border-cyan-200/38 hover:bg-slate-200/10 sm:justify-start sm:py-1.5"
                     >
                       <PencilLine size={14} />
                       {shouldHideGiftInputs
@@ -2043,12 +2043,12 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-sky-200/20 bg-gradient-to-br from-[#182843]/88 to-[#141e33]/86 p-6 backdrop-blur-md transition-colors hover:border-sky-200/40 lg:col-start-2 lg:row-span-2 lg:row-start-1"
+            className="rounded-2xl border border-sky-200/20 bg-gradient-to-br from-[#182843]/88 to-[#141e33]/86 p-4 backdrop-blur-md transition-colors hover:border-sky-200/40 sm:p-6 lg:col-start-2 lg:row-span-2 lg:row-start-1"
           >
-            <div className="flex items-start justify-between mb-4">
+            <div className="mb-3 flex items-start justify-between sm:mb-4">
               <div>
-                <h2 className="text-xl font-bold mb-2">{t('country.title')}</h2>
-                <p className="text-sm text-gray-400">{t('country.description')}</p>
+                <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">{t('country.title')}</h2>
+                <p className="text-xs text-gray-400 sm:text-sm">{t('country.description')}</p>
               </div>
               <Image src={withBasePath('/brand/step-country.svg')} alt="country step" width={36} height={36} />
             </div>
@@ -2078,7 +2078,7 @@ export default function Home() {
                 {isZh ? '目标群体画像' : 'Target audience profile'}
               </div>
 
-              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-4 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]">
+              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)] sm:p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
@@ -2180,7 +2180,7 @@ export default function Home() {
                 )}
               </div>
 
-              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-4 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]">
+              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)] sm:p-4">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
@@ -2195,7 +2195,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
                   {audienceOptions.map(option => {
                     const isActive = targetGroup === option.value
 
@@ -2211,7 +2211,7 @@ export default function Home() {
                           setAnalysis(null)
                         }}
                         className={cn(
-                          'rounded-full border px-3 py-2 text-left text-xs font-medium transition-all',
+                          'shrink-0 rounded-full border px-3 py-2 text-left text-xs font-medium transition-all sm:shrink',
                           isActive
                             ? 'border-cyan-200/42 bg-cyan-300/12 text-cyan-50'
                             : 'border-cyan-200/12 bg-[#0d1f35]/72 text-slate-200 hover:border-cyan-200/28 hover:bg-[#102740]',
@@ -2522,12 +2522,12 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-6 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-colors hover:border-cyan-200/40 lg:col-start-1 lg:row-start-2 lg:flex lg:h-full lg:flex-col"
+            className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-4 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-colors hover:border-cyan-200/40 sm:p-6 lg:col-start-1 lg:row-start-2 lg:flex lg:h-full lg:flex-col"
           >
             <div className="mb-5 flex items-start justify-between border-b border-slate-400/15 pb-4">
               <div>
-                <h2 className="text-xl font-bold mb-2">{t('analysis.title')}</h2>
-                <p className="text-sm text-gray-400">{t('analysis.description')}</p>
+                <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">{t('analysis.title')}</h2>
+                <p className="text-xs text-gray-400 sm:text-sm">{t('analysis.description')}</p>
               </div>
               <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis step" width={36} height={36} />
             </div>
@@ -2536,7 +2536,7 @@ export default function Home() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
                 {isZh ? '分析摘要' : 'Analysis summary'}
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
                 <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
                   {isZh ? '国家：' : 'Country: '}
                   {selectedCountry ? getCountryName(selectedCountry, locale) : locale === 'zh' ? '待选择' : 'Pending'}
@@ -3307,7 +3307,7 @@ export default function Home() {
         </AnimatePresence>
 
         {historyRecords.length > 0 && (
-          <section className="mt-8 rounded-2xl border border-cyan-200/20 bg-[#10243b]/70 p-6 lg:mt-10">
+          <section className="mt-6 rounded-2xl border border-cyan-200/20 bg-[#10243b]/70 p-4 sm:mt-8 sm:p-6 lg:mt-10">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h2 className="text-2xl font-bold text-slate-100">{locale === 'zh' ? '历史记录' : 'History'}</h2>
