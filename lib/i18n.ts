@@ -1,4 +1,4 @@
-import type { GiftItem } from "@/lib/gifting";
+import type { GiftItem } from "@/lib/domain/gifting";
 
 export type Locale = "en" | "zh" | "ja" | "fr";
 

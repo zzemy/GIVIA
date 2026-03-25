@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import {
   buildUnknownRecognition,
   type RecognitionResult,
-} from "@/lib/cultural-analyzer";
-import { buildGiftProfile } from "@/lib/gift-profile";
+} from "@/lib/analysis/cultural-analyzer";
+import { buildGiftProfile } from "@/lib/analysis/gift-profile";
 
 export const runtime = "nodejs";
 

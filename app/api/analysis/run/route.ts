@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
-import { buildUnknownRecognition } from '@/lib/cultural-analyzer'
-import { runAnalysisWithLLMEnhancement } from '@/lib/analysis-runner'
-import type { AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/p0-types'
-import { runEnhancedAnalysis } from '@/lib/p1p2-integration'
+import { buildUnknownRecognition } from '@/lib/analysis/cultural-analyzer'
+import { runAnalysisWithLLMEnhancement } from '@/lib/analysis/analysis-runner'
+import type { AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/types/gifting-types'
+import { runEnhancedAnalysis } from '@/lib/enhancements/enhancement-integration'
 
 export const runtime = 'nodejs'
 

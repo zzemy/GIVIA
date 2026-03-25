@@ -5,8 +5,8 @@ import {
   type CulturalAnalysis,
   type RecognitionResult,
   type SupportedCountry,
-} from "@/lib/cultural-analyzer";
-import { calculateCulturalFitScore, type GiftScore } from "@/lib/gifting";
+} from "@/lib/analysis/cultural-analyzer";
+import { calculateCulturalFitScore, type GiftScore } from "@/lib/domain/gifting";
 
 export const runtime = "nodejs";
 

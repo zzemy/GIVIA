@@ -1,6 +1,6 @@
-import { Canvas } from "@/components/experience/Canvas";
-import { Unboxing } from "@/components/experience/Unboxing";
-import { XRayDetail } from "@/components/experience/XRayDetail";
+import { Canvas } from "@/components/experience/canvas";
+import { Unboxing } from "@/components/experience/unboxing";
+import { XRayDetail } from "@/components/experience/x-ray-detail";
 
 export default function LabPage() {
   return (
