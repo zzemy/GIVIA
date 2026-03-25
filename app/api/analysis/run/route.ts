@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { buildUnknownRecognition } from '@/lib/cultural-analyzer'
-import { runAnalysis } from '@/lib/analysis-runner'
+import { runAnalysisWithLLMEnhancement } from '@/lib/analysis-runner'
 import type { AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/p0-types'
 
 export const runtime = 'nodejs'
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
         }
       : buildUnknownRecognition(body.giftContext?.name)
 
-    const analysis = runAnalysis({
+    const analysis = await runAnalysisWithLLMEnhancement({
       locale,
       country: body.country,
       countryCode: body.countryCode,
