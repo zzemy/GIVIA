@@ -906,10 +906,8 @@ export default function Home() {
               setAnalysis(null)
             }}
           />
-          </div>
-        </div>
 
-        <WorkflowSupportPanels
+          <WorkflowSupportPanels
           locale={locale}
           historyRecords={historyRecords}
           favoriteGiftChecklist={favoriteGiftChecklist}
@@ -926,6 +924,8 @@ export default function Home() {
           onAssistantDeclaredValueChange={setAssistantDeclaredValueInput}
           onRunLogisticsAssistant={handleRunLogisticsAssistant}
         />
+          </div>
+        </div>
 
         {/* Loading indicator */}
         <AnimatePresence>
