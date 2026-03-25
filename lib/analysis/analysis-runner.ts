@@ -1,6 +1,7 @@
 import { buildGiftProfile } from '@/lib/analysis/gift-profile'
 import { buildRecommendations } from '@/lib/analysis/recommend-engine'
 import { buildAnalysisFromRules } from '@/lib/analysis/risk-engine'
+import { sanitizeStringArray, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
 import { enhanceRiskWithLLM, mergeLLMEnhancement } from '@/lib/analysis/llm-risk-enhancement'
 import type { AnalysisEngineResult, AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/types/gifting-types'
 
@@ -33,26 +34,78 @@ export interface AnalysisRunnerOutput extends AnalysisEngineResult {
   }
 }
 
+function sanitizeAnalysisRunnerInput(input: AnalysisRunnerInput): AnalysisRunnerInput {
+  return {
+    ...input,
+    country: sanitizeTextValue(input.country, { maxLength: 64 }),
+    countryCode: sanitizeTextValue(input.countryCode, { maxLength: 16 }),
+    recognition: input.recognition
+      ? {
+          itemKey: sanitizeTextValue(input.recognition.itemKey, {
+            maxLength: 64,
+            fallback: 'unknown',
+          }),
+          itemZh: sanitizeTextValue(input.recognition.itemZh, { maxLength: 80 }),
+          itemEn: sanitizeTextValue(input.recognition.itemEn, { maxLength: 80 }),
+          category: sanitizeTextValue(input.recognition.category, {
+            maxLength: 48,
+            fallback: 'general',
+          }),
+        }
+      : input.recognition,
+    giftContext: input.giftContext
+      ? {
+          name: sanitizeTextValue(input.giftContext.name, { maxLength: 80 }),
+          description: sanitizeTextValue(input.giftContext.description, { maxLength: 240 }),
+          visionLabel: sanitizeTextValue(input.giftContext.visionLabel, { maxLength: 80 }),
+          visionDescription: sanitizeTextValue(input.giftContext.visionDescription, {
+            maxLength: 240,
+          }),
+          source: sanitizeTextValue(input.giftContext.source, { maxLength: 48 }),
+          rawLabels: sanitizeStringArray(input.giftContext.rawLabels, {
+            itemMaxLength: 64,
+            maxItems: 6,
+          }),
+        }
+      : input.giftContext,
+    audience: {
+      group: sanitizeTextValue(input.audience.group, { maxLength: 40, fallback: 'peer' }),
+      customGroup: sanitizeTextValue(input.audience.customGroup, { maxLength: 60 }),
+      sceneTemplate: sanitizeTextValue(input.audience.sceneTemplate, { maxLength: 60 }),
+      ageBand: sanitizeTextValue(input.audience.ageBand, { maxLength: 40 }),
+      gender: sanitizeTextValue(input.audience.gender, { maxLength: 40 }),
+      occupation: sanitizeTextValue(input.audience.occupation, { maxLength: 60 }),
+      relationship: sanitizeTextValue(input.audience.relationship, { maxLength: 60 }),
+      occasion: sanitizeTextValue(input.audience.occasion, { maxLength: 60 }),
+      purpose: sanitizeTextValue(input.audience.purpose, { maxLength: 80 }),
+      budgetRange: sanitizeTextValue(input.audience.budgetRange, { maxLength: 40 }),
+      formality: sanitizeTextValue(input.audience.formality, { maxLength: 40 }),
+      notes: sanitizeTextValue(input.audience.notes, { maxLength: 240 }),
+    },
+  }
+}
+
 export function runAnalysis(input: AnalysisRunnerInput): AnalysisRunnerOutput {
+  const sanitizedInput = sanitizeAnalysisRunnerInput(input)
   const giftProfile = buildGiftProfile({
-    recognition: input.recognition,
-    giftContext: input.giftContext,
+    recognition: sanitizedInput.recognition,
+    giftContext: sanitizedInput.giftContext,
   })
 
   const recommendations = buildRecommendations({
-    locale: input.locale,
-    countryCode: input.countryCode ?? '',
-    audience: input.audience,
+    locale: sanitizedInput.locale,
+    countryCode: sanitizedInput.countryCode ?? '',
+    audience: sanitizedInput.audience,
     giftProfile,
     blockedTerms: [giftProfile.category, ...giftProfile.semanticTags],
   })
 
   const analysis = buildAnalysisFromRules({
-    locale: input.locale,
-    countryCode: input.countryCode,
-    countryName: input.country,
+    locale: sanitizedInput.locale,
+    countryCode: sanitizedInput.countryCode,
+    countryName: sanitizedInput.country,
     profile: giftProfile,
-    audience: input.audience,
+    audience: sanitizedInput.audience,
     recommendations,
   })
 
@@ -76,41 +129,42 @@ export function runAnalysis(input: AnalysisRunnerInput): AnalysisRunnerOutput {
  * Note: This is for server-side calls where we can await LLM responses
  */
 export async function runAnalysisWithLLMEnhancement(input: AnalysisRunnerInput): Promise<AnalysisRunnerOutput> {
+  const sanitizedInput = sanitizeAnalysisRunnerInput(input)
   const giftProfile = buildGiftProfile({
-    recognition: input.recognition,
-    giftContext: input.giftContext,
+    recognition: sanitizedInput.recognition,
+    giftContext: sanitizedInput.giftContext,
   })
 
   const recommendations = buildRecommendations({
-    locale: input.locale,
-    countryCode: input.countryCode ?? '',
-    audience: input.audience,
+    locale: sanitizedInput.locale,
+    countryCode: sanitizedInput.countryCode ?? '',
+    audience: sanitizedInput.audience,
     giftProfile,
     blockedTerms: [giftProfile.category, ...giftProfile.semanticTags],
   })
 
   const ruleAnalysis = buildAnalysisFromRules({
-    locale: input.locale,
-    countryCode: input.countryCode,
-    countryName: input.country,
+    locale: sanitizedInput.locale,
+    countryCode: sanitizedInput.countryCode,
+    countryName: sanitizedInput.country,
     profile: giftProfile,
-    audience: input.audience,
+    audience: sanitizedInput.audience,
     recommendations,
   })
 
   // Attempt LLM enhancement (non-blocking - graceful degradation)
   const llmEnhancement = await enhanceRiskWithLLM({
-    locale: input.locale,
-    countryCode: input.countryCode ?? '',
-    countryName: input.country ?? 'Unknown',
+    locale: sanitizedInput.locale,
+    countryCode: sanitizedInput.countryCode ?? '',
+    countryName: sanitizedInput.country ?? 'Unknown',
     giftName: giftProfile.displayName,
     giftProfile,
-    audience: input.audience,
+    audience: sanitizedInput.audience,
     ruleResult: ruleAnalysis,
   }).catch(() => null)
 
   // Merge LLM results if successful
-  const analysis = mergeLLMEnhancement(ruleAnalysis, llmEnhancement, input.locale)
+  const analysis = mergeLLMEnhancement(ruleAnalysis, llmEnhancement, sanitizedInput.locale)
 
   return {
     ...analysis,

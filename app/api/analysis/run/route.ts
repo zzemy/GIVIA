@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { buildUnknownRecognition } from '@/lib/analysis/cultural-analyzer'
-import { runAnalysisWithLLMEnhancement } from '@/lib/analysis/analysis-runner'
+import {
+  runAnalysisWithLLMEnhancement,
+  type AnalysisRunnerOutput,
+} from '@/lib/analysis/analysis-runner'
 import { sanitizeStringArray, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
 import type { AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/types/gifting-types'
 import { runEnhancedAnalysis } from '@/lib/enhancements/enhancement-integration'
@@ -28,6 +31,136 @@ type RequestPayload = {
     knowledgeGraph?: boolean
     shippingCountry?: string
     budget?: number
+  }
+}
+
+type AIAnalysisOverlay = {
+  score?: { phonetic?: number; symbol?: number; color?: number }
+  fitScore?: number
+  riskLevel?: string
+  isTaboo?: boolean
+  warning?: string
+  rescueItem?: string
+  rescueReason?: string
+  semanticSignals?: string[]
+  packaging?: {
+    style?: string
+    colors?: string | string[]
+    materials?: string
+    avoid?: string | string[]
+  }
+  card?: {
+    tone?: string
+    opener?: string
+    body?: string
+    closing?: string
+  }
+}
+
+function isIntegerInRange(value: unknown, min: number, max: number): value is number {
+  return typeof value === 'number' && Number.isInteger(value) && value >= min && value <= max
+}
+
+function isRiskLevel(value: unknown): value is AnalysisRunnerOutput['riskLevel'] {
+  return value === 'Low' || value === 'Medium' || value === 'High'
+}
+
+function normalizeArrayField(value: string | string[] | undefined, fallback: string[]): string[] | null {
+  if (value === undefined) {
+    return fallback
+  }
+
+  const normalized = Array.isArray(value)
+    ? sanitizeStringArray(value, { itemMaxLength: 40, maxItems: 6 })
+    : sanitizeStringArray(String(value).split(/[,，;；、|]/), { itemMaxLength: 40, maxItems: 6 })
+
+  return normalized.length > 0 ? normalized : null
+}
+
+function buildValidatedAIOverlay(
+  base: AnalysisRunnerOutput,
+  overlay: AIAnalysisOverlay | undefined,
+): Partial<AnalysisRunnerOutput> | null {
+  if (!overlay) {
+    return null
+  }
+
+  const score = overlay.score
+  if (
+    !score ||
+    !isIntegerInRange(score.phonetic, 0, 100) ||
+    !isIntegerInRange(score.symbol, 0, 100) ||
+    !isIntegerInRange(score.color, 0, 100)
+  ) {
+    return null
+  }
+
+  const normalizedScore = {
+    phonetic: score.phonetic,
+    symbol: score.symbol,
+    color: score.color,
+  }
+
+  if (!isIntegerInRange(overlay.fitScore, 0, 100) || !isRiskLevel(overlay.riskLevel)) {
+    return null
+  }
+
+  if (typeof overlay.isTaboo !== 'boolean') {
+    return null
+  }
+
+  const warning = sanitizeTextValue(overlay.warning, { maxLength: 320 })
+  const rescueItem = sanitizeTextValue(overlay.rescueItem, { maxLength: 120 })
+  const rescueReason = sanitizeTextValue(overlay.rescueReason, { maxLength: 320 })
+  const semanticSignals = sanitizeStringArray(overlay.semanticSignals, {
+    itemMaxLength: 80,
+    maxItems: 8,
+  })
+  const packagingStyle = sanitizeTextValue(overlay.packaging?.style, { maxLength: 120 })
+  const packagingColors = normalizeArrayField(overlay.packaging?.colors, base.packaging.colors)
+  const packagingMaterials = sanitizeTextValue(overlay.packaging?.materials, { maxLength: 120 })
+  const packagingAvoid = normalizeArrayField(overlay.packaging?.avoid, base.packaging.avoid)
+  const cardTone = sanitizeTextValue(overlay.card?.tone, { maxLength: 120 })
+  const cardOpener = sanitizeTextValue(overlay.card?.opener, { maxLength: 160 })
+  const cardBody = sanitizeTextValue(overlay.card?.body, { maxLength: 320 })
+  const cardClosing = sanitizeTextValue(overlay.card?.closing, { maxLength: 160 })
+
+  if (
+    !warning ||
+    semanticSignals.length === 0 ||
+    !packagingStyle ||
+    !packagingColors ||
+    !packagingMaterials ||
+    !packagingAvoid ||
+    !cardTone ||
+    !cardOpener ||
+    !cardBody ||
+    !cardClosing
+  ) {
+    return null
+  }
+
+  return {
+    score: normalizedScore,
+    fitScore: overlay.fitScore,
+    riskLevel: overlay.riskLevel,
+    isTaboo: overlay.isTaboo,
+    warning,
+    rescueItem,
+    rescueReason,
+    semanticSignals,
+    packaging: {
+      style: packagingStyle,
+      colors: packagingColors,
+      materials: packagingMaterials,
+      avoid: packagingAvoid,
+    },
+    card: {
+      tone: cardTone,
+      opener: cardOpener,
+      body: cardBody,
+      closing: cardClosing,
+    },
   }
 }
 
@@ -157,60 +290,16 @@ export async function POST(request: Request) {
 
       if (aiResponse.ok) {
         const aiPayload = (await aiResponse.json()) as {
-          analysis?: {
-            score?: { phonetic?: number; symbol?: number; color?: number }
-            fitScore?: number
-            riskLevel?: string
-            isTaboo?: boolean
-            warning?: string
-            rescueItem?: string
-            rescueReason?: string
-            semanticSignals?: string[]
-            packaging?: {
-              style?: string
-              colors?: string | string[]
-              materials?: string
-              avoid?: string | string[]
-            }
-            card?: {
-              tone?: string
-              opener?: string
-              body?: string
-              closing?: string
-            }
-          }
+          analysis?: AIAnalysisOverlay
           source?: string
         }
 
-        if (aiPayload.analysis) {
+        const validatedOverlay = buildValidatedAIOverlay(analysis, aiPayload.analysis)
+
+        if (validatedOverlay) {
           mergedAnalysis = {
             ...analysis,
-            score: aiPayload.analysis.score ?? analysis.score,
-            fitScore: typeof aiPayload.analysis.fitScore === 'number' ? aiPayload.analysis.fitScore : analysis.fitScore,
-            riskLevel: aiPayload.analysis.riskLevel ?? analysis.riskLevel,
-            isTaboo: typeof aiPayload.analysis.isTaboo === 'boolean' ? aiPayload.analysis.isTaboo : analysis.isTaboo,
-            warning: aiPayload.analysis.warning ?? analysis.warning,
-            rescueItem: aiPayload.analysis.rescueItem ?? analysis.rescueItem,
-            rescueReason: aiPayload.analysis.rescueReason ?? analysis.rescueReason,
-            semanticSignals: Array.isArray(aiPayload.analysis.semanticSignals)
-              ? aiPayload.analysis.semanticSignals
-              : analysis.semanticSignals,
-            packaging: aiPayload.analysis.packaging
-              ? {
-                  style: aiPayload.analysis.packaging.style ?? analysis.packaging.style,
-                  colors: aiPayload.analysis.packaging.colors ?? analysis.packaging.colors,
-                  materials: aiPayload.analysis.packaging.materials ?? analysis.packaging.materials,
-                  avoid: aiPayload.analysis.packaging.avoid ?? analysis.packaging.avoid,
-                }
-              : analysis.packaging,
-            card: aiPayload.analysis.card
-              ? {
-                  tone: aiPayload.analysis.card.tone ?? analysis.card.tone,
-                  opener: aiPayload.analysis.card.opener ?? analysis.card.opener,
-                  body: aiPayload.analysis.card.body ?? analysis.card.body,
-                  closing: aiPayload.analysis.card.closing ?? analysis.card.closing,
-                }
-              : analysis.card,
+            ...validatedOverlay,
           }
           source = aiPayload.source === 'aliyun-dashscope' ? 'hybrid-ai-rules' : source
         }
