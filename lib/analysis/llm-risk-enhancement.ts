@@ -1,5 +1,6 @@
 import type { AnalysisEngineResult, AudienceProfileInput, P0Locale } from '@/lib/types/gifting-types'
 import type { GiftProfile } from '@/lib/analysis/gift-profile'
+import type { ModelMessage, NormalizedModelCompletionResult } from '@/lib/ai/adapters/types'
 
 /**
  * LLM-enhanced risk assessment: Add semantic explanations and personalized mitigation suggestions
@@ -124,7 +125,37 @@ async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Prom
       return null
     }
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const completion = await requestAnthropicCompletion({
+      apiKey,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+    })
+
+    if (!completion.ok) {
+      console.warn('[LLM]', completion.error)
+      return null
+    }
+
+    return completion.content
+  } catch (error) {
+    console.warn('[LLM] Request failed:', error)
+    return null
+  }
+}
+
+async function requestAnthropicCompletion(input: {
+  apiKey: string
+  messages: ModelMessage[]
+}): Promise<NormalizedModelCompletionResult> {
+  const { apiKey, messages } = input
+  let response: Response
+
+  try {
+    response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'x-api-key': apiKey,
@@ -134,29 +165,42 @@ async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Prom
       body: JSON.stringify({
         model: 'claude-3-5-sonnet-20241022',
         max_tokens: 1024,
-        messages: [
-          {
-            role: 'user',
-            content: prompt,
-          },
-        ],
+        messages,
       }),
     })
-
-    if (!response.ok) {
-      const error = await response.text()
-      console.warn('[LLM] API error:', response.status, error)
-      return null
-    }
-
-    const data = (await response.json()) as {
-      content?: Array<{ type?: string; text?: string }>
-    }
-    const textContent = data.content?.find(c => c.type === 'text')
-    return textContent?.text ?? null
   } catch (error) {
-    console.warn('[LLM] Request failed:', error)
-    return null
+    return {
+      ok: false,
+      error:
+        error instanceof Error && error.message
+          ? `anthropic request failed: ${error.message}`
+          : 'anthropic request failed',
+    }
+  }
+
+  if (!response.ok) {
+    const error = await response.text()
+    return {
+      ok: false,
+      error: `anthropic api error ${response.status}: ${error}`,
+    }
+  }
+
+  const data = (await response.json()) as {
+    content?: Array<{ type?: string; text?: string }>
+  }
+  const textContent = data.content?.find(c => c.type === 'text')?.text?.trim()
+
+  if (!textContent) {
+    return {
+      ok: false,
+      error: 'anthropic empty model output',
+    }
+  }
+
+  return {
+    ok: true,
+    content: textContent,
   }
 }
 

@@ -4,23 +4,11 @@ import {
   type RecognitionResult,
 } from "@/lib/analysis/cultural-analyzer";
 import { buildGiftProfile } from "@/lib/analysis/gift-profile";
+import { requestDashScopeCompletion } from "@/lib/ai/adapters/dashscope";
+import type { ModelMessage } from "@/lib/ai/adapters/types";
 
 export const runtime = "nodejs";
 
-type DashScopeMessageContent =
-  | string
-  | Array<{
-      type?: string;
-      text?: string;
-    }>;
-
-type DashScopeResponse = {
-  choices?: Array<{
-    message?: {
-      content?: DashScopeMessageContent;
-    };
-  }>;
-};
 
 type VisionResponse = {
   recognition: RecognitionResult;
@@ -30,12 +18,6 @@ type VisionResponse = {
   detectedLabel?: string;
 };
 
-type ProviderErrorPayload = {
-  error?: {
-    message?: string;
-    code?: string;
-  };
-};
 
 type IncomingImagePayload = {
   image?: string;
@@ -139,30 +121,6 @@ function buildLocalFallbackResponse(input: {
     ),
     detectedLabel: sanitizeLabel(normalizedLabel, normalizedLabel),
   };
-}
-
-async function readProviderError(response: Response): Promise<string> {
-  const raw = await response.text();
-
-  try {
-    const parsed = JSON.parse(raw) as ProviderErrorPayload;
-    const message = parsed.error?.message?.trim();
-    const code = parsed.error?.code?.trim();
-
-    if (message && code) {
-      return `${code}: ${message}`;
-    }
-
-    if (message) {
-      return message;
-    }
-  } catch {
-    if (raw.trim()) {
-      return raw.slice(0, 500);
-    }
-  }
-
-  return `provider request failed with status ${response.status}`;
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -319,21 +277,6 @@ function sanitizeRawLabels(labels: string[]): string[] {
     .filter((item) => item.length > 0 && !isLikelyStructuredText(item))
     .map((item) => shortenText(item, 60))
     .slice(0, 6);
-}
-
-function extractTextContent(content: DashScopeMessageContent | undefined): string {
-  if (typeof content === "string") {
-    return content;
-  }
-
-  if (!Array.isArray(content)) {
-    return "";
-  }
-
-  return content
-    .filter((item) => item.type === "text" && typeof item.text === "string")
-    .map((item) => item.text ?? "")
-    .join("\n");
 }
 
 function extractJsonFromText(text: string): Record<string, unknown> | null {
@@ -520,47 +463,40 @@ export async function POST(request: Request) {
         );
       }
 
-      const textResponse = await fetch(`${baseUrl}/chat/completions`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model,
-          temperature: 0.1,
-          max_tokens: 120,
-          messages: [
-            {
-              role: "system",
-              content: buildTextRecognitionSystemPrompt(incomingPayload.language),
-            },
-            {
-              role: "user",
-              content: buildTextRecognitionUserPrompt(
-                incomingPayload.text,
-                incomingPayload.language
-              ),
-            },
-          ],
-          response_format: { type: "json_object" },
-        }),
+      const textCompletion = await requestDashScopeCompletion({
+        apiKey,
+        baseUrl,
+        model,
+        temperature: 0.1,
+        maxTokens: 120,
+        responseFormat: { type: "json_object" },
+        networkErrorPrefix: "aliyun text recognition network error",
+        providerErrorPrefix: "aliyun text recognition request failed",
+        messages: [
+          {
+            role: "system",
+            content: buildTextRecognitionSystemPrompt(incomingPayload.language),
+          },
+          {
+            role: "user",
+            content: buildTextRecognitionUserPrompt(
+              incomingPayload.text,
+              incomingPayload.language
+            ),
+          },
+        ] as ModelMessage[],
       });
 
-      if (!textResponse.ok) {
-        const providerError = await readProviderError(textResponse);
-
+      if (!textCompletion.ok) {
         return NextResponse.json(
           {
-            error: `aliyun text recognition request failed: ${providerError}`,
+            error: textCompletion.error,
           },
           { status: 502 }
         );
       }
 
-      const textPayload = (await textResponse.json()) as DashScopeResponse;
-      const textContent = extractTextContent(textPayload.choices?.[0]?.message?.content);
-      const textParsed = extractJsonFromText(textContent);
+      const textParsed = extractJsonFromText(textCompletion.content);
 
       if (!textParsed) {
         return NextResponse.json(
@@ -631,58 +567,48 @@ export async function POST(request: Request) {
 
     const imageDataUrl = incomingPayload.imageDataUrl;
 
-    const dashScopeResponse = await fetch(
-      `${baseUrl}/chat/completions`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
+    const visionCompletion = await requestDashScopeCompletion({
+      apiKey,
+      baseUrl,
+      model,
+      temperature: 0.1,
+      maxTokens: 120,
+      responseFormat: { type: "json_object" },
+      networkErrorPrefix: "aliyun vision network error",
+      providerErrorPrefix: "aliyun vision request failed",
+      messages: [
+        {
+          role: "system",
+          content: buildImageRecognitionSystemPrompt(incomingPayload.language),
         },
-        body: JSON.stringify({
-          model,
-          temperature: 0.1,
-          max_tokens: 120,
-          messages: [
+        {
+          role: "user",
+          content: [
             {
-              role: "system",
-              content: buildImageRecognitionSystemPrompt(incomingPayload.language),
+              type: "text",
+              text: buildImageRecognitionUserPrompt(incomingPayload.language),
             },
             {
-              role: "user",
-              content: [
-                {
-                  type: "text",
-                  text: buildImageRecognitionUserPrompt(incomingPayload.language),
-                },
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: imageDataUrl,
-                  },
-                },
-              ],
+              type: "image_url",
+              image_url: {
+                url: imageDataUrl,
+              },
             },
           ],
-          response_format: { type: "json_object" },
-        }),
-      }
-    );
+        },
+      ] as ModelMessage[],
+    });
 
-    if (!dashScopeResponse.ok) {
-      const providerError = await readProviderError(dashScopeResponse);
-
+    if (!visionCompletion.ok) {
       return NextResponse.json(
         {
-          error: `aliyun vision request failed: ${providerError}`,
+          error: visionCompletion.error,
         },
         { status: 502 }
       );
     }
 
-    const payload = (await dashScopeResponse.json()) as DashScopeResponse;
-    const content = extractTextContent(payload.choices?.[0]?.message?.content);
-    const parsed = extractJsonFromText(content);
+    const parsed = extractJsonFromText(visionCompletion.content);
 
     if (!parsed) {
       return NextResponse.json(

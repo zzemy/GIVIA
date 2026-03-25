@@ -7,21 +7,12 @@ import {
   type SupportedCountry,
 } from "@/lib/analysis/cultural-analyzer";
 import { calculateCulturalFitScore, type GiftScore } from "@/lib/domain/gifting";
+import { requestDashScopeCompletion as requestDashScopeAdapterCompletion } from "@/lib/ai/adapters/dashscope";
+import type { ModelMessage, NormalizedModelCompletionResult } from "@/lib/ai/adapters/types";
 
 export const runtime = "nodejs";
 
-type ChatMessage = {
-  role: "system" | "user" | "assistant";
-  content: string;
-};
-
-type DashScopeResponse = {
-  choices?: Array<{
-    message?: {
-      content?: string | Array<{ type?: string; text?: string }>;
-    };
-  }>;
-};
+type ChatMessage = ModelMessage;
 
 type GenerateRequest = {
   country: string;
@@ -69,51 +60,12 @@ type GenerateResponse = {
   source: string;
 };
 
-type ProviderErrorPayload = {
-  error?: {
-    message?: string;
-    code?: string;
-  };
-};
-
 type StrictParseResult = {
   analysis: CulturalAnalysis | null;
   missingFields: string[];
 };
 
-type CompletionResult =
-  | {
-      ok: true;
-      content: string;
-    }
-  | {
-      ok: false;
-      error: string;
-    };
-
-async function readProviderError(response: Response): Promise<string> {
-  const raw = await response.text();
-
-  try {
-    const parsed = JSON.parse(raw) as ProviderErrorPayload;
-    const message = parsed.error?.message?.trim();
-    const code = parsed.error?.code?.trim();
-
-    if (message && code) {
-      return `${code}: ${message}`;
-    }
-
-    if (message) {
-      return message;
-    }
-  } catch {
-    if (raw.trim()) {
-      return raw.slice(0, 500);
-    }
-  }
-
-  return `provider request failed with status ${response.status}`;
-}
+type CompletionResult = NormalizedModelCompletionResult;
 
 function isRiskLevel(value: unknown): value is CulturalAnalysis["riskLevel"] {
   return value === "Low" || value === "Medium" || value === "High";
@@ -397,23 +349,6 @@ function getValueByAliases(
   return undefined;
 }
 
-function contentToString(
-  content: string | Array<{ type?: string; text?: string }> | undefined
-): string {
-  if (typeof content === "string") {
-    return content;
-  }
-
-  if (!Array.isArray(content)) {
-    return "";
-  }
-
-  return content
-    .map((part) => (typeof part?.text === "string" ? part.text : ""))
-    .join("\n")
-    .trim();
-}
-
 function isRecognitionResult(value: unknown): value is RecognitionResult {
   if (typeof value !== "object" || value === null) {
     return false;
@@ -444,7 +379,11 @@ function clipText(value: string | undefined, maxLength: number): string {
   return trimmed.slice(0, maxLength);
 }
 
-function compactLabels(value: string[] | undefined, itemMaxLength: number, maxItems: number): string[] {
+function compactLabels(
+  value: string[] | undefined,
+  itemMaxLength: number,
+  maxItems: number
+): string[] {
   if (!Array.isArray(value)) {
     return [];
   }
@@ -515,55 +454,16 @@ async function requestDashScopeCompletion(
   messages: ChatMessage[],
   temperature: number
 ): Promise<CompletionResult> {
-  let dashScopeResponse: Response;
-
-  try {
-    dashScopeResponse = await fetch(`${baseUrl}/chat/completions`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model,
-        temperature,
-        messages,
-        response_format: { type: "json_object" },
-      }),
-    });
-  } catch (error) {
-    return {
-      ok: false,
-      error:
-        error instanceof Error && error.message
-          ? `aliyun generation network error: ${error.message}`
-          : "aliyun generation network error",
-    };
-  }
-
-  if (!dashScopeResponse.ok) {
-    const providerError = await readProviderError(dashScopeResponse);
-
-    return {
-      ok: false,
-      error: `aliyun generation request failed: ${providerError}`,
-    };
-  }
-
-  const payload = (await dashScopeResponse.json()) as DashScopeResponse;
-  const content = contentToString(payload.choices?.[0]?.message?.content);
-
-  if (!content.trim()) {
-    return {
-      ok: false,
-      error: "empty model output",
-    };
-  }
-
-  return {
-    ok: true,
-    content,
-  };
+  return requestDashScopeAdapterCompletion({
+    apiKey,
+    baseUrl,
+    model,
+    messages,
+    temperature,
+    responseFormat: { type: 'json_object' },
+    networkErrorPrefix: 'aliyun generation network error',
+    providerErrorPrefix: 'aliyun generation request failed',
+  });
 }
 
 function buildMessages(request: ResolvedGenerateRequest): ChatMessage[] {
