@@ -14,6 +14,11 @@ import { ResultsSection } from '@/components/gifting/home/results-section'
 import { WorkflowSupportPanels } from '@/components/gifting/home/workflow-support-panels'
 import { getImpactCards } from '@/components/gifting/home/impact-cards'
 import {
+  beautifyDescriptionText,
+  parseRecognitionPayload,
+  type ParsedRecognitionPayload,
+} from '@/components/gifting/home/recognition-helpers'
+import {
   normalizeAnalysisResult,
   normalizeAnalysisEnhancements,
   budgetRangeToAmount,
@@ -58,14 +63,6 @@ import type {
   RecognitionSource,
 } from '@/components/gifting/home/types'
 
-interface RecognitionResponsePayload {
-  source?: string
-  recognition?: RecognitionResult
-  description?: string
-  detectedLabel?: string
-  rawLabels?: string[]
-  error?: string
-}
 
 export default function Home() {
   const params = useParams<{ locale?: string }>()
@@ -489,193 +486,8 @@ export default function Home() {
     setAnalysis(null)
   }
 
-  const isSupportedRecognitionSource = (value: unknown): value is RecognitionSource =>
-    value === 'aliyun-dashscope' ||
-    value === 'aliyun-dashscope-text' ||
-    value === 'local-fallback' ||
-    value === 'local-fallback-text'
-
-  const shortenText = (value: string, maxLength: number) => {
-    if (value.length <= maxLength) {
-      return value
-    }
-
-    return `${value.slice(0, Math.max(0, maxLength - 3))}...`
-  }
-
-  const isLikelyStructuredText = (value: string) => {
-    const compact = value.trim()
-
-    if (!compact) {
-      return false
-    }
-
-    if ((compact.startsWith('{') && compact.endsWith('}')) || (compact.startsWith('[') && compact.endsWith(']'))) {
-      return true
-    }
-
-    return compact.includes('"label"') || compact.includes('"description"')
-  }
-
-  const extractJsonRecord = (value: string): Record<string, unknown> | null => {
-    const compact = value.trim()
-
-    if (!compact) {
-      return null
-    }
-
-    try {
-      const direct = JSON.parse(compact)
-      return typeof direct === 'object' && direct !== null ? (direct as Record<string, unknown>) : null
-    } catch {
-      const start = compact.indexOf('{')
-      const end = compact.lastIndexOf('}')
-
-      if (start === -1 || end === -1 || end <= start) {
-        return null
-      }
-
-      try {
-        const sliced = JSON.parse(compact.slice(start, end + 1))
-        return typeof sliced === 'object' && sliced !== null ? (sliced as Record<string, unknown>) : null
-      } catch {
-        return null
-      }
-    }
-  }
-
-  const pickStringField = (record: Record<string, unknown>, keys: string[]) => {
-    for (const key of keys) {
-      const value = record[key]
-
-      if (typeof value === 'string' && value.trim()) {
-        return value.trim()
-      }
-    }
-
-    return ''
-  }
-
-  const normalizeDetectedLabel = (raw: string, fallback: string) => {
-    const compact = raw.trim()
-    const parsed = extractJsonRecord(compact)
-
-    if (parsed) {
-      const parsedLabel = pickStringField(parsed, ['label', 'name', 'item', 'item_name'])
-      if (parsedLabel) {
-        return shortenText(parsedLabel, 60)
-      }
-    }
-
-    if (compact && !isLikelyStructuredText(compact)) {
-      return shortenText(compact, 60)
-    }
-
-    return shortenText(fallback.trim(), 60)
-  }
-
-  const normalizeDescription = (raw: string, fallback: string) => {
-    const compact = raw.trim()
-    const fallbackText = fallback.trim()
-
-    if (!compact) {
-      return shortenText(fallbackText, 240)
-    }
-
-    const parsed = extractJsonRecord(compact)
-    if (parsed) {
-      const direct = pickStringField(parsed, ['description', 'gift_description', 'item_description', 'summary', 'desc'])
-      if (direct) {
-        return shortenText(direct, 240)
-      }
-
-      const giftNode = parsed.gift
-      if (typeof giftNode === 'object' && giftNode !== null) {
-        const nested = pickStringField(giftNode as Record<string, unknown>, [
-          'description',
-          'gift_description',
-          'item_description',
-          'summary',
-          'desc',
-        ])
-
-        if (nested) {
-          return shortenText(nested, 240)
-        }
-      }
-    }
-
-    if (isLikelyStructuredText(compact)) {
-      return shortenText(fallbackText, 240)
-    }
-
-    return shortenText(compact, 240)
-  }
-
-  const normalizeForCompare = (value: string) =>
-    value
-      .toLowerCase()
-      .replace(/[\s,，。.!！?？;；:：、'"“”‘’\-_/\\()[\]{}<>《》]/g, '')
-      .trim()
-
-  const isDuplicateDescription = (primary: string, secondary: string) => {
-    const normalizedPrimary = normalizeForCompare(primary)
-    const normalizedSecondary = normalizeForCompare(secondary)
-
-    if (!normalizedPrimary || !normalizedSecondary) {
-      return false
-    }
-
-    if (normalizedPrimary === normalizedSecondary) {
-      return true
-    }
-
-    const longer =
-      normalizedPrimary.length >= normalizedSecondary.length ? normalizedPrimary : normalizedSecondary
-    const shorter = longer === normalizedPrimary ? normalizedSecondary : normalizedPrimary
-
-    return shorter.length >= 8 && longer.includes(shorter)
-  }
-
-  const beautifyDescriptionText = (raw: string) => {
-    const compact = normalizeDescription(raw, '')
-
-    if (!compact) {
-      return ''
-    }
-
-    const chunks = compact
-      .split(/[，,。.!！?？;；、\n]+/)
-      .map(item => item.trim())
-      .filter(Boolean)
-
-    if (chunks.length === 0) {
-      return ''
-    }
-
-    const dedupedChunks: string[] = []
-    chunks.forEach(chunk => {
-      const duplicated = dedupedChunks.some(existing => isDuplicateDescription(existing, chunk))
-      if (!duplicated) {
-        dedupedChunks.push(chunk)
-      }
-    })
-
-    const merged = isZh ? dedupedChunks.join('，') : dedupedChunks.join(', ')
-    const punctuated = /[。.!！?？]$/.test(merged) ? merged : `${merged}${isZh ? '。' : '.'}`
-
-    return shortenText(punctuated, 240)
-  }
-
-  const normalizeRawLabels = (labels: string[]) =>
-    labels
-      .map(item => item.trim())
-      .filter(item => item.length > 0 && !isLikelyStructuredText(item))
-      .map(item => shortenText(item, 60))
-      .slice(0, 6)
-
   const handleBeautifyGiftDescription = () => {
-    const polished = beautifyDescriptionText(giftDescription)
+    const polished = beautifyDescriptionText(giftDescription, isZh)
 
     if (!polished || polished === giftDescription.trim()) {
       return
@@ -686,7 +498,7 @@ export default function Home() {
   }
 
   const handleBeautifyVisionDescription = () => {
-    const polished = beautifyDescriptionText(visionDescription)
+    const polished = beautifyDescriptionText(visionDescription, isZh)
 
     if (polished === visionDescription.trim()) {
       return
@@ -696,62 +508,8 @@ export default function Home() {
     setAnalysis(null)
   }
 
-  const parseRecognitionPayload = async (response: Response): Promise<{
-    recognition: RecognitionResult
-    source: RecognitionSource
-    description: string
-    detectedLabel: string
-    rawLabels: string[]
-  }> => {
-    const data = (await response.json().catch(() => ({}))) as RecognitionResponsePayload
-
-    if (!response.ok) {
-      throw new Error(
-        typeof data.error === 'string'
-          ? data.error
-          : isZh
-            ? '识别失败，请稍后再试。'
-            : 'Recognition failed. Please try again.',
-      )
-    }
-
-    if (!isSupportedRecognitionSource(data.source) || !data.recognition) {
-      throw new Error(isZh ? '识别结果格式异常' : 'Invalid recognition response')
-    }
-
-    const fallbackLabel = isZh ? data.recognition.itemZh : data.recognition.itemEn
-    const normalizedDescription = normalizeDescription(
-      typeof data.description === 'string' ? data.description : '',
-      '',
-    )
-    const normalizedDetectedLabel = normalizeDetectedLabel(
-      typeof data.detectedLabel === 'string' ? data.detectedLabel : '',
-      fallbackLabel,
-    )
-
-    const sourceRawLabels = Array.isArray(data.rawLabels)
-      ? data.rawLabels.filter((item): item is string => typeof item === 'string')
-      : []
-    const normalizedRawLabels = normalizeRawLabels(sourceRawLabels)
-    const mergedRawLabels = normalizedRawLabels.length > 0 ? normalizedRawLabels : normalizeRawLabels([normalizedDetectedLabel])
-
-    return {
-      recognition: data.recognition,
-      source: data.source,
-      description: normalizedDescription,
-      detectedLabel: normalizedDetectedLabel,
-      rawLabels: mergedRawLabels,
-    }
-  }
-
-  const applyRecognitionPayload = (payload: {
-    recognition: RecognitionResult
-    source: RecognitionSource
-    description: string
-    detectedLabel: string
-    rawLabels: string[]
-  }) => {
-    const polishedDescription = beautifyDescriptionText(payload.description)
+  const applyRecognitionPayload = (payload: ParsedRecognitionPayload) => {
+    const polishedDescription = beautifyDescriptionText(payload.description, isZh)
 
     setRecognition(payload.recognition)
     setRecognitionSource(payload.source)
@@ -767,13 +525,7 @@ export default function Home() {
     }
   }
 
-  const recognizeByText = async (): Promise<{
-    recognition: RecognitionResult
-    source: RecognitionSource
-    description: string
-    detectedLabel: string
-    rawLabels: string[]
-  }> => {
+  const recognizeByText = async (): Promise<ParsedRecognitionPayload> => {
     const text = [giftName.trim(), giftDescription.trim()].filter(Boolean).join(' ').trim()
 
     const response = await fetch('/api/vision-recognize', {
@@ -787,16 +539,10 @@ export default function Home() {
       }),
     })
 
-    return parseRecognitionPayload(response)
+    return parseRecognitionPayload(response, isZh)
   }
 
-  const recognizeByImage = async (): Promise<{
-    recognition: RecognitionResult
-    source: RecognitionSource
-    description: string
-    detectedLabel: string
-    rawLabels: string[]
-  }> => {
+  const recognizeByImage = async (): Promise<ParsedRecognitionPayload> => {
     if (!selectedFile) {
       throw new Error(isZh ? '请先上传礼物图片' : 'Please upload a gift image first')
     }
@@ -810,7 +556,7 @@ export default function Home() {
       body: formData,
     })
 
-    return parseRecognitionPayload(response)
+    return parseRecognitionPayload(response, isZh)
   }
 
   const handleRecognize = async () => {
@@ -884,8 +630,8 @@ export default function Home() {
         source = textRecognition.source
       }
 
-      const polishedGiftDescription = beautifyDescriptionText(giftDescription)
-      const polishedVisionDescription = beautifyDescriptionText(recognitionDescription)
+      const polishedGiftDescription = beautifyDescriptionText(giftDescription, isZh)
+      const polishedVisionDescription = beautifyDescriptionText(recognitionDescription, isZh)
       const mergedDescription = polishedVisionDescription || polishedGiftDescription
 
       if (giftDescription.trim() !== polishedGiftDescription && polishedGiftDescription) {
