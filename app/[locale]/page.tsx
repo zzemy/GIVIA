@@ -3040,152 +3040,6 @@ export default function Home() {
                 </motion.div>
               )}
 
-              <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-cyan-400/20 bg-white/5 p-6 backdrop-blur-sm">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <Wallet size={18} className="text-cyan-200" />
-                    <h3 className="text-xl font-bold">
-                      {isZh
-                        ? '跨境物流与支付助手'
-                        : isJa
-                          ? '越境配送・決済アシスタント'
-                          : isFr
-                            ? 'Assistant logistique et paiement'
-                            : 'Cross-border Logistics & Payment Assistant'}
-                    </h3>
-                  </div>
-                  <span className="rounded-full border border-cyan-300/25 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-100">
-                    {assistantResult?.rateSource === 'live'
-                      ? isZh
-                        ? '实时汇率'
-                        : isJa
-                          ? 'リアルタイム為替'
-                          : isFr
-                            ? 'Taux en direct'
-                            : 'Live FX'
-                      : isZh
-                        ? '汇率回退'
-                        : isJa
-                          ? '為替フォールバック'
-                          : isFr
-                            ? 'Taux de secours'
-                            : 'Fallback FX'}
-                  </span>
-                </div>
-
-                <div className="mt-4 grid gap-3 md:grid-cols-4">
-                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '礼物价格' : isJa ? '商品価格' : isFr ? 'Prix du cadeau' : 'Gift price'}</p>
-                    <input
-                      value={assistantAmountInput}
-                      onChange={event => setAssistantAmountInput(event.target.value)}
-                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-                    />
-                  </div>
-
-                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '币种' : isJa ? '通貨' : isFr ? 'Devise' : 'Currency'}</p>
-                    <select
-                      value={assistantCurrency}
-                      onChange={event => setAssistantCurrency(event.target.value as AssistantCurrency)}
-                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-                    >
-                      {['USD', 'CNY', 'EUR', 'JPY', 'GBP'].map(currency => (
-                        <option key={currency} value={currency} className="bg-[#0f1f35] text-slate-100">
-                          {currency}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '重量(kg)' : isJa ? '重量(kg)' : isFr ? 'Poids (kg)' : 'Weight (kg)'}</p>
-                    <input
-                      value={assistantWeightInput}
-                      onChange={event => setAssistantWeightInput(event.target.value)}
-                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-                    />
-                  </div>
-
-                  <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '申报价值' : isJa ? '申告価格' : isFr ? 'Valeur déclarée' : 'Declared value'}</p>
-                    <input
-                      value={assistantDeclaredValueInput}
-                      onChange={event => setAssistantDeclaredValueInput(event.target.value)}
-                      className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-4 flex flex-wrap items-center gap-3">
-                  <Button
-                    type="button"
-                    onClick={handleRunLogisticsAssistant}
-                    disabled={isAssistantLoading}
-                    className="border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22"
-                  >
-                    <Truck size={16} className="mr-2" />
-                    {isAssistantLoading
-                      ? isZh
-                        ? '估算中...'
-                        : isJa
-                          ? '計算中...'
-                          : isFr
-                            ? 'Calcul...'
-                            : 'Estimating...'
-                      : isZh
-                        ? '估算物流与支付'
-                        : isJa
-                          ? '配送と決済を見積もる'
-                          : isFr
-                            ? 'Estimer logistique & paiement'
-                            : 'Estimate logistics & payment'}
-                  </Button>
-                  {assistantError && <p className="text-sm text-red-300">{assistantError}</p>}
-                </div>
-
-                {assistantResult && (
-                  <div className="mt-5 space-y-4">
-                    <div className="grid gap-3 md:grid-cols-5">
-                      {Object.entries(assistantResult.convertedAmounts).map(([currency, value]) => (
-                        <div key={currency} className="rounded-xl border border-slate-500/30 bg-slate-900/45 p-3">
-                          <p className="text-xs text-slate-400">{currency}</p>
-                          <p className="mt-1 text-lg font-semibold text-slate-100">{value.toFixed(2)}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="grid gap-3 md:grid-cols-2">
-                      {assistantResult.shippingQuotes.map(quote => (
-                        <div key={`${quote.provider}-${quote.service}`} className="rounded-xl border border-cyan-300/20 bg-[#10253b]/80 p-4">
-                          <div className="flex items-center justify-between">
-                            <p className="text-sm font-semibold text-cyan-100">{quote.provider}</p>
-                            <span className="text-xs text-slate-300">{quote.etaDays} {isZh ? '天' : isJa ? '日' : isFr ? 'jours' : 'days'}</span>
-                          </div>
-                          <p className="mt-1 text-xs text-slate-400">{quote.service}</p>
-                          <p className="mt-3 text-lg font-bold text-slate-100">{quote.currency} {quote.estimatedCost.toFixed(2)}</p>
-                          <ul className="mt-2 space-y-1 text-xs text-slate-300">
-                            {quote.notes.map(note => (
-                              <li key={note}>• {note}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="rounded-xl border border-amber-300/20 bg-amber-500/8 p-3">
-                      <p className="text-sm font-semibold text-amber-200">{isZh ? '清关注意事项' : isJa ? '通関の注意点' : isFr ? 'Points de douane' : 'Customs notes'}</p>
-                      <ul className="mt-2 space-y-1 text-xs text-amber-100/90">
-                        {assistantResult.customsNotes.map(note => (
-                          <li key={note}>• {note}</li>
-                        ))}
-                      </ul>
-                      <p className="mt-2 text-[11px] text-amber-100/80">{assistantResult.disclaimer}</p>
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-
               {analysis.matchedRules.length > 0 && (
                 <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-amber-400/20 bg-white/5 p-6 backdrop-blur-sm">
                   <h3 className="text-xl font-bold">{locale === 'zh' ? '命中的文化规则' : 'Matched Cultural Rules'}</h3>
@@ -3559,6 +3413,153 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Logistics Assistant - independent of analysis */}
+        <div className="mt-6 rounded-2xl border border-cyan-400/20 bg-white/5 p-6 backdrop-blur-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Wallet size={18} className="text-cyan-200" />
+              <h3 className="text-xl font-bold">
+                {isZh
+                  ? '跨境物流与支付助手'
+                  : isJa
+                    ? '越境配送・決済アシスタント'
+                    : isFr
+                      ? 'Assistant logistique et paiement'
+                      : 'Cross-border Logistics & Payment Assistant'}
+              </h3>
+            </div>
+            <span className="rounded-full border border-cyan-300/25 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-100">
+              {assistantResult?.rateSource === 'live'
+                ? isZh
+                  ? '实时汇率'
+                  : isJa
+                    ? 'リアルタイム為替'
+                    : isFr
+                      ? 'Taux en direct'
+                      : 'Live FX'
+                : isZh
+                  ? '汇率回退'
+                  : isJa
+                    ? '為替フォールバック'
+                    : isFr
+                      ? 'Taux de secours'
+                      : 'Fallback FX'}
+            </span>
+          </div>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-4">
+            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '礼物价格' : isJa ? '商品価格' : isFr ? 'Prix du cadeau' : 'Gift price'}</p>
+              <input
+                value={assistantAmountInput}
+                onChange={event => setAssistantAmountInput(event.target.value)}
+                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+              />
+            </div>
+
+            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '币种' : isJa ? '通貨' : isFr ? 'Devise' : 'Currency'}</p>
+              <select
+                value={assistantCurrency}
+                onChange={event => setAssistantCurrency(event.target.value as AssistantCurrency)}
+                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+              >
+                {['USD', 'CNY', 'EUR', 'JPY', 'GBP'].map(currency => (
+                  <option key={currency} value={currency} className="bg-[#0f1f35] text-slate-100">
+                    {currency}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '重量(kg)' : isJa ? '重量(kg)' : isFr ? 'Poids (kg)' : 'Weight (kg)'}</p>
+              <input
+                value={assistantWeightInput}
+                onChange={event => setAssistantWeightInput(event.target.value)}
+                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+              />
+            </div>
+
+            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '申报价值' : isJa ? '申告価格' : isFr ? 'Valeur déclarée' : 'Declared value'}</p>
+              <input
+                value={assistantDeclaredValueInput}
+                onChange={event => setAssistantDeclaredValueInput(event.target.value)}
+                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+              />
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <Button
+              type="button"
+              onClick={handleRunLogisticsAssistant}
+              disabled={isAssistantLoading}
+              className="border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22"
+            >
+              <Truck size={16} className="mr-2" />
+              {isAssistantLoading
+                ? isZh
+                  ? '估算中...'
+                  : isJa
+                    ? '計算中...'
+                    : isFr
+                      ? 'Calcul...'
+                      : 'Estimating...'
+                : isZh
+                  ? '估算物流与支付'
+                  : isJa
+                    ? '配送と決済を見積もる'
+                    : isFr
+                      ? 'Estimer logistique & paiement'
+                      : 'Estimate logistics & payment'}
+            </Button>
+            {assistantError && <p className="text-sm text-red-300">{assistantError}</p>}
+          </div>
+
+          {assistantResult && (
+            <div className="mt-5 space-y-4">
+              <div className="grid gap-3 md:grid-cols-5">
+                {Object.entries(assistantResult.convertedAmounts).map(([currency, value]) => (
+                  <div key={currency} className="rounded-xl border border-slate-500/30 bg-slate-900/45 p-3">
+                    <p className="text-xs text-slate-400">{currency}</p>
+                    <p className="mt-1 text-lg font-semibold text-slate-100">{value.toFixed(2)}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid gap-3 md:grid-cols-2">
+                {assistantResult.shippingQuotes.map(quote => (
+                  <div key={`${quote.provider}-${quote.service}`} className="rounded-xl border border-cyan-300/20 bg-[#10253b]/80 p-4">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold text-cyan-100">{quote.provider}</p>
+                      <span className="text-xs text-slate-300">{quote.etaDays} {isZh ? '天' : isJa ? '日' : isFr ? 'jours' : 'days'}</span>
+                    </div>
+                    <p className="mt-1 text-xs text-slate-400">{quote.service}</p>
+                    <p className="mt-3 text-lg font-bold text-slate-100">{quote.currency} {quote.estimatedCost.toFixed(2)}</p>
+                    <ul className="mt-2 space-y-1 text-xs text-slate-300">
+                      {quote.notes.map(note => (
+                        <li key={note}>• {note}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-xl border border-amber-300/20 bg-amber-500/8 p-3">
+                <p className="text-sm font-semibold text-amber-200">{isZh ? '清关注意事项' : isJa ? '通関の注意点' : isFr ? 'Points de douane' : 'Customs notes'}</p>
+                <ul className="mt-2 space-y-1 text-xs text-amber-100/90">
+                  {assistantResult.customsNotes.map(note => (
+                    <li key={note}>• {note}</li>
+                  ))}
+                </ul>
+                <p className="mt-2 text-[11px] text-amber-100/80">{assistantResult.disclaimer}</p>
+              </div>
+            </div>
+          )}
+        </div>
 
         {historyRecords.length > 0 && (
           <section className="mt-6 rounded-2xl border border-cyan-200/20 bg-[#10243b]/70 p-4 sm:mt-8 sm:p-6 lg:mt-10">
