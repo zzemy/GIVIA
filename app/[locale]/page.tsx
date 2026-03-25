@@ -11,7 +11,10 @@ import { StepGiftInput } from '@/components/gifting/home/step-gift-input'
 import { StepAnalysis } from '@/components/gifting/home/step-analysis'
 import { StepCountry } from '@/components/gifting/home/step-country'
 import { ResultsSection } from '@/components/gifting/home/results-section'
-import { WorkflowSupportPanels } from '@/components/gifting/home/workflow-support-panels'
+import {
+  WorkflowSupportAssistantPanel,
+  WorkflowSupportHistoryPanels,
+} from '@/components/gifting/home/workflow-support-panels'
 import {
   beautifyDescriptionText,
   parseRecognitionPayload,
@@ -812,6 +815,13 @@ export default function Home() {
             onAnalyze={handleAnalyze}
           />
 
+          <div className="hidden xl:block">
+            <WorkflowSupportHistoryPanels
+              locale={locale}
+              historyRecords={historyRecords}
+              favoriteGiftChecklist={favoriteGiftChecklist}
+            />
+          </div>
           </div>
 
           <div className="space-y-4 sm:space-y-6 xl:col-span-7">
@@ -907,10 +917,8 @@ export default function Home() {
             }}
           />
 
-          <WorkflowSupportPanels
+          <WorkflowSupportAssistantPanel
           locale={locale}
-          historyRecords={historyRecords}
-          favoriteGiftChecklist={favoriteGiftChecklist}
           assistantAmountInput={assistantAmountInput}
           assistantCurrency={assistantCurrency}
           assistantWeightInput={assistantWeightInput}
@@ -924,6 +932,14 @@ export default function Home() {
           onAssistantDeclaredValueChange={setAssistantDeclaredValueInput}
           onRunLogisticsAssistant={handleRunLogisticsAssistant}
         />
+
+          <div className="xl:hidden">
+            <WorkflowSupportHistoryPanels
+              locale={locale}
+              historyRecords={historyRecords}
+              favoriteGiftChecklist={favoriteGiftChecklist}
+            />
+          </div>
           </div>
         </div>
 
