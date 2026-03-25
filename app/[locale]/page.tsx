@@ -741,8 +741,8 @@ export default function Home() {
         </div>
 
         {/* Three-step workflow panels */}
-        <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-start">
-          <div className="space-y-4 sm:space-y-6 xl:col-span-5">
+        <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-stretch">
+          <div className="grid content-start gap-4 sm:gap-6 xl:col-span-5 xl:auto-rows-max">
           <StepGiftInput
             locale={locale}
             recognition={recognition}
@@ -815,16 +815,14 @@ export default function Home() {
             onAnalyze={handleAnalyze}
           />
 
-          <div className="hidden xl:block">
-            <WorkflowSupportHistoryPanels
-              locale={locale}
-              historyRecords={historyRecords}
-              favoriteGiftChecklist={favoriteGiftChecklist}
-            />
-          </div>
+          <WorkflowSupportHistoryPanels
+            locale={locale}
+            historyRecords={historyRecords}
+            favoriteGiftChecklist={favoriteGiftChecklist}
+          />
           </div>
 
-          <div className="space-y-4 sm:space-y-6 xl:col-span-7">
+          <div className="grid content-start gap-4 sm:gap-6 xl:col-span-7 xl:auto-rows-max">
           <StepCountry
             locale={locale}
             t={t}
@@ -933,13 +931,6 @@ export default function Home() {
           onRunLogisticsAssistant={handleRunLogisticsAssistant}
         />
 
-          <div className="xl:hidden">
-            <WorkflowSupportHistoryPanels
-              locale={locale}
-              historyRecords={historyRecords}
-              favoriteGiftChecklist={favoriteGiftChecklist}
-            />
-          </div>
           </div>
         </div>
 

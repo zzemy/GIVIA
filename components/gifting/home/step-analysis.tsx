@@ -64,7 +64,7 @@ export function StepAnalysis({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
       whileHover={{ y: -4, scale: 1.01 }}
-      className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-4 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-colors hover:border-cyan-200/40 sm:p-6"
+      className="h-full rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-4 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-colors hover:border-cyan-200/40 sm:p-6"
     >
       <div className="mb-5 flex items-start justify-between border-b border-slate-400/15 pb-4">
         <div>

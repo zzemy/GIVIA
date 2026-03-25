@@ -269,18 +269,21 @@ export function WorkflowSupportHistoryPanels({
             </span>
           </div>
 
-          <div className="mt-5 grid gap-3">
+          <div className="mt-5 -mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {historyRecords.map(record => (
-              <div key={record.id} className="rounded-xl border border-slate-500/30 bg-slate-900/45 p-4">
+              <article
+                key={record.id}
+                className="flex min-w-[280px] max-w-[340px] flex-none snap-start flex-col rounded-2xl border border-slate-500/30 bg-slate-900/45 p-4 shadow-[0_10px_26px_rgba(2,6,23,0.18)] sm:min-w-[320px]"
+              >
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold text-slate-100">{record.giftName}</p>
+                  <div className="min-w-0">
+                    <p className="truncate text-base font-semibold text-slate-100">{record.giftName}</p>
                     <p className="mt-1 text-xs text-slate-400">
                       {record.countryName} · {record.audienceLabel}
                     </p>
                   </div>
                   <span
-                    className={`rounded-full px-2 py-1 text-[11px] ${
+                    className={`shrink-0 rounded-full px-2 py-1 text-[11px] ${
                       record.riskLevel === 'High'
                         ? 'bg-red-500/15 text-red-200'
                         : record.riskLevel === 'Medium'
@@ -303,8 +306,8 @@ export function WorkflowSupportHistoryPanels({
                     ))}
                   </div>
                 )}
-                <p className="mt-3 text-[11px] text-slate-500">{new Date(record.createdAt).toLocaleString()}</p>
-              </div>
+                <p className="mt-auto pt-4 text-[11px] text-slate-500">{new Date(record.createdAt).toLocaleString()}</p>
+              </article>
             ))}
           </div>
         </section>
