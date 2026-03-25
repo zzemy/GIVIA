@@ -341,6 +341,8 @@ export function getPackingRecommendations(
   destination: string,
   locale: P0Locale = 'en',
 ): { general: string[]; estimated_cost_impact: string } {
+  void locale
+
   const baseRecommendations: Record<string, string[]> = {
     fragile: ['Use bubble wrap', 'Double cardboard box', 'Add corner protectors'],
     liquid: ['Use leak-proof container', 'Place in waterproof bag', 'Declare on customs form'],

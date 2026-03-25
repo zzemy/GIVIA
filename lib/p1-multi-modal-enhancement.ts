@@ -8,8 +8,6 @@
  * - Semantic enrichment: Brand associations, category signals
  */
 
-import type { GiftContextInput } from '@/lib/p0-types'
-
 export interface OCRResult {
   text: string[]
   brands: string[]
@@ -65,7 +63,6 @@ export function extractOCRFromImage(imageDescription: string): OCRResult {
     .map(m => m![0])
 
   // Extract specifications
-  const specPatterns = [/(\d+ml|\d+g|\d+cm|防水|耐摔|环保|有机|天然|手工)/gi]
   const specs = imageDescription.match(/(\d+ml|\d+g|\d+cm|防水|耐摔|环保|有机|天然|手工)/gi) || []
 
   return {
@@ -113,7 +110,7 @@ export function extractVisualAttributes(imageDescription: string): VisualAttribu
   }
 
   const materials = Object.entries(materialPatterns)
-    .filter(([_, keywords]) => keywords.some(kw => descLower.includes(kw)))
+    .filter(([, keywords]) => keywords.some(kw => descLower.includes(kw)))
     .map(([material]) => ({ material, confidence: 0.8 }))
 
   // Style detection

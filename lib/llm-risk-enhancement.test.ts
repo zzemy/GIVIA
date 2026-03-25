@@ -1,4 +1,4 @@
-import { enhanceRiskWithLLM, mergeLLMEnhancement } from '@/lib/llm-risk-enhancement'
+import { mergeLLMEnhancement } from '@/lib/llm-risk-enhancement'
 import { runAnalysisWithLLMEnhancement } from '@/lib/analysis-runner'
 import type { AudienceProfileInput, GiftContextInput } from '@/lib/p0-types'
 

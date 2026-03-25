@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, ChevronDown, ChevronUp } from 'lucide-react'
+import { CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CountrySelector } from '@/components/gifting/country-selector'
 import { withBasePath } from '@/lib/asset-path'
@@ -42,8 +42,6 @@ interface StepCountryProps {
   profileFieldClassName: string
   profileLabelClassName: string
   profileControlClassName: string
-  showAdvancedAudienceFields: boolean
-  advancedAudienceFacts: string[]
   ageBand: string
   ageBandOptions: SelectOption[]
   gender: string
@@ -64,7 +62,6 @@ interface StepCountryProps {
   onCustomAudienceGroupChange: (value: string) => void
   onOccasionChange: (value: string) => void
   onTargetProfileChange: (value: string) => void
-  onToggleAdvancedAudienceFields: () => void
   onAgeBandChange: (value: string) => void
   onGenderChange: (value: string) => void
   onOccupationChange: (value: string) => void
@@ -98,8 +95,6 @@ export function StepCountry({
   profileFieldClassName,
   profileLabelClassName,
   profileControlClassName,
-  showAdvancedAudienceFields,
-  advancedAudienceFacts,
   ageBand,
   ageBandOptions,
   gender,
@@ -120,7 +115,6 @@ export function StepCountry({
   onCustomAudienceGroupChange,
   onOccasionChange,
   onTargetProfileChange,
-  onToggleAdvancedAudienceFields,
   onAgeBandChange,
   onGenderChange,
   onOccupationChange,
@@ -363,114 +357,85 @@ export function StepCountry({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.22 }}
           whileHover={{ y: -4, scale: 1.005 }}
-          className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
-        >
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '高级画像' : 'Advanced profile'}</p>
-              <p className="mt-1 text-xs leading-5 text-slate-300/82">
-                {isZh ? '年龄、职业、预算和正式度会影响推荐语气与替代方案。' : 'Age, occupation, budget, and formality refine tone and fallback suggestions.'}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={onToggleAdvancedAudienceFields}
-              className="inline-flex min-w-[88px] shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-cyan-200/18 bg-cyan-100/6 px-3 py-1.5 text-[11px] font-medium text-cyan-50 transition hover:border-cyan-200/32 hover:bg-cyan-100/10"
-            >
-              {showAdvancedAudienceFields ? (
-                <>
-                  <ChevronUp size={14} />
-                  {isZh ? '收起' : 'Collapse'}
-                </>
-              ) : (
-                <>
-                  <ChevronDown size={14} />
-                  {isZh ? '展开' : 'Expand'}
-                </>
-              )}
-            </button>
+        className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="w-full">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '高级画像' : 'Advanced profile'}</p>
+            <p className="mt-1 text-xs leading-5 text-slate-300/82">
+              {isZh ? '年龄、职业、预算和正式度会影响推荐语气与替代方案。' : 'Age, occupation, budget, and formality refine tone and fallback suggestions.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className={profileFieldClassName}>
+            <p className={profileLabelClassName}>{isZh ? '年龄' : 'Age'}</p>
+            <select value={ageBand} onChange={event => onAgeBandChange(event.target.value)} className={profileControlClassName}>
+              {ageBandOptions.map(option => (
+                <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {!showAdvancedAudienceFields && (
-            <div className="mt-4 flex flex-wrap gap-2 text-[11px] text-slate-300/84">
-              {advancedAudienceFacts.map(fact => (
-                <span key={fact} className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
-                  {fact}
-                </span>
+          <div className={profileFieldClassName}>
+            <p className={profileLabelClassName}>{isZh ? '性别偏向' : 'Gender tone'}</p>
+            <select value={gender} onChange={event => onGenderChange(event.target.value)} className={profileControlClassName}>
+              {genderOptions.map(option => (
+                <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                  {option.label}
+                </option>
               ))}
-            </div>
-          )}
+            </select>
+          </div>
 
-          {showAdvancedAudienceFields && (
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div className={profileFieldClassName}>
-                <p className={profileLabelClassName}>{isZh ? '年龄' : 'Age'}</p>
-                <select value={ageBand} onChange={event => onAgeBandChange(event.target.value)} className={profileControlClassName}>
-                  {ageBandOptions.map(option => (
-                    <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <div className={profileFieldClassName}>
+            <p className={profileLabelClassName}>{isZh ? '职业' : 'Occupation'}</p>
+            <select value={occupation} onChange={event => onOccupationChange(event.target.value)} className={profileControlClassName}>
+              {occupationOptions.map(option => (
+                <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-              <div className={profileFieldClassName}>
-                <p className={profileLabelClassName}>{isZh ? '性别偏向' : 'Gender tone'}</p>
-                <select value={gender} onChange={event => onGenderChange(event.target.value)} className={profileControlClassName}>
-                  {genderOptions.map(option => (
-                    <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <div className={profileFieldClassName}>
+            <p className={profileLabelClassName}>{isZh ? '关系' : 'Relationship'}</p>
+            <select value={relationship} onChange={event => onRelationshipChange(event.target.value)} className={profileControlClassName}>
+              {relationshipOptions.map(option => (
+                <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-              <div className={profileFieldClassName}>
-                <p className={profileLabelClassName}>{isZh ? '职业' : 'Occupation'}</p>
-                <select value={occupation} onChange={event => onOccupationChange(event.target.value)} className={profileControlClassName}>
-                  {occupationOptions.map(option => (
-                    <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <div className={profileFieldClassName}>
+            <p className={profileLabelClassName}>{isZh ? '预算' : 'Budget'}</p>
+            <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={profileControlClassName}>
+              {budgetOptions.map(option => (
+                <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-              <div className={profileFieldClassName}>
-                <p className={profileLabelClassName}>{isZh ? '关系' : 'Relationship'}</p>
-                <select value={relationship} onChange={event => onRelationshipChange(event.target.value)} className={profileControlClassName}>
-                  {relationshipOptions.map(option => (
-                    <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className={profileFieldClassName}>
-                <p className={profileLabelClassName}>{isZh ? '预算' : 'Budget'}</p>
-                <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={profileControlClassName}>
-                  {budgetOptions.map(option => (
-                    <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className={profileFieldClassName}>
-                <p className={profileLabelClassName}>{isZh ? '正式程度' : 'Formality'}</p>
-                <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={profileControlClassName}>
-                  {formalityOptions.map(option => (
-                    <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          )}
-        </motion.div>
+          <div className={profileFieldClassName}>
+            <p className={profileLabelClassName}>{isZh ? '正式程度' : 'Formality'}</p>
+            <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={profileControlClassName}>
+              {formalityOptions.map(option => (
+                <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

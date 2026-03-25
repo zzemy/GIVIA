@@ -116,6 +116,8 @@ Reply with JSON only (no other text):
 
 async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Promise<string | null> {
   try {
+    void locale
+
     // Try to use Claude API if available
     const apiKey = process.env.ANTHROPIC_API_KEY
     if (!apiKey) {
@@ -160,6 +162,8 @@ async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Prom
 
 function parseEnhancementResponse(response: string, locale: P0Locale): LLMEnhancedRiskResult | null {
   try {
+    void locale
+
     // Extract JSON from response (LLM might include markdown formatting)
     const jsonMatch = response.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
@@ -195,6 +199,8 @@ export function mergeLLMEnhancement(
   llmEnhancement: LLMEnhancedRiskResult | null,
   locale: P0Locale,
 ): AnalysisEngineResult {
+  void locale
+
   if (!llmEnhancement || llmEnhancement.confidence < 0.5) {
     return ruleResult // Keep original if LLM confidence is low
   }

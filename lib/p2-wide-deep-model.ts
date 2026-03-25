@@ -59,6 +59,8 @@ export interface ModelConfig {
  * Maps (user_id, gift_id, context) -> recommendation score
  */
 export function wideComponentScore(input: WideModelInput, _config: ModelConfig): number {
+  void _config
+
   // In production: use trained model weights stored in database
   // For now: simulated scoring based on historical patterns
 

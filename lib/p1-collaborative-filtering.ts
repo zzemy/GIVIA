@@ -180,7 +180,7 @@ export function suggestByCollaborativeFiltering(
   const currentKey = `${userProfile.group}:${userProfile.occasion || 'general'}`
   const similarGroups = Object.entries(preferenceGroups)
     .filter(([key]) => key === currentKey || key.startsWith(userProfile.group + ':'))
-    .map(([_, prefs]) => prefs)
+    .map(([, prefs]) => prefs)
     .flat()
 
   if (similarGroups.length === 0) {

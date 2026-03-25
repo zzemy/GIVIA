@@ -150,7 +150,6 @@ export default function Home() {
   const [visionLabel, setVisionLabel] = useState('')
   const [recognitionRawLabels, setRecognitionRawLabels] = useState<string[]>([])
   const [showGiftInputsAfterImageRecognition, setShowGiftInputsAfterImageRecognition] = useState(false)
-  const [showAdvancedAudienceFields, setShowAdvancedAudienceFields] = useState(false)
   const [activeImpactCard, setActiveImpactCard] = useState(0)
   const [isImpactPaused, setIsImpactPaused] = useState(false)
   const [recognizingElapsedSeconds, setRecognizingElapsedSeconds] = useState(0)
@@ -231,7 +230,6 @@ export default function Home() {
     templateHasAudienceOverride,
     templateHasBudgetOverride,
     templateHasFormalityOverride,
-    advancedAudienceFacts,
     favoriteGiftChecklist,
     enhancementOriginOptions,
     hasEnabledAnalysisEnhancement,
@@ -645,7 +643,6 @@ export default function Home() {
     setVisionLabel('')
     setRecognitionRawLabels([])
     setShowGiftInputsAfterImageRecognition(false)
-    setShowAdvancedAudienceFields(false)
     setAssistantResult(null)
     setAssistantError('')
     setError('')
@@ -743,195 +740,193 @@ export default function Home() {
         {/* Three-step workflow panels */}
         <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-start">
           <div className="space-y-4 sm:space-y-6 xl:col-span-5">
-          <StepGiftInput
-            locale={locale}
-            recognition={recognition}
-            recognitionSource={recognitionSource}
-            imagePreview={imagePreview}
-            selectedFile={selectedFile}
-            fileInputRef={fileInputRef}
-            shouldHideGiftInputs={shouldHideGiftInputs}
-            giftName={giftName}
-            giftDescription={giftDescription}
-            giftDescriptionRef={giftDescriptionRef}
-            visionLabel={visionLabel}
-            visionDescription={visionDescription}
-            visionDescriptionRef={visionDescriptionRef}
-            canRecognize={canRecognize}
-            isRecognizing={isRecognizing}
-            isTextOnlyRecognition={isTextOnlyRecognition}
-            recognizingElapsedSeconds={recognizingElapsedSeconds}
-            onFileSelect={handleFileSelect}
-            onClearSelectedImage={clearSelectedImage}
-            onToggleTextEditor={() => setShowGiftInputsAfterImageRecognition(prev => !prev)}
-            onGiftNameChange={value => {
-              setGiftName(value)
-              setAnalysis(null)
-            }}
-            onGiftDescriptionChange={value => {
-              setGiftDescription(value)
-              setAnalysis(null)
-            }}
-            onVisionLabelChange={value => {
-              setVisionLabel(value)
-              setAnalysis(null)
-            }}
-            onVisionDescriptionChange={value => {
-              setVisionDescription(value)
-              setAnalysis(null)
-            }}
-            onBeautifyGiftDescription={handleBeautifyGiftDescription}
-            onBeautifyVisionDescription={handleBeautifyVisionDescription}
-            onRecognize={handleRecognize}
-            autoResizeTextarea={autoResizeTextarea}
-          />
+            <StepGiftInput
+              locale={locale}
+              recognition={recognition}
+              recognitionSource={recognitionSource}
+              imagePreview={imagePreview}
+              selectedFile={selectedFile}
+              fileInputRef={fileInputRef}
+              shouldHideGiftInputs={shouldHideGiftInputs}
+              giftName={giftName}
+              giftDescription={giftDescription}
+              giftDescriptionRef={giftDescriptionRef}
+              visionLabel={visionLabel}
+              visionDescription={visionDescription}
+              visionDescriptionRef={visionDescriptionRef}
+              canRecognize={canRecognize}
+              isRecognizing={isRecognizing}
+              isTextOnlyRecognition={isTextOnlyRecognition}
+              recognizingElapsedSeconds={recognizingElapsedSeconds}
+              onFileSelect={handleFileSelect}
+              onClearSelectedImage={clearSelectedImage}
+              onToggleTextEditor={() => setShowGiftInputsAfterImageRecognition(prev => !prev)}
+              onGiftNameChange={value => {
+                setGiftName(value)
+                setAnalysis(null)
+              }}
+              onGiftDescriptionChange={value => {
+                setGiftDescription(value)
+                setAnalysis(null)
+              }}
+              onVisionLabelChange={value => {
+                setVisionLabel(value)
+                setAnalysis(null)
+              }}
+              onVisionDescriptionChange={value => {
+                setVisionDescription(value)
+                setAnalysis(null)
+              }}
+              onBeautifyGiftDescription={handleBeautifyGiftDescription}
+              onBeautifyVisionDescription={handleBeautifyVisionDescription}
+              onRecognize={handleRecognize}
+              autoResizeTextarea={autoResizeTextarea}
+            />
 
-          <StepAnalysis
-            locale={locale}
-            t={t}
-            selectedCountry={selectedCountry}
-            recognition={recognition}
-            hasGiftInput={hasGiftInput}
-            selectedFile={selectedFile}
-            selectedAudienceLabel={selectedAudienceLabel}
-            activeSceneTemplate={activeSceneTemplate}
-            hasEnabledAnalysisEnhancement={hasEnabledAnalysisEnhancement}
-            analysisEnhancementSettings={analysisEnhancementSettings}
-            enhancementOriginCountry={enhancementOriginCountry}
-            enhancementOriginOptions={enhancementOriginOptions}
-            canAnalyze={canAnalyze}
-            hasAnalysis={Boolean(analysis)}
-            isAnalyzing={isAnalyzing}
-            analyzingElapsedSeconds={analyzingElapsedSeconds}
-            isAudienceReady={isAudienceReady}
-            giftName={giftName}
-            onEnhancementSettingChange={(key, checked) =>
-              setAnalysisEnhancementSettings(current => ({
-                ...current,
-                [key]: checked,
-              }))
-            }
-            onEnhancementOriginCountryChange={setEnhancementOriginCountry}
-            onAnalyze={handleAnalyze}
-          />
+            <StepAnalysis
+              locale={locale}
+              t={t}
+              selectedCountry={selectedCountry}
+              recognition={recognition}
+              hasGiftInput={hasGiftInput}
+              selectedFile={selectedFile}
+              selectedAudienceLabel={selectedAudienceLabel}
+              activeSceneTemplate={activeSceneTemplate}
+              hasEnabledAnalysisEnhancement={hasEnabledAnalysisEnhancement}
+              analysisEnhancementSettings={analysisEnhancementSettings}
+              enhancementOriginCountry={enhancementOriginCountry}
+              enhancementOriginOptions={enhancementOriginOptions}
+              canAnalyze={canAnalyze}
+              hasAnalysis={Boolean(analysis)}
+              isAnalyzing={isAnalyzing}
+              analyzingElapsedSeconds={analyzingElapsedSeconds}
+              isAudienceReady={isAudienceReady}
+              giftName={giftName}
+              onEnhancementSettingChange={(key, checked) =>
+                setAnalysisEnhancementSettings(current => ({
+                  ...current,
+                  [key]: checked,
+                }))
+              }
+              onEnhancementOriginCountryChange={setEnhancementOriginCountry}
+              onAnalyze={handleAnalyze}
+            />
+          </div>
 
+          <div className="space-y-4 sm:space-y-6 xl:col-span-7">
+            <StepCountry
+              locale={locale}
+              t={t}
+              apiLanguage={apiLanguage}
+              selectedCountry={selectedCountry}
+              recognition={recognition}
+              hasGiftInput={hasGiftInput}
+              selectedFile={selectedFile}
+              activeSceneTemplate={activeSceneTemplate}
+              sceneTemplate={sceneTemplate}
+              sceneTemplateOptions={sceneTemplateOptions}
+              selectedAudienceLabel={selectedAudienceLabel}
+              budgetLabel={budgetLabel}
+              formalityLabel={formalityLabel}
+              templateHasAudienceOverride={templateHasAudienceOverride}
+              templateHasBudgetOverride={templateHasBudgetOverride}
+              templateHasFormalityOverride={templateHasFormalityOverride}
+              audienceOptions={audienceOptions}
+              targetGroup={targetGroup}
+              customAudienceGroup={customAudienceGroup}
+              occasion={occasion}
+              targetProfile={targetProfile}
+              profileFieldClassName={profileFieldClassName}
+              profileLabelClassName={profileLabelClassName}
+              profileControlClassName={profileControlClassName}
+              ageBand={ageBand}
+              ageBandOptions={ageBandOptions}
+              gender={gender}
+              genderOptions={genderOptions}
+              occupation={occupation}
+              occupationOptions={occupationOptions}
+              relationship={relationship}
+              relationshipOptions={relationshipOptions}
+              budgetRange={budgetRange}
+              budgetOptions={budgetOptions}
+              formality={formality}
+              formalityOptions={formalityOptions}
+              relationshipLabel={relationshipLabel}
+              occupationLabel={occupationLabel}
+              onSelectedCountryChange={value => {
+                setSelectedCountry(value)
+                setAnalysis(null)
+              }}
+              onSceneTemplateChange={handleSceneTemplateChange}
+              onTargetGroupChange={value => {
+                setTargetGroup(value)
+                if (value !== 'other') {
+                  setCustomAudienceGroup('')
+                }
+                setAnalysis(null)
+              }}
+              onCustomAudienceGroupChange={value => {
+                setCustomAudienceGroup(value)
+                setAnalysis(null)
+              }}
+              onOccasionChange={value => {
+                setOccasion(value)
+                setAnalysis(null)
+              }}
+              onTargetProfileChange={value => {
+                setTargetProfile(value)
+                setAnalysis(null)
+              }}
+              onAgeBandChange={value => {
+                setAgeBand(value)
+                setAnalysis(null)
+              }}
+              onGenderChange={value => {
+                setGender(value)
+                setAnalysis(null)
+              }}
+              onOccupationChange={value => {
+                setOccupation(value)
+                setAnalysis(null)
+              }}
+              onRelationshipChange={value => {
+                setRelationship(value)
+                setAnalysis(null)
+              }}
+              onBudgetRangeChange={value => {
+                setBudgetRange(value)
+                setAnalysis(null)
+              }}
+              onFormalityChange={value => {
+                setFormality(value)
+                setAnalysis(null)
+              }}
+            />
+
+            <WorkflowSupportAssistantPanel
+              locale={locale}
+              assistantAmountInput={assistantAmountInput}
+              assistantCurrency={assistantCurrency}
+              assistantWeightInput={assistantWeightInput}
+              assistantDeclaredValueInput={assistantDeclaredValueInput}
+              assistantResult={assistantResult}
+              assistantError={assistantError}
+              isAssistantLoading={isAssistantLoading}
+              onAssistantAmountChange={setAssistantAmountInput}
+              onAssistantCurrencyChange={setAssistantCurrency}
+              onAssistantWeightChange={setAssistantWeightInput}
+              onAssistantDeclaredValueChange={setAssistantDeclaredValueInput}
+              onRunLogisticsAssistant={handleRunLogisticsAssistant}
+            />
+          </div>
+        </div>
+
+        <div className="mb-8 lg:mb-10">
           <WorkflowSupportHistoryPanels
             locale={locale}
             historyRecords={historyRecords}
             favoriteGiftChecklist={favoriteGiftChecklist}
           />
-          </div>
-
-          <div className="space-y-4 sm:space-y-6 xl:col-span-7">
-          <StepCountry
-            locale={locale}
-            t={t}
-            apiLanguage={apiLanguage}
-            selectedCountry={selectedCountry}
-            recognition={recognition}
-            hasGiftInput={hasGiftInput}
-            selectedFile={selectedFile}
-            activeSceneTemplate={activeSceneTemplate}
-            sceneTemplate={sceneTemplate}
-            sceneTemplateOptions={sceneTemplateOptions}
-            selectedAudienceLabel={selectedAudienceLabel}
-            budgetLabel={budgetLabel}
-            formalityLabel={formalityLabel}
-            templateHasAudienceOverride={templateHasAudienceOverride}
-            templateHasBudgetOverride={templateHasBudgetOverride}
-            templateHasFormalityOverride={templateHasFormalityOverride}
-            audienceOptions={audienceOptions}
-            targetGroup={targetGroup}
-            customAudienceGroup={customAudienceGroup}
-            occasion={occasion}
-            targetProfile={targetProfile}
-            profileFieldClassName={profileFieldClassName}
-            profileLabelClassName={profileLabelClassName}
-            profileControlClassName={profileControlClassName}
-            showAdvancedAudienceFields={showAdvancedAudienceFields}
-            advancedAudienceFacts={advancedAudienceFacts}
-            ageBand={ageBand}
-            ageBandOptions={ageBandOptions}
-            gender={gender}
-            genderOptions={genderOptions}
-            occupation={occupation}
-            occupationOptions={occupationOptions}
-            relationship={relationship}
-            relationshipOptions={relationshipOptions}
-            budgetRange={budgetRange}
-            budgetOptions={budgetOptions}
-            formality={formality}
-            formalityOptions={formalityOptions}
-            relationshipLabel={relationshipLabel}
-            occupationLabel={occupationLabel}
-            onSelectedCountryChange={value => {
-              setSelectedCountry(value)
-              setAnalysis(null)
-            }}
-            onSceneTemplateChange={handleSceneTemplateChange}
-            onTargetGroupChange={value => {
-              setTargetGroup(value)
-              if (value !== 'other') {
-                setCustomAudienceGroup('')
-              }
-              setAnalysis(null)
-            }}
-            onCustomAudienceGroupChange={value => {
-              setCustomAudienceGroup(value)
-              setAnalysis(null)
-            }}
-            onOccasionChange={value => {
-              setOccasion(value)
-              setAnalysis(null)
-            }}
-            onTargetProfileChange={value => {
-              setTargetProfile(value)
-              setAnalysis(null)
-            }}
-            onToggleAdvancedAudienceFields={() => setShowAdvancedAudienceFields(prev => !prev)}
-            onAgeBandChange={value => {
-              setAgeBand(value)
-              setAnalysis(null)
-            }}
-            onGenderChange={value => {
-              setGender(value)
-              setAnalysis(null)
-            }}
-            onOccupationChange={value => {
-              setOccupation(value)
-              setAnalysis(null)
-            }}
-            onRelationshipChange={value => {
-              setRelationship(value)
-              setAnalysis(null)
-            }}
-            onBudgetRangeChange={value => {
-              setBudgetRange(value)
-              setAnalysis(null)
-            }}
-            onFormalityChange={value => {
-              setFormality(value)
-              setAnalysis(null)
-            }}
-          />
-
-          <WorkflowSupportAssistantPanel
-          locale={locale}
-          assistantAmountInput={assistantAmountInput}
-          assistantCurrency={assistantCurrency}
-          assistantWeightInput={assistantWeightInput}
-          assistantDeclaredValueInput={assistantDeclaredValueInput}
-          assistantResult={assistantResult}
-          assistantError={assistantError}
-          isAssistantLoading={isAssistantLoading}
-          onAssistantAmountChange={setAssistantAmountInput}
-          onAssistantCurrencyChange={setAssistantCurrency}
-          onAssistantWeightChange={setAssistantWeightInput}
-          onAssistantDeclaredValueChange={setAssistantDeclaredValueInput}
-          onRunLogisticsAssistant={handleRunLogisticsAssistant}
-        />
-
-          </div>
         </div>
 
         {/* Loading indicator */}

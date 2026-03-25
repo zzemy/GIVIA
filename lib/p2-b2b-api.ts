@@ -204,7 +204,7 @@ export function processBulkRecommendation(
 
       successCount++
       processingTimes.push(Date.now() - profileStartTime)
-    } catch (_error) {
+    } catch {
       failureCount++
       results.push({
         recipientId: profile.id,

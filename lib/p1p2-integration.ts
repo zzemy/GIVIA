@@ -114,13 +114,13 @@ export async function runEnhancedAnalysis(request: EnhancedAnalysisRequest): Pro
 
     // P1.3: Logistics estimation
     if (request.includeLogistics && request.shippingCountry) {
-      const logistics = estimateLogisticsCost(request.country, request.shippingCountry, 500, // Mock weight
+      const logistics = estimateLogisticsCost(request.shippingCountry, request.country, 500, // Mock weight
         request.budget || 100,
       )
       p1Enhancements.logisticsEstimate = logistics
 
       // Add packing recommendations
-      p1Enhancements.packingRecommendations = getPackingRecommendations('fragile', request.shippingCountry)
+      p1Enhancements.packingRecommendations = getPackingRecommendations('fragile', request.country)
     }
 
     result.p1Enhancements = p1Enhancements

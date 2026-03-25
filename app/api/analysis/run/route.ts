@@ -33,7 +33,7 @@ type RequestPayload = {
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as RequestPayload
-    const locale = body.locale === 'en' ? 'en' : 'zh'
+    const locale = body.locale === 'zh' ? 'zh' : 'en'
     const audience: AudienceProfileInput = {
       group: body.audience?.group?.trim() || 'peer',
       customGroup: body.audience?.customGroup?.trim() || '',

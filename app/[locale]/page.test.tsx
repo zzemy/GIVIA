@@ -62,4 +62,12 @@ describe('Localized gifting page', () => {
     expect(screen.getByText(/第二步：选择目标国家/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /选择目标国家/i })).toBeInTheDocument()
   })
+
+  it('renders enhanced analysis module controls', () => {
+    render(<Home />)
+
+    expect(screen.getByText(/增强分析模块/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/多模态识别/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Wide & Deep 排序/i)).toBeInTheDocument()
+  })
 })

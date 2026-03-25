@@ -5,8 +5,6 @@
 
 import {
   findSimilarItems,
-  computeCollaborativeScore,
-  suggestByCollaborativeFiltering,
   recordUserFeedback,
 } from '@/lib/p1-collaborative-filtering'
 
@@ -15,14 +13,12 @@ import {
   estimateCustomsDuty,
   estimateLogisticsCost,
   getImportRestrictions,
-  formatLogisticsSummary,
 } from '@/lib/p1-logistics-assistant'
 
 import {
   getMessages,
   formatNumber,
   formatCurrency,
-  formatDate,
   getSupportedLocales,
   isSupportedLocale,
 } from '@/lib/p1-multi-language'
@@ -37,7 +33,6 @@ import {
   createUserEmbedding,
   createGiftEmbedding,
   wideDeepPredict,
-  serveWideDeepModel,
 } from '@/lib/p2-wide-deep-model'
 
 import {
@@ -53,15 +48,17 @@ describe('P1: Collaborative Filtering', () => {
   it('should compute tag similarity correctly', () => {
     interface mockGift {
       giftId: string
+      category: string
       tags: string[]
       styles: string[]
       colors: string[]
       priceRange: [number, number]
       vector: number[]
     }
-    
+
     const gift1: mockGift = {
       giftId: 'tea-set-1',
+      category: 'tea',
       tags: ['tea', 'premium', 'gift'],
       styles: ['traditional', 'minimalist'],
       colors: ['green', 'gold'],
@@ -71,6 +68,7 @@ describe('P1: Collaborative Filtering', () => {
 
     const gift2: mockGift = {
       giftId: 'tea-set-2',
+      category: 'tea',
       tags: ['tea', 'luxury', 'gift'],
       styles: ['modern', 'minimalist'],
       colors: ['black', 'gold'],
@@ -88,10 +86,9 @@ describe('P1: Collaborative Filtering', () => {
     const feedback = recordUserFeedback('user-1', 'gift-1', 5, {
       group: 'parent',
       occasion: 'birthday',
-      budget: 100,
+      budgetRange: 'high',
       gender: 'female',
-      age: 35,
-      country: 'US',
+      occupation: 'office',
       relationship: 'mother',
     }, 'US')
 
@@ -202,10 +199,8 @@ describe('P2: Wide & Deep Model', () => {
     const embedding = createUserEmbedding(
       {
         group: 'peer',
-        occupation: 'engineer',
-        country: 'US',
+        occupation: 'office',
         gender: 'female',
-        age: 35,
         relationship: 'colleague',
       },
       16,
@@ -250,10 +245,8 @@ describe('P2: Wide & Deep Model', () => {
     const prediction = wideDeepPredict(
       {
         group: 'peer',
-        occupation: 'engineer',
-        country: 'US',
+        occupation: 'office',
         gender: 'female',
-        age: 35,
         relationship: 'colleague',
       },
       mockGift,
