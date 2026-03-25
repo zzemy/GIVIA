@@ -19,10 +19,12 @@ import {
   sanitizeStringArray,
   sanitizeTextValue,
 } from "@/lib/ai/guards/input-sanitizer";
+import { validateAnalysisOutput } from "@/lib/ai/guards/output-validator";
 import {
   detectPromptInjectionInFields,
   prependPromptInjectionGuard,
 } from "@/lib/ai/guards/prompt-injection";
+import { extractSafeJsonObject } from "@/lib/ai/guards/safe-json";
 import type { PromptAudienceContext } from "@/lib/ai/prompts/shared";
 
 export const runtime = "nodejs";
@@ -330,25 +332,6 @@ function mergeRecords(
   }
 
   return result;
-}
-
-function extractJsonFromText(text: string): Record<string, unknown> | null {
-  try {
-    return JSON.parse(text) as Record<string, unknown>;
-  } catch {
-    const start = text.indexOf("{");
-    const end = text.lastIndexOf("}");
-
-    if (start === -1 || end === -1 || end <= start) {
-      return null;
-    }
-
-    try {
-      return JSON.parse(text.slice(start, end + 1)) as Record<string, unknown>;
-    } catch {
-      return null;
-    }
-  }
 }
 
 function getValueByAliases(
@@ -890,17 +873,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: initialCompletion.error }, { status: 502 });
     }
 
-    const parsed = extractJsonFromText(initialCompletion.content);
-    const initialParsedResult: StrictParseResult = parsed
-      ? buildStrictModelAnalysis(parsed, resolvedBody.country, resolvedBody.recognition)
+    const initialParsed = extractSafeJsonObject(initialCompletion.content);
+    const initialParsedResult: StrictParseResult = initialParsed.ok
+      ? buildStrictModelAnalysis(
+          initialParsed.value,
+          resolvedBody.country,
+          resolvedBody.recognition
+        )
       : {
           analysis: null,
-          missingFields: ["valid_json"],
+          missingFields: [initialParsed.error],
         };
 
     let finalAnalysis = initialParsedResult.analysis;
     let finalMissingFields = initialParsedResult.missingFields;
-    let latestStructuredOutput = parsed;
+    let latestStructuredOutput = initialParsed.ok ? initialParsed.value : null;
 
     if (!finalAnalysis) {
       const repairCompletion = await requestDashScopeCompletion(
@@ -915,17 +902,21 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: repairCompletion.error }, { status: 502 });
       }
 
-      const repairedParsed = extractJsonFromText(repairCompletion.content);
-      const repairedResult: StrictParseResult = repairedParsed
-        ? buildStrictModelAnalysis(repairedParsed, resolvedBody.country, resolvedBody.recognition)
+      const repairedParsed = extractSafeJsonObject(repairCompletion.content);
+      const repairedResult: StrictParseResult = repairedParsed.ok
+        ? buildStrictModelAnalysis(
+            repairedParsed.value,
+            resolvedBody.country,
+            resolvedBody.recognition
+          )
         : {
             analysis: null,
-            missingFields: ["valid_json"],
+            missingFields: [repairedParsed.error],
           };
 
       finalAnalysis = repairedResult.analysis;
       finalMissingFields = repairedResult.missingFields;
-      latestStructuredOutput = repairedParsed ?? latestStructuredOutput;
+      latestStructuredOutput = repairedParsed.ok ? repairedParsed.value : latestStructuredOutput;
     }
 
     if (!finalAnalysis && latestStructuredOutput) {
@@ -942,10 +933,10 @@ export async function POST(request: Request) {
       );
 
       if (patchCompletion.ok) {
-        const patchParsed = extractJsonFromText(patchCompletion.content);
+        const patchParsed = extractSafeJsonObject(patchCompletion.content);
 
-        if (patchParsed) {
-          const mergedOutput = mergeRecords(latestStructuredOutput, patchParsed);
+        if (patchParsed.ok) {
+          const mergedOutput = mergeRecords(latestStructuredOutput, patchParsed.value);
           const mergedResult = buildStrictModelAnalysis(
             mergedOutput,
             resolvedBody.country,
@@ -972,11 +963,13 @@ export async function POST(request: Request) {
       );
 
       if (strictTemplateCompletion.ok) {
-        const strictTemplateParsed = extractJsonFromText(strictTemplateCompletion.content);
+        const strictTemplateParsed = extractSafeJsonObject(
+          strictTemplateCompletion.content
+        );
 
-        if (strictTemplateParsed) {
+        if (strictTemplateParsed.ok) {
           const strictTemplateResult = buildStrictModelAnalysis(
-            strictTemplateParsed,
+            strictTemplateParsed.value,
             resolvedBody.country,
             resolvedBody.recognition
           );
@@ -996,8 +989,19 @@ export async function POST(request: Request) {
       );
     }
 
+    const validatedAnalysis = validateAnalysisOutput(finalAnalysis);
+
+    if (!validatedAnalysis.ok) {
+      return NextResponse.json(
+        {
+          error: `model output failed validation: ${validatedAnalysis.errors.join(", ")}`,
+        },
+        { status: 502 }
+      );
+    }
+
     return NextResponse.json({
-      analysis: finalAnalysis,
+      analysis: validatedAnalysis.value,
       source: "aliyun-dashscope",
     } satisfies GenerateResponse);
   } catch (error) {

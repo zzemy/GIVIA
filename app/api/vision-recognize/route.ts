@@ -7,6 +7,8 @@ import { buildGiftProfile } from "@/lib/analysis/gift-profile";
 import { requestDashScopeCompletion } from "@/lib/ai/adapters/dashscope";
 import type { ModelMessage } from "@/lib/ai/adapters/types";
 import { sanitizeTextValue } from "@/lib/ai/guards/input-sanitizer";
+import { extractSafeJsonObject } from "@/lib/ai/guards/safe-json";
+import { validateVisionModelOutput } from "@/lib/ai/guards/output-validator";
 import {
   detectPromptInjectionInFields,
   prependPromptInjectionGuard,
@@ -473,23 +475,33 @@ export async function POST(request: Request) {
         );
       }
 
-      const textParsed = extractJsonFromText(textCompletion.content);
+      const textParsed = extractSafeJsonObject(textCompletion.content);
 
-      if (!textParsed) {
+      if (!textParsed.ok) {
         return NextResponse.json(
           {
-            error: "invalid model output: expected JSON object for text recognition",
+            error: `invalid model output: ${textParsed.error}`,
           },
           { status: 502 }
         );
       }
 
-      const parsedRecord = toRecord(textParsed);
-      const primaryLabel = toString(parsedRecord.label);
-      const modelDescription = toString(parsedRecord.description);
-      const synonyms = toStringArray(parsedRecord.synonyms);
+      const validatedOutput = validateVisionModelOutput(textParsed.value);
+
+      if (!validatedOutput.ok) {
+        return NextResponse.json(
+          {
+            error: `invalid model output: ${validatedOutput.errors.join("; ")}`,
+          },
+          { status: 502 }
+        );
+      }
+
+      const primaryLabel = toString(validatedOutput.value.label);
+      const modelDescription = toString(validatedOutput.value.description);
+      const synonyms = toStringArray(validatedOutput.value.synonyms);
       const labels = [primaryLabel, ...synonyms].filter(Boolean);
-      const confidence = toConfidence(parsedRecord.confidence, 0.72);
+      const confidence = toConfidence(validatedOutput.value.confidence, 0.72);
 
       if (!primaryLabel) {
         return NextResponse.json(
@@ -587,23 +599,33 @@ export async function POST(request: Request) {
       );
     }
 
-    const parsed = extractJsonFromText(visionCompletion.content);
+    const parsed = extractSafeJsonObject(visionCompletion.content);
 
-    if (!parsed) {
+    if (!parsed.ok) {
       return NextResponse.json(
         {
-          error: "invalid model output: expected JSON object for image recognition",
+          error: `invalid model output: ${parsed.error}`,
         },
         { status: 502 }
       );
     }
 
-    const parsedRecord = toRecord(parsed);
-    const primaryLabel = toString(parsedRecord.label);
-    const modelDescription = toString(parsedRecord.description);
-    const synonyms = toStringArray(parsedRecord.synonyms);
+    const validatedOutput = validateVisionModelOutput(parsed.value);
+
+    if (!validatedOutput.ok) {
+      return NextResponse.json(
+        {
+          error: `invalid model output: ${validatedOutput.errors.join("; ")}`,
+        },
+        { status: 502 }
+      );
+    }
+
+    const primaryLabel = toString(validatedOutput.value.label);
+    const modelDescription = toString(validatedOutput.value.description);
+    const synonyms = toStringArray(validatedOutput.value.synonyms);
     const labels = [primaryLabel, ...synonyms].filter(Boolean);
-    const confidence = toConfidence(parsedRecord.confidence, 0.78);
+    const confidence = toConfidence(validatedOutput.value.confidence, 0.78);
 
     if (!primaryLabel) {
       return NextResponse.json(

@@ -2,10 +2,12 @@ import type { AnalysisEngineResult, AudienceProfileInput, P0Locale } from '@/lib
 import type { GiftProfile } from '@/lib/analysis/gift-profile'
 import type { ModelMessage, NormalizedModelCompletionResult } from '@/lib/ai/adapters/types'
 import { sanitizeStringArray, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
+import { validateRiskEnhancementOutput } from '@/lib/ai/guards/output-validator'
 import {
   buildPromptInjectionGuardText,
   detectPromptInjectionInFields,
 } from '@/lib/ai/guards/prompt-injection'
+import { extractSafeJsonObject } from '@/lib/ai/guards/safe-json'
 import { buildRiskEnhancementPrompt } from '@/lib/ai/prompts/analysis'
 
 /**
@@ -236,26 +238,24 @@ function parseEnhancementResponse(response: string, locale: P0Locale): LLMEnhanc
   try {
     void locale
 
-    // Extract JSON from response (LLM might include markdown formatting)
-    const jsonMatch = response.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) {
+    const parsedJson = extractSafeJsonObject(response)
+
+    if (!parsedJson.ok) {
       return null
     }
 
-    const parsed = JSON.parse(jsonMatch[0]) as {
-      semanticExplanation?: string
-      personalizedMitigation?: string
-      alternativeFraming?: string
-      culturalContext?: string
-      confidence?: number
+    const validated = validateRiskEnhancementOutput(parsedJson.value)
+
+    if (!validated.ok) {
+      return null
     }
 
     return {
-      semanticExplanation: parsed.semanticExplanation?.trim() || '',
-      personalizedMitigation: parsed.personalizedMitigation?.trim() || '',
-      alternativeFraming: parsed.alternativeFraming?.trim() || '',
-      culturalContext: parsed.culturalContext?.trim() || '',
-      confidence: Math.max(0, Math.min(1, parsed.confidence ?? 0.75)),
+      semanticExplanation: validated.value.semanticExplanation.trim(),
+      personalizedMitigation: validated.value.personalizedMitigation.trim(),
+      alternativeFraming: validated.value.alternativeFraming.trim(),
+      culturalContext: validated.value.culturalContext.trim(),
+      confidence: Math.max(0, Math.min(1, validated.value.confidence ?? 0.75)),
     }
   } catch (error) {
     console.warn('[LLM] Parse error:', error)
