@@ -1,6 +1,7 @@
 import type { AnalysisEngineResult, AudienceProfileInput, P0Locale } from '@/lib/types/gifting-types'
 import type { GiftProfile } from '@/lib/analysis/gift-profile'
 import type { ModelMessage, NormalizedModelCompletionResult } from '@/lib/ai/adapters/types'
+import { buildRiskEnhancementPrompt } from '@/lib/ai/prompts/analysis'
 
 /**
  * LLM-enhanced risk assessment: Add semantic explanations and personalized mitigation suggestions
@@ -52,67 +53,7 @@ export async function enhanceRiskWithLLM(
 }
 
 function buildEnhancementPrompt(input: LLMEnhancementInput): string {
-  const isZh = input.locale === 'zh'
-  const ruleExplanation = input.ruleResult.matchedRules
-    .slice(0, 3)
-    .map(r => (isZh ? r.explanation : r.explanation))
-    .join('; ')
-
-  if (isZh) {
-    return `你是跨文化礼物选择专家。我需要你为以下情境提供语义级别的解释和个性化缓解建议：
-
-【礼物信息】
-- 名称：${input.giftName}
-- 类别：${input.giftProfile.category}
-- 特征：${input.giftProfile.styles.join(', ')}
-
-【赠礼情景】
-- 目标国家：${input.countryName} (${input.countryCode})
-- 收礼人：${input.audience.relationship || 'friend'}, ${input.audience.occupation || 'unknown'}, ${input.audience.ageBand || 'unknown'}
-- 场景：${input.audience.sceneTemplate || 'general'}
-- 正式程度：${input.audience.formality || 'semi-formal'}
-
-【规则层发现的风险】
-${ruleExplanation || '暂无规则命中'}
-风险等级：${input.ruleResult.riskLevel}
-风险分数：${input.ruleResult.riskScore}/100
-
-请按以下JSON格式回复（仅返回JSON，不要其他内容）：
-{
-  "semanticExplanation": "从文化心理学角度解释为什么这个礼物在此国家/情景中有风险（2-3句，深层解释而非规则重述）",
-  "personalizedMitigation": "针对这个特定收礼人和场景的个性化缓解建议（具体、可执行、不冗余）",
-  "alternativeFraming": "如何用语言或包装重新诠释这个礼物以降低风险（策略性建议）",
-  "culturalContext": "这类风险在当地文化中的历史或社会背景（简要、教育性）",
-  "confidence": 0.85
-}`
-  }
-
-  return `You are a cross-cultural gifting expert. Provide semantic-level explanation and personalized mitigation for:
-
-【Gift Info】
-- Name: ${input.giftName}
-- Category: ${input.giftProfile.category}
-- Style: ${input.giftProfile.styles.join(', ')}
-
-【Gifting Context】
-- Target country: ${input.countryName} (${input.countryCode})
-- Recipient: ${input.audience.relationship || 'friend'}, ${input.audience.occupation || 'unknown'}, ${input.audience.ageBand || 'unknown'}
-- Occasion: ${input.audience.sceneTemplate || 'general'}
-- Formality: ${input.audience.formality || 'semi-formal'}
-
-【Rule-Based Findings】
-${ruleExplanation || 'No rules matched'}
-Risk Level: ${input.ruleResult.riskLevel}
-Risk Score: ${input.ruleResult.riskScore}/100
-
-Reply with JSON only (no other text):
-{
-  "semanticExplanation": "Cultural/psychological explanation of why this gift is risky in this context (2-3 sentences, deeper than rule-based)",
-  "personalizedMitigation": "Specific, actionable mitigation for this recipient and scenario (not generic)",
-  "alternativeFraming": "How to reframe this gift through language or packaging narrative",
-  "culturalContext": "Historical or social background of this risk in local culture (brief, educational)",
-  "confidence": 0.85
-}`
+  return buildRiskEnhancementPrompt(input)
 }
 
 async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Promise<string | null> {

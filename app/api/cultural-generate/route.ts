@@ -9,6 +9,13 @@ import {
 import { calculateCulturalFitScore, type GiftScore } from "@/lib/domain/gifting";
 import { requestDashScopeCompletion as requestDashScopeAdapterCompletion } from "@/lib/ai/adapters/dashscope";
 import type { ModelMessage, NormalizedModelCompletionResult } from "@/lib/ai/adapters/types";
+import { buildCulturalAnalysisMessages } from "@/lib/ai/prompts/analysis";
+import {
+  buildCulturalMissingFieldPatchMessages,
+  buildCulturalRepairMessages,
+  buildCulturalStrictTemplateMessages,
+} from "@/lib/ai/prompts/repair";
+import type { PromptAudienceContext } from "@/lib/ai/prompts/shared";
 
 export const runtime = "nodejs";
 
@@ -439,14 +446,6 @@ function resolveRequestPayload(body: GenerateRequest): ResolvedGenerateRequest |
   };
 }
 
-function getOutputLanguageConstraint(language: GenerateRequest["language"]): string {
-  if (language === "en") {
-    return "所有文案用英文，不要输出中文。";
-  }
-
-  return "所有文案用简体中文。";
-}
-
 async function requestDashScopeCompletion(
   apiKey: string,
   baseUrl: string,
@@ -466,59 +465,31 @@ async function requestDashScopeCompletion(
   });
 }
 
-function buildMessages(request: ResolvedGenerateRequest): ChatMessage[] {
-  const languageConstraint = getOutputLanguageConstraint(request.language);
-  const audience = {
-    group: request.audience?.group?.trim() || "peer",
-    customGroup: request.audience?.customGroup?.trim() || "",
-    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
-    ageBand: request.audience?.ageBand?.trim() || "",
-    gender: request.audience?.gender?.trim() || "",
-    occupation: request.audience?.occupation?.trim() || "",
-    relationship: request.audience?.relationship?.trim() || "",
-    occasion: request.audience?.occasion?.trim() || "",
-    purpose: request.audience?.purpose?.trim() || "",
-    budgetRange: request.audience?.budgetRange?.trim() || "",
-    formality: request.audience?.formality?.trim() || "",
-    notes: request.audience?.notes?.trim() || "",
+function buildPromptAudience(audience: GenerateRequest["audience"]): PromptAudienceContext {
+  return {
+    group: audience?.group?.trim() || "peer",
+    customGroup: audience?.customGroup?.trim() || "",
+    sceneTemplate: audience?.sceneTemplate?.trim() || "",
+    ageBand: audience?.ageBand?.trim() || "",
+    gender: audience?.gender?.trim() || "",
+    occupation: audience?.occupation?.trim() || "",
+    relationship: audience?.relationship?.trim() || "",
+    occasion: audience?.occasion?.trim() || "",
+    purpose: audience?.purpose?.trim() || "",
+    budgetRange: audience?.budgetRange?.trim() || "",
+    formality: audience?.formality?.trim() || "",
+    notes: audience?.notes?.trim() || "",
   };
-  const system = [
-    "你是跨文化礼赠顾问。",
-    "国家上下文必须严格使用输入中的 country，不允许自行改写国家。",
-    "必须结合 audience（目标群体）完整字段调整风险判断与建议语气，包括群体、场景、关系、预算、正式度、备注。",
-    "你必须输出严格 JSON，不要输出 Markdown。",
-    "输出字段必须包含：score, riskLevel, isTaboo, warning, rescueItem, rescueReason, semanticSignals, packaging, card。",
-    "score 为 phonetic/symbol/color 0-100 的整数。",
-    "riskLevel 只能是 Low、Medium、High。",
-    "packaging 必须有 style/colors/materials/avoid。",
-    "card 必须有 tone/opener/body/closing。",
-    languageConstraint,
-    "如果 riskLevel 为 Low，rescueItem 和 rescueReason 应为空字符串。",
-    "如果 riskLevel 为 High，应给出更稳妥的替代礼物和原因。",
-    "warning 必须明确说明风险触发点或为何整体安全，不能空泛。",
-    "不得省略任何字段，不得输出 null。",
-  ].join("\n");
+}
 
-  const user = JSON.stringify(
-    {
-      task: "请输出跨文化礼赠风险分析与建议",
-      country: request.country,
-      recognition: request.recognition,
-      giftContext: request.giftContext,
-      audience,
-      constraints: {
-        tabooPolicy: "若存在文化禁忌，isTaboo 必须 true，并写清风险语义。",
-        actionable: "建议必须可执行，避免空泛。",
-      },
-    },
-    null,
-    2
-  );
-
-  return [
-    { role: "system", content: system },
-    { role: "user", content: user },
-  ];
+function buildMessages(request: ResolvedGenerateRequest): ChatMessage[] {
+  return buildCulturalAnalysisMessages({
+    language: request.language,
+    country: request.country,
+    recognition: request.recognition,
+    giftContext: request.giftContext,
+    audience: buildPromptAudience(request.audience),
+  });
 }
 
 function buildRepairMessages(
@@ -526,51 +497,15 @@ function buildRepairMessages(
   previousOutput: string,
   missingFields: string[]
 ): ChatMessage[] {
-  const languageConstraint = getOutputLanguageConstraint(request.language);
-  const audience = {
-    group: request.audience?.group?.trim() || "peer",
-    customGroup: request.audience?.customGroup?.trim() || "",
-    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
-    ageBand: request.audience?.ageBand?.trim() || "",
-    gender: request.audience?.gender?.trim() || "",
-    occupation: request.audience?.occupation?.trim() || "",
-    relationship: request.audience?.relationship?.trim() || "",
-    occasion: request.audience?.occasion?.trim() || "",
-    purpose: request.audience?.purpose?.trim() || "",
-    budgetRange: request.audience?.budgetRange?.trim() || "",
-    formality: request.audience?.formality?.trim() || "",
-    notes: request.audience?.notes?.trim() || "",
-  };
-  const system = [
-    "你是 JSON 结构修复器。",
-    "任务是把上一轮模型输出修复成完整 JSON。",
-    "必须严格使用输入中的 country，不允许改写国家。",
-    "修复时必须保持 audience（目标群体）上下文语义。",
-    "输出必须是严格 JSON，不要输出解释。",
-    "必须包含完整字段：score, riskLevel, isTaboo, warning, rescueItem, rescueReason, semanticSignals, packaging, card。",
-    "score 里必须有 phonetic/symbol/color；packaging 必须有 style/colors/materials/avoid；card 必须有 tone/opener/body/closing。",
-    "riskLevel 只能是 Low/Medium/High。",
-    languageConstraint,
-  ].join("\n");
-
-  const user = JSON.stringify(
-    {
-      task: "修复为字段完整的 JSON",
-      country: request.country,
-      recognition: request.recognition,
-      giftContext: request.giftContext,
-      audience,
-      missingFields,
-      previousOutput,
-    },
-    null,
-    2
-  );
-
-  return [
-    { role: "system", content: system },
-    { role: "user", content: user },
-  ];
+  return buildCulturalRepairMessages({
+    language: request.language,
+    country: request.country,
+    recognition: request.recognition,
+    giftContext: request.giftContext,
+    audience: buildPromptAudience(request.audience),
+    missingFields,
+    previousOutput,
+  });
 }
 
 function buildMissingFieldPatchMessages(
@@ -578,51 +513,15 @@ function buildMissingFieldPatchMessages(
   previousOutput: Record<string, unknown>,
   missingFields: string[]
 ): ChatMessage[] {
-  const languageConstraint = getOutputLanguageConstraint(request.language);
-  const audience = {
-    group: request.audience?.group?.trim() || "peer",
-    customGroup: request.audience?.customGroup?.trim() || "",
-    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
-    ageBand: request.audience?.ageBand?.trim() || "",
-    gender: request.audience?.gender?.trim() || "",
-    occupation: request.audience?.occupation?.trim() || "",
-    relationship: request.audience?.relationship?.trim() || "",
-    occasion: request.audience?.occasion?.trim() || "",
-    purpose: request.audience?.purpose?.trim() || "",
-    budgetRange: request.audience?.budgetRange?.trim() || "",
-    formality: request.audience?.formality?.trim() || "",
-    notes: request.audience?.notes?.trim() || "",
-  };
-  const system = [
-    "你是 JSON 补全器。",
-    "你的任务是只补齐缺失字段，不要改写已有字段语义。",
-    "必须严格使用输入中的 country，不允许改写国家。",
-    "补全时必须保持 audience（目标群体）上下文语义。",
-    "输出必须是严格 JSON，不要输出解释。",
-    "如果缺失 score.*，就补 score.phonetic/score.symbol/score.color（0-100 整数）。",
-    "如果缺失 packaging.*，就补 packaging.style/colors/materials/avoid（非空字符串）。",
-    languageConstraint,
-  ].join("\n");
-
-  const user = JSON.stringify(
-    {
-      task: "只补齐缺失字段",
-      country: request.country,
-      recognition: request.recognition,
-      giftContext: request.giftContext,
-      audience,
-      missingFields,
-      previousOutput,
-      outputRequirement: "返回 JSON patch 对象，可包含 score/packaging/card 等需要补齐的字段",
-    },
-    null,
-    2
-  );
-
-  return [
-    { role: "system", content: system },
-    { role: "user", content: user },
-  ];
+  return buildCulturalMissingFieldPatchMessages({
+    language: request.language,
+    country: request.country,
+    recognition: request.recognition,
+    giftContext: request.giftContext,
+    audience: buildPromptAudience(request.audience),
+    missingFields,
+    previousOutput,
+  });
 }
 
 function buildStrictTemplateMessages(
@@ -630,77 +529,15 @@ function buildStrictTemplateMessages(
   previousOutput: Record<string, unknown>,
   missingFields: string[]
 ): ChatMessage[] {
-  const languageConstraint = getOutputLanguageConstraint(request.language);
-  const audience = {
-    group: request.audience?.group?.trim() || "peer",
-    customGroup: request.audience?.customGroup?.trim() || "",
-    sceneTemplate: request.audience?.sceneTemplate?.trim() || "",
-    ageBand: request.audience?.ageBand?.trim() || "",
-    gender: request.audience?.gender?.trim() || "",
-    occupation: request.audience?.occupation?.trim() || "",
-    relationship: request.audience?.relationship?.trim() || "",
-    occasion: request.audience?.occasion?.trim() || "",
-    purpose: request.audience?.purpose?.trim() || "",
-    budgetRange: request.audience?.budgetRange?.trim() || "",
-    formality: request.audience?.formality?.trim() || "",
-    notes: request.audience?.notes?.trim() || "",
-  };
-  const system = [
-    "你是严格 JSON 生成器。",
-    "必须输出完整 JSON，字段一个都不能少。",
-    "必须严格使用输入中的 country，不允许改写国家。",
-    "必须结合 audience（目标群体）上下文给出风格和风险建议。",
-    "不允许输出 null，不允许输出解释，不允许输出 Markdown。",
-    "score.phonetic/symbol/color 必须是 0-100 整数。",
-    "packaging.style/colors/materials/avoid 必须是非空字符串。",
-    "card.tone/opener/body/closing 必须是非空字符串。",
-    "semanticSignals 必须是非空字符串数组。",
-    "riskLevel 只能是 Low/Medium/High。",
-    languageConstraint,
-  ].join("\n");
-
-  const template = {
-    score: { phonetic: 60, symbol: 60, color: 60 },
-    riskLevel: "Medium",
-    isTaboo: false,
-    warning: "",
-    rescueItem: "",
-    rescueReason: "",
-    semanticSignals: [""],
-    packaging: {
-      style: "",
-      colors: "",
-      materials: "",
-      avoid: "",
-    },
-    card: {
-      tone: "",
-      opener: "",
-      body: "",
-      closing: "",
-    },
-  };
-
-  const user = JSON.stringify(
-    {
-      task: "按模板返回完整 JSON",
-      country: request.country,
-      recognition: request.recognition,
-      giftContext: request.giftContext,
-      audience,
-      missingFields,
-      previousOutput,
-      template,
-      note: "请在保持现有语义的前提下补齐并规范化所有字段。",
-    },
-    null,
-    2
-  );
-
-  return [
-    { role: "system", content: system },
-    { role: "user", content: user },
-  ];
+  return buildCulturalStrictTemplateMessages({
+    language: request.language,
+    country: request.country,
+    recognition: request.recognition,
+    giftContext: request.giftContext,
+    audience: buildPromptAudience(request.audience),
+    missingFields,
+    previousOutput,
+  });
 }
 
 function buildStrictModelAnalysis(

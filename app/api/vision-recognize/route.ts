@@ -6,6 +6,10 @@ import {
 import { buildGiftProfile } from "@/lib/analysis/gift-profile";
 import { requestDashScopeCompletion } from "@/lib/ai/adapters/dashscope";
 import type { ModelMessage } from "@/lib/ai/adapters/types";
+import {
+  buildImageRecognitionMessages,
+  buildTextRecognitionMessages,
+} from "@/lib/ai/prompts/vision";
 
 export const runtime = "nodejs";
 
@@ -317,38 +321,6 @@ function normalizeLanguage(value: unknown): UILanguage {
   return value === "en" ? "en" : "zh";
 }
 
-function buildTextRecognitionSystemPrompt(language: UILanguage): string {
-  if (language === "en") {
-    return "You are a gift text recognition assistant. Output JSON only with fields: label(string), description(string), confidence(number 0-1), synonyms(string[]). description must be exactly one English sentence with no more than 16 words. label must be a common English noun. synonyms max 3 items.";
-  }
-
-  return "你是礼物文本识别助手。你必须只输出 JSON。字段: label(string), description(string), confidence(number 0-1), synonyms(string[])。description 必须是单句且不超过 30 个汉字，label 使用英文通用名词，synonyms 最多 3 项。";
-}
-
-function buildTextRecognitionUserPrompt(text: string, language: UILanguage): string {
-  if (language === "en") {
-    return `Identify the gift object from this text and provide one brief English description sentence. label must be a precise common English noun, avoid preset terms. Gift text: ${text}`;
-  }
-
-  return `根据这段礼物信息识别礼物对象，并补充一句简短的物品描述。label 请使用最贴切的英文通用名词，避免套用固定预设词。礼物信息：${text}`;
-}
-
-function buildImageRecognitionSystemPrompt(language: UILanguage): string {
-  if (language === "en") {
-    return "You are a gift image recognition assistant. Output JSON only with fields: label(string), description(string), confidence(number 0-1), synonyms(string[]). description must be exactly one English sentence with no more than 16 words. label must be a common English noun. synonyms max 3 items.";
-  }
-
-  return "你是礼物图像识别助手。你必须只输出 JSON。字段: label(string), description(string), confidence(number 0-1), synonyms(string[])。description 必须是单句且不超过 30 个汉字，label 使用英文通用名词，synonyms 最多 3 项。";
-}
-
-function buildImageRecognitionUserPrompt(language: UILanguage): string {
-  if (language === "en") {
-    return "Identify the gift object in this image and provide one brief English description sentence. label must be a precise common English noun, avoid preset terms.";
-  }
-
-  return "识别这张图片中的礼物对象，并补充一句礼物描述。label 请使用最贴切的英文通用名词，避免套用固定预设词。";
-}
-
 function isUnsupportedVisionModel(model: string): boolean {
   const normalized = model.toLowerCase();
 
@@ -463,6 +435,11 @@ export async function POST(request: Request) {
         );
       }
 
+      const promptMessages = buildTextRecognitionMessages(
+        incomingPayload.text,
+        incomingPayload.language,
+      );
+
       const textCompletion = await requestDashScopeCompletion({
         apiKey,
         baseUrl,
@@ -472,19 +449,7 @@ export async function POST(request: Request) {
         responseFormat: { type: "json_object" },
         networkErrorPrefix: "aliyun text recognition network error",
         providerErrorPrefix: "aliyun text recognition request failed",
-        messages: [
-          {
-            role: "system",
-            content: buildTextRecognitionSystemPrompt(incomingPayload.language),
-          },
-          {
-            role: "user",
-            content: buildTextRecognitionUserPrompt(
-              incomingPayload.text,
-              incomingPayload.language
-            ),
-          },
-        ] as ModelMessage[],
+        messages: promptMessages as ModelMessage[],
       });
 
       if (!textCompletion.ok) {
@@ -566,6 +531,7 @@ export async function POST(request: Request) {
     }
 
     const imageDataUrl = incomingPayload.imageDataUrl;
+    const imagePrompt = buildImageRecognitionMessages(incomingPayload.language);
 
     const visionCompletion = await requestDashScopeCompletion({
       apiKey,
@@ -577,16 +543,13 @@ export async function POST(request: Request) {
       networkErrorPrefix: "aliyun vision network error",
       providerErrorPrefix: "aliyun vision request failed",
       messages: [
-        {
-          role: "system",
-          content: buildImageRecognitionSystemPrompt(incomingPayload.language),
-        },
+        imagePrompt.system,
         {
           role: "user",
           content: [
             {
               type: "text",
-              text: buildImageRecognitionUserPrompt(incomingPayload.language),
+              text: imagePrompt.userText,
             },
             {
               type: "image_url",
