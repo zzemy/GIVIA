@@ -1,6 +1,11 @@
 import type { AnalysisEngineResult, AudienceProfileInput, P0Locale } from '@/lib/types/gifting-types'
 import type { GiftProfile } from '@/lib/analysis/gift-profile'
 import type { ModelMessage, NormalizedModelCompletionResult } from '@/lib/ai/adapters/types'
+import { sanitizeStringArray, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
+import {
+  buildPromptInjectionGuardText,
+  detectPromptInjectionInFields,
+} from '@/lib/ai/guards/prompt-injection'
 import { buildRiskEnhancementPrompt } from '@/lib/ai/prompts/analysis'
 
 /**
@@ -53,7 +58,89 @@ export async function enhanceRiskWithLLM(
 }
 
 function buildEnhancementPrompt(input: LLMEnhancementInput): string {
-  return buildRiskEnhancementPrompt(input)
+  const sanitizedInput = sanitizeEnhancementInput(input)
+  const injectionAssessment = detectPromptInjectionInFields([
+    sanitizedInput.countryCode,
+    sanitizedInput.countryName,
+    sanitizedInput.giftName,
+    sanitizedInput.giftProfile.category,
+    sanitizedInput.giftProfile.materials,
+    sanitizedInput.giftProfile.styles,
+    sanitizedInput.giftProfile.colors,
+    sanitizedInput.giftProfile.brandTokens,
+    sanitizedInput.giftProfile.semanticTags,
+    sanitizedInput.audience.group,
+    sanitizedInput.audience.customGroup,
+    sanitizedInput.audience.sceneTemplate,
+    sanitizedInput.audience.ageBand,
+    sanitizedInput.audience.gender,
+    sanitizedInput.audience.occupation,
+    sanitizedInput.audience.relationship,
+    sanitizedInput.audience.occasion,
+    sanitizedInput.audience.purpose,
+    sanitizedInput.audience.budgetRange,
+    sanitizedInput.audience.formality,
+    sanitizedInput.audience.notes,
+  ])
+
+  return `${buildPromptInjectionGuardText(injectionAssessment)}\n\n${buildRiskEnhancementPrompt(
+    sanitizedInput,
+  )}`
+}
+
+function sanitizeEnhancementInput(input: LLMEnhancementInput): LLMEnhancementInput {
+  return {
+    ...input,
+    countryCode: sanitizeTextValue(input.countryCode, { maxLength: 16 }),
+    countryName: sanitizeTextValue(input.countryName, { maxLength: 64, fallback: 'Unknown' }),
+    giftName: sanitizeTextValue(input.giftName, { maxLength: 80, fallback: 'Gift' }),
+    giftProfile: {
+      ...input.giftProfile,
+      displayName: sanitizeTextValue(input.giftProfile.displayName, {
+        maxLength: 80,
+        fallback: 'Gift',
+      }),
+      category: sanitizeTextValue(input.giftProfile.category, {
+        maxLength: 48,
+        fallback: 'general',
+      }),
+      materials: sanitizeStringArray(input.giftProfile.materials, {
+        itemMaxLength: 40,
+        maxItems: 6,
+      }),
+      styles: sanitizeStringArray(input.giftProfile.styles, {
+        itemMaxLength: 40,
+        maxItems: 6,
+      }),
+      colors: sanitizeStringArray(input.giftProfile.colors, {
+        itemMaxLength: 40,
+        maxItems: 6,
+      }),
+      brandTokens: sanitizeStringArray(input.giftProfile.brandTokens, {
+        itemMaxLength: 40,
+        maxItems: 6,
+      }),
+      semanticTags: sanitizeStringArray(input.giftProfile.semanticTags, {
+        itemMaxLength: 40,
+        maxItems: 8,
+      }),
+    },
+    audience: {
+      ...input.audience,
+      group: sanitizeTextValue(input.audience.group, { maxLength: 40, fallback: 'peer' }),
+      customGroup: sanitizeTextValue(input.audience.customGroup, { maxLength: 60 }),
+      sceneTemplate: sanitizeTextValue(input.audience.sceneTemplate, { maxLength: 60 }),
+      ageBand: sanitizeTextValue(input.audience.ageBand, { maxLength: 40 }),
+      gender: sanitizeTextValue(input.audience.gender, { maxLength: 40 }),
+      occupation: sanitizeTextValue(input.audience.occupation, { maxLength: 60 }),
+      relationship: sanitizeTextValue(input.audience.relationship, { maxLength: 60 }),
+      occasion: sanitizeTextValue(input.audience.occasion, { maxLength: 60 }),
+      purpose: sanitizeTextValue(input.audience.purpose, { maxLength: 80 }),
+      budgetRange: sanitizeTextValue(input.audience.budgetRange, { maxLength: 40 }),
+      formality: sanitizeTextValue(input.audience.formality, { maxLength: 40 }),
+      notes: sanitizeTextValue(input.audience.notes, { maxLength: 240 }),
+    },
+  }
 }
 
 async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Promise<string | null> {

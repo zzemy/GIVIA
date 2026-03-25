@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { buildUnknownRecognition } from '@/lib/analysis/cultural-analyzer'
 import { runAnalysisWithLLMEnhancement } from '@/lib/analysis/analysis-runner'
+import { sanitizeStringArray, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
 import type { AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/types/gifting-types'
 import { runEnhancedAnalysis } from '@/lib/enhancements/enhancement-integration'
 
@@ -34,37 +35,79 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as RequestPayload
     const locale = body.locale === 'zh' ? 'zh' : 'en'
+    const country = sanitizeTextValue(body.country, { maxLength: 64 })
+    const countryCode = sanitizeTextValue(body.countryCode, { maxLength: 16 })
+    const giftContext: GiftContextInput = {
+      name: sanitizeTextValue(body.giftContext?.name, { maxLength: 80 }),
+      description: sanitizeTextValue(body.giftContext?.description, { maxLength: 240 }),
+      visionLabel: sanitizeTextValue(body.giftContext?.visionLabel, { maxLength: 80 }),
+      visionDescription: sanitizeTextValue(body.giftContext?.visionDescription, {
+        maxLength: 240,
+      }),
+      source: sanitizeTextValue(body.giftContext?.source, { maxLength: 48 }),
+      rawLabels: sanitizeStringArray(body.giftContext?.rawLabels, {
+        itemMaxLength: 64,
+        maxItems: 6,
+      }),
+    }
     const audience: AudienceProfileInput = {
-      group: body.audience?.group?.trim() || 'peer',
-      customGroup: body.audience?.customGroup?.trim() || '',
-      sceneTemplate: body.audience?.sceneTemplate?.trim() || 'birthday',
-      ageBand: body.audience?.ageBand?.trim() || 'adult',
-      gender: body.audience?.gender?.trim() || 'neutral',
-      occupation: body.audience?.occupation?.trim() || 'office',
-      relationship: body.audience?.relationship?.trim() || 'friend',
-      occasion: body.audience?.occasion?.trim() || '',
-      purpose: body.audience?.purpose?.trim() || '',
-      budgetRange: body.audience?.budgetRange?.trim() || 'medium',
-      formality: body.audience?.formality?.trim() || 'semi-formal',
-      notes: body.audience?.notes?.trim() || '',
+      group: sanitizeTextValue(body.audience?.group, { maxLength: 40, fallback: 'peer' }),
+      customGroup: sanitizeTextValue(body.audience?.customGroup, { maxLength: 60 }),
+      sceneTemplate: sanitizeTextValue(body.audience?.sceneTemplate, {
+        maxLength: 60,
+        fallback: 'birthday',
+      }),
+      ageBand: sanitizeTextValue(body.audience?.ageBand, { maxLength: 40, fallback: 'adult' }),
+      gender: sanitizeTextValue(body.audience?.gender, { maxLength: 40, fallback: 'neutral' }),
+      occupation: sanitizeTextValue(body.audience?.occupation, {
+        maxLength: 60,
+        fallback: 'office',
+      }),
+      relationship: sanitizeTextValue(body.audience?.relationship, {
+        maxLength: 60,
+        fallback: 'friend',
+      }),
+      occasion: sanitizeTextValue(body.audience?.occasion, { maxLength: 60 }),
+      purpose: sanitizeTextValue(body.audience?.purpose, { maxLength: 80 }),
+      budgetRange: sanitizeTextValue(body.audience?.budgetRange, {
+        maxLength: 40,
+        fallback: 'medium',
+      }),
+      formality: sanitizeTextValue(body.audience?.formality, {
+        maxLength: 40,
+        fallback: 'semi-formal',
+      }),
+      notes: sanitizeTextValue(body.audience?.notes, { maxLength: 240 }),
     }
 
-    const recognition = body.recognition?.itemZh || body.recognition?.itemEn || body.giftContext?.name
+    const recognition = body.recognition?.itemZh || body.recognition?.itemEn || giftContext.name
       ? {
-          itemKey: body.recognition?.itemKey || 'unknown',
-          itemZh: body.recognition?.itemZh || body.giftContext?.name || '未命名礼物',
-          itemEn: body.recognition?.itemEn || body.giftContext?.name || 'Unnamed gift',
-          category: body.recognition?.category || 'general',
+          itemKey: sanitizeTextValue(body.recognition?.itemKey, {
+            maxLength: 64,
+            fallback: 'unknown',
+          }),
+          itemZh: sanitizeTextValue(body.recognition?.itemZh, {
+            maxLength: 80,
+            fallback: giftContext.name || '未命名礼物',
+          }),
+          itemEn: sanitizeTextValue(body.recognition?.itemEn, {
+            maxLength: 80,
+            fallback: giftContext.name || 'Unnamed gift',
+          }),
+          category: sanitizeTextValue(body.recognition?.category, {
+            maxLength: 48,
+            fallback: 'general',
+          }),
           confidence: typeof body.recognition?.confidence === 'number' ? body.recognition.confidence : 0.5,
         }
-      : buildUnknownRecognition(body.giftContext?.name)
+      : buildUnknownRecognition(giftContext.name)
 
     const analysis = await runAnalysisWithLLMEnhancement({
       locale,
-      country: body.country,
-      countryCode: body.countryCode,
+      country,
+      countryCode,
       recognition,
-      giftContext: body.giftContext,
+      giftContext,
       audience,
     })
 
@@ -79,8 +122,12 @@ export async function POST(request: Request) {
     const enhanced = hasEnhancements
       ? await runEnhancedAnalysis({
           recipientProfile: audience,
-          country: body.countryCode || body.country || 'US',
-          shippingCountry: body.enhancements?.shippingCountry || body.countryCode || body.country || 'US',
+          country: countryCode || country || 'US',
+          shippingCountry:
+            sanitizeTextValue(body.enhancements?.shippingCountry, { maxLength: 16 }) ||
+            countryCode ||
+            country ||
+            'US',
           locale: (body.locale || 'zh') as 'en' | 'zh' | 'ja' | 'fr',
           budget: body.enhancements?.budget,
           includeLLM: true,
@@ -100,9 +147,9 @@ export async function POST(request: Request) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          country: body.country || body.countryCode || 'Unknown',
+          country: country || countryCode || 'Unknown',
           recognition,
-          giftContext: body.giftContext,
+          giftContext,
           audience,
           language: locale,
         }),

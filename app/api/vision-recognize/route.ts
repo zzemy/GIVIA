@@ -6,6 +6,11 @@ import {
 import { buildGiftProfile } from "@/lib/analysis/gift-profile";
 import { requestDashScopeCompletion } from "@/lib/ai/adapters/dashscope";
 import type { ModelMessage } from "@/lib/ai/adapters/types";
+import { sanitizeTextValue } from "@/lib/ai/guards/input-sanitizer";
+import {
+  detectPromptInjectionInFields,
+  prependPromptInjectionGuard,
+} from "@/lib/ai/guards/prompt-injection";
 import {
   buildImageRecognitionMessages,
   buildTextRecognitionMessages,
@@ -372,10 +377,9 @@ async function readIncomingRecognitionPayload(
   if (contentType.includes("application/json")) {
     const payload = (await request.json()) as IncomingImagePayload;
     const language = normalizeLanguage(payload.language);
-    const text = typeof payload.text === "string" ? payload.text.trim() : "";
-    const name = typeof payload.name === "string" ? payload.name.trim() : "";
-    const description =
-      typeof payload.description === "string" ? payload.description.trim() : "";
+    const text = sanitizeTextValue(payload.text, { maxLength: 600 });
+    const name = sanitizeTextValue(payload.name, { maxLength: 80 });
+    const description = sanitizeTextValue(payload.description, { maxLength: 240 });
     const composedText = text || [name, description].filter(Boolean).join(" ").trim();
 
     if (composedText) {
@@ -435,9 +439,17 @@ export async function POST(request: Request) {
         );
       }
 
-      const promptMessages = buildTextRecognitionMessages(
+      const injectionAssessment = detectPromptInjectionInFields([
         incomingPayload.text,
-        incomingPayload.language,
+        incomingPayload.name,
+        incomingPayload.description,
+      ]);
+      const promptMessages = prependPromptInjectionGuard(
+        buildTextRecognitionMessages(
+          incomingPayload.text,
+          incomingPayload.language,
+        ) as ModelMessage[],
+        injectionAssessment,
       );
 
       const textCompletion = await requestDashScopeCompletion({
@@ -449,7 +461,7 @@ export async function POST(request: Request) {
         responseFormat: { type: "json_object" },
         networkErrorPrefix: "aliyun text recognition network error",
         providerErrorPrefix: "aliyun text recognition request failed",
-        messages: promptMessages as ModelMessage[],
+        messages: promptMessages,
       });
 
       if (!textCompletion.ok) {
@@ -532,17 +544,8 @@ export async function POST(request: Request) {
 
     const imageDataUrl = incomingPayload.imageDataUrl;
     const imagePrompt = buildImageRecognitionMessages(incomingPayload.language);
-
-    const visionCompletion = await requestDashScopeCompletion({
-      apiKey,
-      baseUrl,
-      model,
-      temperature: 0.1,
-      maxTokens: 120,
-      responseFormat: { type: "json_object" },
-      networkErrorPrefix: "aliyun vision network error",
-      providerErrorPrefix: "aliyun vision request failed",
-      messages: [
+    const guardedVisionMessages = prependPromptInjectionGuard(
+      [
         imagePrompt.system,
         {
           role: "user",
@@ -560,6 +563,19 @@ export async function POST(request: Request) {
           ],
         },
       ] as ModelMessage[],
+      detectPromptInjectionInFields([])
+    );
+
+    const visionCompletion = await requestDashScopeCompletion({
+      apiKey,
+      baseUrl,
+      model,
+      temperature: 0.1,
+      maxTokens: 120,
+      responseFormat: { type: "json_object" },
+      networkErrorPrefix: "aliyun vision network error",
+      providerErrorPrefix: "aliyun vision request failed",
+      messages: guardedVisionMessages,
     });
 
     if (!visionCompletion.ok) {

@@ -15,6 +15,14 @@ import {
   buildCulturalRepairMessages,
   buildCulturalStrictTemplateMessages,
 } from "@/lib/ai/prompts/repair";
+import {
+  sanitizeStringArray,
+  sanitizeTextValue,
+} from "@/lib/ai/guards/input-sanitizer";
+import {
+  detectPromptInjectionInFields,
+  prependPromptInjectionGuard,
+} from "@/lib/ai/guards/prompt-injection";
 import type { PromptAudienceContext } from "@/lib/ai/prompts/shared";
 
 export const runtime = "nodejs";
@@ -372,56 +380,33 @@ function isRecognitionResult(value: unknown): value is RecognitionResult {
   );
 }
 
-function clipText(value: string | undefined, maxLength: number): string {
-  const trimmed = value?.trim() ?? "";
-
-  if (!trimmed) {
-    return "";
-  }
-
-  if (trimmed.length <= maxLength) {
-    return trimmed;
-  }
-
-  return trimmed.slice(0, maxLength);
-}
-
-function compactLabels(
-  value: string[] | undefined,
-  itemMaxLength: number,
-  maxItems: number
-): string[] {
-  if (!Array.isArray(value)) {
-    return [];
-  }
-
-  return value
-    .filter((item): item is string => typeof item === "string")
-    .map((item) => clipText(item, itemMaxLength))
-    .filter(Boolean)
-    .slice(0, maxItems);
-}
-
 function isSupportedCountry(value: string): value is SupportedCountry {
   return COUNTRY_OPTIONS.some((option) => option.value === value);
 }
 
 function resolveRequestPayload(body: GenerateRequest): ResolvedGenerateRequest | null {
-  if (!body?.country) {
+  const country = sanitizeTextValue(body?.country, { maxLength: 64 });
+
+  if (!country) {
     return null;
   }
 
-  if (!isSupportedCountry(body.country)) {
+  if (!isSupportedCountry(country)) {
     return null;
   }
 
   const rawContext = body.giftContext ?? {};
-  const name = clipText(rawContext.name, 64);
-  const description = clipText(rawContext.description, 240);
-  const visionLabel = clipText(rawContext.visionLabel, 64);
-  const visionDescription = clipText(rawContext.visionDescription, 240);
-  const source = clipText(rawContext.source, 48);
-  const rawLabels = compactLabels(rawContext.rawLabels, 64, 6);
+  const name = sanitizeTextValue(rawContext.name, { maxLength: 64 });
+  const description = sanitizeTextValue(rawContext.description, { maxLength: 240 });
+  const visionLabel = sanitizeTextValue(rawContext.visionLabel, { maxLength: 64 });
+  const visionDescription = sanitizeTextValue(rawContext.visionDescription, {
+    maxLength: 240,
+  });
+  const source = sanitizeTextValue(rawContext.source, { maxLength: 48 });
+  const rawLabels = sanitizeStringArray(rawContext.rawLabels, {
+    itemMaxLength: 64,
+    maxItems: 6,
+  });
 
   const baseRecognition = isRecognitionResult(body.recognition) ? body.recognition : null;
   const fallbackLabel = name || visionLabel || description;
@@ -433,8 +418,30 @@ function resolveRequestPayload(body: GenerateRequest): ResolvedGenerateRequest |
 
   return {
     ...body,
-    country: body.country,
-    recognition: resolvedRecognition,
+    country,
+    recognition: {
+      ...resolvedRecognition,
+      itemKey: sanitizeTextValue(resolvedRecognition.itemKey, {
+        maxLength: 64,
+        fallback: "unknown",
+      }),
+      itemZh: sanitizeTextValue(resolvedRecognition.itemZh, {
+        maxLength: 80,
+        fallback: fallbackLabel || "未命名礼物",
+      }),
+      itemEn: sanitizeTextValue(resolvedRecognition.itemEn, {
+        maxLength: 80,
+        fallback: fallbackLabel || "Unnamed gift",
+      }),
+      category: sanitizeTextValue(resolvedRecognition.category, {
+        maxLength: 48,
+        fallback: "general",
+      }),
+      confidence:
+        typeof resolvedRecognition.confidence === "number"
+          ? Math.min(Math.max(resolvedRecognition.confidence, 0), 1)
+          : 0.5,
+    },
     giftContext: {
       name,
       description,
@@ -467,29 +474,48 @@ async function requestDashScopeCompletion(
 
 function buildPromptAudience(audience: GenerateRequest["audience"]): PromptAudienceContext {
   return {
-    group: audience?.group?.trim() || "peer",
-    customGroup: audience?.customGroup?.trim() || "",
-    sceneTemplate: audience?.sceneTemplate?.trim() || "",
-    ageBand: audience?.ageBand?.trim() || "",
-    gender: audience?.gender?.trim() || "",
-    occupation: audience?.occupation?.trim() || "",
-    relationship: audience?.relationship?.trim() || "",
-    occasion: audience?.occasion?.trim() || "",
-    purpose: audience?.purpose?.trim() || "",
-    budgetRange: audience?.budgetRange?.trim() || "",
-    formality: audience?.formality?.trim() || "",
-    notes: audience?.notes?.trim() || "",
+    group: sanitizeTextValue(audience?.group, { maxLength: 40, fallback: "peer" }),
+    customGroup: sanitizeTextValue(audience?.customGroup, { maxLength: 60 }),
+    sceneTemplate: sanitizeTextValue(audience?.sceneTemplate, { maxLength: 60 }),
+    ageBand: sanitizeTextValue(audience?.ageBand, { maxLength: 40 }),
+    gender: sanitizeTextValue(audience?.gender, { maxLength: 40 }),
+    occupation: sanitizeTextValue(audience?.occupation, { maxLength: 60 }),
+    relationship: sanitizeTextValue(audience?.relationship, { maxLength: 60 }),
+    occasion: sanitizeTextValue(audience?.occasion, { maxLength: 60 }),
+    purpose: sanitizeTextValue(audience?.purpose, { maxLength: 80 }),
+    budgetRange: sanitizeTextValue(audience?.budgetRange, { maxLength: 40 }),
+    formality: sanitizeTextValue(audience?.formality, { maxLength: 40 }),
+    notes: sanitizeTextValue(audience?.notes, { maxLength: 240 }),
   };
 }
 
+function buildPromptInjectionAssessment(
+  request: ResolvedGenerateRequest
+) {
+  return detectPromptInjectionInFields([
+    request.country,
+    request.recognition.itemKey,
+    request.recognition.itemZh,
+    request.recognition.itemEn,
+    request.recognition.category,
+    request.giftContext.name,
+    request.giftContext.description,
+    request.giftContext.visionLabel,
+    request.giftContext.visionDescription,
+    request.giftContext.source,
+    request.giftContext.rawLabels,
+    ...Object.values(buildPromptAudience(request.audience)),
+  ]);
+}
+
 function buildMessages(request: ResolvedGenerateRequest): ChatMessage[] {
-  return buildCulturalAnalysisMessages({
+  return prependPromptInjectionGuard(buildCulturalAnalysisMessages({
     language: request.language,
     country: request.country,
     recognition: request.recognition,
     giftContext: request.giftContext,
     audience: buildPromptAudience(request.audience),
-  });
+  }), buildPromptInjectionAssessment(request));
 }
 
 function buildRepairMessages(
@@ -497,7 +523,7 @@ function buildRepairMessages(
   previousOutput: string,
   missingFields: string[]
 ): ChatMessage[] {
-  return buildCulturalRepairMessages({
+  return prependPromptInjectionGuard(buildCulturalRepairMessages({
     language: request.language,
     country: request.country,
     recognition: request.recognition,
@@ -505,7 +531,7 @@ function buildRepairMessages(
     audience: buildPromptAudience(request.audience),
     missingFields,
     previousOutput,
-  });
+  }), buildPromptInjectionAssessment(request));
 }
 
 function buildMissingFieldPatchMessages(
@@ -513,7 +539,7 @@ function buildMissingFieldPatchMessages(
   previousOutput: Record<string, unknown>,
   missingFields: string[]
 ): ChatMessage[] {
-  return buildCulturalMissingFieldPatchMessages({
+  return prependPromptInjectionGuard(buildCulturalMissingFieldPatchMessages({
     language: request.language,
     country: request.country,
     recognition: request.recognition,
@@ -521,7 +547,7 @@ function buildMissingFieldPatchMessages(
     audience: buildPromptAudience(request.audience),
     missingFields,
     previousOutput,
-  });
+  }), buildPromptInjectionAssessment(request));
 }
 
 function buildStrictTemplateMessages(
@@ -529,7 +555,7 @@ function buildStrictTemplateMessages(
   previousOutput: Record<string, unknown>,
   missingFields: string[]
 ): ChatMessage[] {
-  return buildCulturalStrictTemplateMessages({
+  return prependPromptInjectionGuard(buildCulturalStrictTemplateMessages({
     language: request.language,
     country: request.country,
     recognition: request.recognition,
@@ -537,7 +563,7 @@ function buildStrictTemplateMessages(
     audience: buildPromptAudience(request.audience),
     missingFields,
     previousOutput,
-  });
+  }), buildPromptInjectionAssessment(request));
 }
 
 function buildStrictModelAnalysis(
