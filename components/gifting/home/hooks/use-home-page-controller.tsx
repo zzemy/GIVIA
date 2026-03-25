@@ -39,8 +39,6 @@ import {
 } from '@/lib/storage/analysis-storage'
 import zhMessages from '@/messages/zh.json'
 import enMessages from '@/messages/en.json'
-import jaMessages from '@/messages/ja.json'
-import frMessages from '@/messages/fr.json'
 
 export function useHomePageController(routeLocale: Locale) {
   const router = useRouter()
@@ -53,14 +51,7 @@ export function useHomePageController(routeLocale: Locale) {
 
   const t = React.useCallback(
     (path: string): string => {
-      const source =
-        locale === 'zh'
-          ? zhMessages
-          : locale === 'ja'
-            ? jaMessages
-            : locale === 'fr'
-              ? frMessages
-              : enMessages
+      const source = locale === 'zh' ? zhMessages : enMessages
       const value = path.split('.').reduce<unknown>((acc, key) => {
         if (acc && typeof acc === 'object' && key in (acc as Record<string, unknown>)) {
           return (acc as Record<string, unknown>)[key]

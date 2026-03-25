@@ -66,8 +66,6 @@ export function HomeHeroSection({
             {([
               { value: 'zh' as const, label: '中文' },
               { value: 'en' as const, label: 'English' },
-              { value: 'ja' as const, label: '日本語' },
-              { value: 'fr' as const, label: 'Français' },
             ]).map(languageOption => (
               <button
                 key={languageOption.value}

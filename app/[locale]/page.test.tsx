@@ -54,6 +54,8 @@ describe('Localized gifting page', () => {
 
     expect(screen.getByRole('button', { name: '中文' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'English' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '日本語' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Français' })).not.toBeInTheDocument()
   })
 
   it('renders global country selector', () => {

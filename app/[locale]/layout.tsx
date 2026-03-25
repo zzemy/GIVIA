@@ -1,10 +1,15 @@
-import type { Metadata } from "next"
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import zhMessages from '@/messages/zh.json'
 import enMessages from '@/messages/en.json'
-import jaMessages from '@/messages/ja.json'
-import frMessages from '@/messages/fr.json'
 
-const locales = ['zh', 'en', 'ja', 'fr'] as const
+const locales = ['zh', 'en'] as const
+
+type SupportedLocale = (typeof locales)[number]
+
+function isSupportedLocale(locale: string): locale is SupportedLocale {
+  return locales.includes(locale as SupportedLocale)
+}
 
 export function generateStaticParams() {
   return locales.map(locale => ({ locale }))
@@ -16,14 +21,12 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const { locale } = await params
-  const messages =
-    locale === 'zh'
-      ? zhMessages
-      : locale === 'ja'
-        ? jaMessages
-        : locale === 'fr'
-          ? frMessages
-          : enMessages
+
+  if (!isSupportedLocale(locale)) {
+    notFound()
+  }
+
+  const messages = locale === 'zh' ? zhMessages : enMessages
 
   return {
     title: messages.workflow.title,
@@ -31,10 +34,18 @@ export async function generateMetadata({
   }
 }
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params: Promise<{ locale: string }>
 }) {
+  const { locale } = await params
+
+  if (!isSupportedLocale(locale)) {
+    notFound()
+  }
+
   return children
 }

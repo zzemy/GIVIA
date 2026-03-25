@@ -1,4 +1,4 @@
-export type Locale = 'zh' | 'en' | 'ja' | 'fr'
+export type Locale = 'zh' | 'en'
 
 export type AssistantCurrency = 'USD' | 'CNY' | 'EUR' | 'JPY' | 'GBP'
 

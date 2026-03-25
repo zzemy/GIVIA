@@ -403,8 +403,7 @@ export function normalizeEnhancementCountryCode(value: string): string {
 }
 
 export function formatCurrencyAmount(amount: number, currency: string, locale: Locale): string {
-  const intlLocale =
-    locale === 'zh' ? 'zh-CN' : locale === 'ja' ? 'ja-JP' : locale === 'fr' ? 'fr-FR' : 'en-US'
+  const intlLocale = locale === 'zh' ? 'zh-CN' : 'en-US'
 
   try {
     return new Intl.NumberFormat(intlLocale, {

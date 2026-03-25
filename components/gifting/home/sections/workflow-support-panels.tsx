@@ -67,8 +67,6 @@ export function WorkflowSupportAssistantPanel({
   onRunLogisticsAssistant,
 }: AssistantPanelProps) {
   const isZh = locale === 'zh'
-  const isJa = locale === 'ja'
-  const isFr = locale === 'fr'
 
   return (
     <section className="rounded-2xl border border-cyan-400/20 bg-white/5 p-5 backdrop-blur-sm sm:p-6">
@@ -76,38 +74,18 @@ export function WorkflowSupportAssistantPanel({
         <div className="flex items-center gap-2">
           <Wallet size={18} className="text-cyan-200" />
           <h3 className="text-xl font-bold">
-            {isZh
-              ? '跨境物流与支付助手'
-              : isJa
-                ? '越境配送・決済アシスタント'
-                : isFr
-                  ? 'Assistant logistique et paiement'
-                  : 'Cross-border Logistics & Payment Assistant'}
+            {isZh ? '跨境物流与支付助手' : 'Cross-border Logistics & Payment Assistant'}
           </h3>
         </div>
         <span className="rounded-full border border-cyan-300/25 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-100">
-          {assistantResult?.rateSource === 'live'
-            ? isZh
-              ? '实时汇率'
-              : isJa
-                ? 'リアルタイム為替'
-                : isFr
-                  ? 'Taux en direct'
-                  : 'Live FX'
-            : isZh
-              ? '汇率回退'
-              : isJa
-                ? '為替フォールバック'
-                : isFr
-                  ? 'Taux de secours'
-                  : 'Fallback FX'}
+          {assistantResult?.rateSource === 'live' ? (isZh ? '实时汇率' : 'Live FX') : isZh ? '汇率回退' : 'Fallback FX'}
         </span>
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
         <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
           <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-            {isZh ? '礼物价格' : isJa ? '商品価格' : isFr ? 'Prix du cadeau' : 'Gift price'}
+            {isZh ? '礼物价格' : 'Gift price'}
           </p>
           <input
             value={assistantAmountInput}
@@ -118,7 +96,7 @@ export function WorkflowSupportAssistantPanel({
 
         <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
           <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-            {isZh ? '币种' : isJa ? '通貨' : isFr ? 'Devise' : 'Currency'}
+            {isZh ? '币种' : 'Currency'}
           </p>
           <select
             value={assistantCurrency}
@@ -135,7 +113,7 @@ export function WorkflowSupportAssistantPanel({
 
         <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
           <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-            {isZh ? '重量(kg)' : isJa ? '重量(kg)' : isFr ? 'Poids (kg)' : 'Weight (kg)'}
+            {isZh ? '重量(kg)' : 'Weight (kg)'}
           </p>
           <input
             value={assistantWeightInput}
@@ -146,7 +124,7 @@ export function WorkflowSupportAssistantPanel({
 
         <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
           <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-            {isZh ? '申报价值' : isJa ? '申告価格' : isFr ? 'Valeur déclarée' : 'Declared value'}
+            {isZh ? '申报价值' : 'Declared value'}
           </p>
           <input
             value={assistantDeclaredValueInput}
@@ -164,21 +142,7 @@ export function WorkflowSupportAssistantPanel({
           className="border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22"
         >
           <Truck size={16} className="mr-2" />
-          {isAssistantLoading
-            ? isZh
-              ? '估算中...'
-              : isJa
-                ? '計算中...'
-                : isFr
-                  ? 'Calcul...'
-                  : 'Estimating...'
-            : isZh
-              ? '估算物流与支付'
-              : isJa
-                ? '配送と決済を見積もる'
-                : isFr
-                  ? 'Estimer logistique & paiement'
-                  : 'Estimate logistics & payment'}
+          {isAssistantLoading ? (isZh ? '估算中...' : 'Estimating...') : isZh ? '估算物流与支付' : 'Estimate logistics & payment'}
         </Button>
         {assistantError && <p className="text-sm text-red-300">{assistantError}</p>}
       </div>
@@ -200,7 +164,7 @@ export function WorkflowSupportAssistantPanel({
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold text-cyan-100">{quote.provider}</p>
                   <span className="text-xs text-slate-300">
-                    {quote.etaDays} {isZh ? '天' : isJa ? '日' : isFr ? 'jours' : 'days'}
+                    {quote.etaDays} {isZh ? '天' : 'days'}
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-slate-400">{quote.service}</p>
@@ -218,7 +182,7 @@ export function WorkflowSupportAssistantPanel({
 
           <div className="rounded-xl border border-amber-300/20 bg-amber-500/8 p-3">
             <p className="text-sm font-semibold text-amber-200">
-              {isZh ? '清关注意事项' : isJa ? '通関の注意点' : isFr ? 'Points de douane' : 'Customs notes'}
+              {isZh ? '清关注意事项' : 'Customs notes'}
             </p>
             <ul className="mt-2 space-y-1 text-xs text-amber-100/90">
               {assistantResult.customsNotes.map(note => (
@@ -239,8 +203,6 @@ export function WorkflowSupportHistoryPanels({
   favoriteGiftChecklist,
 }: HistoryPanelsProps) {
   const isZh = locale === 'zh'
-  const isJa = locale === 'ja'
-  const isFr = locale === 'fr'
 
   if (historyRecords.length === 0 && favoriteGiftChecklist.length === 0) {
     return null
@@ -318,22 +280,10 @@ export function WorkflowSupportHistoryPanels({
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-2xl font-bold text-slate-100">
-                {isZh
-                  ? '收藏礼物清单'
-                  : isJa
-                    ? 'お気に入りギフトリスト'
-                    : isFr
-                      ? 'Liste de cadeaux favoris'
-                      : 'Favorite Gift List'}
+                {isZh ? '收藏礼物清单' : 'Favorite Gift List'}
               </h2>
               <p className="mt-1 text-sm text-slate-300">
-                {isZh
-                  ? '来自你的收藏记录，可作为后续送礼候选池。'
-                  : isJa
-                    ? '保存済み候補を次回のギフト検討リストとして再利用できます。'
-                    : isFr
-                      ? 'Vos articles enregistrés pour préparer vos prochaines listes cadeaux.'
-                      : 'Saved picks from your previous analyses for future gifting checklists.'}
+                {isZh ? '来自你的收藏记录，可作为后续送礼候选池。' : 'Saved picks from your previous analyses for future gifting checklists.'}
               </p>
             </div>
             <span className="rounded-full border border-emerald-200/25 bg-emerald-300/10 px-3 py-1 text-xs text-emerald-100">

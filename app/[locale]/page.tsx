@@ -12,10 +12,7 @@ import type { Locale } from '@/components/gifting/home/types'
 
 export default function Home() {
   const params = useParams<{ locale?: string }>()
-  const routeLocale: Locale =
-    params?.locale === 'zh' || params?.locale === 'en' || params?.locale === 'ja' || params?.locale === 'fr'
-      ? params.locale
-      : 'zh'
+  const routeLocale: Locale = params?.locale === 'en' ? 'en' : 'zh'
 
   const { isZh, heroProps, workflowPanelsProps, feedbackProps, resultsProps } = useHomePageController(routeLocale)
 
