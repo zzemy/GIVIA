@@ -144,3 +144,27 @@
 .font-display-zh {
   font-family: var(--app-font-display-zh);
 }
+
+.country-selector-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(103, 232, 249, 0.38) rgba(15, 26, 47, 0.55);
+}
+
+.country-selector-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.country-selector-scroll::-webkit-scrollbar-track {
+  background: rgba(15, 26, 47, 0.45);
+  border-radius: 9999px;
+}
+
+.country-selector-scroll::-webkit-scrollbar-thumb {
+  background: rgba(103, 232, 249, 0.35);
+  border-radius: 9999px;
+  border: 1px solid rgba(15, 26, 47, 0.45);
+}
+
+.country-selector-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(125, 211, 252, 0.5);
+}

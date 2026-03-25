@@ -25,6 +25,7 @@ export function CountrySelector({
 }: CountrySelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const popularCountryCodes = useMemo(() => new Set(POPULAR_COUNTRIES.map(country => country.code)), [])
 
   const selectedCountry = COUNTRIES.find(c => c.code === value)
 
@@ -73,7 +74,7 @@ export function CountrySelector({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-2 rounded-xl border border-sky-300/30 bg-[#0f1a2f] shadow-2xl">
+        <div className="relative z-50 mt-3 rounded-xl border border-sky-300/30 bg-[#0f1a2f] shadow-2xl">
           {/* Search bar */}
           <div className="border-b border-sky-300/20 p-3">
             <div className="relative">
@@ -90,7 +91,7 @@ export function CountrySelector({
           </div>
 
           {/* Search results or grouped countries */}
-          <div className="max-h-96 overflow-y-auto">
+          <div className="country-selector-scroll max-h-96 overflow-y-auto pr-1">
             {filteredCountries ? (
               // Search results
               filteredCountries.length > 0 ? (
@@ -147,13 +148,16 @@ export function CountrySelector({
 
                 {/* Regions */}
                 {(Object.keys(COUNTRIES_BY_REGION) as Array<keyof typeof COUNTRIES_BY_REGION>).map(
-                  region => (
-                    COUNTRIES_BY_REGION[region].length > 0 && (
+                  region => {
+                    const regionalCountries = COUNTRIES_BY_REGION[region].filter(country => !popularCountryCodes.has(country.code))
+
+                    return (
+                    regionalCountries.length > 0 && (
                       <div key={region}>
                         <div className="mt-2 border-b border-sky-300/20 bg-white/5 px-4 py-2 text-sm font-semibold text-sky-200">
                           {regionLabels[region] || region}
                         </div>
-                        {COUNTRIES_BY_REGION[region].map(country => (
+                        {regionalCountries.map(country => (
                           <button
                             key={country.code}
                             type="button"
@@ -172,7 +176,7 @@ export function CountrySelector({
                         ))}
                       </div>
                     )
-                  )
+                  )}
                 )}
               </>
             )}

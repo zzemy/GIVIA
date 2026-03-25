@@ -4,32 +4,13 @@ import React, { useMemo, useState, useRef } from 'react'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  Upload,
-  Sparkles,
-  AlertTriangle,
-  CheckCircle,
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  ChevronUp,
-  RotateCcw,
-  Zap,
-  ShieldCheck,
-  Brain,
-  ShoppingBag,
-  ArrowRight,
-  Globe2,
-  Users,
-  ImagePlus,
-  PencilLine,
-  Trash2,
-  Wallet,
-  Truck,
-} from 'lucide-react'
+import { AlertTriangle, ChevronLeft, ChevronRight, RotateCcw, Zap, ShieldCheck, Brain, ShoppingBag, ArrowRight, Globe2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { WorkflowProgress } from '@/components/gifting/workflow-progress'
-import { CountrySelector } from '@/components/gifting/country-selector'
+import { StepGiftInput } from '@/components/gifting/home/step-gift-input'
+import { StepAnalysis } from '@/components/gifting/home/step-analysis'
+import { StepCountry } from '@/components/gifting/home/step-country'
+import { WorkflowSupportPanels } from '@/components/gifting/home/workflow-support-panels'
 import { InteractiveFlowDemo } from '@/components/gifting/interactive-flow-demo'
 import { InfoTooltip } from '@/components/ui/info-tooltip'
 import { getCountryName } from '@/lib/countries'
@@ -56,36 +37,15 @@ import enMessages from '@/messages/en.json'
 import jaMessages from '@/messages/ja.json'
 import frMessages from '@/messages/fr.json'
 import { cn } from '@/lib/utils'
-
-type Locale = 'zh' | 'en' | 'ja' | 'fr'
-
-type AssistantCurrency = 'USD' | 'CNY' | 'EUR' | 'JPY' | 'GBP'
-
-type LogisticsAssistantResult = {
-  baseAmount: number
-  baseCurrency: AssistantCurrency
-  rateSource: 'live' | 'fallback'
-  convertedAmounts: Record<string, number>
-  shippingQuotes: Array<{
-    provider: 'DHL' | 'SF Express'
-    service: string
-    currency: AssistantCurrency
-    estimatedCost: number
-    etaDays: string
-    notes: string[]
-    source: 'api' | 'fallback'
-  }>
-  customsNotes: string[]
-  disclaimer: string
-}
-
-interface RecognitionResult {
-  itemKey: string
-  itemZh: string
-  itemEn: string
-  category: string
-  confidence: number
-}
+import type {
+  AssistantCurrency,
+  AudienceGroup,
+  EnhancementSettings,
+  Locale,
+  LogisticsAssistantResult,
+  RecognitionResult,
+  RecognitionSource,
+} from '@/components/gifting/home/types'
 
 interface RecognitionResponsePayload {
   source?: string
@@ -95,10 +55,6 @@ interface RecognitionResponsePayload {
   rawLabels?: string[]
   error?: string
 }
-
-type RecognitionSource = 'aliyun-dashscope' | 'aliyun-dashscope-text' | 'local-fallback' | 'local-fallback-text'
-
-type AudienceGroup = 'peer' | 'client' | 'leader' | 'family' | 'elder' | 'other'
 
 interface AnalysisResult {
   fitScore: number
@@ -161,6 +117,65 @@ interface AnalysisResult {
     numbers: number[]
     brandTokens: string[]
     semanticTags: string[]
+  }
+}
+
+type EnhancementRecommendation = AnalysisResult['recommendations'][number]
+
+type EnhancedAnalysisState = {
+  p1?: {
+    multimodalResults?: {
+      confidenceScore: number
+      enrichmentSource: string
+      ocrResult?: {
+        brands: string[]
+        specifications: string[]
+      }
+      visualAttributes?: {
+        colors: Array<{ color: string; prominence: string }>
+        materials: Array<{ material: string; confidence: number }>
+        styles: string[]
+        formFactor: string
+        packaging?: {
+          style: string
+          colors: string[]
+          hasLogo: boolean
+        }
+      }
+    }
+    collaborativeResults?: EnhancementRecommendation[]
+    logisticsEstimate?: {
+      recommendedCarrier: string
+      totalEstimatedCost: number
+      destinationCurrency: string
+      deliveryTimeRange: string
+      shippingQuotes: Array<{
+        carrier: string
+        baseCost: number
+        estimatedDays: number
+        currency: string
+        trackable: boolean
+        insuranceAvailable: boolean
+      }>
+      customsDuty: {
+        dutyRate: number
+        estimatedDuty: number
+        currency: string
+        importLicense: string | null
+        restrictions: string[]
+      }
+    }
+    packingRecommendations?: {
+      general: string[]
+      estimated_cost_impact: string
+    }
+  }
+  p2?: {
+    wideDeepResults?: EnhancementRecommendation[]
+    culturalImpactScores?: Record<string, number>
+  }
+  localizedOutput?: {
+    formattedRecommendations: string
   }
 }
 
@@ -329,6 +344,249 @@ function normalizeAnalysisResult(raw: unknown): AnalysisResult {
   }
 }
 
+function normalizeAnalysisEnhancements(raw: unknown): EnhancedAnalysisState | null {
+  const toRecord = (value: unknown): Record<string, unknown> =>
+    typeof value === 'object' && value !== null ? (value as Record<string, unknown>) : {}
+
+  const toText = (value: unknown): string => (typeof value === 'string' ? value.trim() : '')
+
+  const toNumber = (value: unknown, fallback = 0): number => {
+    const numeric =
+      typeof value === 'number' ? value : typeof value === 'string' && value.trim() ? Number.parseFloat(value) : Number.NaN
+
+    return Number.isFinite(numeric) ? numeric : fallback
+  }
+
+  const toStringArray = (value: unknown): string[] => {
+    if (typeof value === 'string') {
+      return value
+        .split(/[\n,，;；、|]/)
+        .map(item => item.trim())
+        .filter(Boolean)
+        .slice(0, 10)
+    }
+
+    if (!Array.isArray(value)) {
+      return []
+    }
+
+    return value
+      .map(item => (typeof item === 'string' ? item.trim() : ''))
+      .filter(Boolean)
+      .slice(0, 10)
+  }
+
+  const toRecommendationList = (value: unknown): EnhancementRecommendation[] => {
+    if (!Array.isArray(value)) {
+      return []
+    }
+
+    return value
+      .map(item => {
+        const rec = toRecord(item)
+        const id = toText(rec.id)
+        const nameZh = toText(rec.nameZh)
+        const nameEn = toText(rec.nameEn)
+
+        if (!id || (!nameZh && !nameEn)) {
+          return null
+        }
+
+        return {
+          id,
+          nameZh: nameZh || nameEn,
+          nameEn: nameEn || nameZh,
+          category: toText(rec.category) || 'general',
+          score: Math.round(toNumber(rec.score, 0)),
+          reasonZh: toText(rec.reasonZh),
+          reasonEn: toText(rec.reasonEn),
+          packagingTipZh: toText(rec.packagingTipZh),
+          packagingTipEn: toText(rec.packagingTipEn),
+          shippingNoteZh: toText(rec.shippingNoteZh),
+          shippingNoteEn: toText(rec.shippingNoteEn),
+          pitchZh: toText(rec.pitchZh),
+          pitchEn: toText(rec.pitchEn),
+        }
+      })
+      .filter((item): item is EnhancementRecommendation => Boolean(item))
+      .slice(0, 3)
+  }
+
+  const source = toRecord(raw)
+  const p1 = toRecord(source.p1)
+  const p2 = toRecord(source.p2)
+  const multimodal = toRecord(p1.multimodalResults)
+  const logistics = toRecord(p1.logisticsEstimate)
+  const customsDuty = toRecord(logistics.customsDuty)
+  const packing = toRecord(p1.packingRecommendations)
+  const localizedOutput = toRecord(source.localizedOutput)
+
+  const normalized: EnhancedAnalysisState = {}
+
+  if (Object.keys(p1).length > 0) {
+    normalized.p1 = {}
+
+    if (Object.keys(multimodal).length > 0) {
+      const ocrResult = toRecord(multimodal.ocrResult)
+      const visualAttributes = toRecord(multimodal.visualAttributes)
+      const packaging = toRecord(visualAttributes.packaging)
+
+      normalized.p1.multimodalResults = {
+        confidenceScore: toNumber(multimodal.confidenceScore, 0),
+        enrichmentSource: toText(multimodal.enrichmentSource) || 'vision-only',
+        ocrResult: Object.keys(ocrResult).length
+          ? {
+              brands: toStringArray(ocrResult.brands),
+              specifications: toStringArray(ocrResult.specifications),
+            }
+          : undefined,
+        visualAttributes: Object.keys(visualAttributes).length
+          ? {
+              colors: Array.isArray(visualAttributes.colors)
+                ? visualAttributes.colors
+                    .map(item => {
+                      const color = toRecord(item)
+                      const value = toText(color.color)
+                      return value ? { color: value, prominence: toText(color.prominence) || 'accent' } : null
+                    })
+                    .filter(
+                      (item): item is { color: string; prominence: string } => Boolean(item),
+                    )
+                : [],
+              materials: Array.isArray(visualAttributes.materials)
+                ? visualAttributes.materials
+                    .map(item => {
+                      const material = toRecord(item)
+                      const value = toText(material.material)
+                      return value ? { material: value, confidence: toNumber(material.confidence, 0) } : null
+                    })
+                    .filter(
+                      (item): item is { material: string; confidence: number } => Boolean(item),
+                    )
+                : [],
+              styles: toStringArray(visualAttributes.styles),
+              formFactor: toText(visualAttributes.formFactor),
+              packaging: Object.keys(packaging).length
+                ? {
+                    style: toText(packaging.style),
+                    colors: toStringArray(packaging.colors),
+                    hasLogo: Boolean(packaging.hasLogo),
+                  }
+                : undefined,
+            }
+          : undefined,
+      }
+    }
+
+    const collaborativeResults = toRecommendationList(p1.collaborativeResults)
+    if (collaborativeResults.length > 0) {
+      normalized.p1.collaborativeResults = collaborativeResults
+    }
+
+    if (Object.keys(logistics).length > 0) {
+      normalized.p1.logisticsEstimate = {
+        recommendedCarrier: toText(logistics.recommendedCarrier),
+        totalEstimatedCost: toNumber(logistics.totalEstimatedCost, 0),
+        destinationCurrency: toText(logistics.destinationCurrency) || 'USD',
+        deliveryTimeRange: toText(logistics.deliveryTimeRange),
+        shippingQuotes: Array.isArray(logistics.shippingQuotes)
+          ? logistics.shippingQuotes
+              .map(item => {
+                const quote = toRecord(item)
+                const carrier = toText(quote.carrier)
+                return carrier
+                  ? {
+                      carrier,
+                      baseCost: toNumber(quote.baseCost, 0),
+                      estimatedDays: Math.round(toNumber(quote.estimatedDays, 0)),
+                      currency: toText(quote.currency) || 'USD',
+                      trackable: Boolean(quote.trackable),
+                      insuranceAvailable: Boolean(quote.insuranceAvailable),
+                    }
+                  : null
+              })
+              .filter(
+                (item): item is {
+                  carrier: string
+                  baseCost: number
+                  estimatedDays: number
+                  currency: string
+                  trackable: boolean
+                  insuranceAvailable: boolean
+                } => Boolean(item),
+              )
+          : [],
+        customsDuty: {
+          dutyRate: toNumber(customsDuty.dutyRate, 0),
+          estimatedDuty: toNumber(customsDuty.estimatedDuty, 0),
+          currency: toText(customsDuty.currency) || 'USD',
+          importLicense: toText(customsDuty.importLicense) || null,
+          restrictions: toStringArray(customsDuty.restrictions),
+        },
+      }
+    }
+
+    if (Object.keys(packing).length > 0) {
+      normalized.p1.packingRecommendations = {
+        general: toStringArray(packing.general),
+        estimated_cost_impact: toText(packing.estimated_cost_impact),
+      }
+    }
+  }
+
+  if (Object.keys(p2).length > 0) {
+    normalized.p2 = {}
+
+    const wideDeepResults = toRecommendationList(p2.wideDeepResults)
+    if (wideDeepResults.length > 0) {
+      normalized.p2.wideDeepResults = wideDeepResults
+    }
+
+    if (p2.culturalImpactScores && typeof p2.culturalImpactScores === 'object') {
+      normalized.p2.culturalImpactScores = Object.fromEntries(
+        Object.entries(p2.culturalImpactScores as Record<string, unknown>)
+          .map(([key, value]) => [key, Math.max(0, Math.min(1, toNumber(value, 0)))])
+          .filter(([, value]) => Number.isFinite(value)),
+      )
+    }
+  }
+
+  if (toText(localizedOutput.formattedRecommendations)) {
+    normalized.localizedOutput = {
+      formattedRecommendations: toText(localizedOutput.formattedRecommendations),
+    }
+  }
+
+  return Object.keys(normalized).length > 0 ? normalized : null
+}
+
+function budgetRangeToAmount(value: string): number {
+  if (value === 'low') return 60
+  if (value === 'high') return 240
+  return 120
+}
+
+function normalizeEnhancementCountryCode(value: string): string {
+  const upper = value.trim().toUpperCase()
+  if (upper === 'GB') return 'UK'
+  return upper
+}
+
+function formatCurrencyAmount(amount: number, currency: string, locale: Locale): string {
+  const intlLocale =
+    locale === 'zh' ? 'zh-CN' : locale === 'ja' ? 'ja-JP' : locale === 'fr' ? 'fr-FR' : 'en-US'
+
+  try {
+    return new Intl.NumberFormat(intlLocale, {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: 2,
+    }).format(amount)
+  } catch {
+    return `${currency} ${amount.toFixed(2)}`
+  }
+}
+
 function buildRiskReasons(analysis: AnalysisResult, locale: Locale): string[] {
   const reasons: string[] = []
 
@@ -485,18 +743,6 @@ function getRiskActionMeta(riskLevel: AnalysisResult['riskLevel'], locale: Local
   }
 }
 
-function formatFileSize(sizeInBytes: number): string {
-  if (!Number.isFinite(sizeInBytes) || sizeInBytes <= 0) {
-    return '0 B'
-  }
-
-  if (sizeInBytes < 1024 * 1024) {
-    return `${(sizeInBytes / 1024).toFixed(sizeInBytes < 10 * 1024 ? 1 : 0)} KB`
-  }
-
-  return `${(sizeInBytes / (1024 * 1024)).toFixed(1)} MB`
-}
-
 export default function Home() {
   const params = useParams<{ locale?: string }>()
   const router = useRouter()
@@ -554,6 +800,7 @@ export default function Home() {
   const [occasion, setOccasion] = useState('')
   const [targetProfile, setTargetProfile] = useState('')
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
+  const [analysisEnhancements, setAnalysisEnhancements] = useState<EnhancedAnalysisState | null>(null)
   const [analysisSource, setAnalysisSource] = useState('')
   const [historyRecords, setHistoryRecords] = useState<StoredAnalysisRecord[]>([])
   const [favoriteRecommendationIds, setFavoriteRecommendationIds] = useState<string[]>([])
@@ -564,6 +811,14 @@ export default function Home() {
   const [assistantResult, setAssistantResult] = useState<LogisticsAssistantResult | null>(null)
   const [assistantError, setAssistantError] = useState('')
   const [isAssistantLoading, setIsAssistantLoading] = useState(false)
+  const [analysisEnhancementSettings, setAnalysisEnhancementSettings] = useState<EnhancementSettings>({
+    multimodal: true,
+    collaborativeFiltering: true,
+    logistics: true,
+    wideDeep: true,
+    knowledgeGraph: true,
+  })
+  const [enhancementOriginCountry, setEnhancementOriginCountry] = useState('CN')
 
   // Loading state
   const [isRecognizing, setIsRecognizing] = useState(false)
@@ -592,8 +847,6 @@ export default function Home() {
   const isLoading = isRecognizing || isAnalyzing
   const isLoadingRecognition = isRecognizing
   const isZh = locale === 'zh'
-  const isJa = locale === 'ja'
-  const isFr = locale === 'fr'
   const hasGiftInput = Boolean(giftName.trim() || giftDescription.trim())
   const canRecognize = Boolean(selectedFile || hasGiftInput)
   const isAudienceReady = targetGroup !== 'other' || customAudienceGroup.trim().length > 0
@@ -759,12 +1012,38 @@ export default function Home() {
       .map(id => latestById.get(id))
       .filter((item): item is { id: string; name: string; category: string } => Boolean(item))
   }, [favoriteRecommendationIds, historyRecords])
+  const enhancementOriginOptions = useMemo(
+    () => [
+      { value: 'CN', label: isZh ? '中国大陆发货' : 'Ship from China' },
+      { value: 'US', label: isZh ? '美国发货' : 'Ship from United States' },
+      { value: 'JP', label: isZh ? '日本发货' : 'Ship from Japan' },
+    ],
+    [isZh],
+  )
+  const hasEnabledAnalysisEnhancement = useMemo(
+    () => Object.values(analysisEnhancementSettings).some(Boolean),
+    [analysisEnhancementSettings],
+  )
+  const hasAnalysisEnhancementResults = useMemo(
+    () =>
+      Boolean(
+        analysisEnhancements?.p1?.multimodalResults ||
+          (analysisEnhancements?.p1?.collaborativeResults?.length ?? 0) > 0 ||
+          analysisEnhancements?.p1?.logisticsEstimate ||
+          (analysisEnhancements?.p1?.packingRecommendations?.general.length ?? 0) > 0 ||
+          (analysisEnhancements?.p2?.wideDeepResults?.length ?? 0) > 0 ||
+          (analysisEnhancements?.p2?.culturalImpactScores &&
+            Object.keys(analysisEnhancements.p2.culturalImpactScores).length > 0) ||
+          analysisEnhancements?.localizedOutput?.formattedRecommendations,
+      ),
+    [analysisEnhancements],
+  )
   const riskActionMeta = useMemo(() => (analysis ? getRiskActionMeta(analysis.riskLevel, locale) : null), [analysis, locale])
   const profileFieldClassName =
-    'rounded-2xl border border-cyan-200/14 bg-[#10253f]/62 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]'
+    'rounded-2xl border border-cyan-200/14 bg-[#10253f]/62 p-4 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]'
   const profileLabelClassName = 'text-[11px] uppercase tracking-[0.14em] text-slate-400'
   const profileControlClassName =
-    'mt-2 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2.5 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none'
+    'mt-3 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-3 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none'
 
   const impactCards = useMemo(
     () =>
@@ -1364,6 +1643,7 @@ export default function Home() {
 
     setIsAnalyzing(true)
     setError('')
+    setAnalysisEnhancements(null)
 
     try {
       let recognitionForAnalysis = recognition
@@ -1414,7 +1694,7 @@ export default function Home() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          countryCode: selectedCountry,
+          countryCode: normalizeEnhancementCountryCode(selectedCountry),
           recognition: recognitionForAnalysis,
           giftContext: {
             name: giftName.trim(),
@@ -1440,6 +1720,17 @@ export default function Home() {
             notes: targetProfile.trim(),
           },
           locale: apiLanguage,
+          enhancements: hasEnabledAnalysisEnhancement
+            ? {
+                multimodal: analysisEnhancementSettings.multimodal,
+                collaborativeFiltering: analysisEnhancementSettings.collaborativeFiltering,
+                logistics: analysisEnhancementSettings.logistics,
+                wideDeep: analysisEnhancementSettings.wideDeep,
+                knowledgeGraph: analysisEnhancementSettings.knowledgeGraph,
+                shippingCountry: enhancementOriginCountry,
+                budget: budgetRangeToAmount(budgetRange),
+              }
+            : undefined,
         }),
       })
 
@@ -1449,12 +1740,13 @@ export default function Home() {
         throw new Error(typeof data.error === 'string' ? data.error : t('errors.analysisFailed'))
       }
 
-      if (typeof data.source !== 'string' || !data.source.includes('engine')) {
+      if (typeof data.source !== 'string' || !data.source.trim()) {
         throw new Error(typeof data.error === 'string' ? data.error : t('errors.analysisFailed'))
       }
 
       const normalizedAnalysis = normalizeAnalysisResult(data.analysis)
       setAnalysis(normalizedAnalysis)
+      setAnalysisEnhancements(normalizeAnalysisEnhancements(data.enhancements))
       setAnalysisSource(typeof data.source === 'string' ? data.source : '')
 
       const record: StoredAnalysisRecord = {
@@ -1498,6 +1790,7 @@ export default function Home() {
     setOccasion('')
     setTargetProfile('')
     setAnalysis(null)
+    setAnalysisEnhancements(null)
     setAnalysisSource('')
     setSelectedFile(null)
     setImagePreview('')
@@ -1582,7 +1875,7 @@ export default function Home() {
       <div className="pointer-events-none absolute inset-0 opacity-12 [background-image:repeating-linear-gradient(90deg,rgba(148,163,184,0.11)_0_1px,transparent_1px_58px),repeating-linear-gradient(0deg,rgba(148,163,184,0.08)_0_1px,transparent_1px_52px)]" />
 
       <header className="sticky top-0 z-40 border-b border-cyan-200/15 bg-[#0c1b33]/78 backdrop-blur-2xl">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <div className="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-4 xl:px-8">
           <div className="flex items-center gap-3">
             <Image src={withBasePath('/brand/logo-mark.svg')} alt="GIVIA logo mark" width={44} height={44} priority />
             <div className="leading-none">
@@ -1616,7 +1909,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="relative mx-auto max-w-6xl px-4 py-12">
+      <main className="relative mx-auto max-w-[1480px] px-5 py-12 xl:px-8">
         <section className="mb-10 grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
@@ -1815,970 +2108,194 @@ export default function Home() {
         </div>
 
         {/* Three-step workflow panels */}
-        <div className="mb-8 grid items-start gap-4 sm:gap-6 lg:mb-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.14fr)] lg:grid-rows-[auto_minmax(0,1fr)]">
-          {/* Step 1: Image Recognition */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/35 sm:p-6 lg:col-start-1 lg:row-start-1"
-          >
-            <div className="mb-3 flex items-start justify-between sm:mb-4">
-              <div>
-                <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">
-                  {isZh ? '第一步：上传图片或输入礼物' : 'Step 1: Upload Image or Type the Gift'}
-                </h2>
-                <p className="text-xs text-gray-400 sm:text-sm">
-                  {isZh
-                    ? '支持图片识别，也支持直接输入礼物名称或场景描述。'
-                    : 'Use either image recognition or direct text input for the gift item.'}
-                </p>
-              </div>
-              <Image src={withBasePath('/brand/step-vision.svg')} alt="vision step" width={36} height={36} />
-            </div>
+        <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-start">
+          <div className="space-y-4 sm:space-y-6 xl:col-span-5">
+          <StepGiftInput
+            locale={locale}
+            recognition={recognition}
+            recognitionSource={recognitionSource}
+            imagePreview={imagePreview}
+            selectedFile={selectedFile}
+            fileInputRef={fileInputRef}
+            shouldHideGiftInputs={shouldHideGiftInputs}
+            giftName={giftName}
+            giftDescription={giftDescription}
+            giftDescriptionRef={giftDescriptionRef}
+            visionLabel={visionLabel}
+            visionDescription={visionDescription}
+            visionDescriptionRef={visionDescriptionRef}
+            canRecognize={canRecognize}
+            isRecognizing={isRecognizing}
+            isTextOnlyRecognition={isTextOnlyRecognition}
+            recognizingElapsedSeconds={recognizingElapsedSeconds}
+            onFileSelect={handleFileSelect}
+            onClearSelectedImage={clearSelectedImage}
+            onToggleTextEditor={() => setShowGiftInputsAfterImageRecognition(prev => !prev)}
+            onGiftNameChange={value => {
+              setGiftName(value)
+              setAnalysis(null)
+            }}
+            onGiftDescriptionChange={value => {
+              setGiftDescription(value)
+              setAnalysis(null)
+            }}
+            onVisionLabelChange={value => {
+              setVisionLabel(value)
+              setAnalysis(null)
+            }}
+            onVisionDescriptionChange={value => {
+              setVisionDescription(value)
+              setAnalysis(null)
+            }}
+            onBeautifyGiftDescription={handleBeautifyGiftDescription}
+            onBeautifyVisionDescription={handleBeautifyVisionDescription}
+            onRecognize={handleRecognize}
+            autoResizeTextarea={autoResizeTextarea}
+          />
 
-            {/* File upload area */}
-            <div className="mb-6">
-              <div className="rounded-[1.4rem] border border-cyan-200/18 bg-[#10233d]/72 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]">
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className={cn(
-                    'group w-full cursor-pointer overflow-hidden rounded-[1.1rem] border border-dashed border-cyan-200/28 text-left transition-all hover:border-cyan-200/55 hover:bg-cyan-200/5',
-                    imagePreview ? 'relative aspect-[4/3] bg-slate-950/70 p-0' : 'min-h-[12rem] p-5 sm:min-h-[16rem] sm:p-8',
-                  )}
-                >
-                  {imagePreview ? (
-                    <>
-                      <div className="relative h-full w-full">
-                        <Image src={imagePreview} alt="Preview" fill className="object-cover" />
-                      </div>
-                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#04101d]/96 via-[#04101d]/32 to-transparent" />
-                      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4">
-                        <div className="flex items-end justify-between gap-3">
-                          <div className="min-w-0">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-cyan-100/72">
-                              {isZh ? '当前识别图片' : 'Current reference image'}
-                            </p>
-                            <p className="mt-1 truncate text-sm font-medium text-slate-50">
-                              {selectedFile?.name ?? (isZh ? '已上传图片' : 'Uploaded image')}
-                            </p>
-                            <p className="mt-1 text-xs text-slate-300/86">
-                              {recognition
-                                ? isZh
-                                  ? '识别后仍可继续手动修改名称、标签和描述。'
-                                  : 'You can still edit the name, label, and description after recognition.'
-                                : isZh
-                                  ? '点击图片可更换，下面可继续补充礼物文字信息。'
-                                  : 'Click the image to replace it, then keep refining the text details below.'}
-                            </p>
-                          </div>
-                          <div className="rounded-full border border-cyan-100/20 bg-[#071726]/72 px-3 py-1 text-[11px] text-cyan-50/88">
-                            {selectedFile ? formatFileSize(selectedFile.size) : null}
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-                      <div className="flex size-14 items-center justify-center rounded-2xl border border-cyan-200/25 bg-cyan-300/10 text-cyan-100">
-                        <ImagePlus size={26} />
-                      </div>
-                      <div>
-                        <p className="text-base font-semibold text-slate-50">
-                          {isZh ? '上传礼物图片' : 'Upload gift image'}
-                        </p>
-                        <p className="mt-1 text-sm leading-6 text-slate-300/88">
-                          {isZh
-                            ? '支持用图片触发识别，也支持后续继续修改名称、描述和标签。'
-                            : 'Start from an image, then keep editing the name, description, and label after recognition.'}
-                        </p>
-                      </div>
-                      <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] text-slate-300/82">
-                        <span className="rounded-full border border-cyan-100/14 bg-cyan-100/8 px-3 py-1">
-                          JPG / PNG / WEBP
-                        </span>
-                        <span className="rounded-full border border-cyan-100/14 bg-cyan-100/8 px-3 py-1">
-                          {isZh ? '支持替换与移除' : 'Replaceable and removable'}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </button>
+          <StepAnalysis
+            locale={locale}
+            t={t}
+            selectedCountry={selectedCountry}
+            recognition={recognition}
+            hasGiftInput={hasGiftInput}
+            selectedFile={selectedFile}
+            selectedAudienceLabel={selectedAudienceLabel}
+            activeSceneTemplate={activeSceneTemplate}
+            hasEnabledAnalysisEnhancement={hasEnabledAnalysisEnhancement}
+            analysisEnhancementSettings={analysisEnhancementSettings}
+            enhancementOriginCountry={enhancementOriginCountry}
+            enhancementOriginOptions={enhancementOriginOptions}
+            canAnalyze={canAnalyze}
+            hasAnalysis={Boolean(analysis)}
+            isAnalyzing={isAnalyzing}
+            analyzingElapsedSeconds={analyzingElapsedSeconds}
+            isAudienceReady={isAudienceReady}
+            giftName={giftName}
+            onEnhancementSettingChange={(key, checked) =>
+              setAnalysisEnhancementSettings(current => ({
+                ...current,
+                [key]: checked,
+              }))
+            }
+            onEnhancementOriginCountryChange={setEnhancementOriginCountry}
+            onAnalyze={handleAnalyze}
+          />
 
-                <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-200/22 bg-cyan-300/12 px-3 py-2 text-xs font-medium text-cyan-50 transition hover:border-cyan-200/38 hover:bg-cyan-300/18 sm:justify-start sm:py-1.5"
-                  >
-                    <Upload size={14} />
-                    {imagePreview ? (isZh ? '更换图片' : 'Replace image') : (isZh ? '选择图片' : 'Choose image')}
-                  </button>
+          </div>
 
-                  {imagePreview && (
-                    <button
-                      type="button"
-                      onClick={clearSelectedImage}
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-400/18 bg-slate-200/6 px-3 py-2 text-xs font-medium text-slate-200 transition hover:border-slate-300/34 hover:bg-slate-200/12 sm:justify-start sm:py-1.5"
-                    >
-                      <Trash2 size={14} />
-                      {isZh ? '移除图片' : 'Remove image'}
-                    </button>
-                  )}
-
-                  {selectedFile && recognition && (
-                    <button
-                      type="button"
-                      onClick={() => setShowGiftInputsAfterImageRecognition(prev => !prev)}
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-200/18 bg-slate-200/6 px-3 py-2 text-xs font-medium text-slate-100 transition hover:border-cyan-200/38 hover:bg-slate-200/10 sm:justify-start sm:py-1.5"
-                    >
-                      <PencilLine size={14} />
-                      {shouldHideGiftInputs
-                        ? isZh
-                          ? '继续编辑文字'
-                          : 'Continue editing text'
-                        : isZh
-                          ? '收起文字编辑'
-                          : 'Collapse text editor'}
-                    </button>
-                  )}
-
-                  {selectedFile && (
-                    <span className="text-[11px] text-slate-400">
-                      {isZh
-                        ? '上传图片只影响识别输入，不会锁定你的后续修改。'
-                        : 'The image only seeds recognition and never locks your later edits.'}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileSelect}
-                className="hidden"
-              />
-
-              <div className="my-3 flex items-center gap-3 text-xs text-slate-400">
-                <div className="h-px flex-1 bg-slate-600/70" />
-                <span>{isZh ? '或' : 'or'}</span>
-                <div className="h-px flex-1 bg-slate-600/70" />
-              </div>
-
-              {shouldHideGiftInputs ? (
-                <div className="rounded-xl border border-cyan-200/12 bg-[#0f1f35]/68 px-3 py-2 text-xs leading-5 text-slate-400">
-                  {isZh
-                    ? '图片已识别。你仍然可以用上方“继续编辑文字”来补充或修改礼物名称、描述和标签。'
-                    : 'The image has been recognized. Use “Continue editing text” above to keep refining the name, description, and label.'}
-                </div>
-              ) : (
-                <>
-                  <label htmlFor="gift-name" className="mb-2 block text-xs font-medium text-slate-300">
-                    {isZh ? '礼物名称（必填其一：名称或图片）' : 'Gift name (required if no image)'}
-                  </label>
-                  <input
-                    id="gift-name"
-                    type="text"
-                    value={giftName}
-                    onChange={event => {
-                      setGiftName(event.target.value)
-                      setAnalysis(null)
-                    }}
-                    placeholder={isZh ? '例如：钢笔、香水、茶具' : 'e.g. fountain pen, perfume, tea set'}
-                    className="w-full rounded-xl border border-cyan-200/20 bg-[#0f1f35] px-3 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-                  />
-
-                  <div className="mb-2 mt-3 flex items-center justify-between">
-                    <label htmlFor="gift-description" className="block text-xs font-medium text-slate-300">
-                      {isZh ? '礼物描述（选填）' : 'Gift description (optional)'}
-                    </label>
-                    <button
-                      type="button"
-                      onClick={handleBeautifyGiftDescription}
-                      disabled={!giftDescription.trim()}
-                      className="text-[11px] font-medium text-cyan-200/90 transition hover:text-cyan-100 disabled:cursor-not-allowed disabled:text-slate-500"
-                    >
-                      {isZh ? '一键润色' : 'Polish'}
-                    </button>
-                  </div>
-                  <textarea
-                    ref={giftDescriptionRef}
-                    id="gift-description"
-                    value={giftDescription}
-                    onChange={event => {
-                      setGiftDescription(event.target.value)
-                      autoResizeTextarea(event.target)
-                      setAnalysis(null)
-                    }}
-                    rows={3}
-                    placeholder={
-                      isZh
-                        ? '例如：黑色金属笔身、简约商务风、礼盒包装'
-                        : 'e.g. black metal body, minimal business style, boxed package'
-                    }
-                    className="w-full resize-none overflow-hidden rounded-xl border border-cyan-200/20 bg-[#0f1f35] px-3 py-2 text-sm leading-6 text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-                  />
-                </>
-              )}
-            </div>
-
-            {/* Recognition result */}
-            <AnimatePresence>
-              {recognition && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="mb-6 rounded-lg border border-sky-300/30 bg-sky-500/10 p-4"
-                >
-                  <div className="flex items-start gap-3">
-                    <CheckCircle size={20} className="mt-0.5 flex-shrink-0 text-sky-300" />
-                    <div className="flex-1">
-                      {(() => {
-                        const recognizedDisplay = locale === 'zh' ? recognition.itemZh : recognition.itemEn
-                        const detectedDisplay = (visionLabel || recognizedDisplay).trim()
-                        const shouldShowDetectedLabel =
-                          normalizeForCompare(detectedDisplay) !== normalizeForCompare(recognizedDisplay)
-
-                        return (
-                          <>
-                            <p className="text-sm text-gray-300 mb-2">
-                              {locale === 'zh' ? '识别物件:' : 'Recognized item:'}{' '}
-                              <span className="font-semibold text-sky-200">{recognizedDisplay}</span>
-                            </p>
-                            <div className="text-xs text-gray-400 space-y-1">
-                              <p>{locale === 'zh' ? '类别:' : 'Category:'} {recognition.category}</p>
-                              {shouldShowDetectedLabel && (
-                                <p>
-                                  {locale === 'zh' ? '识别标签:' : 'Detected label:'}{' '}
-                                  <span className="text-slate-200">{detectedDisplay}</span>
-                                </p>
-                              )}
-                              <p>{locale === 'zh' ? '置信度:' : 'Confidence:'} {(recognition.confidence * 100).toFixed(0)}%</p>
-                              <p className="text-[11px] text-slate-400">
-                                {recognitionSource === 'aliyun-dashscope-text'
-                                  ? locale === 'zh'
-                                    ? '说明：该数值来自 AI 文本识别阶段，仅表示识别可信度。'
-                                    : 'Note: this value comes from AI text recognition confidence only.'
-                                  : locale === 'zh'
-                                    ? '说明：该数值来自 AI 图像识别阶段，仅表示识别可信度，最终建议会结合全部输入上下文。'
-                                    : 'Note: this value comes from model recognition confidence only; final advice uses full input context.'}
-                              </p>
-                            </div>
-                          </>
-                        )
-                      })()}
-
-                      <div className="mt-3 space-y-2 border-t border-slate-600/40 pt-3">
-                        <p className="text-[11px] text-slate-400">
-                          {locale === 'zh' ? '识别结果可手动修正，分析会使用你修改后的内容。' : 'Recognition outputs are editable before analysis.'}
-                        </p>
-                        <input
-                          value={visionLabel}
-                          onChange={event => {
-                            setVisionLabel(event.target.value)
-                            setAnalysis(null)
-                          }}
-                          placeholder={locale === 'zh' ? '可修改识别标签' : 'Edit detected label'}
-                          className="w-full rounded-lg border border-cyan-200/20 bg-[#0f1f35] px-2 py-1.5 text-xs text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-                        />
-                        <div className="flex items-center justify-between">
-                          <p className="text-[11px] text-slate-400">
-                            {locale === 'zh' ? '礼物描述（可直接修改识别结果）' : 'Gift description (editable recognition result)'}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={handleBeautifyVisionDescription}
-                            disabled={!visionDescription.trim()}
-                            className="text-[11px] font-medium text-cyan-200/90 transition hover:text-cyan-100 disabled:cursor-not-allowed disabled:text-slate-500"
-                          >
-                            {locale === 'zh' ? '润色描述' : 'Polish'}
-                          </button>
-                        </div>
-                        <textarea
-                          ref={visionDescriptionRef}
-                          value={visionDescription}
-                          onChange={event => {
-                            setVisionDescription(event.target.value)
-                            autoResizeTextarea(event.target)
-                            setAnalysis(null)
-                          }}
-                          rows={2}
-                          placeholder={locale === 'zh' ? '可直接修改识别输出的礼物描述' : 'Edit recognized gift description'}
-                          className="w-full resize-none overflow-hidden rounded-lg border border-cyan-200/20 bg-[#0f1f35] px-2 py-1.5 text-xs leading-5 text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <Button
-              onClick={handleRecognize}
-              disabled={!canRecognize || isRecognizing}
-              className={`w-full py-2 rounded-lg font-semibold transition-all ${
-                isRecognizing
-                  ? 'bg-slate-700/70 text-slate-300'
-                  : 'border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22'
-              }`}
-            >
-              {isRecognizing ? (
-                <>
-                  <Sparkles size={16} className="inline mr-2 animate-spin" />
-                  {locale === 'zh' ? `识别中... ${recognizingElapsedSeconds}s` : `Recognizing... ${recognizingElapsedSeconds}s`}
-                </>
-              ) : (
-                <>
-                  <Sparkles size={16} className="inline mr-2" />
-                  {isTextOnlyRecognition
-                    ? locale === 'zh'
-                      ? '确认礼物信息'
-                      : 'Confirm Gift Info'
-                    : locale === 'zh'
-                      ? 'AI 识别物件'
-                      : 'AI Recognize'}
-                </>
-              )}
-            </Button>
-          </motion.div>
-
-          {/* Step 2: Country Selection */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-sky-200/20 bg-gradient-to-br from-[#182843]/88 to-[#141e33]/86 p-4 backdrop-blur-md transition-colors hover:border-sky-200/40 sm:p-6 lg:col-start-2 lg:row-span-2 lg:row-start-1"
-          >
-            <div className="mb-3 flex items-start justify-between sm:mb-4">
-              <div>
-                <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">{t('country.title')}</h2>
-                <p className="text-xs text-gray-400 sm:text-sm">{t('country.description')}</p>
-              </div>
-              <Image src={withBasePath('/brand/step-country.svg')} alt="country step" width={36} height={36} />
-            </div>
-
-            {/* Country selector */}
-            <div className="mb-6">
-              <CountrySelector
-                value={selectedCountry}
-                onChange={value => {
-                  setSelectedCountry(value)
-                  setAnalysis(null)
-                }}
-                locale={apiLanguage}
-                regionLabels={{
-                  asia: locale === 'zh' ? '亚洲' : 'Asia',
-                  europe: locale === 'zh' ? '欧洲' : 'Europe',
-                  americas: locale === 'zh' ? '美洲' : 'Americas',
-                  africa: locale === 'zh' ? '非洲' : 'Africa',
-                  oceania: locale === 'zh' ? '大洋洲' : 'Oceania',
-                }}
-              />
-            </div>
-
-            <div className="mb-6 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-cyan-100/85">
-                <Users size={14} />
-                {isZh ? '目标群体画像' : 'Target audience profile'}
-              </div>
-
-              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)] sm:p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-                      {isZh ? '送礼场景模板' : 'Scene template'}
-                    </p>
-                    <p className="mt-1 text-sm text-slate-300/88">
-                      {isZh ? '先选场景，再微调对象、预算和正式程度。' : 'Pick the scene first, then fine-tune audience, budget, and tone.'}
-                    </p>
-                  </div>
-                  {activeSceneTemplate && (
-                    <div className="rounded-full border border-cyan-200/18 bg-cyan-300/10 px-3 py-1 text-[11px] text-cyan-50/88">
-                      {isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn}
-                    </div>
-                  )}
-                </div>
-
-                <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                  {sceneTemplateOptions.map((option, index) => {
-                    const isActive = sceneTemplate === option.value
-
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => handleSceneTemplateChange(option.value)}
-                        className={cn(
-                          'rounded-2xl border px-3 py-3 text-left transition-all',
-                          isActive
-                            ? 'border-cyan-200/42 bg-cyan-300/12 shadow-[0_12px_30px_rgba(34,211,238,0.08)]'
-                            : 'border-cyan-200/12 bg-[#0d1f35]/72 hover:border-cyan-200/28 hover:bg-[#102740]',
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-3">
-                          <div>
-                            <p className="text-sm font-semibold text-slate-100">{option.label}</p>
-                            <p className="mt-1 text-xs leading-5 text-slate-400 line-clamp-2">{option.hint}</p>
-                          </div>
-                          <span
-                            className={cn(
-                              'inline-flex size-6 items-center justify-center rounded-full border text-[10px] font-medium',
-                              isActive
-                                ? 'border-cyan-100/30 bg-cyan-100/12 text-cyan-50'
-                                : 'border-slate-200/10 bg-slate-200/5 text-slate-400',
-                            )}
-                          >
-                            {isActive ? <CheckCircle size={12} /> : `0${index + 1}`}
-                          </span>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {activeSceneTemplate && (
-                  <div className="mt-3 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3">
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-                      {isZh ? '模板预设与当前生效值' : 'Preset and active values'}
-                    </p>
-                    <p className="mt-2 text-xs leading-5 text-slate-300/88">
-                      {isZh
-                        ? `模板只是起点。点击模板会填入默认对象、预算和正式度；下面字段一旦修改，会立刻覆盖模板默认值并用于分析。${activeSceneTemplate.promptZh}`
-                        : `The template is only a starter. Clicking it seeds default audience, budget, and formality values. Any edits below immediately override those defaults for analysis. ${activeSceneTemplate.promptEn}`}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-300/84">
-                      <span className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
-                        {isZh ? '当前对象：' : 'Active audience: '}
-                        {selectedAudienceLabel}
-                      </span>
-                      <span className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
-                        {isZh ? '当前预算：' : 'Active budget: '}
-                        {budgetLabel}
-                      </span>
-                      <span className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
-                        {isZh ? '当前正式度：' : 'Active formality: '}
-                        {formalityLabel}
-                      </span>
-                      {(templateHasAudienceOverride || templateHasBudgetOverride || templateHasFormalityOverride) && (
-                        <span className="rounded-full border border-amber-200/18 bg-amber-100/8 px-3 py-1 text-amber-100">
-                          {isZh ? '已覆盖模板默认值' : 'Preset overridden'}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-400">
-                      <span className="rounded-full border border-slate-200/10 bg-slate-200/5 px-3 py-1">
-                        {isZh ? '模板默认对象：' : 'Preset audience: '}
-                        {templateAudienceLabel}
-                      </span>
-                      <span className="rounded-full border border-slate-200/10 bg-slate-200/5 px-3 py-1">
-                        {isZh ? '模板默认预算：' : 'Preset budget: '}
-                        {templateBudgetLabel}
-                      </span>
-                      <span className="rounded-full border border-slate-200/10 bg-slate-200/5 px-3 py-1">
-                        {isZh ? '模板默认正式度：' : 'Preset formality: '}
-                        {templateFormalityLabel}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="rounded-[1.35rem] border border-cyan-200/16 bg-[#10253f]/58 p-3 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)] sm:p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-                      {isZh ? '对象与画像字段' : 'Audience and profile fields'}
-                    </p>
-                    <p className="mt-1 text-sm text-slate-300/88">
-                      {isZh ? '把对象、关系和预算补全，分析会更贴近真实收礼人。' : 'Complete audience, relationship, and budget details for more grounded analysis.'}
-                    </p>
-                  </div>
-                  <div className="rounded-full border border-slate-200/10 bg-slate-100/5 px-3 py-1 text-[11px] text-slate-300/78">
-                    {isZh ? '可继续自定义' : 'Fully customizable'}
-                  </div>
-                </div>
-
-                <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
-                  {audienceOptions.map(option => {
-                    const isActive = targetGroup === option.value
-
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => {
-                          setTargetGroup(option.value as AudienceGroup)
-                          if (option.value !== 'other') {
-                            setCustomAudienceGroup('')
-                          }
-                          setAnalysis(null)
-                        }}
-                        className={cn(
-                          'shrink-0 rounded-full border px-3 py-2 text-left text-xs font-medium transition-all sm:shrink',
-                          isActive
-                            ? 'border-cyan-200/42 bg-cyan-300/12 text-cyan-50'
-                            : 'border-cyan-200/12 bg-[#0d1f35]/72 text-slate-200 hover:border-cyan-200/28 hover:bg-[#102740]',
-                        )}
-                      >
-                        {option.label}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {targetGroup === 'other' && (
-                  <div className="mt-3 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3">
-                    <p className={profileLabelClassName}>{isZh ? '自定义群体' : 'Custom audience'}</p>
-                    <input
-                      value={customAudienceGroup}
-                      onChange={event => {
-                        setCustomAudienceGroup(event.target.value)
-                        setAnalysis(null)
-                      }}
-                      placeholder={isZh ? '请输入自定义目标群体，如：新婚夫妇、海外导师' : 'Custom audience, e.g. newlyweds, overseas mentor'}
-                      className={profileControlClassName}
-                    />
-                  </div>
-                )}
-
-                <div className="mt-4 grid gap-3">
-                  <div className={profileFieldClassName}>
-                    <p className={profileLabelClassName}>{isZh ? '场合关键词' : 'Occasion keywords'}</p>
-                    <input
-                      value={occasion}
-                      onChange={event => {
-                        setOccasion(event.target.value)
-                        setAnalysis(null)
-                      }}
-                      placeholder={isZh ? '如：生日晚宴、客户来访、节日问候' : 'e.g. birthday dinner, client visit, festive note'}
-                      className={profileControlClassName}
-                    />
-                  </div>
-
-                  <div className={profileFieldClassName}>
-                    <p className={profileLabelClassName}>{isZh ? '补充备注' : 'Additional notes'}</p>
-                    <textarea
-                      value={targetProfile}
-                      onChange={event => {
-                        setTargetProfile(event.target.value)
-                        setAnalysis(null)
-                      }}
-                      rows={3}
-                      placeholder={
-                        isZh
-                          ? '例如品牌偏好、禁忌颜色、收礼人近期需求'
-                          : 'Brand preferences, colors to avoid, recipient needs'
-                      }
-                      className="mt-2 w-full resize-none rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 transition focus:border-cyan-200/45 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-4 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
-                        {isZh ? '高级画像' : 'Advanced profile'}
-                      </p>
-                      <p className="mt-1 text-xs leading-5 text-slate-300/82">
-                        {isZh ? '年龄、职业、预算和正式度会影响推荐语气与替代方案。' : 'Age, occupation, budget, and formality refine tone and fallback suggestions.'}
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowAdvancedAudienceFields(prev => !prev)}
-                      className="inline-flex items-center gap-2 rounded-full border border-cyan-200/18 bg-cyan-100/6 px-3 py-1.5 text-[11px] font-medium text-cyan-50 transition hover:border-cyan-200/32 hover:bg-cyan-100/10"
-                    >
-                      {showAdvancedAudienceFields ? (
-                        <>
-                          <ChevronUp size={14} />
-                          {isZh ? '收起' : 'Collapse'}
-                        </>
-                      ) : (
-                        <>
-                          <ChevronDown size={14} />
-                          {isZh ? '展开' : 'Expand'}
-                        </>
-                      )}
-                    </button>
-                  </div>
-
-                  {!showAdvancedAudienceFields && (
-                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-300/84">
-                      {advancedAudienceFacts.map(fact => (
-                        <span key={fact} className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">
-                          {fact}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {showAdvancedAudienceFields && (
-                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                      <div className={profileFieldClassName}>
-                        <p className={profileLabelClassName}>{isZh ? '年龄' : 'Age'}</p>
-                        <select
-                          value={ageBand}
-                          onChange={event => {
-                            setAgeBand(event.target.value)
-                            setAnalysis(null)
-                          }}
-                          className={profileControlClassName}
-                        >
-                          {ageBandOptions.map(option => (
-                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={profileFieldClassName}>
-                        <p className={profileLabelClassName}>{isZh ? '性别偏向' : 'Gender tone'}</p>
-                        <select
-                          value={gender}
-                          onChange={event => {
-                            setGender(event.target.value)
-                            setAnalysis(null)
-                          }}
-                          className={profileControlClassName}
-                        >
-                          {genderOptions.map(option => (
-                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={profileFieldClassName}>
-                        <p className={profileLabelClassName}>{isZh ? '职业' : 'Occupation'}</p>
-                        <select
-                          value={occupation}
-                          onChange={event => {
-                            setOccupation(event.target.value)
-                            setAnalysis(null)
-                          }}
-                          className={profileControlClassName}
-                        >
-                          {occupationOptions.map(option => (
-                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={profileFieldClassName}>
-                        <p className={profileLabelClassName}>{isZh ? '关系' : 'Relationship'}</p>
-                        <select
-                          value={relationship}
-                          onChange={event => {
-                            setRelationship(event.target.value)
-                            setAnalysis(null)
-                          }}
-                          className={profileControlClassName}
-                        >
-                          {relationshipOptions.map(option => (
-                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={profileFieldClassName}>
-                        <p className={profileLabelClassName}>{isZh ? '预算' : 'Budget'}</p>
-                        <select
-                          value={budgetRange}
-                          onChange={event => {
-                            setBudgetRange(event.target.value)
-                            setAnalysis(null)
-                          }}
-                          className={profileControlClassName}
-                        >
-                          {budgetOptions.map(option => (
-                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div className={profileFieldClassName}>
-                        <p className={profileLabelClassName}>{isZh ? '正式程度' : 'Formality'}</p>
-                        <select
-                          value={formality}
-                          onChange={event => {
-                            setFormality(event.target.value)
-                            setAnalysis(null)
-                          }}
-                          className={profileControlClassName}
-                        >
-                          {formalityOptions.map(option => (
-                            <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Country result */}
-            <AnimatePresence>
-              {selectedCountry && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="mb-6"
-                >
-                  <div className="rounded-lg border border-sky-300/30 bg-sky-500/10 p-4">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle size={20} className="mt-0.5 flex-shrink-0 text-sky-300" />
-                      <div className="flex-1">
-                        <p className="text-xs uppercase tracking-[0.16em] text-sky-100/85">
-                          {locale === 'zh' ? '已确认信息' : 'Confirmed details'}
-                        </p>
-                        <div className="mt-2 space-y-1.5 text-sm">
-                          <p className="text-gray-300">
-                            {locale === 'zh' ? '国家:' : 'Country:'}{' '}
-                            <span className="font-semibold text-sky-200">{getCountryName(selectedCountry, locale)}</span>
-                          </p>
-                          <p className="text-gray-300">
-                            {locale === 'zh' ? '目标群体:' : 'Audience:'}{' '}
-                            <span className="font-semibold text-sky-200">{selectedAudienceLabel}</span>
-                          </p>
-                          <p className="text-gray-300">
-                            {locale === 'zh' ? '场景模板:' : 'Scene:'}{' '}
-                            <span className="font-semibold text-sky-200">
-                              {activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : sceneTemplate}
-                            </span>
-                          </p>
-                          <p className="text-xs text-slate-300/95">
-                            {locale === 'zh' ? '结构化画像:' : 'Structured profile:'}{' '}
-                            <span className="text-slate-200">
-                              {[
-                                ageBandOptions.find(option => option.value === ageBand)?.label,
-                                occupationOptions.find(option => option.value === occupation)?.label,
-                                relationshipOptions.find(option => option.value === relationship)?.label,
-                                budgetOptions.find(option => option.value === budgetRange)?.label,
-                                formalityOptions.find(option => option.value === formality)?.label,
-                              ]
-                                .filter(Boolean)
-                                .join(isZh ? ' / ' : ' / ')}
-                            </span>
-                          </p>
-                          {occasion.trim() && (
-                            <p className="text-xs text-slate-300/95">
-                              {locale === 'zh' ? '场合说明:' : 'Occasion:'}{' '}
-                              <span className="text-slate-200">{occasion.trim()}</span>
-                            </p>
-                          )}
-                          {targetProfile.trim() && (
-                            <p className="text-xs text-slate-300/95">
-                              {locale === 'zh' ? '补充备注:' : 'Notes:'}{' '}
-                              <span className="text-slate-200">{targetProfile}</span>
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <Button
-              disabled
-              className="w-full py-2 rounded-lg font-semibold bg-gray-700 text-gray-400 cursor-default"
-            >
-              {!recognition && !hasGiftInput && !selectedFile
-                ? locale === 'zh'
-                  ? '等待第一步...'
-                  : 'Waiting for step 1...'
-                : targetGroup === 'other' && !customAudienceGroup.trim()
-                  ? locale === 'zh'
-                    ? '请补充自定义群体描述'
-                    : 'Add custom audience details'
-                : !recognition && hasGiftInput
-                  ? locale === 'zh'
-                    ? '已输入礼物信息，可直接开始分析'
-                    : 'Gift info entered, ready for analysis'
-                : selectedCountry
-                  ? locale === 'zh'
-                    ? '国家已选择'
-                    : 'Country selected'
-                  : locale === 'zh'
-                    ? '请选择目标国家'
-                    : 'Please choose a country'}
-            </Button>
-          </motion.div>
-
-          {/* Step 3: Cultural Analysis */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            whileHover={{ y: -4, scale: 1.01 }}
-            className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-4 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-colors hover:border-cyan-200/40 sm:p-6 lg:col-start-1 lg:row-start-2 lg:flex lg:h-full lg:flex-col"
-          >
-            <div className="mb-5 flex items-start justify-between border-b border-slate-400/15 pb-4">
-              <div>
-                <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">{t('analysis.title')}</h2>
-                <p className="text-xs text-gray-400 sm:text-sm">{t('analysis.description')}</p>
-              </div>
-              <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis step" width={36} height={36} />
-            </div>
-
-            <div className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-900/34 p-3.5">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                {isZh ? '分析摘要' : 'Analysis summary'}
-              </p>
-              <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
-                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
-                  {isZh ? '国家：' : 'Country: '}
-                  {selectedCountry ? getCountryName(selectedCountry, locale) : locale === 'zh' ? '待选择' : 'Pending'}
-                </span>
-                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
-                  {isZh ? '场景：' : 'Scene: '}
-                  {activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : locale === 'zh' ? '未设置' : 'Unset'}
-                </span>
-                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
-                  {isZh ? '识别：' : 'Recognition: '}
-                  {recognition || hasGiftInput || selectedFile
-                    ? locale === 'zh'
-                      ? '已准备'
-                      : 'Ready'
-                    : locale === 'zh'
-                      ? '待输入'
-                      : 'Waiting'}
-                </span>
-                <span className="rounded-full border border-slate-200/12 bg-slate-200/6 px-3 py-1.5 text-xs text-slate-200">
-                  {isZh ? '画像：' : 'Audience: '}
-                  {selectedAudienceLabel}
-                </span>
-              </div>
-            </div>
-
-            {/* Analysis checklist */}
-            {canAnalyze && !analysis && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mb-5 rounded-2xl border border-slate-200/12 bg-slate-800/24 p-3"
-              >
-                <p className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
-                  <Sparkles size={14} />
-                  {locale === 'zh' ? '分析准备清单' : 'Analysis Checklist'}
-                </p>
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-900/42 px-3 py-2.5">
-                    <div className="flex items-center gap-2 text-sm text-slate-200">
-                      <CheckCircle size={14} className="text-emerald-400" />
-                      <span>{locale === 'zh' ? '礼物信息' : 'Gift info'}</span>
-                    </div>
-                    <span className="truncate text-right text-xs text-slate-300/84">
-                      {recognition ? (locale === 'zh' ? recognition.itemZh : recognition.itemEn) : giftName || (locale === 'zh' ? '已输入' : 'Entered')}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-900/42 px-3 py-2.5">
-                    <div className="flex items-center gap-2 text-sm text-slate-200">
-                      <CheckCircle size={14} className="text-emerald-400" />
-                      <span>{locale === 'zh' ? '目标国家' : 'Target country'}</span>
-                    </div>
-                    <span className="truncate text-right text-xs text-slate-300/84">
-                      {getCountryName(selectedCountry, locale)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between gap-3 rounded-xl bg-slate-900/42 px-3 py-2.5">
-                    <div className="flex items-center gap-2 text-sm text-slate-200">
-                      <CheckCircle size={14} className="text-emerald-400" />
-                      <span>{locale === 'zh' ? '目标群体' : 'Audience'}</span>
-                    </div>
-                    <span className="truncate text-right text-xs text-slate-300/84">{selectedAudienceLabel}</span>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Status messages */}
-            <div className="mt-auto mb-5 rounded-2xl border border-slate-200/12 bg-slate-700/30 px-4 py-3">
-              <p className="text-sm text-gray-300">
-                {analysis
-                  ? locale === 'zh'
-                    ? '分析已完成。结果已在下方更新，可向下查看详细内容。'
-                    : 'Analysis completed. Results are updated below. Scroll down for details.'
-                  : !selectedCountry
-                  ? locale === 'zh'
-                    ? '请先选择目标国家'
-                    : 'Please select a country first'
-                  : !isAudienceReady
-                    ? locale === 'zh'
-                      ? '请补充目标群体描述后再分析'
-                      : 'Add audience profile details before analyzing'
-                  : recognition
-                    ? locale === 'zh'
-                      ? '准备就绪，点击分析'
-                      : 'Ready to analyze'
-                    : hasGiftInput || selectedFile
-                      ? locale === 'zh'
-                        ? '已输入礼物信息，点击开始分析将自动补全识别'
-                        : 'Gift info entered. Analyze will auto-complete recognition first.'
-                    : locale === 'zh'
-                      ? '请先完成第一步'
-                      : 'Please complete step 1 first'}
-              </p>
-            </div>
-
-            <Button
-              onClick={handleAnalyze}
-              disabled={!canAnalyze || isAnalyzing}
-              className={`w-full py-2 rounded-lg font-semibold transition-all ${
-                isAnalyzing
-                  ? 'bg-slate-700/70 text-slate-300'
-                  : !canAnalyze
-                    ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                    : 'border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22'
-              }`}
-            >
-              {isAnalyzing ? (
-                <>
-                  <Sparkles size={16} className="inline mr-2 animate-spin" />
-                  {locale === 'zh' ? `分析中... ${analyzingElapsedSeconds}s` : `Analyzing... ${analyzingElapsedSeconds}s`}
-                </>
-              ) : (
-                <>
-                  <Zap size={16} className="inline mr-2" />
-                  {analysis
-                    ? locale === 'zh'
-                      ? '重新分析'
-                      : 'Analyze again'
-                    : t('analysis.analyze')}
-                </>
-              )}
-            </Button>
-
-            {analysis && !isAnalyzing && (
-              <div className="mt-3 rounded-lg border border-emerald-300/35 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-100">
-                {locale === 'zh'
-                  ? '分析成功，向下查看风险评估与建议。'
-                  : 'Analysis succeeded. Scroll down to view risk assessment and suggestions.'}
-              </div>
-            )}
-          </motion.div>
+          <div className="space-y-4 sm:space-y-6 xl:col-span-7">
+          <StepCountry
+            locale={locale}
+            t={t}
+            apiLanguage={apiLanguage}
+            selectedCountry={selectedCountry}
+            recognition={recognition}
+            hasGiftInput={hasGiftInput}
+            selectedFile={selectedFile}
+            activeSceneTemplate={activeSceneTemplate}
+            sceneTemplate={sceneTemplate}
+            sceneTemplateOptions={sceneTemplateOptions}
+            selectedAudienceLabel={selectedAudienceLabel}
+            budgetLabel={budgetLabel}
+            formalityLabel={formalityLabel}
+            templateHasAudienceOverride={templateHasAudienceOverride}
+            templateHasBudgetOverride={templateHasBudgetOverride}
+            templateHasFormalityOverride={templateHasFormalityOverride}
+            audienceOptions={audienceOptions}
+            targetGroup={targetGroup}
+            customAudienceGroup={customAudienceGroup}
+            occasion={occasion}
+            targetProfile={targetProfile}
+            profileFieldClassName={profileFieldClassName}
+            profileLabelClassName={profileLabelClassName}
+            profileControlClassName={profileControlClassName}
+            showAdvancedAudienceFields={showAdvancedAudienceFields}
+            advancedAudienceFacts={advancedAudienceFacts}
+            ageBand={ageBand}
+            ageBandOptions={ageBandOptions}
+            gender={gender}
+            genderOptions={genderOptions}
+            occupation={occupation}
+            occupationOptions={occupationOptions}
+            relationship={relationship}
+            relationshipOptions={relationshipOptions}
+            budgetRange={budgetRange}
+            budgetOptions={budgetOptions}
+            formality={formality}
+            formalityOptions={formalityOptions}
+            relationshipLabel={relationshipLabel}
+            occupationLabel={occupationLabel}
+            onSelectedCountryChange={value => {
+              setSelectedCountry(value)
+              setAnalysis(null)
+            }}
+            onSceneTemplateChange={handleSceneTemplateChange}
+            onTargetGroupChange={value => {
+              setTargetGroup(value)
+              if (value !== 'other') {
+                setCustomAudienceGroup('')
+              }
+              setAnalysis(null)
+            }}
+            onCustomAudienceGroupChange={value => {
+              setCustomAudienceGroup(value)
+              setAnalysis(null)
+            }}
+            onOccasionChange={value => {
+              setOccasion(value)
+              setAnalysis(null)
+            }}
+            onTargetProfileChange={value => {
+              setTargetProfile(value)
+              setAnalysis(null)
+            }}
+            onToggleAdvancedAudienceFields={() => setShowAdvancedAudienceFields(prev => !prev)}
+            onAgeBandChange={value => {
+              setAgeBand(value)
+              setAnalysis(null)
+            }}
+            onGenderChange={value => {
+              setGender(value)
+              setAnalysis(null)
+            }}
+            onOccupationChange={value => {
+              setOccupation(value)
+              setAnalysis(null)
+            }}
+            onRelationshipChange={value => {
+              setRelationship(value)
+              setAnalysis(null)
+            }}
+            onBudgetRangeChange={value => {
+              setBudgetRange(value)
+              setAnalysis(null)
+            }}
+            onFormalityChange={value => {
+              setFormality(value)
+              setAnalysis(null)
+            }}
+          />
+          </div>
         </div>
+
+        <WorkflowSupportPanels
+          locale={locale}
+          historyRecords={historyRecords}
+          favoriteGiftChecklist={favoriteGiftChecklist}
+          assistantAmountInput={assistantAmountInput}
+          assistantCurrency={assistantCurrency}
+          assistantWeightInput={assistantWeightInput}
+          assistantDeclaredValueInput={assistantDeclaredValueInput}
+          assistantResult={assistantResult}
+          assistantError={assistantError}
+          isAssistantLoading={isAssistantLoading}
+          onAssistantAmountChange={setAssistantAmountInput}
+          onAssistantCurrencyChange={setAssistantCurrency}
+          onAssistantWeightChange={setAssistantWeightInput}
+          onAssistantDeclaredValueChange={setAssistantDeclaredValueInput}
+          onRunLogisticsAssistant={handleRunLogisticsAssistant}
+        />
 
         {/* Loading indicator */}
         <AnimatePresence>
@@ -2955,6 +2472,219 @@ export default function Home() {
                   </div>
                 </motion.div>
               </div>
+
+              {hasAnalysisEnhancementResults && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-sky-300/20 bg-white/5 p-6 backdrop-blur-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-2xl font-bold">
+                        {isZh ? 'P1 / P2 增强结果' : 'P1 / P2 enhancement results'}
+                      </h3>
+                      <p className="mt-1 text-sm text-slate-300">
+                        {isZh
+                          ? '这些结果来自文档中已实现但此前未在主流程展示的增强模块。'
+                          : 'These panels surface enhancement modules that were implemented but previously not shown in the main workflow.'}
+                      </p>
+                    </div>
+                    <span className="rounded-full border border-sky-300/30 bg-sky-400/10 px-3 py-1 text-xs text-sky-100">
+                      {isZh ? '增强洞察' : 'Enhanced insights'}
+                    </span>
+                  </div>
+
+                  <div className="mt-5 grid gap-4 lg:grid-cols-2">
+                    {analysisEnhancements?.p1?.multimodalResults && (
+                      <div className="rounded-2xl border border-cyan-300/18 bg-[#10253b]/82 p-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <h4 className="text-lg font-semibold text-slate-50">
+                            {isZh ? '多模态识别补强' : 'Multimodal recognition'}
+                          </h4>
+                          <span className="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
+                            {(analysisEnhancements.p1.multimodalResults.confidenceScore * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                        <p className="mt-2 text-xs text-slate-400">
+                          {isZh ? '信息源：' : 'Source: '}
+                          {analysisEnhancements.p1.multimodalResults.enrichmentSource}
+                        </p>
+                        <div className="mt-3 space-y-2 text-xs text-slate-300">
+                          {analysisEnhancements.p1.multimodalResults.ocrResult?.brands?.length ? (
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                              <span className="text-cyan-100">{isZh ? 'OCR 品牌：' : 'OCR brands: '}</span>
+                              {analysisEnhancements.p1.multimodalResults.ocrResult.brands.join(isZh ? '、' : ', ')}
+                            </div>
+                          ) : null}
+                          {analysisEnhancements.p1.multimodalResults.ocrResult?.specifications?.length ? (
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                              <span className="text-cyan-100">{isZh ? '规格特征：' : 'Specs: '}</span>
+                              {analysisEnhancements.p1.multimodalResults.ocrResult.specifications.join(isZh ? '、' : ', ')}
+                            </div>
+                          ) : null}
+                          {analysisEnhancements.p1.multimodalResults.visualAttributes?.colors?.length ? (
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                              <span className="text-cyan-100">{isZh ? '视觉颜色：' : 'Detected colors: '}</span>
+                              {analysisEnhancements.p1.multimodalResults.visualAttributes.colors
+                                .map(item => `${item.color}${item.prominence ? ` (${item.prominence})` : ''}`)
+                                .join(isZh ? '、' : ', ')}
+                            </div>
+                          ) : null}
+                          {analysisEnhancements.p1.multimodalResults.visualAttributes?.materials?.length ? (
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                              <span className="text-cyan-100">{isZh ? '材质识别：' : 'Materials: '}</span>
+                              {analysisEnhancements.p1.multimodalResults.visualAttributes.materials
+                                .map(item => `${item.material} ${(item.confidence * 100).toFixed(0)}%`)
+                                .join(isZh ? '、' : ', ')}
+                            </div>
+                          ) : null}
+                          {analysisEnhancements.p1.multimodalResults.visualAttributes?.styles?.length ? (
+                            <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                              <span className="text-cyan-100">{isZh ? '风格标签：' : 'Style tags: '}</span>
+                              {analysisEnhancements.p1.multimodalResults.visualAttributes.styles.join(isZh ? '、' : ', ')}
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    )}
+
+                    {analysisEnhancements?.p1?.logisticsEstimate && (
+                      <div className="rounded-2xl border border-amber-300/18 bg-[#10253b]/82 p-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <h4 className="text-lg font-semibold text-slate-50">
+                            {isZh ? '物流与清关估算' : 'Logistics estimate'}
+                          </h4>
+                          <span className="rounded-full border border-amber-300/25 bg-amber-300/10 px-3 py-1 text-xs text-amber-100">
+                            {analysisEnhancements.p1.logisticsEstimate.recommendedCarrier || 'N/A'}
+                          </span>
+                        </div>
+                        <div className="mt-3 grid gap-2 text-xs text-slate-300 sm:grid-cols-2">
+                          <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                            {isZh ? '总成本：' : 'Total cost: '}
+                            {formatCurrencyAmount(
+                              analysisEnhancements.p1.logisticsEstimate.totalEstimatedCost,
+                              analysisEnhancements.p1.logisticsEstimate.destinationCurrency,
+                              locale,
+                            )}
+                          </div>
+                          <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                            {isZh ? '预计时效：' : 'ETA: '}
+                            {analysisEnhancements.p1.logisticsEstimate.deliveryTimeRange}
+                          </div>
+                          <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                            {isZh ? '关税预估：' : 'Duties: '}
+                            {formatCurrencyAmount(
+                              analysisEnhancements.p1.logisticsEstimate.customsDuty.estimatedDuty,
+                              analysisEnhancements.p1.logisticsEstimate.customsDuty.currency,
+                              locale,
+                            )}
+                          </div>
+                          <div className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                            {isZh ? '税率：' : 'Duty rate: '}
+                            {(analysisEnhancements.p1.logisticsEstimate.customsDuty.dutyRate * 100).toFixed(0)}%
+                          </div>
+                        </div>
+                        {analysisEnhancements.p1.logisticsEstimate.shippingQuotes.length > 0 && (
+                          <div className="mt-3 space-y-2">
+                            {analysisEnhancements.p1.logisticsEstimate.shippingQuotes.map(quote => (
+                              <div key={`${quote.carrier}-${quote.estimatedDays}`} className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2 text-xs text-slate-300">
+                                <span className="text-amber-100">{quote.carrier}</span>
+                                {` · ${formatCurrencyAmount(quote.baseCost, quote.currency, locale)} · ${quote.estimatedDays} ${isZh ? '天' : 'days'}`}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {analysisEnhancements.p1.packingRecommendations?.general.length ? (
+                          <div className="mt-3 rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2 text-xs text-slate-300">
+                            <span className="text-amber-100">{isZh ? '包装建议：' : 'Packing: '}</span>
+                            {analysisEnhancements.p1.packingRecommendations.general.join(isZh ? '；' : '; ')}
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
+
+                    {analysisEnhancements?.p1?.collaborativeResults?.length ? (
+                      <div className="rounded-2xl border border-emerald-300/18 bg-[#10253b]/82 p-4">
+                        <h4 className="text-lg font-semibold text-slate-50">
+                          {isZh ? '协同过滤重排结果' : 'Collaborative reranking'}
+                        </h4>
+                        <div className="mt-3 space-y-2">
+                          {analysisEnhancements.p1.collaborativeResults.map(item => (
+                            <div key={item.id} className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="text-sm font-medium text-slate-100">{locale === 'zh' ? item.nameZh : item.nameEn}</span>
+                                <span className="text-xs text-emerald-100">{item.score}</span>
+                              </div>
+                              <p className="mt-1 text-xs leading-5 text-slate-300">
+                                {locale === 'zh' ? item.reasonZh : item.reasonEn}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {analysisEnhancements?.p2?.wideDeepResults?.length ? (
+                      <div className="rounded-2xl border border-fuchsia-300/18 bg-[#10253b]/82 p-4">
+                        <h4 className="text-lg font-semibold text-slate-50">
+                          {isZh ? 'Wide & Deep 重排结果' : 'Wide & Deep reranking'}
+                        </h4>
+                        <div className="mt-3 space-y-2">
+                          {analysisEnhancements.p2.wideDeepResults.map(item => (
+                            <div key={item.id} className="rounded-lg border border-slate-600/60 bg-slate-900/45 px-3 py-2">
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="text-sm font-medium text-slate-100">{locale === 'zh' ? item.nameZh : item.nameEn}</span>
+                                <span className="text-xs text-fuchsia-100">{item.score}</span>
+                              </div>
+                              <p className="mt-1 text-xs leading-5 text-slate-300">
+                                {locale === 'zh' ? item.reasonZh : item.reasonEn}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {analysisEnhancements?.p2?.culturalImpactScores &&
+                    Object.keys(analysisEnhancements.p2.culturalImpactScores).length > 0 ? (
+                      <div className="rounded-2xl border border-violet-300/18 bg-[#10253b]/82 p-4">
+                        <h4 className="text-lg font-semibold text-slate-50">
+                          {isZh ? '知识图谱文化影响分' : 'Knowledge graph impact'}
+                        </h4>
+                        <p className="mt-2 text-xs text-slate-400">
+                          {isZh
+                            ? '当前图谱覆盖国家有限，未收录的国家会显示为 0。'
+                            : 'Current graph coverage is limited; unsupported countries will show as 0.'}
+                        </p>
+                        <div className="mt-3 space-y-2">
+                          {Object.entries(analysisEnhancements.p2.culturalImpactScores).map(([id, score]) => {
+                            const matchedRecommendation = analysis.recommendations.find(item => item.id === id)
+                            return (
+                              <div key={id}>
+                                <div className="mb-1 flex items-center justify-between text-xs text-slate-300">
+                                  <span>{matchedRecommendation ? (locale === 'zh' ? matchedRecommendation.nameZh : matchedRecommendation.nameEn) : id}</span>
+                                  <span>{Math.round(score * 100)}%</span>
+                                </div>
+                                <div className="h-1.5 rounded-full bg-slate-700/80">
+                                  <div className="h-full rounded-full bg-violet-300/80" style={{ width: `${Math.round(score * 100)}%` }} />
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {analysisEnhancements?.localizedOutput?.formattedRecommendations && (
+                    <div className="mt-4 rounded-2xl border border-slate-200/12 bg-slate-950/30 p-4">
+                      <h4 className="text-sm font-semibold text-slate-100">
+                        {isZh ? '本地化格式化输出' : 'Localized formatted output'}
+                      </h4>
+                      <pre className="mt-2 whitespace-pre-wrap break-words text-xs leading-6 text-slate-300">
+                        {analysisEnhancements.localizedOutput.formattedRecommendations}
+                      </pre>
+                    </div>
+                  )}
+                </motion.div>
+              )}
 
               {analysis.recommendations.length > 0 && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-emerald-400/20 bg-white/5 p-6 backdrop-blur-sm">
@@ -3414,237 +3144,6 @@ export default function Home() {
           )}
         </AnimatePresence>
 
-        {/* Logistics Assistant - independent of analysis */}
-        <div className="mt-6 rounded-2xl border border-cyan-400/20 bg-white/5 p-6 backdrop-blur-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Wallet size={18} className="text-cyan-200" />
-              <h3 className="text-xl font-bold">
-                {isZh
-                  ? '跨境物流与支付助手'
-                  : isJa
-                    ? '越境配送・決済アシスタント'
-                    : isFr
-                      ? 'Assistant logistique et paiement'
-                      : 'Cross-border Logistics & Payment Assistant'}
-              </h3>
-            </div>
-            <span className="rounded-full border border-cyan-300/25 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-100">
-              {assistantResult?.rateSource === 'live'
-                ? isZh
-                  ? '实时汇率'
-                  : isJa
-                    ? 'リアルタイム為替'
-                    : isFr
-                      ? 'Taux en direct'
-                      : 'Live FX'
-                : isZh
-                  ? '汇率回退'
-                  : isJa
-                    ? '為替フォールバック'
-                    : isFr
-                      ? 'Taux de secours'
-                      : 'Fallback FX'}
-            </span>
-          </div>
-
-          <div className="mt-4 grid gap-3 md:grid-cols-4">
-            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '礼物价格' : isJa ? '商品価格' : isFr ? 'Prix du cadeau' : 'Gift price'}</p>
-              <input
-                value={assistantAmountInput}
-                onChange={event => setAssistantAmountInput(event.target.value)}
-                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-              />
-            </div>
-
-            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '币种' : isJa ? '通貨' : isFr ? 'Devise' : 'Currency'}</p>
-              <select
-                value={assistantCurrency}
-                onChange={event => setAssistantCurrency(event.target.value as AssistantCurrency)}
-                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-              >
-                {['USD', 'CNY', 'EUR', 'JPY', 'GBP'].map(currency => (
-                  <option key={currency} value={currency} className="bg-[#0f1f35] text-slate-100">
-                    {currency}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '重量(kg)' : isJa ? '重量(kg)' : isFr ? 'Poids (kg)' : 'Weight (kg)'}</p>
-              <input
-                value={assistantWeightInput}
-                onChange={event => setAssistantWeightInput(event.target.value)}
-                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-              />
-            </div>
-
-            <div className="rounded-xl border border-cyan-200/14 bg-[#0d1f35]/72 p-3">
-              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '申报价值' : isJa ? '申告価格' : isFr ? 'Valeur déclarée' : 'Declared value'}</p>
-              <input
-                value={assistantDeclaredValueInput}
-                onChange={event => setAssistantDeclaredValueInput(event.target.value)}
-                className="mt-2 w-full rounded-lg border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
-              />
-            </div>
-          </div>
-
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <Button
-              type="button"
-              onClick={handleRunLogisticsAssistant}
-              disabled={isAssistantLoading}
-              className="border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22"
-            >
-              <Truck size={16} className="mr-2" />
-              {isAssistantLoading
-                ? isZh
-                  ? '估算中...'
-                  : isJa
-                    ? '計算中...'
-                    : isFr
-                      ? 'Calcul...'
-                      : 'Estimating...'
-                : isZh
-                  ? '估算物流与支付'
-                  : isJa
-                    ? '配送と決済を見積もる'
-                    : isFr
-                      ? 'Estimer logistique & paiement'
-                      : 'Estimate logistics & payment'}
-            </Button>
-            {assistantError && <p className="text-sm text-red-300">{assistantError}</p>}
-          </div>
-
-          {assistantResult && (
-            <div className="mt-5 space-y-4">
-              <div className="grid gap-3 md:grid-cols-5">
-                {Object.entries(assistantResult.convertedAmounts).map(([currency, value]) => (
-                  <div key={currency} className="rounded-xl border border-slate-500/30 bg-slate-900/45 p-3">
-                    <p className="text-xs text-slate-400">{currency}</p>
-                    <p className="mt-1 text-lg font-semibold text-slate-100">{value.toFixed(2)}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid gap-3 md:grid-cols-2">
-                {assistantResult.shippingQuotes.map(quote => (
-                  <div key={`${quote.provider}-${quote.service}`} className="rounded-xl border border-cyan-300/20 bg-[#10253b]/80 p-4">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-cyan-100">{quote.provider}</p>
-                      <span className="text-xs text-slate-300">{quote.etaDays} {isZh ? '天' : isJa ? '日' : isFr ? 'jours' : 'days'}</span>
-                    </div>
-                    <p className="mt-1 text-xs text-slate-400">{quote.service}</p>
-                    <p className="mt-3 text-lg font-bold text-slate-100">{quote.currency} {quote.estimatedCost.toFixed(2)}</p>
-                    <ul className="mt-2 space-y-1 text-xs text-slate-300">
-                      {quote.notes.map(note => (
-                        <li key={note}>• {note}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-
-              <div className="rounded-xl border border-amber-300/20 bg-amber-500/8 p-3">
-                <p className="text-sm font-semibold text-amber-200">{isZh ? '清关注意事项' : isJa ? '通関の注意点' : isFr ? 'Points de douane' : 'Customs notes'}</p>
-                <ul className="mt-2 space-y-1 text-xs text-amber-100/90">
-                  {assistantResult.customsNotes.map(note => (
-                    <li key={note}>• {note}</li>
-                  ))}
-                </ul>
-                <p className="mt-2 text-[11px] text-amber-100/80">{assistantResult.disclaimer}</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {historyRecords.length > 0 && (
-          <section className="mt-6 rounded-2xl border border-cyan-200/20 bg-[#10243b]/70 p-4 sm:mt-8 sm:p-6 lg:mt-10">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-100">{locale === 'zh' ? '历史记录' : 'History'}</h2>
-                <p className="mt-1 text-sm text-slate-300">
-                  {locale === 'zh' ? '最近 8 次分析会保存在本地浏览器，便于复盘和继续筛选。' : 'The latest 8 analyses are stored locally for review and follow-up decisions.'}
-                </p>
-              </div>
-              <span className="rounded-full border border-cyan-200/25 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
-                {historyRecords.length}
-              </span>
-            </div>
-
-            <div className="mt-5 grid gap-3 md:grid-cols-2">
-              {historyRecords.map(record => (
-                <div key={record.id} className="rounded-xl border border-slate-500/30 bg-slate-900/45 p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-slate-100">{record.giftName}</p>
-                      <p className="mt-1 text-xs text-slate-400">
-                        {record.countryName} · {record.audienceLabel}
-                      </p>
-                    </div>
-                    <span
-                      className={`rounded-full px-2 py-1 text-[11px] ${
-                        record.riskLevel === 'High'
-                          ? 'bg-red-500/15 text-red-200'
-                          : record.riskLevel === 'Medium'
-                            ? 'bg-amber-500/15 text-amber-200'
-                            : 'bg-emerald-500/15 text-emerald-200'
-                      }`}
-                    >
-                      {record.riskLevel} · {record.riskScore}
-                    </span>
-                  </div>
-                  {record.recommendations.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {record.recommendations.map(item => (
-                        <span key={`${record.id}-${item.id}`} className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[11px] text-cyan-100">
-                          {item.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <p className="mt-3 text-[11px] text-slate-500">{new Date(record.createdAt).toLocaleString()}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {favoriteGiftChecklist.length > 0 && (
-          <section className="mt-6 rounded-2xl border border-emerald-200/20 bg-[#102b3d]/70 p-4 sm:p-6">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-100">
-                  {isZh ? '收藏礼物清单' : isJa ? 'お気に入りギフトリスト' : isFr ? 'Liste de cadeaux favoris' : 'Favorite Gift List'}
-                </h2>
-                <p className="mt-1 text-sm text-slate-300">
-                  {isZh
-                    ? '来自你的收藏记录，可作为后续送礼候选池。'
-                    : isJa
-                      ? '保存済み候補を次回のギフト検討リストとして再利用できます。'
-                      : isFr
-                        ? 'Vos articles enregistrés pour préparer vos prochaines listes cadeaux.'
-                        : 'Saved picks from your previous analyses for future gifting checklists.'}
-                </p>
-              </div>
-              <span className="rounded-full border border-emerald-200/25 bg-emerald-300/10 px-3 py-1 text-xs text-emerald-100">
-                {favoriteGiftChecklist.length}
-              </span>
-            </div>
-
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {favoriteGiftChecklist.map(item => (
-                <div key={item.id} className="rounded-xl border border-emerald-300/20 bg-[#0f2235]/75 p-3">
-                  <p className="text-sm font-semibold text-slate-100">{item.name}</p>
-                  <p className="mt-1 text-xs text-slate-400">{item.category}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
       </main>
     </div>
   )
