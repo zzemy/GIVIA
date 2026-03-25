@@ -741,8 +741,8 @@ export default function Home() {
         </div>
 
         {/* Three-step workflow panels */}
-        <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-stretch">
-          <div className="grid content-start gap-4 sm:gap-6 xl:col-span-5 xl:auto-rows-max">
+        <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-start">
+          <div className="space-y-4 sm:space-y-6 xl:col-span-5">
           <StepGiftInput
             locale={locale}
             recognition={recognition}
@@ -822,7 +822,7 @@ export default function Home() {
           />
           </div>
 
-          <div className="grid content-start gap-4 sm:gap-6 xl:col-span-7 xl:auto-rows-max">
+          <div className="space-y-4 sm:space-y-6 xl:col-span-7">
           <StepCountry
             locale={locale}
             t={t}

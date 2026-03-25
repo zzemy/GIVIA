@@ -269,11 +269,11 @@ export function WorkflowSupportHistoryPanels({
             </span>
           </div>
 
-          <div className="mt-5 -mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="mt-5 grid gap-3 lg:grid-cols-2">
             {historyRecords.map(record => (
               <article
                 key={record.id}
-                className="flex min-w-[280px] max-w-[340px] flex-none snap-start flex-col rounded-2xl border border-slate-500/30 bg-slate-900/45 p-4 shadow-[0_10px_26px_rgba(2,6,23,0.18)] sm:min-w-[320px]"
+                className="rounded-2xl border border-slate-500/30 bg-slate-900/45 p-4 shadow-[0_10px_26px_rgba(2,6,23,0.18)]"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -306,7 +306,7 @@ export function WorkflowSupportHistoryPanels({
                     ))}
                   </div>
                 )}
-                <p className="mt-auto pt-4 text-[11px] text-slate-500">{new Date(record.createdAt).toLocaleString()}</p>
+                <p className="mt-4 text-[11px] text-slate-500">{new Date(record.createdAt).toLocaleString()}</p>
               </article>
             ))}
           </div>

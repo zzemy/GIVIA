@@ -137,7 +137,7 @@ export function StepCountry({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.13 }}
         whileHover={{ y: -4, scale: 1.005 }}
-        className="h-full rounded-2xl border border-cyan-200/18 bg-[#13253e]/88 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+        className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/88 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
       >
         <div className="mb-4 flex items-start justify-between gap-4 border-b border-slate-400/15 pb-4">
           <div>
@@ -179,13 +179,13 @@ export function StepCountry({
         </div>
       </motion.div>
 
-      <div className="grid gap-4 2xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] 2xl:items-stretch">
+      <div className="grid gap-4 2xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] 2xl:items-start">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.16 }}
           whileHover={{ y: -4, scale: 1.005 }}
-          className="h-full rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+          className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -260,7 +260,7 @@ export function StepCountry({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.19 }}
           whileHover={{ y: -4, scale: 1.005 }}
-          className="h-full rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+          className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -357,13 +357,13 @@ export function StepCountry({
         </motion.div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] xl:items-stretch">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] xl:items-start">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.22 }}
           whileHover={{ y: -4, scale: 1.005 }}
-          className="h-full rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+          className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -477,7 +477,7 @@ export function StepCountry({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
           whileHover={{ y: -4, scale: 1.005 }}
-          className="h-full rounded-2xl border border-sky-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-sky-200/34 sm:p-6"
+          className="rounded-2xl border border-sky-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-sky-200/34 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
