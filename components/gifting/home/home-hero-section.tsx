@@ -50,7 +50,7 @@ export function HomeHeroSection({
 }: HomeHeroSectionProps) {
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-cyan-200/15 bg-[#0c1b33]/78 backdrop-blur-2xl">
+      <header className="sticky top-0 z-[220] ml-[calc(50%-50vw)] w-screen border-b border-cyan-200/15 bg-[#0c1b33]/78 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-4 xl:px-8">
           <div className="flex items-center gap-3">
             <Image src={withBasePath('/brand/logo-mark.svg')} alt="GIVIA logo mark" width={44} height={44} priority />
@@ -85,75 +85,79 @@ export function HomeHeroSection({
         </div>
       </header>
 
-      <section className="mb-10 grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
+      <section className="mb-10 mt-8 grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative rounded-[2rem] border border-cyan-100/18 bg-gradient-to-br from-[#10233f]/90 via-[#11253f]/84 to-[#182a43]/80 p-8 shadow-[0_30px_90px_rgba(6,14,28,0.52)] backdrop-blur-xl"
+          className="relative flex h-full flex-col rounded-[2rem] border border-cyan-100/18 bg-gradient-to-br from-[#10233f]/90 via-[#11253f]/84 to-[#182a43]/80 p-8 shadow-[0_30px_90px_rgba(6,14,28,0.52)] backdrop-blur-xl"
         >
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-100/25 bg-cyan-100/8 px-3 py-1 text-xs tracking-[0.14em] text-cyan-50/95">
-            <Globe2 size={14} /> {t('hero.badge')}
-          </p>
+          <div>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-100/25 bg-cyan-100/8 px-3 py-1 text-xs tracking-[0.14em] text-cyan-50/95">
+              <Globe2 size={14} /> {t('hero.badge')}
+            </p>
 
-          <h1
-            className={`max-w-[11.5em] bg-gradient-to-r from-slate-50 via-slate-100 to-cyan-100 bg-clip-text text-3xl leading-[1.08] text-transparent md:text-[3.35rem] md:leading-[1.06] ${
-              isZh
-                ? 'font-sans-zh font-semibold tracking-[-0.02em]'
-                : 'font-semibold tracking-[-0.02em] [font-family:var(--app-font-sans)]'
-            }`}
-          >
-            {isZh ? (
-              <>
-                <span className="block">让每一份礼物</span>
-                <span className="block text-cyan-100">都能跨文化被理解</span>
-              </>
-            ) : (
-              <>
-                <span className="block">Gift with cultural clarity,</span>
-                <span className="block text-cyan-100">not cross-border guesswork.</span>
-              </>
-            )}
-          </h1>
+            <h1
+              className={`max-w-[11.5em] bg-gradient-to-r from-slate-50 via-slate-100 to-cyan-100 bg-clip-text text-3xl leading-[1.08] text-transparent md:text-[3.35rem] md:leading-[1.06] ${
+                isZh
+                  ? 'font-sans-zh font-semibold tracking-[-0.02em]'
+                  : 'font-semibold tracking-[-0.02em] [font-family:var(--app-font-sans)]'
+              }`}
+            >
+              {isZh ? (
+                <>
+                  <span className="block">让每一份礼物</span>
+                  <span className="block text-cyan-100">都能跨文化被理解</span>
+                </>
+              ) : (
+                <>
+                  <span className="block">Gift with cultural clarity,</span>
+                  <span className="block text-cyan-100">not cross-border guesswork.</span>
+                </>
+              )}
+            </h1>
 
-          <p className="mt-5 max-w-2xl text-base leading-8 text-slate-200/95">{t('hero.description')}</p>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-slate-200/95">{t('hero.description')}</p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3 text-xs text-slate-200">
-            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-300/40 bg-emerald-500/14 px-3 py-1">
-              <ShieldCheck size={14} /> {t('hero.trust1')}
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-sky-300/40 bg-sky-500/14 px-3 py-1">
-              <ShoppingBag size={14} /> {t('hero.trust2')}
-            </span>
+            <div className="mt-6 flex flex-wrap items-center gap-3 text-xs text-slate-200">
+              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-300/40 bg-emerald-500/14 px-3 py-1">
+                <ShieldCheck size={14} /> {t('hero.trust1')}
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full border border-sky-300/40 bg-sky-500/14 px-3 py-1">
+                <ShoppingBag size={14} /> {t('hero.trust2')}
+              </span>
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-2 text-xs text-slate-200/90">
+              {['Tokyo', 'Dubai', 'Paris', 'Sao Paulo', 'Singapore'].map(city => (
+                <motion.span
+                  key={city}
+                  whileHover={{ y: -2, scale: 1.04 }}
+                  className="rounded-full border border-slate-300/18 bg-slate-100/8 px-3 py-1"
+                >
+                  {city}
+                </motion.span>
+              ))}
+            </div>
           </div>
 
-          <div className="mt-7 flex flex-wrap gap-2 text-xs text-slate-200/90">
-            {['Tokyo', 'Dubai', 'Paris', 'Sao Paulo', 'Singapore'].map(city => (
-              <motion.span
-                key={city}
-                whileHover={{ y: -2, scale: 1.04 }}
-                className="rounded-full border border-slate-300/18 bg-slate-100/8 px-3 py-1"
-              >
-                {city}
-              </motion.span>
-            ))}
+          <div className="mt-auto self-start pt-8">
+            <motion.button
+              type="button"
+              whileHover={{ y: -2, scale: 1.015 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onEnterFlow}
+              className="inline-flex items-center gap-2 rounded-xl border border-cyan-200/40 bg-cyan-300/12 px-5 py-2.5 text-sm font-semibold text-cyan-50 hover:bg-cyan-300/20"
+            >
+              {isZh ? '立即进入分析流程' : 'Start the flow now'} <ArrowRight size={15} />
+            </motion.button>
           </div>
-
-          <motion.button
-            type="button"
-            whileHover={{ y: -2, scale: 1.015 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={onEnterFlow}
-            className="mt-8 inline-flex items-center gap-2 rounded-xl border border-cyan-200/40 bg-cyan-300/12 px-5 py-2.5 text-sm font-semibold text-cyan-50 hover:bg-cyan-300/20"
-          >
-            {isZh ? '立即进入分析流程' : 'Start the flow now'} <ArrowRight size={15} />
-          </motion.button>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08 }}
-          className="relative overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-gradient-to-br from-[#10233f]/90 via-[#11263f]/84 to-[#162a44]/82 p-6 shadow-[0_28px_70px_rgba(6,14,28,0.56)]"
+          className="relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-gradient-to-br from-[#10233f]/90 via-[#11263f]/84 to-[#162a44]/82 p-6 shadow-[0_28px_70px_rgba(6,14,28,0.56)]"
         >
           <p className="relative text-xs uppercase tracking-[0.22em] text-sky-100/80">{t('hero.panelTitle')}</p>
           <h2 className={`relative mt-3 text-2xl text-slate-100 ${isZh ? 'font-sans-zh font-semibold tracking-tight' : 'font-semibold tracking-tight [font-family:var(--app-font-sans)]'}`}>

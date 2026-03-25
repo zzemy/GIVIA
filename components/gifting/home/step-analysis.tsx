@@ -57,14 +57,15 @@ export function StepAnalysis({
   onAnalyze,
 }: StepAnalysisProps) {
   const isZh = locale === 'zh'
+  const statTileClassName = 'rounded-xl border border-slate-200/10 bg-slate-950/24 px-3 py-2.5'
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      whileHover={{ y: -4, scale: 1.01 }}
-      className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-4 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-colors hover:border-cyan-200/40 sm:p-6"
+      whileHover={{ y: -2, scale: 1.004 }}
+      className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-4 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-200/40 sm:p-6"
     >
       <div className="mb-5 flex items-start justify-between border-b border-slate-400/15 pb-4">
         <div>
@@ -74,10 +75,10 @@ export function StepAnalysis({
         <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis step" width={36} height={36} />
       </div>
 
-      <div className="grid gap-4">
-        <div className="rounded-2xl border border-slate-200/12 bg-slate-900/34 p-3.5">
+      <div className="grid gap-4 sm:gap-5">
+        <div className="rounded-2xl border border-slate-200/12 bg-slate-900/34 p-3.5 sm:p-4">
           <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{isZh ? '分析摘要' : 'Analysis summary'}</p>
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
             {[
               {
                 label: isZh ? '国家' : 'Country',
@@ -96,7 +97,7 @@ export function StepAnalysis({
                 value: selectedAudienceLabel,
               },
             ].map(item => (
-              <div key={item.label} className="rounded-xl border border-slate-200/10 bg-slate-950/24 px-3 py-2.5">
+              <div key={item.label} className={statTileClassName}>
                 <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{item.label}</p>
                 <p className="mt-1 text-sm font-medium text-slate-100">{item.value}</p>
               </div>
@@ -104,8 +105,8 @@ export function StepAnalysis({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-cyan-200/14 bg-cyan-400/5 p-3.5">
-          <div className="flex items-start justify-between gap-3">
+        <div className="rounded-2xl border border-cyan-200/14 bg-cyan-400/5 p-3.5 sm:p-4">
+          <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div>
               <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-100/80">P1 / P2</p>
               <h3 className="mt-1 text-sm font-semibold text-slate-100">
@@ -117,12 +118,12 @@ export function StepAnalysis({
                   : 'Run multimodal recognition, collaborative filtering, logistics, knowledge graph, and Wide & Deep reranking in the same analysis.'}
               </p>
             </div>
-            <span className="rounded-full border border-cyan-200/18 bg-cyan-300/10 px-3 py-1 text-[11px] text-cyan-100">
+            <span className="shrink-0 whitespace-nowrap rounded-full border border-cyan-200/18 bg-cyan-300/10 px-3 py-1 text-[11px] leading-none text-cyan-100">
               {hasEnabledAnalysisEnhancement ? (isZh ? '已启用增强' : 'Enhancements on') : isZh ? '仅基础分析' : 'P0 only'}
             </span>
           </div>
 
-          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <div className="mt-3 grid gap-2.5 md:grid-cols-2">
             {([
               { key: 'multimodal', label: isZh ? '多模态识别' : 'Multimodal recognition' },
               { key: 'collaborativeFiltering', label: isZh ? '协同过滤重排' : 'Collaborative reranking' },
@@ -132,26 +133,26 @@ export function StepAnalysis({
             ] as Array<{ key: keyof EnhancementSettings; label: string }>).map(option => (
               <label
                 key={option.key}
-                className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-200/10 bg-slate-900/38 px-3 py-2.5 text-sm text-slate-200"
+                className="flex min-h-[2.9rem] cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200/10 bg-slate-900/38 px-3 py-2.5 text-sm text-slate-200 transition-colors hover:border-cyan-200/24"
               >
-                <span>{option.label}</span>
+                <span className="leading-5">{option.label}</span>
                 <input
                   type="checkbox"
                   checked={analysisEnhancementSettings[option.key]}
                   onChange={event => onEnhancementSettingChange(option.key, event.target.checked)}
-                  className="h-4 w-4 rounded border-slate-500 bg-slate-950 text-cyan-300"
+                  className="h-4 w-4 rounded border-slate-500 bg-slate-950 text-cyan-300 accent-cyan-300"
                 />
               </label>
             ))}
           </div>
 
           {analysisEnhancementSettings.logistics && (
-            <div className="mt-3 rounded-xl border border-slate-200/10 bg-slate-950/35 p-3">
+            <div className="mt-3 rounded-xl border border-slate-200/10 bg-slate-950/35 p-3.5">
               <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{isZh ? '物流出发地' : 'Shipping origin'}</p>
               <select
                 value={enhancementOriginCountry}
                 onChange={event => onEnhancementOriginCountryChange(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100"
+                className="mt-2 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none"
               >
                 {enhancementOriginOptions.map(option => (
                   <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
@@ -169,7 +170,7 @@ export function StepAnalysis({
         </div>
 
         {canAnalyze && !hasAnalysis && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-slate-200/12 bg-slate-800/24 p-3">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-slate-200/12 bg-slate-800/24 p-3.5 sm:p-4">
             <p className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
               <Sparkles size={14} />
               {locale === 'zh' ? '分析准备清单' : 'Analysis Checklist'}
@@ -180,7 +181,7 @@ export function StepAnalysis({
                   <CheckCircle size={14} className="text-emerald-400" />
                   <span>{locale === 'zh' ? '礼物信息' : 'Gift info'}</span>
                 </div>
-                <span className="truncate text-right text-xs text-slate-300/84">
+                <span className="truncate text-right text-xs text-slate-300/84 sm:max-w-[60%]">
                   {recognition ? (locale === 'zh' ? recognition.itemZh : recognition.itemEn) : giftName || (locale === 'zh' ? '已输入' : 'Entered')}
                 </span>
               </div>
@@ -204,7 +205,7 @@ export function StepAnalysis({
           </motion.div>
         )}
 
-        <div className="rounded-2xl border border-slate-200/12 bg-slate-700/30 px-4 py-3">
+        <div className="rounded-2xl border border-slate-200/12 bg-slate-700/30 px-4 py-3.5">
           <p className="text-sm text-gray-300">
             {hasAnalysis
               ? locale === 'zh'
@@ -233,12 +234,12 @@ export function StepAnalysis({
           <Button
             onClick={onAnalyze}
             disabled={!canAnalyze || isAnalyzing}
-            className={`mt-3 w-full rounded-lg py-2 font-semibold transition-all ${
+            className={`mt-3 w-full rounded-xl py-2.5 font-semibold transition-all ${
               isAnalyzing
                 ? 'bg-slate-700/70 text-slate-300'
                 : !canAnalyze
-                  ? 'cursor-not-allowed bg-gray-700 text-gray-400'
-                  : 'border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22'
+                  ? 'cursor-not-allowed border border-slate-200/10 bg-slate-700 text-slate-400'
+                  : 'border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/24'
             }`}
           >
             {isAnalyzing ? (
@@ -256,7 +257,7 @@ export function StepAnalysis({
         </div>
 
         {hasAnalysis && !isAnalyzing && (
-          <div className="rounded-lg border border-emerald-300/35 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-100">
+          <div className="rounded-xl border border-emerald-300/35 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-100">
             {locale === 'zh' ? '分析成功，向下查看风险评估与建议。' : 'Analysis succeeded. Scroll down to view risk assessment and suggestions.'}
           </div>
         )}

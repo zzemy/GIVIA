@@ -50,11 +50,11 @@ export function CountrySelector({
   }
 
   return (
-    <div className="relative w-full">
+    <div className={`relative w-full ${isOpen ? 'z-[180]' : 'z-20'}`}>
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full rounded-xl border border-sky-300/35 bg-slate-900/40 px-4 py-3 text-left transition-colors hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+        className="w-full rounded-xl border border-sky-300/35 bg-slate-900/40 px-4 py-3 text-left transition-colors hover:border-sky-300/55 hover:bg-slate-800/60 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -74,7 +74,7 @@ export function CountrySelector({
       </button>
 
       {isOpen && (
-        <div className="relative z-50 mt-3 rounded-xl border border-sky-300/30 bg-[#0f1a2f] shadow-2xl">
+        <div className="absolute left-0 top-[calc(100%+0.5rem)] z-[190] w-full rounded-xl border border-sky-300/30 bg-[#0f1a2f] shadow-2xl">
           {/* Search bar */}
           <div className="border-b border-sky-300/20 p-3">
             <div className="relative">

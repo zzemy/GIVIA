@@ -716,7 +716,7 @@ export default function Home() {
       />
       <div className="pointer-events-none absolute inset-0 opacity-12 [background-image:repeating-linear-gradient(90deg,rgba(148,163,184,0.11)_0_1px,transparent_1px_58px),repeating-linear-gradient(0deg,rgba(148,163,184,0.08)_0_1px,transparent_1px_52px)]" />
 
-      <main className="relative mx-auto max-w-[1480px] px-5 py-12 xl:px-8">
+      <main className="relative mx-auto max-w-[1480px] px-5 pb-12 pt-0 xl:px-8">
         <HomeHeroSection
           locale={locale}
           isZh={isZh}
@@ -738,8 +738,8 @@ export default function Home() {
         </div>
 
         {/* Three-step workflow panels */}
-        <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-start">
-          <div className="space-y-4 sm:space-y-6 xl:col-span-5">
+        <div className="mb-8 grid gap-4 sm:gap-6 lg:mb-10 xl:grid-cols-12 xl:items-start 2xl:gap-7">
+          <div className="space-y-4 sm:space-y-6 xl:col-span-4 2xl:col-span-5">
             <StepGiftInput
               locale={locale}
               recognition={recognition}
@@ -813,7 +813,7 @@ export default function Home() {
             />
           </div>
 
-          <div className="flex h-full flex-col gap-4 sm:gap-6 xl:col-span-7">
+          <div className="flex h-full flex-col gap-4 sm:gap-6 xl:col-span-8 2xl:col-span-7">
             <StepCountry
               locale={locale}
               t={t}
@@ -918,40 +918,6 @@ export default function Home() {
               onAssistantDeclaredValueChange={setAssistantDeclaredValueInput}
               onRunLogisticsAssistant={handleRunLogisticsAssistant}
             />
-
-            <section className="hidden min-h-[9rem] flex-1 flex-col rounded-2xl border border-cyan-200/16 bg-[#10253c]/72 p-5 backdrop-blur-sm xl:flex">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '执行提示' : 'Execution hints'}</p>
-                <span className="rounded-full border border-cyan-200/20 bg-cyan-100/8 px-3 py-1 text-[11px] text-cyan-100/85">
-                  {isZh ? '自动对齐填充' : 'Adaptive fill'}
-                </span>
-              </div>
-
-              <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                <div className="rounded-xl border border-slate-200/10 bg-slate-950/24 px-3 py-2.5">
-                  <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '国家' : 'Country'}</p>
-                  <p className="mt-1 text-sm font-medium text-slate-100">
-                    {selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '待选择' : 'Pending'}
-                  </p>
-                </div>
-                <div className="rounded-xl border border-slate-200/10 bg-slate-950/24 px-3 py-2.5">
-                  <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '礼物输入' : 'Gift input'}</p>
-                  <p className="mt-1 text-sm font-medium text-slate-100">
-                    {recognition || hasGiftInput || selectedFile ? (isZh ? '已准备' : 'Ready') : isZh ? '待输入' : 'Waiting'}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-3 rounded-xl border border-slate-200/10 bg-slate-900/30 px-3 py-2.5 text-sm text-slate-200">
-                {canAnalyze
-                  ? isZh
-                    ? '条件已满足，左侧可直接开始第三步分析。'
-                    : 'All prerequisites are met. You can run step 3 directly.'
-                  : isZh
-                    ? '先补齐国家或礼物信息，再执行分析。'
-                    : 'Complete country or gift details before analyzing.'}
-              </div>
-            </section>
           </div>
         </div>
 

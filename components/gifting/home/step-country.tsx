@@ -123,15 +123,18 @@ export function StepCountry({
   onFormalityChange,
 }: StepCountryProps) {
   const isZh = locale === 'zh'
+  const cardBaseClassName =
+    'rounded-2xl border border-cyan-200/18 bg-gradient-to-br from-[#132842]/88 to-[#0f2239]/82 p-4 shadow-[0_10px_28px_rgba(3,12,28,0.22)] backdrop-blur-md transition-all duration-300 hover:border-cyan-200/32 sm:p-6'
+  const statTileClassName = 'rounded-xl border border-slate-200/10 bg-slate-950/28 px-3 py-2.5'
 
   return (
-    <div className="grid gap-4 sm:gap-5">
+    <div className="grid gap-4 sm:gap-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.13 }}
-        whileHover={{ y: -4, scale: 1.005 }}
-        className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/88 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+        whileHover={{ y: -1 }}
+        className={`${cardBaseClassName} relative z-[160]`}
       >
         <div className="mb-4 flex items-start justify-between gap-4 border-b border-slate-400/15 pb-4">
           <div>
@@ -173,13 +176,13 @@ export function StepCountry({
         </div>
       </motion.div>
 
-      <div className="grid gap-4 2xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
+      <div className="grid gap-4 xl:grid-cols-2 xl:items-stretch">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.16 }}
-          whileHover={{ y: -4, scale: 1.005 }}
-          className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+          whileHover={{ y: -1 }}
+          className={`${cardBaseClassName} h-full flex flex-col`}
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -195,7 +198,7 @@ export function StepCountry({
             )}
           </div>
 
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <div className="mt-4 grid gap-2.5 md:grid-cols-2">
             {sceneTemplateOptions.map((option, index) => {
               const isActive = sceneTemplate === option.value
 
@@ -205,9 +208,9 @@ export function StepCountry({
                   type="button"
                   onClick={() => onSceneTemplateChange(option.value)}
                   className={cn(
-                    'rounded-2xl border px-3 py-3 text-left transition-all',
+                    'rounded-2xl border px-3 py-3 text-left transition-all duration-200',
                     isActive
-                      ? 'border-cyan-200/42 bg-cyan-300/12 shadow-[0_12px_30px_rgba(34,211,238,0.08)]'
+                      ? 'border-cyan-200/44 bg-cyan-300/14 shadow-[0_14px_32px_rgba(34,211,238,0.10)]'
                       : 'border-cyan-200/12 bg-[#0d1f35]/72 hover:border-cyan-200/28 hover:bg-[#102740]',
                   )}
                 >
@@ -233,7 +236,7 @@ export function StepCountry({
           </div>
 
           {activeSceneTemplate && (
-            <div className="mt-4 rounded-xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3">
+            <div className="mt-4 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/74 p-3.5">
               <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '当前生效值' : 'Active values'}</p>
               <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-300/84">
                 <span className="rounded-full border border-cyan-200/12 bg-cyan-100/6 px-3 py-1">{isZh ? '对象：' : 'Audience: '}{selectedAudienceLabel}</span>
@@ -253,8 +256,8 @@ export function StepCountry({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.19 }}
-          whileHover={{ y: -4, scale: 1.005 }}
-          className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
+          whileHover={{ y: -1 }}
+          className={`${cardBaseClassName} h-full flex flex-col`}
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -268,7 +271,7 @@ export function StepCountry({
             </span>
           </div>
 
-          <div className="mt-4 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/72 p-3 sm:p-4">
+          <div className="mt-4 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/74 p-3.5 sm:p-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '群体标签' : 'Audience tags'}</p>
@@ -283,7 +286,7 @@ export function StepCountry({
               </div>
             </div>
 
-            <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+            <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1.5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
               {audienceOptions.map(option => {
                 const isActive = targetGroup === option.value
 
@@ -293,7 +296,7 @@ export function StepCountry({
                     type="button"
                     onClick={() => onTargetGroupChange(option.value as AudienceGroup)}
                     className={cn(
-                      'shrink-0 rounded-full border px-3 py-2 text-left text-xs font-medium transition-all sm:shrink',
+                      'shrink-0 rounded-full border px-3 py-2 text-left text-xs font-medium transition-all duration-200 sm:shrink',
                       isActive
                         ? 'border-cyan-200/42 bg-cyan-300/12 text-cyan-50'
                         : 'border-cyan-200/12 bg-[#0d1f35]/72 text-slate-200 hover:border-cyan-200/28 hover:bg-[#102740]',
@@ -318,32 +321,32 @@ export function StepCountry({
             )}
           </div>
 
-          <div className="mt-4 grid gap-3 lg:grid-cols-2">
-            <div className={`${profileFieldClassName} min-h-[10rem]`}>
+          <div className="mt-4 grid auto-rows-fr gap-3 lg:grid-cols-2">
+            <div className={`${profileFieldClassName} flex min-h-[10.5rem] flex-col`}>
               <p className={profileLabelClassName}>{isZh ? '场合关键词' : 'Occasion keywords'}</p>
               <input
                 value={occasion}
                 onChange={event => onOccasionChange(event.target.value)}
                 placeholder={isZh ? '如：生日晚宴、客户来访、节日问候' : 'e.g. birthday dinner, client visit, festive note'}
-                className={profileControlClassName}
+                className={`${profileControlClassName} h-11`}
               />
-              <p className="mt-2 text-xs leading-5 text-slate-400">
+              <p className="mt-2 min-h-10 text-xs leading-5 text-slate-400">
                 {isZh ? '建议写成一句真实场景，方便分析送礼时机与表达方式。' : 'A short real-world moment helps the analysis adjust timing and phrasing.'}
               </p>
             </div>
 
-            <div className={`${profileFieldClassName} min-h-[10rem]`}>
+            <div className={`${profileFieldClassName} flex min-h-[10.5rem] flex-col`}>
               <p className={profileLabelClassName}>{isZh ? '补充备注' : 'Additional notes'}</p>
               <textarea
                 value={targetProfile}
                 onChange={event => onTargetProfileChange(event.target.value)}
-                rows={3}
+                rows={1}
                 placeholder={
                   isZh ? '例如品牌偏好、禁忌颜色、收礼人近期需求' : 'Brand preferences, colors to avoid, recipient needs'
                 }
-                className="mt-2 w-full resize-none rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 transition focus:border-cyan-200/45 focus:outline-none"
+                className="mt-3 h-11 w-full resize-none overflow-hidden rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 transition focus:border-cyan-200/45 focus:outline-none"
               />
-              <p className="mt-2 text-xs leading-5 text-slate-400">
+              <p className="mt-2 min-h-10 text-xs leading-5 text-slate-400">
                 {isZh ? '这些备注会同步影响替代礼物、包装和贺卡语气建议。' : 'These notes also flow into safer alternatives, packaging, and card tone.'}
               </p>
             </div>
@@ -351,25 +354,25 @@ export function StepCountry({
         </motion.div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+      <div className="grid gap-4 xl:grid-cols-2 xl:items-stretch">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.22 }}
-          whileHover={{ y: -4, scale: 1.005 }}
-        className="rounded-2xl border border-cyan-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/34 sm:p-6"
-      >
-        <div className="flex items-center justify-between gap-3">
-          <div className="w-full">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '高级画像' : 'Advanced profile'}</p>
-            <p className="mt-1 text-xs leading-5 text-slate-300/82">
-              {isZh ? '年龄、职业、预算和正式度会影响推荐语气与替代方案。' : 'Age, occupation, budget, and formality refine tone and fallback suggestions.'}
-            </p>
+          whileHover={{ y: -1 }}
+          className={`${cardBaseClassName} h-full flex flex-col`}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <div className="w-full">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '高级画像' : 'Advanced profile'}</p>
+              <p className="mt-1 text-xs leading-5 text-slate-300/82">
+                {isZh ? '年龄、职业、预算和正式度会影响推荐语气与替代方案。' : 'Age, occupation, budget, and formality refine tone and fallback suggestions.'}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div className={profileFieldClassName}>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className={profileFieldClassName}>
             <p className={profileLabelClassName}>{isZh ? '年龄' : 'Age'}</p>
             <select value={ageBand} onChange={event => onAgeBandChange(event.target.value)} className={profileControlClassName}>
               {ageBandOptions.map(option => (
@@ -380,7 +383,7 @@ export function StepCountry({
             </select>
           </div>
 
-          <div className={profileFieldClassName}>
+            <div className={profileFieldClassName}>
             <p className={profileLabelClassName}>{isZh ? '性别偏向' : 'Gender tone'}</p>
             <select value={gender} onChange={event => onGenderChange(event.target.value)} className={profileControlClassName}>
               {genderOptions.map(option => (
@@ -391,7 +394,7 @@ export function StepCountry({
             </select>
           </div>
 
-          <div className={profileFieldClassName}>
+            <div className={profileFieldClassName}>
             <p className={profileLabelClassName}>{isZh ? '职业' : 'Occupation'}</p>
             <select value={occupation} onChange={event => onOccupationChange(event.target.value)} className={profileControlClassName}>
               {occupationOptions.map(option => (
@@ -402,7 +405,7 @@ export function StepCountry({
             </select>
           </div>
 
-          <div className={profileFieldClassName}>
+            <div className={profileFieldClassName}>
             <p className={profileLabelClassName}>{isZh ? '关系' : 'Relationship'}</p>
             <select value={relationship} onChange={event => onRelationshipChange(event.target.value)} className={profileControlClassName}>
               {relationshipOptions.map(option => (
@@ -413,7 +416,7 @@ export function StepCountry({
             </select>
           </div>
 
-          <div className={profileFieldClassName}>
+            <div className={profileFieldClassName}>
             <p className={profileLabelClassName}>{isZh ? '预算' : 'Budget'}</p>
             <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={profileControlClassName}>
               {budgetOptions.map(option => (
@@ -424,7 +427,7 @@ export function StepCountry({
             </select>
           </div>
 
-          <div className={profileFieldClassName}>
+            <div className={profileFieldClassName}>
             <p className={profileLabelClassName}>{isZh ? '正式程度' : 'Formality'}</p>
             <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={profileControlClassName}>
               {formalityOptions.map(option => (
@@ -434,15 +437,15 @@ export function StepCountry({
               ))}
             </select>
           </div>
-        </div>
-      </motion.div>
+          </div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          whileHover={{ y: -4, scale: 1.005 }}
-          className="flex h-full flex-col rounded-2xl border border-sky-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-sky-200/34 sm:p-6"
+          whileHover={{ y: -1 }}
+          className="flex h-full flex-col rounded-2xl border border-sky-200/18 bg-gradient-to-br from-[#132842]/88 to-[#0f2239]/82 p-4 shadow-[0_10px_28px_rgba(3,12,28,0.22)] backdrop-blur-md transition-all duration-300 hover:border-sky-200/34 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -456,7 +459,7 @@ export function StepCountry({
             </span>
           </div>
 
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <div className="mt-4 grid auto-rows-fr gap-2.5 sm:grid-cols-2">
             {[
               {
                 label: isZh ? '场景' : 'Scene',
@@ -468,16 +471,16 @@ export function StepCountry({
               { label: isZh ? '职业' : 'Occupation', value: occupationLabel },
               { label: isZh ? '正式度' : 'Formality', value: formalityLabel },
             ].map(item => (
-              <div key={item.label} className="rounded-xl border border-slate-200/10 bg-slate-950/28 px-3 py-2.5">
+              <div key={item.label} className={`${statTileClassName} flex min-h-[4.6rem] flex-col justify-center`}>
                 <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{item.label}</p>
-                <p className="mt-1 text-sm font-medium text-slate-100">{item.value}</p>
+                <p className="mt-1 line-clamp-2 text-sm font-medium leading-5 text-slate-100">{item.value}</p>
               </div>
             ))}
           </div>
 
           <AnimatePresence>
             {selectedCountry && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-4 rounded-2xl border border-sky-300/24 bg-sky-500/10 p-4">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-4 rounded-2xl border border-sky-300/24 bg-sky-500/10 p-4 shadow-[inset_0_1px_0_rgba(186,230,253,0.1)]">
                 <div className="flex items-start gap-3">
                   <CheckCircle size={20} className="mt-0.5 flex-shrink-0 text-sky-300" />
                   <div className="flex-1">
@@ -516,7 +519,7 @@ export function StepCountry({
             )}
           </AnimatePresence>
 
-          <Button disabled className="mt-auto w-full cursor-default rounded-lg bg-gray-700 py-2 font-semibold text-gray-400">
+          <Button disabled className="mt-5 w-full cursor-default rounded-xl border border-slate-200/10 bg-slate-700/70 py-2.5 font-semibold text-slate-300/75">
             {!recognition && !hasGiftInput && !selectedFile
               ? locale === 'zh'
                 ? '等待第一步...'
