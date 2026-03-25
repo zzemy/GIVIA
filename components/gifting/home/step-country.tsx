@@ -173,7 +173,7 @@ export function StepCountry({
         </div>
       </motion.div>
 
-      <div className="grid gap-4 2xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)] 2xl:items-start">
+      <div className="grid gap-4 2xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -351,7 +351,7 @@ export function StepCountry({
         </motion.div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] xl:items-start">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -442,7 +442,7 @@ export function StepCountry({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
           whileHover={{ y: -4, scale: 1.005 }}
-          className="rounded-2xl border border-sky-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-sky-200/34 sm:p-6"
+          className="flex h-full flex-col rounded-2xl border border-sky-200/18 bg-[#13253e]/82 p-4 backdrop-blur-md transition-colors hover:border-sky-200/34 sm:p-6"
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -516,7 +516,7 @@ export function StepCountry({
             )}
           </AnimatePresence>
 
-          <Button disabled className="mt-4 w-full cursor-default rounded-lg bg-gray-700 py-2 font-semibold text-gray-400">
+          <Button disabled className="mt-auto w-full cursor-default rounded-lg bg-gray-700 py-2 font-semibold text-gray-400">
             {!recognition && !hasGiftInput && !selectedFile
               ? locale === 'zh'
                 ? '等待第一步...'
