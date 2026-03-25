@@ -6,10 +6,14 @@
 import type { AudienceProfileInput, RecommendationItem } from '@/lib/p0-types'
 import { runAnalysisWithLLMEnhancement } from '@/lib/analysis-runner'
 import { enhanceWithMultiModal } from '@/lib/p1-multi-modal-enhancement'
+import type { P1EnhancedRecognition } from '@/lib/p1-multi-modal-enhancement'
 import { rerankWithCollaborativeFiltering } from '@/lib/p1-collaborative-filtering'
 import { estimateLogisticsCost, getPackingRecommendations } from '@/lib/p1-logistics-assistant'
+import type { LogisticsEstimate } from '@/lib/p1-logistics-assistant'
 import { getMessages, formatCurrency } from '@/lib/p1-multi-language'
+import type { LocaleMessages } from '@/lib/p1-multi-language'
 import { assessCulturalImpact } from '@/lib/p2-knowledge-graph'
+import { rerankWithWideDeep } from '@/lib/p2-wide-deep-model'
 import type { GiftProfile } from '@/lib/gift-profile'
 
 export interface EnhancedAnalysisRequest {
@@ -27,10 +31,10 @@ export interface EnhancedAnalysisRequest {
 }
 
 export interface P1Enhancements {
-  multimodalResults?: Record<string, unknown>
+  multimodalResults?: P1EnhancedRecognition
   collaborativeResults?: RecommendationItem[]
-  logisticsEstimate?: Record<string, unknown>
-  packingRecommendations?: Record<string, unknown>
+  logisticsEstimate?: LogisticsEstimate
+  packingRecommendations?: ReturnType<typeof getPackingRecommendations>
 }
 
 export interface P2Enhancements {
@@ -39,7 +43,7 @@ export interface P2Enhancements {
 }
 
 export interface LocalizedOutput {
-  messages: Record<string, unknown>
+  messages: LocaleMessages
   formattedRecommendations: string
 }
 
@@ -54,9 +58,14 @@ export interface EnhancedAnalysisResult {
  * Run complete enhanced analysis with P0/P1/P2 features
  */
 export async function runEnhancedAnalysis(request: EnhancedAnalysisRequest): Promise<EnhancedAnalysisResult> {
+  const engineLocale = request.locale === 'zh' ? 'zh' : 'en'
+
   // Step 1: Run P0 analysis (always)
-  const p0Results = await runAnalysisWithLLMEnhancement(request.recipientProfile, request.country, {
-    useLLM: request.includeLLM !== false,
+  const p0Results = await runAnalysisWithLLMEnhancement({
+    locale: engineLocale,
+    country: request.country,
+    countryCode: request.country,
+    audience: request.recipientProfile,
   })
 
   const result: EnhancedAnalysisResult = {
@@ -72,9 +81,11 @@ export async function runEnhancedAnalysis(request: EnhancedAnalysisRequest): Pro
     // P1.1: Multi-modal enhancement
     if (request.includeMultimodal) {
       const multimodalResult = await enhanceWithMultiModal({
+        baseCategory: p0Results.giftProfile.category,
+        itemZh: p0Results.giftProfile.displayName,
+        itemEn: p0Results.giftProfile.displayName,
         description: `Gift for ${request.recipientProfile.group}`,
-        occasion: request.recipientProfile.occasion || 'general',
-        budget: request.budget || 100,
+        imageDescription: request.recipientProfile.notes || '',
       })
 
       p1Enhancements.multimodalResults = multimodalResult
@@ -83,15 +94,15 @@ export async function runEnhancedAnalysis(request: EnhancedAnalysisRequest): Pro
     // P1.2: Collaborative filtering
     if (request.includeCollaborativeFiltering && p0Results.recommendations) {
       const mockGiftProfile: GiftProfile = {
-        name: 'Mock Gift',
+        displayName: p0Results.giftProfile.displayName,
         category: 'general',
-        priceRange: [0, 1000],
+        materials: p0Results.giftProfile.materials,
+        styles: p0Results.giftProfile.styles,
+        colors: p0Results.giftProfile.colors,
+        numbers: p0Results.giftProfile.numbers,
         semanticTags: [],
-        styles: [],
-        colors: [],
-        tabooCountries: [],
-        description: '',
-        imagePath: '',
+        brandTokens: p0Results.giftProfile.brandTokens,
+        searchableText: p0Results.giftProfile.semanticTags.join(' '),
       }
       const collabFiltered = rerankWithCollaborativeFiltering(
         p0Results.recommendations,
@@ -118,6 +129,33 @@ export async function runEnhancedAnalysis(request: EnhancedAnalysisRequest): Pro
   // Step 3: P2 Enhancements (optional)
   if (request.includeWideDeep || request.includeKnowledgeGraph) {
     const p2Enhancements = result.p2Enhancements || {}
+
+    if (request.includeWideDeep && p0Results.recommendations) {
+      const mappedProfiles = Object.fromEntries(
+        p0Results.recommendations.map(rec => [
+          rec.id,
+          {
+            displayName: p0Results.giftProfile.displayName,
+            category: rec.category,
+            materials: p0Results.giftProfile.materials,
+            styles: p0Results.giftProfile.styles,
+            colors: p0Results.giftProfile.colors,
+            numbers: p0Results.giftProfile.numbers,
+            semanticTags: p0Results.giftProfile.semanticTags,
+            brandTokens: p0Results.giftProfile.brandTokens,
+            searchableText: p0Results.giftProfile.semanticTags.join(' '),
+          } satisfies GiftProfile,
+        ]),
+      )
+
+      p2Enhancements.wideDeepResults = rerankWithWideDeep(
+        p0Results.recommendations,
+        request.recipientProfile,
+        mappedProfiles,
+        request.recipientProfile.occasion || 'general',
+        request.country,
+      )
+    }
 
     // P2.1: Knowledge graph cultural impact
     if (request.includeKnowledgeGraph && p0Results.recommendations) {
@@ -210,14 +248,10 @@ export function createSampleEnhancedRequest(): EnhancedAnalysisRequest {
   return {
     recipientProfile: {
       group: 'peer',
-      gender: 'female',
-      age: 30,
-      country: 'US',
       relationship: 'colleague',
-      budget: 150,
       occupation: 'engineer',
-      interests: ['tech', 'design'],
       occasion: 'birthday',
+      notes: 'premium metal fountain pen with gift box',
     },
     country: 'US',
     shippingCountry: 'CN',

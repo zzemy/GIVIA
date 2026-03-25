@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { buildUnknownRecognition } from '@/lib/cultural-analyzer'
 import { runAnalysisWithLLMEnhancement } from '@/lib/analysis-runner'
 import type { AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/p0-types'
+import { runEnhancedAnalysis } from '@/lib/p1p2-integration'
 
 export const runtime = 'nodejs'
 
@@ -18,6 +19,15 @@ type RequestPayload = {
   }
   giftContext?: GiftContextInput
   audience?: AudienceProfileInput
+  enhancements?: {
+    multimodal?: boolean
+    collaborativeFiltering?: boolean
+    logistics?: boolean
+    wideDeep?: boolean
+    knowledgeGraph?: boolean
+    shippingCountry?: string
+    budget?: number
+  }
 }
 
 export async function POST(request: Request) {
@@ -57,6 +67,30 @@ export async function POST(request: Request) {
       giftContext: body.giftContext,
       audience,
     })
+
+    const hasEnhancements = Boolean(
+      body.enhancements?.multimodal ||
+        body.enhancements?.collaborativeFiltering ||
+        body.enhancements?.logistics ||
+        body.enhancements?.wideDeep ||
+        body.enhancements?.knowledgeGraph,
+    )
+
+    const enhanced = hasEnhancements
+      ? await runEnhancedAnalysis({
+          recipientProfile: audience,
+          country: body.countryCode || body.country || 'US',
+          shippingCountry: body.enhancements?.shippingCountry || body.countryCode || body.country || 'US',
+          locale: (body.locale || 'zh') as 'en' | 'zh' | 'ja' | 'fr',
+          budget: body.enhancements?.budget,
+          includeLLM: true,
+          includeMultimodal: body.enhancements?.multimodal,
+          includeCollaborativeFiltering: body.enhancements?.collaborativeFiltering,
+          includeLogistics: body.enhancements?.logistics,
+          includeWideDeep: body.enhancements?.wideDeep,
+          includeKnowledgeGraph: body.enhancements?.knowledgeGraph,
+        })
+      : null
 
     let source = 'local-p0-engine'
     let mergedAnalysis: Record<string, unknown> = analysis as unknown as Record<string, unknown>
@@ -141,6 +175,13 @@ export async function POST(request: Request) {
     return NextResponse.json({
       source,
       analysis: mergedAnalysis,
+      enhancements: enhanced
+        ? {
+            p1: enhanced.p1Enhancements,
+            p2: enhanced.p2Enhancements,
+            localizedOutput: enhanced.localizedOutput,
+          }
+        : undefined,
     })
   } catch (error) {
     return NextResponse.json(

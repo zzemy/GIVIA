@@ -218,15 +218,15 @@ describe('P2: Wide & Deep Model', () => {
 
   it('should create gift embedding', () => {
     const mockGift: GiftProfile = {
-      name: 'Premium Tea Set',
+      displayName: 'Premium Tea Set',
       category: 'beverage',
-      priceRange: [50, 200],
+      materials: ['ceramic'],
       semanticTags: ['luxury', 'tea', 'asian'],
       styles: ['traditional'],
       colors: ['gold'],
-      tabooCountries: [],
-      description: 'High-quality tea set',
-      imagePath: '/gifts/tea-set.jpg',
+      numbers: [200],
+      brandTokens: [],
+      searchableText: 'premium tea set ceramic gold',
     }
 
     const embedding = createGiftEmbedding(mockGift, 16)
@@ -236,15 +236,15 @@ describe('P2: Wide & Deep Model', () => {
 
   it('should make wide & deep predictions', () => {
     const mockGift: GiftProfile = {
-      name: 'Premium Tea Set',
+      displayName: 'Premium Tea Set',
       category: 'beverage',
-      priceRange: [50, 200],
+      materials: ['ceramic'],
       semanticTags: ['luxury', 'tea', 'asian'],
       styles: ['traditional'],
       colors: ['gold'],
-      tabooCountries: [],
-      description: 'High-quality tea set',
-      imagePath: '/gifts/tea-set.jpg',
+      numbers: [200],
+      brandTokens: [],
+      searchableText: 'premium tea set ceramic gold',
     }
 
     const prediction = wideDeepPredict(

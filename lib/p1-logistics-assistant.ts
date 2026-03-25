@@ -340,7 +340,7 @@ export function getPackingRecommendations(
   itemCategory: string,
   destination: string,
   locale: P0Locale = 'en',
-): Record<string, string[]> {
+): { general: string[]; estimated_cost_impact: string } {
   const baseRecommendations: Record<string, string[]> = {
     fragile: ['Use bubble wrap', 'Double cardboard box', 'Add corner protectors'],
     liquid: ['Use leak-proof container', 'Place in waterproof bag', 'Declare on customs form'],
@@ -349,7 +349,7 @@ export function getPackingRecommendations(
     perishable: ['Not recommended for long transit', 'Use insulated box with cooling gel'],
   }
 
-  const recommendations = baseRecommendations[itemCategory] || baseRecommendations.fragile
+  const recommendations = [...(baseRecommendations[itemCategory] || baseRecommendations.fragile)]
 
   // Add destination-specific recommendations
   if (['CN', 'SA', 'AE'].includes(destination)) {
@@ -373,7 +373,7 @@ export function formatLogisticsSummary(estimate: LogisticsEstimate, locale: P0Lo
   const dutyStr = estimate.customsDuty.estimatedDuty.toFixed(2)
   const costStr = estimate.totalEstimatedCost.toFixed(2)
 
-  if (locale === 'zh' || locale === 'en') {
+  if (locale === 'zh') {
     return `🚚 物流估算：${estimate.recommendedCarrier} (${estimate.deliveryTimeRange})
 💰 预估成本：${costStr} ${estimate.destinationCurrency}
 📋 关税：${dutyStr} ${estimate.destinationCurrency}

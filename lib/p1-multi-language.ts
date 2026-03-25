@@ -9,8 +9,6 @@
  * - RTL support placeholder for future Arabic enhancement
  */
 
-import type { P0Locale } from '@/lib/p0-types'
-
 export type SupportedLocale = 'en' | 'zh' | 'ja' | 'fr'
 
 export interface LocaleMessages {
@@ -124,7 +122,7 @@ export const messagesFr: LocaleMessages = {
 /**
  * Get messages for a specific locale
  */
-export function getMessages(locale: P0Locale): LocaleMessages {
+export function getMessages(locale: SupportedLocale): LocaleMessages {
   switch (locale) {
     case 'ja':
       return messagesJa
@@ -236,7 +234,7 @@ export function getMessages(locale: P0Locale): LocaleMessages {
 /**
  * Format number according to locale
  */
-export function formatNumber(value: number, locale: P0Locale): string {
+export function formatNumber(value: number, locale: SupportedLocale): string {
   if (locale === 'ja' || locale === 'fr') {
     return new Intl.NumberFormat(locale === 'ja' ? 'ja-JP' : 'fr-FR').format(value)
   }
@@ -252,9 +250,9 @@ export function formatNumber(value: number, locale: P0Locale): string {
 export function formatCurrency(
   value: number,
   currencyCode: string,
-  locale: P0Locale,
+  locale: SupportedLocale,
 ): string {
-  const localeMap: Record<P0Locale, string> = {
+  const localeMap: Record<SupportedLocale, string> = {
     en: 'en-US',
     zh: 'zh-CN',
     ja: 'ja-JP',
@@ -272,8 +270,8 @@ export function formatCurrency(
 /**
  * Format date according to locale
  */
-export function formatDate(date: Date, locale: P0Locale, style: 'short' | 'long' = 'short'): string {
-  const localeMap: Record<P0Locale, string> = {
+export function formatDate(date: Date, locale: SupportedLocale, style: 'short' | 'long' = 'short'): string {
+  const localeMap: Record<SupportedLocale, string> = {
     en: 'en-US',
     zh: 'zh-CN',
     ja: 'ja-JP',
@@ -293,11 +291,11 @@ export function formatDate(date: Date, locale: P0Locale, style: 'short' | 'long'
 export function translateAnalysisResult(
   riskLevel: string,
   riskFactors: string[],
-  locale: P0Locale,
+  locale: SupportedLocale,
 ): { level: string; summary: string; factors: string[] } {
   const messages = getMessages(locale)
 
-  const levelMap: Record<string, Record<P0Locale, string>> = {
+  const levelMap: Record<string, Record<SupportedLocale, string>> = {
     prohibited: {
       en: 'Prohibited',
       zh: '禁止',
@@ -331,8 +329,8 @@ export function translateAnalysisResult(
 /**
  * Get locale-aware date range for delivery
  */
-export function getLocalizedDeliveryRange(minDays: number, maxDays: number, locale: P0Locale): string {
-  const labels: Record<P0Locale, { day: string; to: string }> = {
+export function getLocalizedDeliveryRange(minDays: number, maxDays: number, locale: SupportedLocale): string {
+  const labels: Record<SupportedLocale, { day: string; to: string }> = {
     en: { day: 'day', to: 'to' },
     zh: { day: '天', to: '至' },
     ja: { day: '日', to: '〜' },

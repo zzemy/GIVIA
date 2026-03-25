@@ -1,6 +1,6 @@
 "use client";
 
-import { Pie, PieChart, PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from "recharts";
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from "recharts";
 import { AlertTriangle, BadgeCheck } from "lucide-react";
 import { calculateCulturalFitScore, type GiftItem } from "@/lib/gifting";
 import {

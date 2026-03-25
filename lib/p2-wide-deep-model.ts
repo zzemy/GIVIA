@@ -12,7 +12,7 @@
  * - Model serving infrastructure
  */
 
-import type { AudienceProfileInput, P0Locale, RecommendationItem } from '@/lib/p0-types'
+import type { AudienceProfileInput, RecommendationItem } from '@/lib/p0-types'
 import type { GiftProfile } from '@/lib/gift-profile'
 
 export interface FeatureEmbedding {
@@ -94,7 +94,7 @@ export function createUserEmbedding(
   // In production: load pre-trained embeddings from model
   const embedding: number[] = []
 
-  const features = `${userProfile.group}:${userProfile.occupation}:${userProfile.country || 'global'}`
+  const features = `${userProfile.group}:${userProfile.occupation || 'unknown'}:${userProfile.relationship || 'general'}`
   let hash = 0
   for (let i = 0; i < features.length; i++) {
     hash = (hash << 5) - hash + features.charCodeAt(i)
@@ -135,7 +135,12 @@ export function createGiftEmbedding(gift: GiftProfile, embeddingDim: number): Fe
   return {
     featureName: 'gift_attributes',
     embedding,
-    metadata: { category: gift.category, price: gift.priceRange },
+    metadata: {
+      category: gift.category,
+      materialCount: gift.materials.length,
+      styleCount: gift.styles.length,
+      tagCount: gift.semanticTags.length,
+    },
   }
 }
 
@@ -269,7 +274,7 @@ export function wideDeepPredict(
   const wideScore = wideComponentScore(
     {
       userId: userProfile.group,
-      giftId: gift.name,
+      giftId: gift.displayName,
       contextId: `${occasion}:${country}`,
       historicalInteractions,
     },
@@ -326,7 +331,7 @@ export function rerankWithWideDeep(
   historicalInteractions: Array<{ giftId: string; rating: number }> = [],
 ): RecommendationItem[] {
   return p1Recommendations
-    .map((rec, index) => {
+    .map(rec => {
       const gift = giftProfiles[rec.id]
       if (!gift) return rec
 
@@ -361,7 +366,7 @@ export function serveWideDeepModel(
     .map((gift) => {
       const prediction = wideDeepPredict(userProfile, gift, occasion, country)
       return {
-        giftId: gift.name,
+        giftId: gift.displayName,
         score: prediction.combinedScore,
       }
     })

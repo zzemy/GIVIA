@@ -9,7 +9,7 @@
  * - Impact scoring for cultural factors
  */
 
-import type { P0Locale } from '@/lib/p0-types'
+type GraphLocale = 'en' | 'zh' | 'ja' | 'fr'
 
 export type EntityType = 'country' | 'holiday' | 'culture' | 'taboo' | 'gift' | 'occasion' | 'tradition'
 
@@ -26,8 +26,8 @@ export type RelationType =
 export interface KnowledgeEntity {
   id: string
   type: EntityType
-  label: Record<P0Locale, string>
-  description: Record<P0Locale, string>
+  label: Record<GraphLocale, string>
+  description: Record<GraphLocale, string>
   tags: string[]
   metadata: Record<string, unknown>
 }
@@ -285,6 +285,19 @@ export const culturalRelations: KnowledgeRelation[] = [
   },
 ]
 
+function normalizeCountryEntityId(countryId: string): string {
+  const normalized = countryId.trim().toLowerCase()
+  const mapped: Record<string, string> = {
+    cn: 'country_cn',
+    jp: 'country_jp',
+    us: 'country_us',
+    country_cn: 'country_cn',
+    country_jp: 'country_jp',
+    country_us: 'country_us',
+  }
+  return mapped[normalized] ?? countryId
+}
+
 /**
  * Query knowledge graph for related entities
  */
@@ -322,17 +335,19 @@ export function queryKnowledgeGraph(query: GraphQuery, relations: KnowledgeRelat
  * Get cultural impact score for a gift-country combination
  */
 export function assessCulturalImpact(giftId: string, countryId: string): { score: number; factors: string[] } {
+  const normalizedCountryId = normalizeCountryEntityId(countryId)
+
   const positiveRelations = culturalRelations.filter(
     rel =>
-      ((rel.source === countryId && rel.target === giftId) ||
-        (rel.source === giftId && rel.target === countryId)) &&
+      ((rel.source === normalizedCountryId && rel.target === giftId) ||
+        (rel.source === giftId && rel.target === normalizedCountryId)) &&
       ['suitable_for', 'prefers', 'associated_with'].includes(rel.type),
   )
 
   const negativeRelations = culturalRelations.filter(
     rel =>
-      ((rel.source === countryId && rel.target === giftId) ||
-        (rel.source === giftId && rel.target === countryId)) &&
+      ((rel.source === normalizedCountryId && rel.target === giftId) ||
+        (rel.source === giftId && rel.target === normalizedCountryId)) &&
       ['avoids', 'conflicts_with'].includes(rel.type),
   )
 
@@ -372,9 +387,9 @@ export function findCulturallyCompatibleAlternatives(
  */
 export function getLocalizedException(
   relation: KnowledgeRelation,
-  locale: P0Locale,
+  locale: GraphLocale,
 ): string {
-  const explanations: Record<RelationType, Record<P0Locale, string>> = {
+  const explanations: Record<RelationType, Record<GraphLocale, string>> = {
     celebrates: {
       en: 'is celebrated in',
       zh: '在...中庆祝',
