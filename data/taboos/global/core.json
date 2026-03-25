@@ -1,0 +1,19 @@
+{
+  "scope": "global",
+  "countryCode": "GLOBAL",
+  "countryNameEn": "Global",
+  "rules": [
+    {
+      "id": "global-business-romantic",
+      "ruleType": "business",
+      "severity": "medium",
+      "riskScore": 16,
+      "triggers": ["romantic", "intimate", "heart", "情侣", "暧昧", "香水"],
+      "explanationZh": "正式商务送礼通常应避免情感过强或边界模糊的表达。",
+      "explanationEn": "Formal business gifting should avoid emotionally ambiguous or intimate signals.",
+      "suggestionZh": "商务场景优先中性、稳重、实用型礼物。",
+      "suggestionEn": "Choose neutral, practical, and polished gifts for business contexts.",
+      "tags": ["商务边界", "通用规则"]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "scope": "country",
+  "countryCode": "CN",
+  "countryNameEn": "China",
+  "rules": [
+    {
+      "id": "cn-clock",
+      "ruleType": "phonetic",
+      "severity": "high",
+      "riskScore": 48,
+      "triggers": ["clock", "watch", "钟", "表"],
+      "explanationZh": "钟表在中文语境中容易联想到“送终”，在生日、拜访等场合风险很高。",
+      "explanationEn": "Clocks can echo funeral phrasing in Chinese, making them risky for celebratory gifting.",
+      "suggestionZh": "改送钢笔、茶具或礼盒型食品，更稳妥。",
+      "suggestionEn": "Switch to a pen, tea set, or boxed gourmet gift for a safer choice.",
+      "tags": ["谐音禁忌", "高风险"]
+    },
+    {
+      "id": "cn-umbrella",
+      "ruleType": "symbol",
+      "severity": "medium",
+      "riskScore": 28,
+      "triggers": ["umbrella", "雨伞", "伞"],
+      "explanationZh": "伞与“散”谐音，容易被理解为关系分散，不适合作为祝福型礼物。",
+      "explanationEn": "Umbrellas can imply separation in Chinese gifting contexts.",
+      "suggestionZh": "如果必须送，建议配合说明用途，并增加温暖型附赠品中和语义。",
+      "suggestionEn": "If you must send it, explain the practical intent and pair it with a warmer companion gift.",
+      "tags": ["关系疏离", "象征风险"]
+    },
+    {
+      "id": "cn-sharp",
+      "ruleType": "symbol",
+      "severity": "medium",
+      "riskScore": 24,
+      "triggers": ["knife", "scissors", "刀", "剪刀", "blade"],
+      "explanationZh": "刀剪类礼物容易传递“切断关系”的联想，尤其不适合亲友和节庆场景。",
+      "explanationEn": "Sharp gifts can symbolize cutting ties, especially in personal occasions.",
+      "suggestionZh": "优先换成书写、茶饮或家居类礼物。",
+      "suggestionEn": "Prefer stationery, tea, or home-oriented gifts instead.",
+      "tags": ["切断关系", "象征风险"]
+    },
+    {
+      "id": "cn-white-packaging",
+      "ruleType": "color",
+      "severity": "medium",
+      "riskScore": 18,
+      "triggers": ["white", "纯白", "白色"],
+      "explanationZh": "大面积纯白包装在中国喜庆送礼中偏冷，容易靠近丧礼语义。",
+      "explanationEn": "Large white packaging can feel too close to mourning aesthetics in Chinese celebrations.",
+      "suggestionZh": "包装优先用红、金、青绿等更温和或吉利的配色。",
+      "suggestionEn": "Favor warmer colors such as red, gold, or teal for the packaging.",
+      "tags": ["包装风险", "色彩"]
+    }
+  ]
+}

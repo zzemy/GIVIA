@@ -1,0 +1,19 @@
+{
+  "scope": "country",
+  "countryCode": "FR",
+  "countryNameEn": "France",
+  "rules": [
+    {
+      "id": "fr-chrysanthemum",
+      "ruleType": "symbol",
+      "severity": "high",
+      "riskScore": 34,
+      "triggers": ["chrysanthemum", "菊", "菊花"],
+      "explanationZh": "菊花在法国常与悼念场景关联，不适合作为轻松祝贺礼物。",
+      "explanationEn": "Chrysanthemums are strongly associated with mourning in France.",
+      "suggestionZh": "改送巧克力、香氛或精致纸品更安全。",
+      "suggestionEn": "Switch to chocolate, fragrance, or refined paper goods.",
+      "tags": ["花语禁忌", "高风险"]
+    }
+  ]
+}

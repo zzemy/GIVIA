@@ -1,9 +1,14 @@
 import countryRulesData from '@/data/country-rules.json'
 import giftCatalogData from '@/data/gift-catalog.json'
 import sceneTemplatesData from '@/data/scene-templates.json'
+import { loadTabooCountryRules } from '@/lib/domain/taboo/taboo-loader'
+import { mergeCountryRuleSources } from '@/lib/domain/taboo/taboo-merge'
 import type { CountryRule, GiftCatalogItem, SceneTemplate } from '@/lib/types/gifting-types'
 
-export const COUNTRY_RULES = countryRulesData.rules as CountryRule[]
+export const COUNTRY_RULES = mergeCountryRuleSources({
+  tabooRules: loadTabooCountryRules(),
+  legacyRules: countryRulesData.rules as CountryRule[],
+})
 export const GIFT_CATALOG = giftCatalogData.items as GiftCatalogItem[]
 export const SCENE_TEMPLATES = sceneTemplatesData.templates as SceneTemplate[]
 

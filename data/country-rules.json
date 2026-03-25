@@ -1,118 +1,6 @@
 {
   "rules": [
     {
-      "id": "cn-clock",
-      "countryCode": "CN",
-      "countryNameEn": "China",
-      "ruleType": "phonetic",
-      "severity": "high",
-      "riskScore": 48,
-      "triggers": ["clock", "watch", "钟", "表"],
-      "explanationZh": "钟表在中文语境中容易联想到“送终”，在生日、拜访等场合风险很高。",
-      "explanationEn": "Clocks can echo funeral phrasing in Chinese, making them risky for celebratory gifting.",
-      "suggestionZh": "改送钢笔、茶具或礼盒型食品，更稳妥。",
-      "suggestionEn": "Switch to a pen, tea set, or boxed gourmet gift for a safer choice.",
-      "tags": ["谐音禁忌", "高风险"]
-    },
-    {
-      "id": "cn-umbrella",
-      "countryCode": "CN",
-      "countryNameEn": "China",
-      "ruleType": "symbol",
-      "severity": "medium",
-      "riskScore": 28,
-      "triggers": ["umbrella", "雨伞", "伞"],
-      "explanationZh": "伞与“散”谐音，容易被理解为关系分散，不适合作为祝福型礼物。",
-      "explanationEn": "Umbrellas can imply separation in Chinese gifting contexts.",
-      "suggestionZh": "如果必须送，建议配合说明用途，并增加温暖型附赠品中和语义。",
-      "suggestionEn": "If you must send it, explain the practical intent and pair it with a warmer companion gift.",
-      "tags": ["关系疏离", "象征风险"]
-    },
-    {
-      "id": "cn-sharp",
-      "countryCode": "CN",
-      "countryNameEn": "China",
-      "ruleType": "symbol",
-      "severity": "medium",
-      "riskScore": 24,
-      "triggers": ["knife", "scissors", "刀", "剪刀", "blade"],
-      "explanationZh": "刀剪类礼物容易传递“切断关系”的联想，尤其不适合亲友和节庆场景。",
-      "explanationEn": "Sharp gifts can symbolize cutting ties, especially in personal occasions.",
-      "suggestionZh": "优先换成书写、茶饮或家居类礼物。",
-      "suggestionEn": "Prefer stationery, tea, or home-oriented gifts instead.",
-      "tags": ["切断关系", "象征风险"]
-    },
-    {
-      "id": "cn-white-packaging",
-      "countryCode": "CN",
-      "countryNameEn": "China",
-      "ruleType": "color",
-      "severity": "medium",
-      "riskScore": 18,
-      "triggers": ["white", "纯白", "白色"],
-      "explanationZh": "大面积纯白包装在中国喜庆送礼中偏冷，容易靠近丧礼语义。",
-      "explanationEn": "Large white packaging can feel too close to mourning aesthetics in Chinese celebrations.",
-      "suggestionZh": "包装优先用红、金、青绿等更温和或吉利的配色。",
-      "suggestionEn": "Favor warmer colors such as red, gold, or teal for the packaging.",
-      "tags": ["包装风险", "色彩"]
-    },
-    {
-      "id": "jp-four-nine",
-      "countryCode": "JP",
-      "countryNameEn": "Japan",
-      "ruleType": "phonetic",
-      "severity": "high",
-      "riskScore": 40,
-      "triggers": ["4", "9", "四", "九"],
-      "explanationZh": "4 和 9 在日本常与不吉含义关联，礼盒件数或图案涉及这些数字时需谨慎。",
-      "explanationEn": "The numbers 4 and 9 often carry unlucky connotations in Japan.",
-      "suggestionZh": "避免 4 件装、9 件装，优先改为 3、5 或 8 件组合。",
-      "suggestionEn": "Avoid 4- or 9-piece sets and switch to 3, 5, or 8 when possible.",
-      "tags": ["数字禁忌", "高风险"]
-    },
-    {
-      "id": "jp-sharp",
-      "countryCode": "JP",
-      "countryNameEn": "Japan",
-      "ruleType": "symbol",
-      "severity": "medium",
-      "riskScore": 24,
-      "triggers": ["knife", "scissors", "刀", "剪刀"],
-      "explanationZh": "刀具类礼物容易触发切断关系的寓意，在私人关系里要特别注意。",
-      "explanationEn": "Sharp gifts can imply cutting off the relationship in Japanese gifting.",
-      "suggestionZh": "优先换成茶点、文具或居家陈设类礼物。",
-      "suggestionEn": "Choose tea, stationery, or tasteful home decor instead.",
-      "tags": ["切断关系", "象征风险"]
-    },
-    {
-      "id": "jp-white-funeral",
-      "countryCode": "JP",
-      "countryNameEn": "Japan",
-      "ruleType": "color",
-      "severity": "medium",
-      "riskScore": 16,
-      "triggers": ["white", "菊", "chrysanthemum", "白色"],
-      "explanationZh": "白色与菊花元素在日本部分送礼语境中容易偏向丧礼表达。",
-      "explanationEn": "White-heavy designs and chrysanthemum cues can feel funeral-adjacent in Japan.",
-      "suggestionZh": "包装可改为米金、墨蓝、青灰等更稳妥的色系。",
-      "suggestionEn": "Use muted gold, navy, or blue-grey tones instead.",
-      "tags": ["丧礼联想", "色彩"]
-    },
-    {
-      "id": "fr-chrysanthemum",
-      "countryCode": "FR",
-      "countryNameEn": "France",
-      "ruleType": "symbol",
-      "severity": "high",
-      "riskScore": 34,
-      "triggers": ["chrysanthemum", "菊", "菊花"],
-      "explanationZh": "菊花在法国常与悼念场景关联，不适合作为轻松祝贺礼物。",
-      "explanationEn": "Chrysanthemums are strongly associated with mourning in France.",
-      "suggestionZh": "改送巧克力、香氛或精致纸品更安全。",
-      "suggestionEn": "Switch to chocolate, fragrance, or refined paper goods.",
-      "tags": ["花语禁忌", "高风险"]
-    },
-    {
       "id": "uk-umbrella",
       "countryCode": "GB",
       "countryNameEn": "United Kingdom",
@@ -125,20 +13,6 @@
       "suggestionZh": "正式送礼建议换成围巾、文具或咖啡礼盒。",
       "suggestionEn": "For formal gifting, opt for a scarf, stationery, or a coffee hamper.",
       "tags": ["民俗风险", "中风险"]
-    },
-    {
-      "id": "us-overpersonal-business",
-      "countryCode": "US",
-      "countryNameEn": "United States",
-      "ruleType": "business",
-      "severity": "medium",
-      "riskScore": 20,
-      "triggers": ["perfume", "香水", "jewelry", "珠宝", "intimate", "romantic"],
-      "explanationZh": "在美国商务场景中，过于私人或暧昧的礼物容易造成边界感不清。",
-      "explanationEn": "In US business settings, highly personal gifts can feel inappropriate or ambiguous.",
-      "suggestionZh": "商务拜访优先选择文具、咖啡礼盒或办公桌面礼物。",
-      "suggestionEn": "For business visits, prefer stationery, coffee hampers, or desk accessories.",
-      "tags": ["商务边界", "场景风险"]
     },
     {
       "id": "de-overcheap-business",
@@ -209,20 +83,6 @@
       "suggestionZh": "保持礼物正式、中性、品质稳定。",
       "suggestionEn": "Keep the gift formal, neutral, and polished.",
       "tags": ["商务边界", "场景风险"]
-    },
-    {
-      "id": "global-business-romantic",
-      "countryCode": "GLOBAL",
-      "countryNameEn": "Global",
-      "ruleType": "business",
-      "severity": "medium",
-      "riskScore": 16,
-      "triggers": ["romantic", "intimate", "heart", "情侣", "暧昧", "香水"],
-      "explanationZh": "正式商务送礼通常应避免情感过强或边界模糊的表达。",
-      "explanationEn": "Formal business gifting should avoid emotionally ambiguous or intimate signals.",
-      "suggestionZh": "商务场景优先中性、稳重、实用型礼物。",
-      "suggestionEn": "Choose neutral, practical, and polished gifts for business contexts.",
-      "tags": ["商务边界", "通用规则"]
     }
   ]
 }

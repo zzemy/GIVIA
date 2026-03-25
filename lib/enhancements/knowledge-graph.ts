@@ -9,6 +9,8 @@
  * - Impact scoring for cultural factors
  */
 
+import { loadTabooDatasets } from '@/lib/domain/taboo/taboo-loader'
+
 type GraphLocale = 'en' | 'zh' | 'ja' | 'fr'
 
 export type EntityType = 'country' | 'holiday' | 'culture' | 'taboo' | 'gift' | 'occasion' | 'tradition'
@@ -56,8 +58,28 @@ export interface GraphQueryResult {
   summary: string
 }
 
-// Cultural knowledge base (partial)
-export const culturalEntities: KnowledgeEntity[] = [
+function normalizeCountryEntityId(countryId: string): string {
+  const normalized = countryId.trim().toLowerCase()
+  const mapped: Record<string, string> = {
+    cn: 'country_cn',
+    fr: 'country_fr',
+    jp: 'country_jp',
+    us: 'country_us',
+    country_cn: 'country_cn',
+    country_fr: 'country_fr',
+    country_jp: 'country_jp',
+    country_us: 'country_us',
+  }
+  return mapped[normalized] ?? countryId
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max)
+}
+
+const tabooDatasets = loadTabooDatasets()
+
+const baseCulturalEntities: KnowledgeEntity[] = [
   {
     id: 'country_cn',
     type: 'country',
@@ -75,6 +97,19 @@ export const culturalEntities: KnowledgeEntity[] = [
     },
     tags: ['asian', 'developing', 'collectivist'],
     metadata: { gdp: '17.7T', population: '1.4B' },
+  },
+  {
+    id: 'country_fr',
+    type: 'country',
+    label: { en: 'France', zh: '法国', ja: 'フランス', fr: 'France' },
+    description: {
+      en: 'French Republic',
+      zh: '法兰西共和国',
+      ja: 'フランス共和国',
+      fr: 'République française',
+    },
+    tags: ['european', 'developed', 'ceremonial'],
+    metadata: { gdp: '3.0T', population: '68M' },
   },
   {
     id: 'country_jp',
@@ -139,42 +174,6 @@ export const culturalEntities: KnowledgeEntity[] = [
     metadata: { season: 'winter', date: 'dec-25' },
   },
   {
-    id: 'taboo_clock',
-    type: 'taboo',
-    label: {
-      en: 'Clocks (gifting)',
-      zh: '钟表',
-      ja: '時計',
-      fr: 'Horloges',
-    },
-    description: {
-      en: 'Giving clocks is taboo (sounds like death in Chinese)',
-      zh: '送钟谐音不好',
-      ja: '時計を贈ることは避ける',
-      fr: 'Offrir des horloges est un tabou',
-    },
-    tags: ['asian', 'linguistic-taboo'],
-    metadata: { severity: 'high', regions: ['CN', 'JP', 'SG', 'TW'] },
-  },
-  {
-    id: 'taboo_knife',
-    type: 'taboo',
-    label: {
-      en: 'Sharp objects',
-      zh: '刀具',
-      ja: 'ナイフ',
-      fr: 'Objets tranchants',
-    },
-    description: {
-      en: 'Knives symbolize cutting ties',
-      zh: '刀子象征割裂关系',
-      ja: 'ナイフは関係を切ることを象徴する',
-      fr: 'Les couteaux symbolisent la rupture des liens',
-    },
-    tags: ['asian', 'symbolic-taboo'],
-    metadata: { severity: 'medium', regions: ['CN', 'JP', 'VN'] },
-  },
-  {
     id: 'gift_tea',
     type: 'gift',
     label: { en: 'Tea', zh: '茶', ja: 'お茶', fr: 'Thé' },
@@ -225,8 +224,44 @@ export const culturalEntities: KnowledgeEntity[] = [
   },
 ]
 
-// Relationships between entities
-export const culturalRelations: KnowledgeRelation[] = [
+function buildTabooEntityId(ruleId: string): string {
+  return `taboo_rule_${ruleId.replace(/[^a-z0-9]+/gi, '_').toLowerCase()}`
+}
+
+function buildTabooEntities(): KnowledgeEntity[] {
+  return tabooDatasets.flatMap(dataset =>
+    dataset.rules.map(rule => ({
+      id: buildTabooEntityId(rule.id),
+      type: 'taboo' as const,
+      label: {
+        en: rule.id,
+        zh: rule.id,
+        ja: rule.id,
+        fr: rule.id,
+      },
+      description: {
+        en: rule.explanationEn,
+        zh: rule.explanationZh,
+        ja: rule.explanationEn,
+        fr: rule.explanationEn,
+      },
+      tags: rule.tags,
+      metadata: {
+        countryCode: dataset.countryCode,
+        severity: rule.severity,
+        ruleType: rule.ruleType,
+        triggers: rule.triggers,
+      },
+    })),
+  )
+}
+
+export const culturalEntities: KnowledgeEntity[] = [
+  ...baseCulturalEntities,
+  ...buildTabooEntities(),
+]
+
+const baseCulturalRelations: KnowledgeRelation[] = [
   {
     source: 'country_cn',
     target: 'holiday_lunar',
@@ -240,20 +275,6 @@ export const culturalRelations: KnowledgeRelation[] = [
     type: 'celebrates',
     strength: 0.7,
     context: 'Also celebrated but less prominent',
-  },
-  {
-    source: 'country_cn',
-    target: 'taboo_clock',
-    type: 'avoids',
-    strength: 0.9,
-    context: 'Strong cultural taboo',
-  },
-  {
-    source: 'country_jp',
-    target: 'taboo_clock',
-    type: 'avoids',
-    strength: 0.8,
-    context: 'Observed but slightly less strict',
   },
   {
     source: 'country_cn',
@@ -276,27 +297,32 @@ export const culturalRelations: KnowledgeRelation[] = [
     strength: 0.9,
     context: 'Premium gift for clients',
   },
-  {
-    source: 'taboo_clock',
-    target: 'country_us',
-    type: 'conflicts_with',
-    strength: 0.1,
-    context: 'Not a taboo in Western cultures',
-  },
 ]
 
-function normalizeCountryEntityId(countryId: string): string {
-  const normalized = countryId.trim().toLowerCase()
-  const mapped: Record<string, string> = {
-    cn: 'country_cn',
-    jp: 'country_jp',
-    us: 'country_us',
-    country_cn: 'country_cn',
-    country_jp: 'country_jp',
-    country_us: 'country_us',
-  }
-  return mapped[normalized] ?? countryId
+function buildTabooRelations(): KnowledgeRelation[] {
+  return tabooDatasets.flatMap(dataset =>
+    dataset.rules.map(rule => ({
+      source:
+        dataset.countryCode === 'GLOBAL'
+          ? 'occasion_business'
+          : normalizeCountryEntityId(dataset.countryCode),
+      target: buildTabooEntityId(rule.id),
+      type: 'avoids' as const,
+      strength: clamp(rule.riskScore / 60, 0.2, 0.95),
+      context: rule.explanationEn,
+      metadata: {
+        severity: rule.severity,
+        ruleType: rule.ruleType,
+      },
+    })),
+  )
 }
+
+// Relationships between entities
+export const culturalRelations: KnowledgeRelation[] = [
+  ...baseCulturalRelations,
+  ...buildTabooRelations(),
+]
 
 /**
  * Query knowledge graph for related entities

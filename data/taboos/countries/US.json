@@ -1,0 +1,19 @@
+{
+  "scope": "country",
+  "countryCode": "US",
+  "countryNameEn": "United States",
+  "rules": [
+    {
+      "id": "us-overpersonal-business",
+      "ruleType": "business",
+      "severity": "medium",
+      "riskScore": 20,
+      "triggers": ["perfume", "香水", "jewelry", "珠宝", "intimate", "romantic"],
+      "explanationZh": "在美国商务场景中，过于私人或暧昧的礼物容易造成边界感不清。",
+      "explanationEn": "In US business settings, highly personal gifts can feel inappropriate or ambiguous.",
+      "suggestionZh": "商务拜访优先选择文具、咖啡礼盒或办公桌面礼物。",
+      "suggestionEn": "For business visits, prefer stationery, coffee hampers, or desk accessories.",
+      "tags": ["商务边界", "场景风险"]
+    }
+  ]
+}

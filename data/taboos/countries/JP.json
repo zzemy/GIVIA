@@ -1,0 +1,43 @@
+{
+  "scope": "country",
+  "countryCode": "JP",
+  "countryNameEn": "Japan",
+  "rules": [
+    {
+      "id": "jp-four-nine",
+      "ruleType": "phonetic",
+      "severity": "high",
+      "riskScore": 40,
+      "triggers": ["4", "9", "四", "九"],
+      "explanationZh": "4 和 9 在日本常与不吉含义关联，礼盒件数或图案涉及这些数字时需谨慎。",
+      "explanationEn": "The numbers 4 and 9 often carry unlucky connotations in Japan.",
+      "suggestionZh": "避免 4 件装、9 件装，优先改为 3、5 或 8 件组合。",
+      "suggestionEn": "Avoid 4- or 9-piece sets and switch to 3, 5, or 8 when possible.",
+      "tags": ["数字禁忌", "高风险"]
+    },
+    {
+      "id": "jp-sharp",
+      "ruleType": "symbol",
+      "severity": "medium",
+      "riskScore": 24,
+      "triggers": ["knife", "scissors", "刀", "剪刀"],
+      "explanationZh": "刀具类礼物容易触发切断关系的寓意，在私人关系里要特别注意。",
+      "explanationEn": "Sharp gifts can imply cutting off the relationship in Japanese gifting.",
+      "suggestionZh": "优先换成茶点、文具或居家陈设类礼物。",
+      "suggestionEn": "Choose tea, stationery, or tasteful home decor instead.",
+      "tags": ["切断关系", "象征风险"]
+    },
+    {
+      "id": "jp-white-funeral",
+      "ruleType": "color",
+      "severity": "medium",
+      "riskScore": 16,
+      "triggers": ["white", "菊", "chrysanthemum", "白色"],
+      "explanationZh": "白色与菊花元素在日本部分送礼语境中容易偏向丧礼表达。",
+      "explanationEn": "White-heavy designs and chrysanthemum cues can feel funeral-adjacent in Japan.",
+      "suggestionZh": "包装可改为米金、墨蓝、青灰等更稳妥的色系。",
+      "suggestionEn": "Use muted gold, navy, or blue-grey tones instead.",
+      "tags": ["丧礼联想", "色彩"]
+    }
+  ]
+}
