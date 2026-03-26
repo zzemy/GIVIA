@@ -96,8 +96,13 @@ describe('ResultsSection', () => {
 
     expect(screen.getByRole('button', { name: /重新开始/i })).toBeInTheDocument()
     expect(screen.getByText(/高风险处理建议/i)).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /赠礼顾问结论|advisor summary/i })).toBeInTheDocument()
-    expect(screen.getByText(/支持分析/i)).toBeInTheDocument()
+
+    const summaryHeading = screen.getByRole('heading', { name: /赠礼顾问结论|advisor summary/i })
+    const recommendationsHeading = screen.getByRole('heading', { name: /更稳妥的替代推荐|safer alternatives/i })
+    const supportingAnalysisLabel = screen.getByText(/支持分析|supporting analysis/i)
+
+    expect(summaryHeading.compareDocumentPosition(recommendationsHeading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(recommendationsHeading.compareDocumentPosition(supportingAnalysisLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect(screen.getByText(/风险等级 高风险/i)).toBeInTheDocument()
   })
 })

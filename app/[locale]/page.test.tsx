@@ -66,6 +66,27 @@ describe('Localized gifting page', () => {
     expect(screen.getByRole('button', { name: /选择目标国家/i })).toBeInTheDocument()
   })
 
+
+
+  it('renders the guided concierge workflow in the intended order', () => {
+    render(<Home />)
+
+    const giftStep = screen.getByRole('heading', {
+      level: 2,
+      name: /第一步：上传图片或输入礼物|step 1: upload image or type the gift/i,
+    })
+    const countryStep = screen.getByRole('heading', {
+      level: 2,
+      name: /第二步：选择目标国家|step 2: select target country/i,
+    })
+    const analysisStep = screen.getByRole('heading', {
+      level: 2,
+      name: /第三步：获取文化分析|第三步：AI 文化分析|step 3: get cultural analysis|step 3: ai cultural analysis/i,
+    })
+
+    expect(giftStep.compareDocumentPosition(countryStep) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(countryStep.compareDocumentPosition(analysisStep) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
   it('renders enhanced analysis module controls', () => {
     render(<Home />)
 
