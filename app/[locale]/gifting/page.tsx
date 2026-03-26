@@ -85,10 +85,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#5368b5]',
       chapter: isZh ? 'Chapter 01' : 'Chapter 01',
       kicker: isZh ? 'Object reading' : 'Object reading',
-      title: isZh ? '让礼物先被准确看见。' : 'Let the gift be seen precisely first.',
+      title: isZh ? '先把礼物真正看清。' : 'See the gift with real precision first.',
       desc: isZh
-        ? '从图像、名称与描述里提炼礼物的真实语义，避免后续所有判断都建立在错误认知之上。'
-        : 'Extract the gift’s real meaning from image, name, and description before every later decision inherits the wrong premise.',
+        ? '先从图像、名称与描述里提炼礼物的真实语义，避免后续一切判断都建立在偏差之上。'
+        : 'Extract the object’s true meaning from image, title, and description before every later judgment inherits the wrong premise.',
       quote: isZh ? 'Every gesture starts with the object itself.' : 'Every gesture starts with the object itself.',
       images: photoSets[1],
     },
@@ -100,10 +100,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#2d8a69]',
       chapter: isZh ? 'Chapter 02' : 'Chapter 02',
       kicker: isZh ? 'Context framing' : 'Context framing',
-      title: isZh ? '把国家与对象写进语境。' : 'Write country and recipient into the context.',
+      title: isZh ? '把目的地与对象写入语境。' : 'Write destination and recipient into the context.',
       desc: isZh
-        ? '礼物不是发往一个地址，而是进入一个由礼仪、关系与场合共同塑造的阅读环境。'
-        : 'A gift does not ship to an address. It enters a reading environment shaped by etiquette, relationship, and occasion.',
+        ? '礼物并不是寄往一个地址，而是进入一个由礼仪、关系与场合共同塑造的阅读环境。'
+        : 'A gift is never sent merely to an address. It enters a field of interpretation shaped by etiquette, relationship, and occasion.',
       quote: isZh ? 'Context changes how the same object is felt.' : 'Context changes how the same object is felt.',
       images: photoSets[2],
     },
@@ -115,10 +115,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#c67a1f]',
       chapter: isZh ? 'Chapter 03' : 'Chapter 03',
       kicker: isZh ? 'Editorial judgment' : 'Editorial judgment',
-      title: isZh ? '把信息收束成文化判断。' : 'Narrow the information into a cultural read.',
+      title: isZh ? '把线索收束成文化判断。' : 'Edit the gathered signals into a cultural judgment.',
       desc: isZh
-        ? '这里不再增加素材，而是把礼物线索、文化禁忌和关系角色整合成真正可执行的建议。'
-        : 'This is where gift signals, cultural taboos, and relationship roles are edited into an actionable recommendation.',
+        ? '这里不再增加素材，而是把礼物线索、文化分寸与关系角色收束成真正可执行的礼赠建议。'
+        : 'No more raw material is added here. Gift signals, cultural tact, and relationship roles are edited into an actionable recommendation.',
       quote: isZh ? 'Precision matters most at the moment of judgment.' : 'Precision matters most at the moment of judgment.',
       images: photoSets[3],
     },
@@ -130,10 +130,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#7b58b9]',
       chapter: isZh ? 'Chapter 04' : 'Chapter 04',
       kicker: isZh ? 'Composition in progress' : 'Composition in progress',
-      title: isZh ? '系统正在编织文化判断。' : 'The system is weaving the cultural read.',
+      title: isZh ? '系统正在编排最终判断。' : 'The system is composing the final judgment.',
       desc: isZh
-        ? '多模态识别、规则判断和关系语境正在交叉校准，准备输出最终礼赠建议。'
-        : 'Multimodal recognition, rules, and relationship context are being cross-checked to shape the final gifting recommendation.',
+        ? '多模态识别、礼仪规则与关系语境正在交叉校准，准备输出更完整、更稳妥的礼赠提案。'
+        : 'Multimodal reading, etiquette rules, and relationship context are being cross-checked to shape a more complete and tactful proposal.',
       quote: isZh ? 'Editorial intelligence is being composed.' : 'Editorial intelligence is being composed.',
       images: photoSets[4],
     },
@@ -145,9 +145,9 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#d84b74]',
       chapter: isZh ? 'Chapter 05' : 'Chapter 05',
       kicker: isZh ? 'Final proposal' : 'Final proposal',
-      title: isZh ? '把情感安全地送达。' : 'Deliver the emotion with precision.',
+      title: isZh ? '把情感稳妥地送达。' : 'Deliver the feeling with tact and precision.',
       desc: isZh
-        ? '结果页不是评分终点，而是一份兼顾文化分寸、表达方式与替代方案的礼赠编辑稿。'
+        ? '结果页并不是评分终点，而是一份兼顾文化分寸、表达方式与替代方案的礼赠编辑稿。'
         : 'The result is not a scorecard. It is an editorial gifting brief balancing tact, expression, and alternatives.',
       quote: isZh ? 'A gift lands through feeling, not through raw utility.' : 'A gift lands through feeling, not through raw utility.',
       images: photoSets[5],
@@ -357,7 +357,7 @@ export default function GiftingPage() {
                       disabled={!canAdvanceFromStep1}
                       className={`inline-flex items-center gap-2 rounded-full px-10 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}
                     >
-                      {isZh ? '继续下一章' : 'Continue'}
+                      {isZh ? '进入下一章' : 'Continue to the next chapter'}
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   </div>
@@ -403,7 +403,7 @@ export default function GiftingPage() {
                       disabled={!canAdvanceFromStep2}
                       className={`inline-flex items-center gap-2 rounded-full px-10 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}
                     >
-                      {isZh ? '进入判断' : 'Continue'}
+                      {isZh ? '进入判断章节' : 'Enter the judgment chapter'}
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   </div>
@@ -488,7 +488,7 @@ export default function GiftingPage() {
                         <div className="mt-6 grid gap-3 sm:grid-cols-3">
                           {[
                             isZh ? '礼物语义' : 'Gift semantics',
-                            isZh ? '文化禁忌' : 'Cultural taboos',
+                            isZh ? '文化分寸' : 'Cultural tact',
                             isZh ? '关系语境' : 'Relationship context',
                           ].map(item => (
                             <div key={item} className="rounded-[1.4rem] border border-black/6 bg-white/72 px-4 py-4 text-sm text-[#475467]">

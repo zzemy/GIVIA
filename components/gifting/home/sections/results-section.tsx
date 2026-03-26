@@ -61,25 +61,25 @@ export function ResultsSection({
   const summaryTitle =
     analysis.riskLevel === 'Low'
       ? isZh
-        ? '整体适合赠送'
-        : 'Broadly suitable to give'
+        ? '整体方向得体，可安心赠送'
+        : 'The overall direction is tactful and safe to send'
       : analysis.riskLevel === 'Medium'
         ? isZh
-          ? '建议调整后再赠送'
-          : 'Refine before gifting'
+          ? '建议调整后再送达'
+          : 'Refine before sending'
         : isZh
-          ? '不建议直接赠送当前方案'
-          : 'Do not send the current gift as-is'
+          ? '当前方案不宜直接送出'
+          : 'The current gift should not be sent as-is'
 
   const summaryBody =
     analysis.warning ||
     (analysis.riskLevel === 'Low'
       ? isZh
-        ? '当前礼物整体方向稳定，重点优化包装、表达和送达方式。'
-        : 'The overall direction is stable. Focus on packaging, wording, and delivery details.'
+        ? '当前礼物的整体方向相对稳定，重点应放在包装、表达方式与送达细节的修整上。'
+        : 'The broader direction is stable; refinement now lies in packaging, wording, and the details of delivery.'
       : isZh
-        ? '建议优先参考替代推荐，并结合包装与表达方式一起调整。'
-        : 'Prefer the alternative recommendations and adjust packaging and wording together.')
+        ? '建议优先参考替代提案，并连同包装与表达方式一起重新整理。'
+        : 'Prefer the alternative proposals and reconsider packaging and wording as part of the same adjustment.')
 
   const resultPhotos = [
     'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1600&q=80',
@@ -92,7 +92,7 @@ export function ResultsSection({
         <div className="max-w-[48rem]">
           <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Final proposal' : 'Final proposal'}</p>
           <h2 className="mt-3 text-[3.2rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1c1a17]">
-            {isZh ? '一份更像品牌编辑稿的礼赠结论。' : 'A gifting conclusion written like an editorial brief.'}
+            {isZh ? '一份更像品牌编辑稿的礼赠结论。' : 'A gifting conclusion composed with the tone of an editorial brief.'}
           </h2>
           <p className="mt-4 text-base leading-8 text-[#69707d]">
             {countryLabel} · {selectedAudienceLabel} · {sceneLabel}
@@ -163,7 +163,7 @@ export function ResultsSection({
               <div className="relative flex min-h-[15rem] flex-col justify-end p-5">
                 <p className="text-[11px] uppercase tracking-[0.2em] text-white/72">{isZh ? 'Human landing' : 'Human landing'}</p>
                 <p className="mt-2 text-[1.2rem] font-serif leading-tight text-white">
-                  {isZh ? '礼物最后落地的是情绪与关系。' : 'What lands in the end is feeling and relationship.'}
+                  {isZh ? '礼物最终落地的是情绪、关系与被理解的方式。' : 'What ultimately lands is feeling, relationship, and the way the gesture is understood.'}
                 </p>
               </div>
             </div>
@@ -175,7 +175,7 @@ export function ResultsSection({
                 <ShieldCheck size={18} />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Recommended path' : 'Recommended path'}</p>
+                <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Recommended direction' : 'Recommended direction'}</p>
                 <p className="mt-2 text-[1.4rem] font-serif leading-tight text-[#1c1a17]">
                   {topRecommendation
                     ? isZh
@@ -191,9 +191,9 @@ export function ResultsSection({
           </div>
 
           <div className="rounded-[2.1rem] border border-black/6 bg-white/82 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.16)]">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Narrative context' : 'Narrative context'}</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Editorial context' : 'Editorial context'}</p>
             <p className="mt-3 text-sm leading-8 text-[#69707d]">
-              {contextParagraph || (isZh ? '当前未补充更多礼物与对象背景。' : 'No additional gift or recipient context was provided.')}
+              {contextParagraph || (isZh ? '当前尚未补充更多礼物与对象背景。' : 'No additional object or recipient context was provided.')}
             </p>
           </div>
         </div>
@@ -207,7 +207,7 @@ export function ResultsSection({
             </div>
             <div>
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Recommendations' : 'Recommendations'}</p>
-              <h3 className="mt-1 text-[2rem] font-serif text-[#1c1a17]">{isZh ? '更稳妥的替代路径' : 'Safer alternative directions'}</h3>
+              <h3 className="mt-1 text-[2rem] font-serif text-[#1c1a17]">{isZh ? '更稳妥的替代方向' : 'More tactful alternative directions'}</h3>
             </div>
           </div>
 
@@ -258,7 +258,7 @@ export function ResultsSection({
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? 'Risk notes' : 'Risk notes'}</p>
-                <h3 className="mt-1 text-[1.8rem] font-serif text-[#1c1a17]">{isZh ? '文化摩擦点' : 'Potential frictions'}</h3>
+                <h3 className="mt-1 text-[1.8rem] font-serif text-[#1c1a17]">{isZh ? '文化摩擦点' : 'Points of cultural friction'}</h3>
               </div>
             </div>
             <div className="mt-5 space-y-3">
@@ -270,7 +270,7 @@ export function ResultsSection({
                 ))
               ) : (
                 <div className="rounded-[1.25rem] bg-[#f5faf6] px-4 py-4 text-sm leading-7 text-[#4d6a57]">
-                  {isZh ? '暂无明显文化风险，仍建议注意包装与表达细节。' : 'No major cultural risk was found, though packaging and phrasing still matter.'}
+                  {isZh ? '当前未见明显文化风险，但包装与表达细节仍值得认真处理。' : 'No major cultural risk appears immediately, though packaging and phrasing still deserve careful attention.'}
                 </div>
               )}
             </div>

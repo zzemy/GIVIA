@@ -26,7 +26,7 @@ export default function RootPage() {
           <section className="flex flex-col justify-center">
             <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#5d72cc]/14 bg-white/66 px-4 py-2 text-sm text-[#5d72cc] shadow-[0_14px_34px_-26px_rgba(93,114,204,0.45)] backdrop-blur-xl">
               <span className="h-2 w-2 rounded-full bg-[#5d72cc]" />
-              Editorial routing
+              Choose your language
             </div>
 
             <div className="mt-8 flex items-center gap-4">
@@ -40,13 +40,13 @@ export default function RootPage() {
             </div>
 
             <h1 className="mt-8 max-w-[10ch] text-[4.5rem] font-serif leading-[0.9] tracking-[-0.085em] text-[#1d1915] sm:text-[5.6rem]">
-              Enter the
-              <span className="block text-[#5d72cc]">human story</span>
-              before the flow.
+              Begin with the
+              <span className="block text-[#5d72cc]">right gesture</span>
+              for the right culture.
             </h1>
 
             <p className="mt-6 max-w-[34rem] text-lg font-light leading-9 text-[#69707d]">
-              The route in should already feel like an international magazine cover—bright, cultured, and human—before the gifting experience even begins.
+              Givia helps you judge whether a gift will feel thoughtful, awkward, or risky before it crosses a cultural boundary.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -85,7 +85,7 @@ export default function RootPage() {
                   />
                   <div className="relative flex h-full min-h-[16rem] flex-col justify-end p-5">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-white/72">Cultural atmosphere</p>
-                    <p className="mt-2 text-[1.55rem] font-serif leading-tight text-white">A route-in page should already feel warm, global, and authored.</p>
+                    <p className="mt-2 text-[1.55rem] font-serif leading-tight text-white">Read the mood around a gift before it reaches the other side.</p>
                   </div>
                 </article>
 
@@ -99,7 +99,7 @@ export default function RootPage() {
                   />
                   <div className="relative flex h-full min-h-[12.5rem] items-end p-5">
                     <div className="rounded-full border border-white/28 bg-white/16 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white/84 backdrop-blur-md">
-                      Human first
+                      Human context
                     </div>
                   </div>
                 </article>
@@ -116,16 +116,16 @@ export default function RootPage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.28),transparent_26%)] mix-blend-screen" />
                 <div className="relative flex h-full min-h-[42rem] flex-col justify-between p-6">
                   <div className="inline-flex w-fit items-center rounded-full border border-white/28 bg-white/14 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-white/84 backdrop-blur-md">
-                    Brand-led transition
+                    Before you send
                   </div>
                   <div className="space-y-4">
                     <div className="rounded-[2rem] border border-white/24 bg-white/14 p-5 backdrop-blur-xl">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-white/72">Preview</p>
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-white/72">What Givia helps with</p>
                       <p className="mt-3 text-[1.95rem] font-serif leading-tight text-white">
-                        From route guidance to final proposal, the whole product should feel like one international editorial world.
+                        Check whether the gift fits the relationship, the destination, and the occasion before you decide to send it.
                       </p>
                       <p className="mt-4 text-sm leading-7 text-white/80">
-                        No fake illustration mood. No loading-page detour. Just a calm, cultured, photography-led invitation into the flow.
+                        See cultural friction early, understand safer alternatives, and make the final expression feel considerate rather than generic.
                       </p>
                     </div>
                   </div>

@@ -1,7 +1,7 @@
 {
   "workflow": {
     "title": "Givia",
-    "subtitle": "A bright editorial gifting experience for international relationships",
+    "subtitle": "A more tactful way to judge gifts across cultures",
     "steps": {
       "recognize": "Recognize",
       "country": "Country",
@@ -10,25 +10,25 @@
   },
   "hero": {
     "badge": "Light Editorial High-End",
-    "headline": "Let the gift be understood before the gesture is delivered",
-    "description": "Givia edits gift semantics, relationship distance, and cultural tact into one executable gifting brief for a more refined international experience.",
-    "trust1": "Culture-first framing",
-    "trust2": "International brand storytelling",
+    "headline": "Know whether the gift should be sent before you send it",
+    "description": "Givia helps you judge whether a gift fits the destination culture, the relationship, and the occasion before the gesture is delivered.",
+    "trust1": "Spot cultural risk early",
+    "trust2": "Choose a safer expression",
     "panelTitle": "Givia Editorial Flow",
-    "panelHeadline": "An authored gifting proposal for global relationships",
-    "panelDesc": "Not just whether a gift works, but why it lands, how it should be sent, and what to change when it does not.",
-    "panelCta": "Enter the gifting editorial flow"
+    "panelHeadline": "A clearer gifting judgment for global relationships",
+    "panelDesc": "See whether a gift feels appropriate, why it may create friction, and what to change before it reaches the other side.",
+    "panelCta": "Start evaluating the gift"
   },
   "recognition": {
     "title": "Chapter 1: Create the gift profile",
-    "description": "Upload the key visual and add object notes so the system understands the gift before cultural judgment begins.",
+    "description": "Upload the key visual and add object notes so the system can understand the gift before cultural judgment begins.",
     "upload": "Click to upload or drag the gift image",
     "placeholder": "Supports JPG, PNG, WEBP; clearer material and packaging details are better",
     "loading": "Composing the gift reading, please wait..."
   },
   "country": {
     "title": "Chapter 2: Compose the cultural frame",
-    "description": "Choose the destination and add recipient, occasion, and tact so the gift enters a real social context.",
+    "description": "Choose the destination and add recipient, occasion, and social tone so the gift enters a real cultural context.",
     "search": "Search countries...",
     "popular": "Popular Countries",
     "regions": {
@@ -41,7 +41,7 @@
   },
   "analysis": {
     "title": "Chapter 3: Generate the proposal",
-    "description": "The system turns gift signals, etiquette, and relationship roles into one final recommendation and alternative path.",
+    "description": "The system turns gift signals, etiquette, and relationship roles into one final recommendation and alternative direction.",
     "analyze": "Generate proposal",
     "loading": "Composing the cultural proposal, this may take a moment...",
     "noRecognition": "Please upload and recognize a gift first",

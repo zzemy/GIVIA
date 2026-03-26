@@ -21,25 +21,25 @@ export default function Home() {
 
   const photographyFrames: EditorialFrame[] = [
     {
-      eyebrow: isZh ? 'Human ritual' : 'Human ritual',
-      title: isZh ? '礼物属于关系，而不是仓促寄出的一件物品。' : 'A gift belongs to a relationship, not to rushed delivery.',
-      copy: isZh ? '从手势、神情与场景里，重新理解送达的分寸。' : 'Read tact again through gesture, expression, and setting.',
+      eyebrow: isZh ? 'Relationship first' : 'Relationship first',
+      title: isZh ? '先判断这份礼物是否适合这段关系。' : 'Decide whether the gift suits the relationship before you send it.',
+      copy: isZh ? '不同亲疏、身份与场合，需要完全不同的表达分寸。' : 'Different distances, roles, and occasions require very different levels of tact.',
       image:
         'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
       align: 'bottom',
     },
     {
-      eyebrow: isZh ? 'Cultural warmth' : 'Cultural warmth',
-      title: isZh ? '国际化不等于抽空文化，而是更细腻地理解文化。' : 'International does not mean culture-less. It means understanding culture with more nuance.',
-      copy: isZh ? '让礼物进入真实的城市、人群与生活质感。' : 'Let the gift enter real cities, people, and lived textures.',
+      eyebrow: isZh ? 'Cultural reading' : 'Cultural reading',
+      title: isZh ? '提前识别可能的误读、禁忌与文化摩擦。' : 'Spot possible misreadings, taboos, and cultural friction early.',
+      copy: isZh ? '让礼物进入真实文化语境，而不是停留在自己的想象里。' : 'Place the gift inside a real cultural context instead of your own assumptions.',
       image:
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80',
       align: 'top',
     },
     {
-      eyebrow: isZh ? 'Global mood' : 'Global mood',
-      title: isZh ? '摄影不是装饰，而是品牌情绪与文化气氛。' : 'Photography is not decoration. It is brand mood and cultural atmosphere.',
-      copy: isZh ? '让首页像一本国际杂志的封面，而不是一个工具落地页。' : 'Make the homepage feel like an international magazine cover, not a utility landing page.',
+      eyebrow: isZh ? 'Better delivery' : 'Better delivery',
+      title: isZh ? '最后给你的，不只是结论，而是更稳妥的送达方式。' : 'What you receive is not only a verdict, but a safer way to deliver the gesture.',
+      copy: isZh ? '包括替代建议、包装方向与表达语气，让心意落地得更自然。' : 'Including alternatives, packaging direction, and message tone so the gesture lands more naturally.',
       image:
         'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80',
       align: 'bottom',
@@ -48,22 +48,22 @@ export default function Home() {
 
   const editorialValues = [
     {
-      label: isZh ? 'Brand direction' : 'Brand direction',
-      value: isZh ? 'Light Editorial High-End' : 'Light Editorial High-End',
+      label: isZh ? '你会得到' : 'What you get',
+      value: isZh ? '一份更得体的礼赠判断' : 'A more tactful gifting judgment',
     },
     {
-      label: isZh ? 'Visual language' : 'Visual language',
-      value: isZh ? 'Bright / Human / Soft Luxury' : 'Bright / Human / Soft Luxury',
+      label: isZh ? '它会帮你避免' : 'What it helps you avoid',
+      value: isZh ? '文化误读、关系失分与表达失准' : 'Cultural misreading, social awkwardness, and the wrong tone',
     },
     {
-      label: isZh ? 'Core method' : 'Core method',
-      value: isZh ? 'Culture-first narrative system' : 'Culture-first narrative system',
+      label: isZh ? '最后交付' : 'Final output',
+      value: isZh ? '可执行的礼赠建议、替代方向与表达方式' : 'Actionable recommendations, alternatives, and better wording',
     },
   ]
 
   const editorialBullets = isZh
-    ? ['识别礼物的真实语义', '重建文化与关系语境', '输出可执行的礼赠编辑稿']
-    : ['Read the gift precisely', 'Rebuild culture and relationship context', 'Return an actionable editorial brief']
+    ? ['判断这份礼物在目标国家是否得体', '识别潜在禁忌与文化摩擦', '给出更稳妥的替代方案与表达建议']
+    : ['Judge whether the gift feels appropriate in the target culture', 'Identify likely taboos and cultural friction', 'Offer safer alternatives and better wording']
 
   return (
     <div className={`home-editorial-shell relative min-h-screen overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
@@ -110,7 +110,7 @@ export default function Home() {
               <div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-[#6d82d8]/14 bg-white/68 px-4 py-2 text-sm text-[#566fd1] shadow-[0_12px_30px_-26px_rgba(86,111,209,0.52)] backdrop-blur-xl">
                   <Sparkles className="h-4 w-4" />
-                  {isZh ? '重新定义跨文化送礼体验' : 'A new language for global gifting'}
+                  {isZh ? '帮你把礼物送对，而不只是送出去' : 'Help the gift arrive well, not merely arrive'}
                 </div>
 
                 <h1
@@ -120,25 +120,25 @@ export default function Home() {
                 >
                   {isZh ? (
                     <>
-                      <span className="block">不是送出</span>
-                      <span className="block text-[#566fd1]">一件礼物，</span>
-                      <span className="block">而是送达</span>
-                      <span className="block">一种分寸。</span>
+                      <span className="block">先判断这份礼物</span>
+                      <span className="block text-[#566fd1]">该不该送，</span>
+                      <span className="block">再决定如何</span>
+                      <span className="block">把心意送好。</span>
                     </>
                   ) : (
                     <>
-                      <span className="block">Not just</span>
-                      <span className="block text-[#566fd1]">sending a gift,</span>
-                      <span className="block">but delivering</span>
-                      <span className="block">the right tact.</span>
+                      <span className="block">Know whether the gift</span>
+                      <span className="block text-[#566fd1]">should be sent,</span>
+                      <span className="block">before deciding</span>
+                      <span className="block">how to send it well.</span>
                     </>
                   )}
                 </h1>
 
                 <p className="mt-8 max-w-[34rem] text-lg font-light leading-9 text-[#69707d]">
                   {isZh
-                    ? 'Givia 不是传统推荐工具，而是一套面向国际关系、现代审美与人文表达的礼赠编辑系统。它先理解礼物，再理解关系，最后给出真正得体的送达方式。'
-                    : 'Givia is not a conventional recommendation tool. It is an editorial gifting system for international relationships, modern taste, and human expression—reading the object, the relationship, and the safest way to make it land.'}
+                    ? 'Givia 帮你在送出之前先看清三件事：这份礼物在目标国家会不会被误读、它是否适合这段关系、以及怎样表达会更得体。'
+                    : 'Givia helps you see three things before you send anything: whether the gift may be misread, whether it fits the relationship, and how to express it with better tact.'}
                 </p>
 
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -147,11 +147,11 @@ export default function Home() {
                     onClick={() => router.push(`/${locale}/gifting`)}
                     className="inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#5b72d1] via-[#4e63bb] to-[#4455a6] px-8 py-4 text-base font-medium text-white shadow-[0_22px_44px_-24px_rgba(91,114,209,0.56)] transition hover:-translate-y-1"
                   >
-                    {isZh ? '开始礼赠编辑' : 'Start the editorial flow'}
+                    {isZh ? '开始判断这份礼物' : 'Evaluate this gift now'}
                     <ArrowRight className="h-5 w-5" />
                   </button>
                   <div className="rounded-full border border-black/6 bg-white/54 px-5 py-3 text-sm text-[#69707d] backdrop-blur-xl">
-                    {isZh ? '识别 → 语境 → 判断 → 提案' : 'Object → Context → Judgment → Proposal'}
+                    {isZh ? '物件 → 语境 → 判断 → 提案' : 'Object → Context → Judgment → Proposal'}
                   </div>
                 </div>
               </div>
@@ -182,10 +182,10 @@ export default function Home() {
                 <div className="grid gap-4 xl:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)]">
                   <div className="rounded-[2.35rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(250,246,240,0.92))] p-6 shadow-[0_20px_42px_-30px_rgba(15,23,42,0.16)]">
                     <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">
-                      {isZh ? 'Editorial statement' : 'Editorial statement'}
+                      {isZh ? '为什么先判断再送出' : 'Why evaluate before sending'}
                     </p>
                     <p className="mt-5 text-[2.25rem] font-serif leading-[1.05] tracking-[-0.05em] text-[#1d1915]">
-                      {isZh ? '高端品牌感，不应该来自装饰，而应该来自秩序、留白与叙事。' : 'High-end brand feeling should come from order, restraint, and narrative—not decoration.'}
+                      {isZh ? '跨文化送礼真正难的，不是挑到贵的东西，而是避免误读、拿捏关系，并把心意送到对方舒服的位置。' : 'The hard part of cross-cultural gifting is rarely picking something expensive; it is avoiding misreading, respecting the relationship, and placing the gesture where it feels right.'}
                     </p>
                     <div className="mt-8 space-y-3">
                       {editorialBullets.map(item => (
@@ -231,7 +231,7 @@ export default function Home() {
                       />
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(24,22,19,0.44))]" />
                       <div className="absolute left-5 top-5 rounded-full border border-white/30 bg-white/16 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-white/84 backdrop-blur-md">
-                        {isZh ? 'Poster composition' : 'Poster composition'}
+                        {isZh ? 'Before you decide' : 'Before you decide'}
                       </div>
                       <div className="relative flex h-full min-h-[39rem] flex-col justify-between p-6">
                         <div className="flex justify-end">
@@ -240,7 +240,7 @@ export default function Home() {
                               {isZh ? 'Soft luxury' : 'Soft luxury'}
                             </p>
                             <p className="mt-3 text-sm leading-7 text-white/82">
-                              {isZh ? '极简的留白，配合叙事型图像与柔和光影。' : 'Minimal whitespace paired with narrative imagery and soft light.'}
+                              {isZh ? '克制的留白，配合叙事型摄影与柔和光影。' : 'Restrained whitespace, narrative photography, and a quieter light.'}
                             </p>
                           </div>
                         </div>
@@ -248,19 +248,19 @@ export default function Home() {
                         <div className="space-y-4">
                           <div className="inline-flex items-center gap-2 rounded-full border border-white/24 bg-white/12 px-4 py-2 text-xs text-white/84 backdrop-blur-md">
                             <Sparkles className="h-3.5 w-3.5" />
-                            {isZh ? 'Magazine-grade brand system' : 'Magazine-grade brand system'}
+                            {isZh ? '为跨文化送礼而设计' : 'Built for cross-cultural gifting'}
                           </div>
                           <div className="rounded-[2rem] border border-white/24 bg-white/14 p-5 backdrop-blur-xl">
                             <p className="text-[11px] uppercase tracking-[0.22em] text-white/70">
-                              {isZh ? '品牌封面叙事' : 'Cover story'}
+                              {isZh ? '你最终会知道' : 'What you will know'}
                             </p>
                             <p className="mt-3 text-[1.75rem] font-serif leading-tight text-white">
-                              {isZh ? '先建立信任与审美，再让用户进入步骤。' : 'Build trust and taste first, then invite the user into the flow.'}
+                              {isZh ? '这份礼物能不能送、哪里容易出问题、还有什么更稳妥的方向。' : 'Whether the gift should be sent, where it may go wrong, and what safer direction you can take instead.'}
                             </p>
                             <p className="mt-4 text-sm leading-7 text-white/78">
                               {isZh
-                                ? '首页不再展示笨重的功能堆叠，而是像一本高端杂志的封面页，先把品牌的立场说清楚。'
-                                : 'The homepage no longer stacks utility cards. It behaves like the cover of a refined magazine, stating the brand position before the workflow begins.'}
+                                ? '你会先得到一层更完整的判断：礼物本身、目标文化、关系场景与表达方式，哪一环最值得调整。'
+                                : 'You get a fuller judgment first: the object itself, the destination culture, the relationship setting, and which part of the expression deserves adjustment.'}
                             </p>
                           </div>
                         </div>

@@ -1,7 +1,7 @@
 {
   "workflow": {
     "title": "Givia",
-    "subtitle": "明亮、国际化、叙事型的礼赠编辑体验",
+    "subtitle": "一套更懂文化分寸的跨文化礼赠判断体验",
     "steps": {
       "recognize": "AI识别",
       "country": "目标国家",
@@ -10,14 +10,14 @@
   },
   "hero": {
     "badge": "Light Editorial High-End",
-    "headline": "让礼物先被理解，再让心意被稳妥送达",
-    "description": "Givia 将礼物语义、关系距离与文化分寸编排成一份可执行的礼赠编辑稿，帮助你以更国际化、更高端的人文方式完成表达。",
-    "trust1": "文化语境优先",
-    "trust2": "国际品牌叙事体验",
+    "headline": "先判断这份礼物该不该送，再决定怎样送好",
+    "description": "Givia 帮你在送出之前看清这份礼物是否适合目标国家、关系场景与表达方式，避免好意在跨文化语境里被误读。",
+    "trust1": "提前识别文化风险",
+    "trust2": "找到更稳妥的表达",
     "panelTitle": "Givia Editorial Flow",
-    "panelHeadline": "为跨文化关系编辑一份礼赠提案",
-    "panelDesc": "不只是输出能不能送，而是把为什么、怎么送、如何更得体，一并整理成清晰结论。",
-    "panelCta": "进入礼赠编辑流程"
+    "panelHeadline": "给跨文化关系一份更清晰的礼赠判断",
+    "panelDesc": "不只是判断能不能送，而是把哪里可能出问题、怎样调整更稳妥，一并整理成清晰结论。",
+    "panelCta": "开始判断这份礼物"
   },
   "recognition": {
     "title": "第一章：建立礼物主档",
@@ -28,7 +28,7 @@
   },
   "country": {
     "title": "第二章：编排文化语境",
-    "description": "选择目的地并补充对象、场合与分寸，让礼物进入真实的社会语境。",
+    "description": "选择目的地并补充对象、场合与分寸，让礼物进入真实而细腻的社会语境。",
     "search": "搜索国家...",
     "popular": "热门国家",
     "regions": {
@@ -41,7 +41,7 @@
   },
   "analysis": {
     "title": "第三章：生成礼赠提案",
-    "description": "系统将把礼物信号、国家礼仪与关系角色收束成最终判断与替代建议。",
+    "description": "系统将把礼物信号、国家礼仪与关系角色收束成最终判断与替代方向。",
     "analyze": "生成提案",
     "loading": "正在编排文化提案，网络波动时可能稍有延迟...",
     "noRecognition": "请先上传并识别礼物",
