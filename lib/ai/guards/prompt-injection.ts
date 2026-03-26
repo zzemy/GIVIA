@@ -1,5 +1,6 @@
 import type { ModelMessage } from '@/lib/ai/adapters/types'
 import { sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
+import { loadInjectionBlacklist } from '@/lib/domain/taboo/taboo-loader'
 
 type PromptInjectionSeverity = 'none' | 'low' | 'medium' | 'high'
 
@@ -72,6 +73,35 @@ const PROMPT_INJECTION_PATTERNS: PromptInjectionPattern[] = [
   },
 ]
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function inferBlacklistSeverity(phrase: string): Exclude<PromptInjectionSeverity, 'none'> {
+  const normalized = phrase.toLowerCase()
+
+  if (
+    normalized.includes('ignore') ||
+    normalized.includes('reveal') ||
+    normalized.includes('developer') ||
+    normalized.includes('system') ||
+    normalized.includes('忽略') ||
+    normalized.includes('泄露') ||
+    normalized.includes('系统')
+  ) {
+    return 'high'
+  }
+
+  return 'medium'
+}
+
+const TABOO_BLACKLIST_PATTERNS: PromptInjectionPattern[] = loadInjectionBlacklist().map(phrase => ({
+  kind: 'taboo_blacklist',
+  label: phrase,
+  severity: inferBlacklistSeverity(phrase),
+  regex: new RegExp(escapeRegExp(phrase), 'i'),
+}))
+
 function severityToScore(severity: Exclude<PromptInjectionSeverity, 'none'>): number {
   switch (severity) {
     case 'high':
@@ -123,7 +153,7 @@ export function detectPromptInjectionInFields(values: unknown[]): PromptInjectio
   const matches: PromptInjectionMatch[] = []
   const seen = new Set<string>()
 
-  for (const pattern of PROMPT_INJECTION_PATTERNS) {
+  for (const pattern of [...PROMPT_INJECTION_PATTERNS, ...TABOO_BLACKLIST_PATTERNS]) {
     if (!pattern.regex.test(combined)) {
       continue
     }
