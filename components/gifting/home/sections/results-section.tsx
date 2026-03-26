@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { homeSurface } from '@/components/gifting/home/home-design-tokens'
+import { homeButton, homeSurface } from '@/components/gifting/home/home-design-tokens'
 import { getCountryName } from '@/lib/countries'
 import { ResultsDetailPanels } from '@/components/gifting/home/sections/results-detail-panels'
 import { ResultsEnhancementPanels } from '@/components/gifting/home/sections/results-enhancement-panels'
@@ -65,34 +65,34 @@ export function ResultsSection({
   const contextLabel = `${selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '未选择国家' : 'No country'} · ${selectedAudienceLabel} · ${sceneLabel}`
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-14 space-y-6 sm:space-y-7">
-      <div className="flex items-center justify-between">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6 sm:space-y-7">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="text-3xl font-bold">{t('results.title')}</h2>
+          <h2 className="text-3xl font-bold text-slate-100">{t('results.title')}</h2>
           {analysisSource && (
-            <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
+            <div className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-slate-200">
               {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI + 规则引擎' : 'AI + Rules') : isZh ? '本地规则回退' : 'Local rules fallback'}
             </div>
           )}
         </div>
-        <Button onClick={onReset} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-white hover:bg-white/[0.08]">
+        <Button onClick={onReset} className={`${homeButton.secondary} text-white`}>
           <RotateCcw size={16} />
           {isZh ? '重新开始' : 'Start Over'}
         </Button>
       </div>
 
-      <div className={`px-4 py-3 text-sm text-slate-200 ${homeSurface.quiet}`}>
-        <p>
+      <div className={`px-4 py-3.5 text-sm text-slate-200 ${homeSurface.inset}`}>
+        <p className="font-medium text-slate-100">
           {isZh ? '分析上下文：' : 'Analysis context: '}
           {contextLabel}
         </p>
         {!!(visionDescription.trim() || giftDescription.trim()) && (
-          <p className="mt-1 text-xs text-slate-300/78">
+          <p className="mt-2 text-xs leading-6 text-slate-300/78">
             {isZh ? '礼物描述：' : 'Gift description: '}
             {visionDescription.trim() || giftDescription.trim()}
           </p>
         )}
-        {targetProfile.trim() && <p className="mt-1 text-xs text-slate-300/78">{targetProfile.trim()}</p>}
+        {targetProfile.trim() && <p className="mt-1 text-xs leading-6 text-slate-300/78">{targetProfile.trim()}</p>}
       </div>
 
       <ResultsSummaryPanel analysis={analysis} locale={locale} contextLabel={contextLabel} />
@@ -104,7 +104,7 @@ export function ResultsSection({
         onToggleFavoriteRecommendation={onToggleFavoriteRecommendation}
       />
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         <p className="text-xs uppercase tracking-[0.2em] text-[#e7d2af]/76">
           {isZh ? '支持分析' : 'SUPPORTING ANALYSIS'}
         </p>

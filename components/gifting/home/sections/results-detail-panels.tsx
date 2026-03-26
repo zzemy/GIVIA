@@ -60,11 +60,11 @@ export function ResultsDetailPanels({
         <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-bold text-slate-100">{isZh ? '综合风险分' : 'Risk Score'}</h3>
-            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">0-100</span>
+            <span className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">0-100</span>
           </div>
           <div className="mt-4 text-5xl font-bold text-[#f3ddba]">{analysis.riskScore}</div>
           <div className="mt-3 h-2 rounded-full bg-slate-700/80">
-            <div className="h-full rounded-full bg-gradient-to-r from-[#e7d2af] to-rose-300" style={{ width: `${analysis.riskScore}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-[#e7d2af] to-[#d9a77f]" style={{ width: `${analysis.riskScore}%` }} />
           </div>
           <p className="mt-3 text-sm text-slate-300/78">
             {analysis.riskScore >= 72
@@ -118,11 +118,11 @@ export function ResultsDetailPanels({
             </div>
           </div>
           <div className="mb-4">
-            <div className="bg-gradient-to-r from-cyan-400 via-sky-400 to-cyan-300 bg-clip-text text-5xl font-bold text-transparent">
+            <div className="bg-gradient-to-r from-[#f3ddba] to-[#d8c8aa] bg-clip-text text-5xl font-bold text-transparent">
               {analysis.fitScore}
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-700">
-              <div className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-cyan-300 transition-all" style={{ width: `${analysis.fitScore}%` }} />
+              <div className="h-full rounded-full bg-gradient-to-r from-[#e7d2af] to-[#d8c8aa] transition-all" style={{ width: `${analysis.fitScore}%` }} />
             </div>
           </div>
           <p className="text-sm text-slate-300/72">
@@ -156,7 +156,7 @@ export function ResultsDetailPanels({
                   <span>{metric.value}</span>
                 </div>
                 <div className="h-1.5 rounded-full bg-slate-700/80">
-                  <div className="h-full rounded-full bg-cyan-300/80" style={{ width: `${metric.value}%` }} />
+                  <div className="h-full rounded-full bg-[#e7d2af]/75" style={{ width: `${metric.value}%` }} />
                 </div>
               </div>
             ))}
@@ -176,7 +176,7 @@ export function ResultsDetailPanels({
               analysis.riskLevel === 'Low'
                 ? 'border border-green-500/50 bg-green-500/20 text-green-300'
                 : analysis.riskLevel === 'Medium'
-                  ? 'border border-yellow-500/50 bg-yellow-500/20 text-yellow-300'
+                  ? 'border border-amber-400/35 bg-amber-500/12 text-amber-100'
                   : 'border border-red-500/50 bg-red-500/20 text-red-300'
             }`}
           >
@@ -194,7 +194,7 @@ export function ResultsDetailPanels({
           </div>
 
           {analysis.isTaboo && (
-            <div className="mt-3 rounded-lg border border-red-500/30 bg-red-500/10 p-3">
+            <div className="mt-3 rounded-lg border border-red-400/24 bg-red-500/8 p-3">
               <p className="text-sm text-red-200">
                 {isZh ? '⚠️ 已触发禁忌风险，不建议直接赠送原方案。' : '⚠️ Taboo-level risk detected. Direct gifting is not recommended.'}
               </p>
@@ -253,8 +253,8 @@ export function ResultsDetailPanels({
                 key={tip}
                 className={cn(
                   'rounded-lg border px-3 py-2 text-sm',
-                  riskActionMeta?.panelClassName ?? 'border-cyan-500/30 bg-cyan-500/10',
-                  riskActionMeta?.textClassName ?? 'text-cyan-100',
+                  riskActionMeta?.panelClassName ?? 'border-[#e7d2af]/24 bg-[#e7d2af]/8',
+                  riskActionMeta?.textClassName ?? 'text-[#f5e6cb]',
                 )}
               >
                 {tip}
@@ -263,15 +263,15 @@ export function ResultsDetailPanels({
           </div>
 
           {analysis.riskLevel !== 'Low' && (analysis.rescueItem || analysis.rescueReason) && (
-            <div className="mt-4 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3">
+            <div className="mt-4 rounded-lg border border-[#e7d2af]/24 bg-[#e7d2af]/8 p-3">
               {analysis.rescueItem && (
-                <p className="text-sm text-emerald-200">
+                <p className="text-sm text-[#f5e6cb]">
                   {isZh ? '更稳妥的替代礼物：' : 'Safer replacement: '}
                   {analysis.rescueItem}
                 </p>
               )}
               {analysis.rescueReason && (
-                <p className="mt-1 text-xs text-emerald-100/90">
+                <p className="mt-1 text-xs text-[#f5e6cb]/82">
                   {isZh ? '替代理由：' : 'Why it helps: '}
                   {analysis.rescueReason}
                 </p>

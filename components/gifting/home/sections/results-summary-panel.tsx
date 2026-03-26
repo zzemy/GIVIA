@@ -55,25 +55,44 @@ export function ResultsSummaryPanel({
 
   return (
     <section className={`overflow-hidden p-6 md:p-8 ${homeSurface.primary}`}>
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)] xl:items-start">
         <div className="max-w-3xl">
           <h3 className="text-xs uppercase tracking-[0.22em] text-[#e7d2af]/80">
             {isZh ? '赠礼顾问结论' : 'Advisor summary'}
           </h3>
-          <p className="mt-3 text-3xl font-semibold leading-tight text-slate-50 md:text-[2.2rem]">
+          <p className="home-balance mt-3 text-3xl font-semibold leading-tight text-slate-50 md:text-[2.35rem]">
             {summaryHeadline}
           </p>
-          <p className="mt-5 max-w-[46rem] text-sm leading-7 text-slate-200/82 md:text-base">
+          <p className="home-pretty mt-5 max-w-[46rem] text-sm leading-7 text-slate-200/82 md:text-base">
             {summaryBody}
           </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            <span className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
+              {contextLabel}
+            </span>
+            <span className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
+              {isZh ? `文化契合度 ${analysis.fitScore}` : `Fit score ${analysis.fitScore}`}
+            </span>
+            <span
+              className={`home-pill-nowrap rounded-full px-3 py-1 text-xs ${
+                analysis.riskLevel === 'Low'
+                  ? 'border border-emerald-400/25 bg-emerald-500/12 text-emerald-100'
+                  : analysis.riskLevel === 'Medium'
+                    ? 'border border-amber-400/25 bg-amber-500/12 text-amber-100'
+                    : 'border border-red-400/25 bg-red-500/12 text-red-100'
+              }`}
+            >
+              {isZh ? `风险等级 ${localizedRiskLevel}` : `Risk level ${localizedRiskLevel}`}
+            </span>
+          </div>
         </div>
 
-        <div className="grid gap-3 lg:min-w-72">
-          <div className={`px-4 py-3 ${homeSurface.quiet}`}>
+        <div className="grid gap-3">
+          <div className={`px-4 py-4 ${homeSurface.inset}`}>
             <p className="text-[11px] uppercase tracking-[0.18em] text-[#e7d2af]/70">
               {isZh ? '判断结论' : 'Decision'}
             </p>
-            <p className="mt-2 text-sm font-semibold text-slate-100">
+            <p className="mt-2 text-base font-semibold leading-7 text-slate-100">
               {analysis.riskLevel === 'Low'
                 ? isZh
                   ? '可直接优化后赠送'
@@ -87,11 +106,12 @@ export function ResultsSummaryPanel({
                     : 'Prefer a replacement option'}
             </p>
           </div>
-          <div className={`px-4 py-3 ${homeSurface.quiet}`}>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-sky-100/72">
+
+          <div className={`px-4 py-4 ${homeSurface.inset}`}>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#e7d2af]/70">
               {isZh ? '推荐方向' : 'Recommended path'}
             </p>
-            <p className="mt-2 text-sm font-semibold text-slate-100">
+            <p className="mt-2 text-base font-semibold leading-7 text-slate-100">
               {topRecommendation
                 ? locale === 'zh'
                   ? topRecommendation.nameZh
@@ -100,26 +120,6 @@ export function ResultsSummaryPanel({
             </p>
           </div>
         </div>
-      </div>
-
-      <div className="mt-6 flex flex-wrap gap-2">
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
-          {contextLabel}
-        </span>
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
-          {isZh ? `文化契合度 ${analysis.fitScore}` : `Fit score ${analysis.fitScore}`}
-        </span>
-        <span
-          className={`rounded-full px-3 py-1 text-xs ${
-            analysis.riskLevel === 'Low'
-              ? 'border border-emerald-400/25 bg-emerald-500/12 text-emerald-100'
-              : analysis.riskLevel === 'Medium'
-                ? 'border border-amber-400/25 bg-amber-500/12 text-amber-100'
-              : 'border border-red-400/25 bg-red-500/12 text-red-100'
-          }`}
-        >
-          {isZh ? `风险等级 ${localizedRiskLevel}` : `Risk level ${localizedRiskLevel}`}
-        </span>
       </div>
     </section>
   )

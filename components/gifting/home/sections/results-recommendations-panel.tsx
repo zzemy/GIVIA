@@ -23,12 +23,12 @@ export function ResultsRecommendationsPanel({
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`p-6 md:p-7 ${homeSurface.secondary}`}>
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-[#e7d2af]/78">
             {locale === 'zh' ? '推荐方案' : 'Recommended options'}
           </p>
-          <h3 className="mt-2 text-2xl font-bold text-slate-100">
+          <h3 className="home-balance mt-2 text-2xl font-bold text-slate-100">
             {analysis.riskLevel === 'Low'
               ? locale === 'zh'
                 ? '可选升级推荐'
@@ -37,7 +37,7 @@ export function ResultsRecommendationsPanel({
                 ? '更稳妥的替代推荐'
                 : 'Safer alternatives'}
           </h3>
-          <p className="mt-1 text-sm text-slate-300/78">
+          <p className="home-pretty mt-1 max-w-3xl text-sm leading-7 text-slate-300/78">
             {analysis.riskLevel === 'Low'
               ? locale === 'zh'
                 ? '当前礼物整体可送，以下是更稳、更匹配当前场景的升级选项。'
@@ -47,7 +47,7 @@ export function ResultsRecommendationsPanel({
                 : 'The current option carries risk. These safer replacements are ranked by country rules, scene template, budget, and recipient profile.'}
           </p>
         </div>
-        <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
+        <div className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-slate-200">
           {analysis.riskLevel === 'Low'
             ? locale === 'zh'
               ? '升级参考'
@@ -58,22 +58,22 @@ export function ResultsRecommendationsPanel({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+      <div className="mt-5 grid gap-4 xl:grid-cols-2">
         {analysis.recommendations.map(item => {
           const isFavorite = favoriteRecommendationIds.includes(item.id)
           const name = locale === 'zh' ? item.nameZh : item.nameEn
 
           return (
-            <div key={item.id} className={`p-4 ${homeSurface.quiet}`}>
+            <div key={item.id} className={`p-4 sm:p-5 ${homeSurface.inset}`}>
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.14em] text-[#e7d2af]/78">{item.category}</p>
-                  <h4 className="mt-2 text-lg font-semibold text-slate-50">{name}</h4>
+                  <h4 className="mt-2 text-xl font-semibold text-slate-50">{name}</h4>
                 </div>
                 <button
                   type="button"
                   onClick={() => onToggleFavoriteRecommendation(item.id)}
-                  className={`rounded-full border px-3 py-1 text-xs transition ${
+                  className={`home-pill-nowrap rounded-full border px-3 py-1.5 text-xs transition ${
                     isFavorite
                       ? 'border-[#e7d2af]/35 bg-[#e7d2af]/12 text-[#f5e6cd]'
                       : 'border-white/10 bg-white/[0.04] text-slate-200 hover:border-white/22'
@@ -83,19 +83,24 @@ export function ResultsRecommendationsPanel({
                 </button>
               </div>
 
-              <div className="mt-3 text-3xl font-bold text-[#f3ddba]">{item.score}</div>
-              <p className="mt-2 text-sm leading-6 text-slate-300/82">{locale === 'zh' ? item.reasonZh : item.reasonEn}</p>
+              <div className="mt-4 flex items-end justify-between gap-3">
+                <div className="text-3xl font-bold text-[#f3ddba]">{item.score}</div>
+                <span className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-slate-200">
+                  {locale === 'zh' ? '综合匹配分' : 'Match score'}
+                </span>
+              </div>
+              <p className="home-pretty mt-3 text-sm leading-6 text-slate-300/82">{locale === 'zh' ? item.reasonZh : item.reasonEn}</p>
 
               <div className="mt-4 space-y-2 text-xs text-slate-300">
-                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2">
+                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2.5">
                   <span className="text-[#f3ddba]">{locale === 'zh' ? '送礼话术：' : 'Pitch: '}</span>
                   {locale === 'zh' ? item.pitchZh : item.pitchEn}
                 </div>
-                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2">
+                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2.5">
                   <span className="text-[#f3ddba]">{locale === 'zh' ? '包装建议：' : 'Packaging: '}</span>
                   {locale === 'zh' ? item.packagingTipZh : item.packagingTipEn}
                 </div>
-                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2">
+                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2.5">
                   <span className="text-[#f3ddba]">{locale === 'zh' ? '寄送提示：' : 'Shipping: '}</span>
                   {locale === 'zh' ? item.shippingNoteZh : item.shippingNoteEn}
                 </div>

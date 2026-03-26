@@ -23,7 +23,7 @@ export function ResultsEnhancementPanels({
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-sky-300/20 bg-white/5 p-6 backdrop-blur-sm">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 backdrop-blur-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-2xl font-bold">{isZh ? 'P1 / P2 增强结果' : 'P1 / P2 enhancement results'}</h3>
@@ -33,17 +33,17 @@ export function ResultsEnhancementPanels({
               : 'These panels surface enhancement modules that were implemented but previously not shown in the main workflow.'}
           </p>
         </div>
-        <span className="rounded-full border border-sky-300/30 bg-sky-400/10 px-3 py-1 text-xs text-sky-100">
+        <span className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
           {isZh ? '增强洞察' : 'Enhanced insights'}
         </span>
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-2">
         {analysisEnhancements.p1?.multimodalResults && (
-          <div className="rounded-2xl border border-cyan-300/18 bg-[#10253b]/82 p-4">
+          <div className="rounded-2xl border border-white/10 bg-[#10253b]/74 p-4">
             <div className="flex items-center justify-between gap-3">
               <h4 className="text-lg font-semibold text-slate-50">{isZh ? '多模态识别补强' : 'Multimodal recognition'}</h4>
-              <span className="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
+              <span className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
                 {(analysisEnhancements.p1.multimodalResults.confidenceScore * 100).toFixed(0)}%
               </span>
             </div>
@@ -91,10 +91,10 @@ export function ResultsEnhancementPanels({
         )}
 
         {analysisEnhancements.p1?.logisticsEstimate && (
-          <div className="rounded-2xl border border-amber-300/18 bg-[#10253b]/82 p-4">
+          <div className="rounded-2xl border border-white/10 bg-[#10253b]/74 p-4">
             <div className="flex items-center justify-between gap-3">
               <h4 className="text-lg font-semibold text-slate-50">{isZh ? '物流与清关估算' : 'Logistics estimate'}</h4>
-              <span className="rounded-full border border-amber-300/25 bg-amber-300/10 px-3 py-1 text-xs text-amber-100">
+              <span className="home-pill-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
                 {analysisEnhancements.p1.logisticsEstimate.recommendedCarrier || 'N/A'}
               </span>
             </div>
