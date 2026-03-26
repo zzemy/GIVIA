@@ -1,22 +1,20 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "Taboo-Free Gifting | 跨文化礼赠",
+  title: 'Givia | Light Editorial High-End Gifting',
   description:
-    "AI-powered cross-cultural gift recommendation platform. Avoid cultural taboos with semantic analysis.",
-};
+    'A cross-cultural gifting experience rebuilt with bright editorial storytelling, human context, and high-end international brand direction.',
+}
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="zh">
-      <body className="antialiased">
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
-  );
+  )
 }

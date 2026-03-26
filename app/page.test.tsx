@@ -1,30 +1,38 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import RootPage from './page'
 
-const pushMock = jest.fn()
+const replaceMock = jest.fn()
+
+jest.useFakeTimers()
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: pushMock,
+    push: jest.fn(),
+    replace: replaceMock,
   }),
 }))
 
-describe('Root redirect page', () => {
+describe('Root editorial routing page', () => {
   beforeEach(() => {
-    pushMock.mockClear()
+    replaceMock.mockClear()
   })
 
-  it('renders loading state', () => {
+  it('renders the editorial routing hero', () => {
     render(<RootPage />)
-    expect(screen.getByText(/Loading.../i)).toBeInTheDocument()
+
+    expect(screen.getByRole('heading', { level: 1, name: /enter the[\s\S]*editorial flow/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /中文进入/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /enter in english/i })).toBeInTheDocument()
   })
 
-  it('redirects to /zh on mount', async () => {
+  it('redirects to /zh after the transition delay', () => {
     render(<RootPage />)
 
-    await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/zh')
+    act(() => {
+      jest.advanceTimersByTime(1800)
     })
+
+    expect(replaceMock).toHaveBeenCalledWith('/zh')
   })
 })

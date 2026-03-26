@@ -23,21 +23,21 @@ jest.mock('framer-motion', () => ({
 }))
 
 describe('Localized homepage', () => {
-  it('renders the bright editorial hero and primary CTA', () => {
+  it('renders the editorial homepage hero and CTA set', () => {
     render(<Home />)
 
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /让心意[\s\S]*跨越山海[\s\S]*毫无阻碍/i,
+        name: /不是送出[\s\S]*一件礼物[\s\S]*而是送达[\s\S]*一种分寸/i,
       }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /开始体验/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /开启心意之旅/i })).toBeInTheDocument()
-    expect(screen.getByText(/为全球关系编辑送礼语言/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /进入体验/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /开始礼赠编辑/i })).toBeInTheDocument()
+    expect(screen.getByText(/高端品牌感，不应该来自装饰/i)).toBeInTheDocument()
   })
 
-  it('renders language switch buttons', () => {
+  it('renders language switch button', () => {
     render(<Home />)
 
     expect(screen.getByRole('button', { name: 'EN' })).toBeInTheDocument()
