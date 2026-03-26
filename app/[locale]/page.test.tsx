@@ -34,7 +34,7 @@ describe('Localized homepage', () => {
     ).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /开始体验/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /开启心意之旅/i })).toBeInTheDocument()
-    expect(screen.getByText(/99%/)).toBeInTheDocument()
+    expect(screen.getByText(/为全球关系编辑送礼语言/i)).toBeInTheDocument()
   })
 
   it('renders language switch buttons', () => {

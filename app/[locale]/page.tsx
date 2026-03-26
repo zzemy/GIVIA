@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Globe2, HeartHandshake, Sparkles } from 'lucide-react'
+import { ArrowRight, Sparkles } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { HomeBackground } from '@/components/gifting/home/sections/home-background'
 
@@ -10,6 +10,37 @@ export default function Home() {
   const router = useRouter()
   const isZh = params?.locale !== 'en'
   const locale = isZh ? 'zh' : 'en'
+  const editorialCards = [
+    {
+      title: isZh ? '文化语境' : 'Cultural context',
+      copy: isZh
+        ? '不再只判断能不能送，而是理解这份礼物在不同关系和礼仪里会被怎样阅读。'
+        : 'Not just whether a gift works, but how it will be interpreted across relationships and etiquette.',
+      image:
+        'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      title: isZh ? '情绪与场景' : 'Emotion and occasion',
+      copy: isZh
+        ? '把对象、场合、距离感和表达语气一起纳入判断，让礼物更像一段被精心编辑的叙事。'
+        : 'Recipient, occasion, distance, and tone are edited together so the gift reads like a deliberate gesture.',
+      image:
+        'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80',
+    },
+    {
+      title: isZh ? '全球礼赠编辑' : 'Global gifting edit',
+      copy: isZh
+        ? '从识别物件到生成替代方案，整个流程都围绕国际化审美与人文体验重构。'
+        : 'From object recognition to safer alternatives, the full journey is rebuilt around international taste and human insight.',
+      image:
+        'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80',
+    },
+  ]
+  const editorialPrinciples = [
+    isZh ? 'Culture-first' : 'Culture-first',
+    isZh ? 'Narrative-led' : 'Narrative-led',
+    isZh ? 'Soft luxury' : 'Soft luxury',
+  ]
 
   return (
     <div className={`home-editorial-shell relative min-h-screen overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
@@ -97,52 +128,109 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.9, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="relative min-h-[420px] lg:min-h-[600px]"
+              className="relative min-h-[480px] lg:min-h-[620px]"
             >
-              <div className="absolute left-[2%] top-[28%] z-10 hidden w-[32%] rounded-[2rem] border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(234,237,241,0.86))] p-5 shadow-[0_28px_60px_-34px_rgba(15,23,42,0.28)] backdrop-blur-xl lg:block">
-                <p className="text-sm font-medium text-[#5e6572]">Cultural Connection</p>
-                <div className="mt-24 flex items-center gap-2 text-sm text-[#7f8795]">
-                  <Globe2 className="h-4 w-4" />
-                  <span>Tokyo, Japan</span>
-                </div>
-              </div>
+              <div className="absolute left-[-8%] top-[-10%] z-0 hidden h-56 w-56 rounded-full bg-[#dce7fb] blur-3xl lg:block" />
+              <div className="absolute bottom-[-6%] right-[6%] z-0 hidden h-64 w-64 rounded-full bg-[#f9dccb] blur-3xl lg:block" />
 
-              <div className="absolute right-[5%] top-[2%] z-20 w-full max-w-[21rem] overflow-hidden rounded-[2.4rem] border border-white/95 bg-[linear-gradient(180deg,rgba(255,220,214,0.9),rgba(249,216,206,0.88))] p-4 shadow-[0_38px_90px_-48px_rgba(15,23,42,0.42)] sm:max-w-[23rem] xl:max-w-[25rem]">
-                <div className="relative overflow-hidden rounded-[2rem] bg-[linear-gradient(160deg,#f5d3ca_0%,#f7cabd_26%,#eb2fa0_26.5%,#f52dac_72%,#cf0f79_100%)] px-6 py-8">
-                  <div className="pointer-events-none absolute inset-0 opacity-55 [background-image:radial-gradient(rgba(84,39,16,0.75)_1.6px,transparent_1.6px)] [background-size:22px_22px]" />
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_14%,rgba(255,255,255,0.32),transparent_26%),radial-gradient(circle_at_78%_78%,rgba(255,219,120,0.22),transparent_28%)]" />
-                  <div className="relative mx-auto mt-10 h-[14rem] w-[12.5rem] rounded-[1.6rem] border border-white/18 bg-[linear-gradient(180deg,#ff41bf_0%,#eb118a_100%)] shadow-[0_34px_54px_-30px_rgba(136,6,82,0.62)]">
-                    <div className="absolute left-1/2 top-0 h-full w-6 -translate-x-1/2 bg-[linear-gradient(180deg,#f9d992_0%,#c7932e_100%)] shadow-[0_0_18px_rgba(244,194,74,0.52)]" />
-                    <div className="absolute left-0 top-1/2 h-6 w-full -translate-y-1/2 bg-[linear-gradient(90deg,#f9d992_0%,#c7932e_100%)] shadow-[0_0_18px_rgba(244,194,74,0.52)]" />
-                    <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-full border-[10px] border-[#c7932e] border-l-transparent border-t-transparent" />
+              <div className="relative z-10 overflow-hidden rounded-[2.8rem] border border-white/95 bg-[linear-gradient(145deg,rgba(255,255,255,0.9),rgba(248,243,236,0.78))] p-5 shadow-[0_38px_90px_-50px_rgba(15,23,42,0.3)] backdrop-blur-2xl sm:p-6 lg:p-7">
+                <div className="grid gap-4 xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)]">
+                  <div className="flex h-full flex-col gap-4">
+                    <div className="rounded-[2.1rem] border border-black/6 bg-white/72 p-6 shadow-[0_20px_44px_-34px_rgba(15,23,42,0.18)]">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-[#7e8593]">
+                        {isZh ? 'Editorial intelligence' : 'Editorial intelligence'}
+                      </p>
+                      <h2 className="mt-4 text-[2rem] font-serif leading-tight tracking-[-0.04em] text-[#1f2027] sm:text-[2.35rem]">
+                        {isZh ? '为全球关系编辑送礼语言。' : 'Editing the language of gifting for global relationships.'}
+                      </h2>
+                      <p className="mt-4 text-sm leading-7 text-[#6b7280]">
+                        {isZh
+                          ? '不是翻译式工具，而是一套把文化分寸、情绪表达与礼物语义整合在一起的现代礼赠编辑系统。'
+                          : 'Not a translation utility, but a modern editorial system for cultural nuance, emotional intent, and gift semantics.'}
+                      </p>
+                    </div>
+
+                    <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+                      {editorialPrinciples.map(item => (
+                        <div
+                          key={item}
+                          className="rounded-[1.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.88),rgba(247,244,238,0.92))] px-5 py-4 text-sm text-[#4b5563] shadow-[0_16px_32px_-28px_rgba(15,23,42,0.18)]"
+                        >
+                          <p className="text-[11px] uppercase tracking-[0.2em] text-[#97a0af]">
+                            {isZh ? '原则' : 'Principle'}
+                          </p>
+                          <p className="mt-2 font-medium text-[#1f2027]">{item}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid min-h-[29rem] gap-4 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+                    <div className="grid gap-4">
+                      {editorialCards.slice(0, 2).map((card, index) => (
+                        <motion.div
+                          key={card.title}
+                          initial={{ opacity: 0, y: 18 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6, delay: 0.12 + index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                          className="relative overflow-hidden rounded-[2.1rem] border border-white/90 bg-[#f4efe7] shadow-[0_22px_46px_-34px_rgba(15,23,42,0.22)]"
+                        >
+                          <div
+                            className="absolute inset-0 bg-cover bg-center saturate-[0.86]"
+                            style={{ backgroundImage: `url(${card.image})` }}
+                          />
+                          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,243,236,0.06),rgba(28,26,23,0.54))]" />
+                          <div className="relative flex min-h-[13rem] flex-col justify-end p-5">
+                            <p className="text-[11px] uppercase tracking-[0.2em] text-white/70">
+                              {isZh ? `章节 0${index + 1}` : `Chapter 0${index + 1}`}
+                            </p>
+                            <h3 className="mt-2 text-[1.45rem] font-serif text-white">{card.title}</h3>
+                            <p className="mt-2 max-w-sm text-sm leading-6 text-white/80">{card.copy}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 18 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative overflow-hidden rounded-[2.3rem] border border-white/90 bg-[#efe7dd] shadow-[0_24px_52px_-34px_rgba(15,23,42,0.22)]"
+                    >
+                      <div
+                        className="absolute inset-0 bg-cover bg-center saturate-[0.78]"
+                        style={{ backgroundImage: `url(${editorialCards[2]?.image})` }}
+                      />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(19,20,25,0.52))]" />
+                      <div className="absolute inset-x-4 top-4 rounded-full border border-white/30 bg-white/18 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-white/86 backdrop-blur-md">
+                        {isZh ? 'Light Editorial High-End' : 'Light Editorial High-End'}
+                      </div>
+                      <div className="relative flex h-full min-h-[29rem] flex-col justify-between p-6">
+                        <div />
+                        <div className="space-y-4">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-white/28 bg-white/14 px-3 py-1.5 text-xs text-white/86 backdrop-blur-md">
+                            <Sparkles className="h-3.5 w-3.5" />
+                            {isZh ? '人文叙事驱动' : 'Human narrative driven'}
+                          </div>
+                          <div className="rounded-[1.9rem] border border-white/28 bg-white/16 p-5 backdrop-blur-xl">
+                            <p className="text-[11px] uppercase tracking-[0.2em] text-white/68">
+                              {isZh ? '品牌视角' : 'Brand perspective'}
+                            </p>
+                            <p className="mt-3 text-[1.45rem] font-serif leading-tight text-white">
+                              {isZh ? '把送礼从“避免出错”，提升到“表达得体、被真实感知”。' : 'Move gifting beyond avoiding mistakes and toward being felt with tact and clarity.'}
+                            </p>
+                            <p className="mt-4 text-sm leading-7 text-white/76">
+                              {isZh
+                                ? '首页不再展示工具化卡片，而是用统一的摄影、留白和叙事层次去建立品牌信任。'
+                                : 'The homepage now builds trust through photography, whitespace, and narrative hierarchy instead of stacked utility cards.'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
                   </div>
                 </div>
               </div>
-
-              <div className="absolute bottom-[15%] right-[23%] z-30 rounded-[1.55rem] border border-white/88 bg-white/86 px-5 py-4 shadow-[0_24px_50px_-30px_rgba(15,23,42,0.25)] backdrop-blur-xl">
-                <p className="text-sm font-medium text-[#4d5564]">{isZh ? '心意解析完成' : 'Intention Decoded'}</p>
-                <div className="mt-3 flex gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                  <span className="h-2 w-2 rounded-full bg-[#6c7fd2]" />
-                  <span className="h-2 w-2 rounded-full bg-amber-400" />
-                </div>
-              </div>
-
-              <motion.div
-                initial={{ y: 10 }}
-                animate={{ y: -12 }}
-                transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-                className="absolute bottom-[8%] right-[8%] z-40 flex w-[8.8rem] flex-col items-center rounded-[1.9rem] border border-white/88 bg-white/86 px-4 py-5 text-center shadow-[0_28px_54px_-34px_rgba(15,23,42,0.28)] backdrop-blur-xl"
-              >
-                <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-rose-50 text-rose-500">
-                  <HeartHandshake className="h-5 w-5" />
-                </div>
-                <p className="text-[2rem] font-semibold leading-none text-[#262830]">99%</p>
-                <p className="mt-2 text-xs tracking-[0.16em] text-[#7c8596]">{isZh ? '文化契合度' : 'Cultural fit'}</p>
-              </motion.div>
-
-              <div className="absolute left-0 top-[8%] z-0 hidden h-[16rem] w-[16rem] rounded-full bg-[#dce7fb] blur-3xl lg:block" />
-              <div className="absolute bottom-[5%] right-[10%] z-0 hidden h-[15rem] w-[15rem] rounded-full bg-[#f8dfc5] blur-3xl lg:block" />
             </motion.section>
           </div>
         </main>

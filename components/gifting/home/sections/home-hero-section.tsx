@@ -182,10 +182,10 @@ export function HomeHeroSection({
 
             <div className="relative h-full">
               <div className="absolute left-[6%] top-[28%] z-10 hidden w-[34%] rounded-[2rem] border border-white/85 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(236,237,240,0.84))] p-5 shadow-[0_28px_60px_-34px_rgba(15,23,42,0.32)] backdrop-blur-xl lg:block">
-                <p className="text-sm font-medium text-[#5d6472]">{isZh ? 'Cultural Connection' : 'Cultural Connection'}</p>
+                <p className="text-sm font-medium text-[#5d6472]">{isZh ? 'Global Etiquette Atlas' : 'Global Etiquette Atlas'}</p>
                 <div className="mt-24 flex items-center gap-2 text-sm text-[#7c8596]">
                   <Globe2 size={15} />
-                  <span>Tokyo, Japan</span>
+                  <span>{isZh ? 'Emotion · Etiquette · Occasion' : 'Emotion · Etiquette · Occasion'}</span>
                 </div>
               </div>
 
@@ -219,8 +219,8 @@ export function HomeHeroSection({
                 <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-rose-50 text-rose-500">
                   <HeartHandshake size={20} />
                 </div>
-                <p className="text-[2rem] font-semibold leading-none text-[#262830]">99%</p>
-                <p className="mt-2 text-xs tracking-[0.16em] text-[#7c8596]">{isZh ? '文化契合度' : 'Cultural fit'}</p>
+                <p className="text-[1.35rem] font-semibold leading-none text-[#262830]">{isZh ? '已策展' : 'Curated'}</p>
+                <p className="mt-2 text-xs tracking-[0.16em] text-[#7c8596]">{isZh ? '叙事就绪' : 'Editorial fit'}</p>
               </motion.div>
 
               <div className="absolute left-0 top-[8%] z-0 hidden h-[17rem] w-[17rem] rounded-full bg-[#d8e5fb] blur-3xl lg:block" />
