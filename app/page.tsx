@@ -26,7 +26,7 @@ export default function RootPage() {
           <section className="flex flex-col justify-center">
             <div className="inline-flex w-fit items-center gap-2 rounded-full border border-[#5d72cc]/14 bg-white/66 px-4 py-2 text-sm text-[#5d72cc] shadow-[0_14px_34px_-26px_rgba(93,114,204,0.45)] backdrop-blur-xl">
               <span className="h-2 w-2 rounded-full bg-[#5d72cc]" />
-              Choose your language
+              A quiet beginning
             </div>
 
             <div className="mt-8 flex items-center gap-4">
@@ -40,13 +40,13 @@ export default function RootPage() {
             </div>
 
             <h1 className="mt-8 max-w-[10ch] text-[4.5rem] font-serif leading-[0.9] tracking-[-0.085em] text-[#1d1915] sm:text-[5.6rem]">
-              Begin with the
-              <span className="block text-[#5d72cc]">right gesture</span>
-              for the right culture.
+              Before a gift
+              <span className="block text-[#5d72cc]">crosses a border,</span>
+              it already carries a story.
             </h1>
 
             <p className="mt-6 max-w-[34rem] text-lg font-light leading-9 text-[#69707d]">
-              Givia helps you judge whether a gift will feel thoughtful, awkward, or risky before it crosses a cultural boundary.
+              Some gifts arrive as warmth. Some arrive as misunderstanding. Givia helps you read the distance between the two before you send anything.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -85,7 +85,7 @@ export default function RootPage() {
                   />
                   <div className="relative flex h-full min-h-[16rem] flex-col justify-end p-5">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-white/72">Cultural atmosphere</p>
-                    <p className="mt-2 text-[1.55rem] font-serif leading-tight text-white">Read the mood around a gift before it reaches the other side.</p>
+                    <p className="mt-2 text-[1.55rem] font-serif leading-tight text-white">Every gift enters a room before it enters a hand.</p>
                   </div>
                 </article>
 
@@ -99,7 +99,7 @@ export default function RootPage() {
                   />
                   <div className="relative flex h-full min-h-[12.5rem] items-end p-5">
                     <div className="rounded-full border border-white/28 bg-white/16 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white/84 backdrop-blur-md">
-                      Human context
+                      Social distance
                     </div>
                   </div>
                 </article>
@@ -116,16 +116,16 @@ export default function RootPage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.28),transparent_26%)] mix-blend-screen" />
                 <div className="relative flex h-full min-h-[42rem] flex-col justify-between p-6">
                   <div className="inline-flex w-fit items-center rounded-full border border-white/28 bg-white/14 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-white/84 backdrop-blur-md">
-                    Before you send
+                    A quieter judgment
                   </div>
                   <div className="space-y-4">
                     <div className="rounded-[2rem] border border-white/24 bg-white/14 p-5 backdrop-blur-xl">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-white/72">What Givia helps with</p>
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-white/72">Before the gesture leaves you</p>
                       <p className="mt-3 text-[1.95rem] font-serif leading-tight text-white">
-                        Check whether the gift fits the relationship, the destination, and the occasion before you decide to send it.
+                        The same object can feel generous in one city, intimate in another, and inappropriate somewhere else.
                       </p>
                       <p className="mt-4 text-sm leading-7 text-white/80">
-                        See cultural friction early, understand safer alternatives, and make the final expression feel considerate rather than generic.
+                        So the question is not only what to give, but how it will be read, by whom, and in what kind of relationship.
                       </p>
                     </div>
                   </div>

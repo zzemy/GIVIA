@@ -85,10 +85,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#5368b5]',
       chapter: isZh ? 'Chapter 01' : 'Chapter 01',
       kicker: isZh ? 'Object reading' : 'Object reading',
-      title: isZh ? '先把礼物真正看清。' : 'See the gift with real precision first.',
+      title: isZh ? '先看清故事，是从什么样的礼物开始。' : 'First, see what kind of object this story begins with.',
       desc: isZh
-        ? '先从图像、名称与描述里提炼礼物的真实语义，避免后续一切判断都建立在偏差之上。'
-        : 'Extract the object’s true meaning from image, title, and description before every later judgment inherits the wrong premise.',
+        ? '每一段送达都始于物件本身。先把它的材质、气质与象征看清，后面的文化判断才不会失焦。'
+        : 'Every gesture begins with the object itself. Read its material, mood, and symbolism first so every later judgment does not drift off premise.',
       quote: isZh ? 'Every gesture starts with the object itself.' : 'Every gesture starts with the object itself.',
       images: photoSets[1],
     },
@@ -100,10 +100,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#2d8a69]',
       chapter: isZh ? 'Chapter 02' : 'Chapter 02',
       kicker: isZh ? 'Context framing' : 'Context framing',
-      title: isZh ? '把目的地与对象写入语境。' : 'Write destination and recipient into the context.',
+      title: isZh ? '再把人物、地点与场合写进同一页。' : 'Then place the person, place, and occasion on the same page.',
       desc: isZh
-        ? '礼物并不是寄往一个地址，而是进入一个由礼仪、关系与场合共同塑造的阅读环境。'
-        : 'A gift is never sent merely to an address. It enters a field of interpretation shaped by etiquette, relationship, and occasion.',
+        ? '礼物不是寄往一个地址，而是进入一段具体关系、一个具体场合，以及一套正在等待它的文化阅读。'
+        : 'A gift is never sent to an address alone. It enters a relationship, an occasion, and a cultural reading already waiting for it.',
       quote: isZh ? 'Context changes how the same object is felt.' : 'Context changes how the same object is felt.',
       images: photoSets[2],
     },
@@ -115,10 +115,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#c67a1f]',
       chapter: isZh ? 'Chapter 03' : 'Chapter 03',
       kicker: isZh ? 'Editorial judgment' : 'Editorial judgment',
-      title: isZh ? '把线索收束成文化判断。' : 'Edit the gathered signals into a cultural judgment.',
+      title: isZh ? '然后判断，这份心意会被怎样接住。' : 'Then decide how this gesture is likely to be received.',
       desc: isZh
-        ? '这里不再增加素材，而是把礼物线索、文化分寸与关系角色收束成真正可执行的礼赠建议。'
-        : 'No more raw material is added here. Gift signals, cultural tact, and relationship roles are edited into an actionable recommendation.',
+        ? '这里不再增加新素材，而是把礼物线索、文化分寸与关系角色收束成一个更成熟的判断。'
+        : 'No new material is added here. Gift signals, cultural tact, and relationship roles are tightened into a more mature judgment.',
       quote: isZh ? 'Precision matters most at the moment of judgment.' : 'Precision matters most at the moment of judgment.',
       images: photoSets[3],
     },
@@ -130,10 +130,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#7b58b9]',
       chapter: isZh ? 'Chapter 04' : 'Chapter 04',
       kicker: isZh ? 'Composition in progress' : 'Composition in progress',
-      title: isZh ? '系统正在编排最终判断。' : 'The system is composing the final judgment.',
+      title: isZh ? '系统正在把这些线索写成最后的结论。' : 'The system is now writing those signals into a final conclusion.',
       desc: isZh
-        ? '多模态识别、礼仪规则与关系语境正在交叉校准，准备输出更完整、更稳妥的礼赠提案。'
-        : 'Multimodal reading, etiquette rules, and relationship context are being cross-checked to shape a more complete and tactful proposal.',
+        ? '礼物语义、礼仪规则与关系语境正在交叉校准，准备把这次送达整理成一份更稳妥的提案。'
+        : 'Gift meaning, etiquette rules, and relationship context are being cross-checked to turn this gesture into a more tactful proposal.',
       quote: isZh ? 'Editorial intelligence is being composed.' : 'Editorial intelligence is being composed.',
       images: photoSets[4],
     },
@@ -145,10 +145,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#d84b74]',
       chapter: isZh ? 'Chapter 05' : 'Chapter 05',
       kicker: isZh ? 'Final proposal' : 'Final proposal',
-      title: isZh ? '把情感稳妥地送达。' : 'Deliver the feeling with tact and precision.',
+      title: isZh ? '最后，让心意以更好的方式抵达。' : 'At last, let the feeling arrive in a better way.',
       desc: isZh
-        ? '结果页并不是评分终点，而是一份兼顾文化分寸、表达方式与替代方案的礼赠编辑稿。'
-        : 'The result is not a scorecard. It is an editorial gifting brief balancing tact, expression, and alternatives.',
+        ? '结果页不是冷冰冰的评分终点，而是一份兼顾文化分寸、表达方式与替代方向的礼赠编辑稿。'
+        : 'The result is not a cold scorecard. It is an editorial gifting brief balancing tact, expression, and alternatives.',
       quote: isZh ? 'A gift lands through feeling, not through raw utility.' : 'A gift lands through feeling, not through raw utility.',
       images: photoSets[5],
     },
@@ -184,7 +184,7 @@ export default function GiftingPage() {
               <div>
                 <p className="text-xl font-serif font-medium tracking-tight text-[#1c1a17]">Givia</p>
                 <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
-                  {isZh ? 'Narrative Editorial Flow' : 'Narrative Editorial Flow'}
+                  {isZh ? 'Editorial Gifting Story' : 'Editorial Gifting Story'}
                 </p>
               </div>
             </div>
@@ -228,7 +228,7 @@ export default function GiftingPage() {
                       />
                       <div className="relative flex h-full min-h-[12rem] items-end p-5">
                         <div className="rounded-full border border-white/26 bg-white/18 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/86 backdrop-blur-md">
-                          {isZh ? 'Human frame' : 'Human frame'}
+                          {isZh ? 'Human scene' : 'Human scene'}
                         </div>
                       </div>
                     </div>
@@ -266,7 +266,7 @@ export default function GiftingPage() {
                     {currentContent.desc}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-2">
-                    {[isZh ? 'Editorial pacing' : 'Editorial pacing', isZh ? 'Human mood' : 'Human mood', isZh ? 'Soft luxury' : 'Soft luxury'].map(
+                    {[isZh ? 'Story pacing' : 'Story pacing', isZh ? 'Human mood' : 'Human mood', isZh ? 'Soft luxury' : 'Soft luxury'].map(
                       item => (
                         <span key={item} className="rounded-full border border-black/8 bg-white/56 px-4 py-2 text-xs uppercase tracking-[0.16em] text-[#7f8696]">
                           {item}
@@ -336,15 +336,15 @@ export default function GiftingPage() {
                 >
                   <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
-                      {isZh ? 'Step 01 / Gift signal' : 'Step 01 / Gift signal'}
+                      {isZh ? 'Step 01 / Opening object' : 'Step 01 / Opening object'}
                     </p>
                     <h1 className="mt-4 text-[3rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
-                      {isZh ? '先把礼物的语义写清楚。' : 'Clarify the gift before you judge it.'}
+                      {isZh ? '故事要先从礼物本身开始。' : 'The story has to begin with the gift itself.'}
                     </h1>
                     <p className="mt-4 max-w-2xl text-lg leading-9 text-[#667085]">
                       {isZh
-                        ? '上传参考图，补充名称与描述，让系统先理解这份礼物本身，再进入跨文化解读。'
-                        : 'Upload a reference, add the name and description, and let the system understand the object before the cross-cultural read begins.'}
+                        ? '上传参考图，补充名称与描述，让系统先理解这份物件是什么、像什么、会让人联想到什么。'
+                        : 'Upload a reference, add the name and description, and let the system understand what the object is, what mood it carries, and what associations it may trigger.'}
                     </p>
                   </div>
 
@@ -375,15 +375,15 @@ export default function GiftingPage() {
                 >
                   <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
-                      {isZh ? 'Step 02 / Cultural context' : 'Step 02 / Cultural context'}
+                      {isZh ? 'Step 02 / People and place' : 'Step 02 / People and place'}
                     </p>
                     <h1 className="mt-4 text-[3rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
-                      {isZh ? '把目的地、对象与场合编辑进同一页。' : 'Edit destination, recipient, and occasion onto the same page.'}
+                      {isZh ? '再把人物、地点与场景放进同一个故事里。' : 'Then place person, place, and occasion inside the same story.'}
                     </h1>
                     <p className="mt-4 max-w-2xl text-lg leading-9 text-[#667085]">
                       {isZh
-                        ? '国家只是起点，更重要的是这份礼物将被谁接收、在什么场合被感知。'
-                        : 'Country is only the starting point. What matters is who receives the gift and in what social setting it will be felt.'}
+                        ? '国家只是背景，真正决定分寸的，是谁会接住它、在什么场合接住它、以及彼此相隔多远。'
+                        : 'Country is only the backdrop. What defines the tact is who receives it, in what setting, and how much distance exists between you.'}
                     </p>
                   </div>
 
@@ -421,15 +421,15 @@ export default function GiftingPage() {
                 >
                   <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
-                      {isZh ? 'Step 03 / Cultural judgment' : 'Step 03 / Cultural judgment'}
+                      {isZh ? 'Step 03 / Moment of judgment' : 'Step 03 / Moment of judgment'}
                     </p>
                     <h1 className="mt-4 text-[3rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
-                      {isZh ? '把所有线索收束成一份礼赠建议。' : 'Turn the gathered signals into a gifting recommendation.'}
+                      {isZh ? '现在判断，这份心意会被如何理解。' : 'Now decide how the gesture is likely to be understood.'}
                     </h1>
                     <p className="mt-4 max-w-2xl text-lg leading-9 text-[#667085]">
                       {isZh
-                        ? '最后一步决定的是送与不送、怎么送，以及如果不稳妥时该如何替换。'
-                        : 'This final chapter decides whether to send, how to send, and what to substitute when the current option is not tactful enough.'}
+                        ? '这一章决定的，不只是送与不送，而是这份心意应该怎样落地，才不会让好意偏离原本的方向。'
+                        : 'This chapter decides not only whether to send, but how the gesture should land so that goodwill does not drift away from its intention.'}
                     </p>
                   </div>
 
@@ -475,15 +475,15 @@ export default function GiftingPage() {
 
                       <div>
                         <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
-                          {isZh ? 'Composing cultural intelligence' : 'Composing cultural intelligence'}
+                          {isZh ? 'Composing the final reading' : 'Composing the final reading'}
                         </p>
                         <h2 className="mt-4 text-[2.7rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
-                          {isZh ? '系统正在把判断写成最终提案。' : 'The system is shaping the final editorial recommendation.'}
+                          {isZh ? '系统正在把整段判断写成最终提案。' : 'The system is writing the full reading into a final proposal.'}
                         </h2>
                         <p className="mt-4 max-w-xl text-lg leading-9 text-[#667085]">
                           {isZh
-                            ? '正在同步比对礼物语义、国家礼仪、关系角色和高级模块结果，准备输出更稳妥的送礼提案。'
-                            : 'Gift semantics, country etiquette, relationship roles, and enhancement modules are being cross-checked to form a safer gifting proposal.'}
+                            ? '正在同步比对礼物语义、国家礼仪、关系角色与文化规则，准备输出更稳妥的送达方式。'
+                            : 'Gift semantics, country etiquette, relationship roles, and cultural rules are being cross-checked to produce a more tactful way for the gesture to land.'}
                         </p>
                         <div className="mt-6 grid gap-3 sm:grid-cols-3">
                           {[
