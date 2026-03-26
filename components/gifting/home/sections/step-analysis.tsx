@@ -1,12 +1,10 @@
 'use client'
 
 import React from 'react'
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { CheckCircle2, SlidersHorizontal, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { homeButton, homeControl } from '@/components/gifting/home/home-design-tokens'
-import { withBasePath } from '@/lib/asset-path'
 import { getCountryName } from '@/lib/countries'
 import type { SceneTemplate } from '@/lib/types/gifting-types'
 import type { EnhancementSettings, Locale, RecognitionResult, SelectOption } from '@/components/gifting/home/types'
@@ -87,29 +85,26 @@ export function StepAnalysis({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-[2rem] border border-black/6 bg-white/92 p-6 shadow-[0_24px_60px_-36px_rgba(15,23,42,0.22)] backdrop-blur-xl sm:p-7"
+      className="rounded-[2.3rem] border border-black/6 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(249,245,239,0.94))] p-6 shadow-[0_30px_80px_-46px_rgba(15,23,42,0.24)] backdrop-blur-2xl sm:p-8"
     >
-      <div className="mb-6 flex items-start justify-between gap-4 border-b border-black/6 pb-5">
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-[#667085]">{isZh ? 'STEP 03' : 'STEP 03'}</p>
-          <h2 className="mt-2 text-[1.9rem] font-serif leading-tight text-[#1c1a17]">
-            {isZh ? '第三步：获取文化分析' : 'Step 3: Generate cultural analysis'}
-          </h2>
-          <p className="mt-2 max-w-[42rem] text-sm leading-7 text-[#667085]">
-            {isZh
-              ? '最后一步会综合礼物属性、国家语境、对象画像和高级模块，为你输出送礼风险与替代建议。'
-              : 'The final step combines gift attributes, country context, recipient profile, and optional modules into a recommendation with risk guidance.'}
-          </p>
-        </div>
-        <Image src={withBasePath('/brand/step-analysis.svg')} alt="Analysis step" width={42} height={42} />
+      <div className="rounded-[1.9rem] border border-black/6 bg-white/70 p-5 shadow-[0_18px_42px_-30px_rgba(15,23,42,0.16)]">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Judgment room' : 'Judgment room'}</p>
+        <p className="mt-3 text-[1.85rem] font-serif leading-tight text-[#1c1a17]">
+          {isZh ? '现在不是再填表，而是做最后的文化取舍。' : 'This is no longer about filling fields. It is about making the final cultural call.'}
+        </p>
+        <p className="mt-3 max-w-3xl text-sm leading-8 text-[#667085]">
+          {isZh
+            ? '先确认礼物、国家和对象是否完整，再决定是否引入更深层的增强模块。'
+            : 'Confirm that the gift, country, and recipient frame are complete, then decide whether deeper enhancement modules are truly necessary.'}
+        </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div className="rounded-[1.5rem] border border-black/6 bg-[#fbf7f2] p-4">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '分析准备清单' : 'Readiness checklist'}</p>
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)]">
+        <div className="rounded-[2rem] border border-black/6 bg-[linear-gradient(180deg,#fcfaf7,#f7f1e9)] p-5">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Readiness checklist' : 'Readiness checklist'}</p>
           <div className="mt-4 space-y-3">
             {checklist.map(item => (
-              <div key={item.label} className="flex items-center justify-between gap-3 rounded-[1rem] bg-white/88 px-4 py-3">
+              <div key={item.label} className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-black/6 bg-white/84 px-4 py-4">
                 <div className="flex items-center gap-3">
                   <div className={`rounded-full p-1 ${item.done ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
                     <CheckCircle2 size={16} />
@@ -125,30 +120,26 @@ export function StepAnalysis({
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-[1.5rem] border border-black/6 bg-white/88 p-4">
-            <div className="flex items-center justify-between gap-3">
+          <div className="rounded-[1.9rem] border border-black/6 bg-white/76 p-5">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '高级判断补充项' : 'Advanced add-ons'}</p>
+                <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Calibration modules' : 'Calibration modules'}</p>
                 <p className="mt-2 text-sm leading-7 text-[#667085]">
                   {isZh
-                    ? '默认分析已经可用。只有在你需要更深入识别、物流估算或重排判断时，再打开高级模块。'
-                    : 'The default analysis is already sufficient. Turn on advanced modules only when you need deeper recognition, logistics, or reranking.'}
+                    ? '默认判断通常已经足够。只有需要更深层识别、物流估算或重排时，再开启增强模块。'
+                    : 'The default analysis is usually enough. Turn on deeper modules only when you truly need reranking, logistics, or richer recognition.'}
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowAdvanced(current => !current)}
-                className={`${homeButton.secondary} px-4 py-2 text-sm`}
-              >
+              <button type="button" onClick={() => setShowAdvanced(current => !current)} className={`${homeButton.secondary} px-4 py-2 text-sm`}>
                 <SlidersHorizontal size={14} />
-                {showAdvanced ? (isZh ? '收起高级设置' : 'Hide advanced settings') : isZh ? '展开高级设置' : 'Show advanced settings'}
+                {showAdvanced ? (isZh ? '收起设置' : 'Hide settings') : isZh ? '展开设置' : 'Show settings'}
               </button>
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
               {(Object.entries(analysisEnhancementSettings) as Array<[keyof EnhancementSettings, boolean]>).map(([key, enabled]) =>
                 enabled ? (
-                  <span key={key} className="rounded-full border border-[#efe3ce] bg-[#fff8ef] px-3 py-1 text-xs text-[#9b6b20]">
+                  <span key={key} className="rounded-full border border-[#efe3ce] bg-[#fff8ef] px-4 py-2 text-xs text-[#9b6b20]">
                     {key}
                   </span>
                 ) : null,
@@ -161,10 +152,10 @@ export function StepAnalysis({
             </div>
 
             {showAdvanced && (
-              <div className="mt-4 space-y-3">
+              <div className="mt-5 space-y-3">
                 {(Object.keys(analysisEnhancementSettings) as Array<keyof EnhancementSettings>).map(key => (
-                  <label key={key} className="flex items-center justify-between gap-3 rounded-[1rem] border border-black/6 bg-[#fcfaf7] px-4 py-3 text-sm text-[#1c1a17]">
-                    <span>{key}</span>
+                  <label key={key} className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-black/6 bg-[#fcfaf7] px-4 py-4 text-sm text-[#1c1a17]">
+                    <span className="font-medium">{key}</span>
                     <input
                       type="checkbox"
                       checked={analysisEnhancementSettings[key]}
@@ -175,13 +166,9 @@ export function StepAnalysis({
                 ))}
 
                 {analysisEnhancementSettings.logistics && (
-                  <div className="rounded-[1rem] border border-black/6 bg-[#fcfaf7] p-4">
-                    <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '物流出发地' : 'Shipping origin'}</p>
-                    <select
-                      value={enhancementOriginCountry}
-                      onChange={event => onEnhancementOriginCountryChange(event.target.value)}
-                      className={`${homeControl.input} mt-3`}
-                    >
+                  <div className="rounded-[1.2rem] border border-black/6 bg-[#fcfaf7] p-4">
+                    <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '物流出发地' : 'Shipping origin'}</p>
+                    <select value={enhancementOriginCountry} onChange={event => onEnhancementOriginCountryChange(event.target.value)} className={`${homeControl.input} mt-3`}>
                       {enhancementOriginOptions.map(option => (
                         <option key={option.value} value={option.value}>
                           {option.label}
@@ -194,12 +181,12 @@ export function StepAnalysis({
             )}
           </div>
 
-          <div className="rounded-[1.5rem] border border-[#eadfcb] bg-[linear-gradient(180deg,#fffdf8,#fff7eb)] p-5 shadow-[0_18px_44px_-30px_rgba(184,129,45,0.32)]">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-[#9b6b20]">{isZh ? '准备完成后' : 'When ready'}</p>
-            <p className="mt-3 text-base leading-7 text-[#5f4b2c]">
+          <div className="rounded-[1.95rem] border border-[#eadfcb] bg-[linear-gradient(180deg,#fffdf8,#fff4e3)] p-5 shadow-[0_22px_46px_-32px_rgba(184,129,45,0.26)]">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#9b6b20]">{isZh ? 'Editorial decision' : 'Editorial decision'}</p>
+            <p className="mt-3 text-base leading-8 text-[#5f4b2c]">
               {isZh
-                ? '系统会输出文化风险、包装建议、问候语语气和更稳妥的替代礼物。'
-                : 'The system will return cultural risk notes, packaging guidance, greeting tone, and safer alternative gifts.'}
+                ? '系统将输出文化风险、包装方向、问候语语气，以及更稳妥的替代礼物。'
+                : 'The system will produce cultural risk notes, packaging direction, greeting tone, and safer alternative gifts.'}
             </p>
 
             <Button onClick={onAnalyze} disabled={!canAnalyze || isAnalyzing} className={`mt-5 w-full rounded-full py-4 text-sm font-semibold ${homeButton.primary}`}>

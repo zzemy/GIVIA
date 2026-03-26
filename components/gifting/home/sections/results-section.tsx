@@ -80,15 +80,19 @@ export function ResultsSection({
         ? '建议优先参考替代推荐，并结合包装与表达方式一起调整。'
         : 'Prefer the alternative recommendations and adjust packaging and wording together.')
 
+  const contextParagraph = [visionDescription.trim() || giftDescription.trim(), targetProfile.trim()].filter(Boolean).join(' ')
+
   return (
-    <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+    <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-[#667085]">{isZh ? '分析结果' : 'Analysis result'}</p>
-          <h2 className="mt-2 text-[2.5rem] font-serif leading-tight text-[#1c1a17]">
-            {isZh ? '跨文化礼赠指南' : 'The gifting guide'}
+          <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">
+            {isZh ? 'Analysis result' : 'Analysis result'}
+          </p>
+          <h2 className="mt-2 text-[3rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
+            {isZh ? '一份可执行的礼赠编辑稿。' : 'An editorial gifting brief you can actually use.'}
           </h2>
-          <p className="mt-2 text-sm leading-7 text-[#667085]">
+          <p className="mt-3 text-base leading-8 text-[#667085]">
             {countryLabel} · {selectedAudienceLabel} · {sceneLabel}
           </p>
         </div>
@@ -99,7 +103,7 @@ export function ResultsSection({
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
-        <div className="rounded-[2rem] border border-[#e6ddd1] bg-[linear-gradient(160deg,#fffdf9,#fff6ea)] p-7 shadow-[0_24px_60px_-40px_rgba(184,129,45,0.3)]">
+        <div className="rounded-[2.2rem] border border-[#e6ddd1] bg-[linear-gradient(160deg,#fffdf9,#fff4e6)] p-7 shadow-[0_30px_70px_-44px_rgba(184,129,45,0.28)]">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-[#eadfcb] bg-white/70 px-3 py-1 text-xs text-[#8b6b2d]">
               {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI + 规则引擎' : 'AI + Rules') : isZh ? '本地规则回退' : 'Local fallback'}
@@ -109,19 +113,19 @@ export function ResultsSection({
             </span>
           </div>
 
-          <h3 className="mt-5 text-[2.1rem] font-serif leading-tight text-[#1c1a17]">{summaryTitle}</h3>
+          <h3 className="mt-5 text-[2.4rem] font-serif leading-[1.08] tracking-[-0.03em] text-[#1c1a17]">{summaryTitle}</h3>
           <p className="mt-4 max-w-[48rem] text-base leading-8 text-[#5d6472]">{summaryBody}</p>
 
           <div className="mt-6 grid gap-3 md:grid-cols-3">
-            <div className="rounded-[1.25rem] border border-black/6 bg-white/70 p-4">
+            <div className="rounded-[1.45rem] border border-black/6 bg-white/74 p-4">
               <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '风险等级' : 'Risk level'}</p>
               <p className="mt-2 text-lg font-semibold text-[#1c1a17]">{analysis.riskLevel}</p>
             </div>
-            <div className="rounded-[1.25rem] border border-black/6 bg-white/70 p-4">
+            <div className="rounded-[1.45rem] border border-black/6 bg-white/74 p-4">
               <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '包装方向' : 'Packaging'}</p>
               <p className="mt-2 text-lg font-semibold text-[#1c1a17]">{analysis.packaging.style}</p>
             </div>
-            <div className="rounded-[1.25rem] border border-black/6 bg-white/70 p-4">
+            <div className="rounded-[1.45rem] border border-black/6 bg-white/74 p-4">
               <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '问候语语气' : 'Greeting tone'}</p>
               <p className="mt-2 text-lg font-semibold text-[#1c1a17]">{analysis.greetingCard.tone}</p>
             </div>
@@ -129,41 +133,44 @@ export function ResultsSection({
         </div>
 
         <div className="space-y-4">
-          <div className="rounded-[1.7rem] border border-black/6 bg-white/88 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.22)]">
+          <div className="rounded-[1.9rem] border border-black/6 bg-white/82 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.18)]">
             <div className="flex items-start gap-3">
               <div className="rounded-full bg-[#eef6ef] p-2 text-emerald-600">
                 <ShieldCheck size={18} />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '推荐方向' : 'Recommended path'}</p>
+                <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? 'Recommended path' : 'Recommended path'}</p>
                 <p className="mt-2 text-xl font-semibold text-[#1c1a17]">
-                  {topRecommendation ? (isZh ? topRecommendation.nameZh : topRecommendation.nameEn) : analysis.rescueItem || (isZh ? '继续优化当前礼物' : 'Refine the current gift')}
+                  {topRecommendation
+                    ? isZh
+                      ? topRecommendation.nameZh
+                      : topRecommendation.nameEn
+                    : analysis.rescueItem || (isZh ? '继续优化当前礼物' : 'Refine the current gift')}
                 </p>
-                <p className="mt-3 text-sm leading-7 text-[#667085]">
+                <p className="mt-3 text-sm leading-8 text-[#667085]">
                   {topRecommendation ? (isZh ? topRecommendation.reasonZh : topRecommendation.reasonEn) : analysis.rescueReason}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-[1.7rem] border border-black/6 bg-white/88 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.22)]">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '礼物上下文' : 'Gift context'}</p>
-            {(visionDescription.trim() || giftDescription.trim()) && (
-              <p className="mt-3 text-sm leading-7 text-[#667085]">{visionDescription.trim() || giftDescription.trim()}</p>
-            )}
-            {targetProfile.trim() && <p className="mt-3 text-sm leading-7 text-[#667085]">{targetProfile.trim()}</p>}
+          <div className="rounded-[1.9rem] border border-black/6 bg-white/82 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.18)]">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? 'Gift context' : 'Gift context'}</p>
+            <p className="mt-3 text-sm leading-8 text-[#667085]">
+              {contextParagraph || (isZh ? '当前未补充更多礼物与对象背景。' : 'No additional gift or recipient context was provided.')}
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-[1.8rem] border border-black/6 bg-white/90 p-6 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.2)]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <div className="rounded-[2rem] border border-black/6 bg-white/88 p-6 shadow-[0_22px_50px_-34px_rgba(15,23,42,0.18)]">
           <div className="flex items-center gap-3">
             <div className="rounded-full bg-[#eef6ef] p-2 text-emerald-600">
               <Star size={18} />
             </div>
             <div>
-              <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '推荐方案' : 'Recommendations'}</p>
+              <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? 'Recommendations' : 'Recommendations'}</p>
               <h3 className="mt-1 text-2xl font-serif text-[#1c1a17]">{isZh ? '更稳妥的礼赠建议' : 'Safer gifting options'}</h3>
             </div>
           </div>
@@ -172,13 +179,11 @@ export function ResultsSection({
             {analysis.recommendations.map(item => {
               const saved = favoriteRecommendationIds.includes(item.id)
               return (
-                <article key={item.id} className="rounded-[1.3rem] border border-black/6 bg-[#fcfaf7] p-4">
+                <article key={item.id} className="rounded-[1.5rem] border border-black/6 bg-[#fcfaf7] p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-[11px] uppercase tracking-[0.16em] text-[#9b6b20]">{item.category}</p>
-                      <h4 className="mt-2 text-xl font-semibold text-[#1c1a17]">
-                        {isZh ? item.nameZh : item.nameEn}
-                      </h4>
+                      <h4 className="mt-2 text-xl font-semibold text-[#1c1a17]">{isZh ? item.nameZh : item.nameEn}</h4>
                     </div>
                     <button
                       type="button"
@@ -190,13 +195,13 @@ export function ResultsSection({
                       {saved ? (isZh ? '已收藏' : 'Saved') : isZh ? '收藏' : 'Save'}
                     </button>
                   </div>
-                  <p className="mt-3 text-sm leading-7 text-[#667085]">{isZh ? item.reasonZh : item.reasonEn}</p>
+                  <p className="mt-3 text-sm leading-8 text-[#667085]">{isZh ? item.reasonZh : item.reasonEn}</p>
                   <div className="mt-4 grid gap-2">
-                    <div className="rounded-xl bg-white px-3 py-2 text-sm text-[#5d6472]">
+                    <div className="rounded-[1rem] bg-white px-3 py-3 text-sm leading-7 text-[#5d6472]">
                       {isZh ? '包装建议：' : 'Packaging: '}
                       {isZh ? item.packagingTipZh : item.packagingTipEn}
                     </div>
-                    <div className="rounded-xl bg-white px-3 py-2 text-sm text-[#5d6472]">
+                    <div className="rounded-[1rem] bg-white px-3 py-3 text-sm leading-7 text-[#5d6472]">
                       {isZh ? '寄送提示：' : 'Shipping: '}
                       {isZh ? item.shippingNoteZh : item.shippingNoteEn}
                     </div>
@@ -208,42 +213,42 @@ export function ResultsSection({
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-[1.8rem] border border-black/6 bg-white/90 p-6 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.2)]">
+          <div className="rounded-[2rem] border border-black/6 bg-white/88 p-6 shadow-[0_22px_50px_-34px_rgba(15,23,42,0.18)]">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-[#fdf0ec] p-2 text-rose-600">
                 <AlertTriangle size={18} />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '风险与提醒' : 'Risk notes'}</p>
+                <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? 'Risk notes' : 'Risk notes'}</p>
                 <h3 className="mt-1 text-2xl font-serif text-[#1c1a17]">{isZh ? '文化摩擦点' : 'Potential frictions'}</h3>
               </div>
             </div>
             <div className="mt-5 space-y-3">
               {riskReasons.length > 0 ? (
                 riskReasons.map(reason => (
-                  <div key={reason} className="rounded-[1rem] bg-[#fff7f5] px-4 py-3 text-sm leading-7 text-[#7a5b56]">
+                  <div key={reason} className="rounded-[1.1rem] bg-[#fff7f5] px-4 py-4 text-sm leading-7 text-[#7a5b56]">
                     {reason}
                   </div>
                 ))
               ) : (
-                <div className="rounded-[1rem] bg-[#f5faf6] px-4 py-3 text-sm leading-7 text-[#4d6a57]">
+                <div className="rounded-[1.1rem] bg-[#f5faf6] px-4 py-4 text-sm leading-7 text-[#4d6a57]">
                   {isZh ? '暂无明显文化风险，仍建议注意包装与表达细节。' : 'No major cultural risk was found, though packaging and phrasing still matter.'}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="rounded-[1.8rem] border border-black/6 bg-white/90 p-6 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.2)]">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '如果必须送当前礼物' : 'If you must send the current gift'}</p>
+          <div className="rounded-[2rem] border border-black/6 bg-white/88 p-6 shadow-[0_22px_50px_-34px_rgba(15,23,42,0.18)]">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? 'If you must send it' : 'If you must send it'}</p>
             <div className="mt-4 space-y-3">
               {mustSendAdvice.length > 0 ? (
                 mustSendAdvice.map(item => (
-                  <div key={item} className="rounded-[1rem] bg-[#f8f6f2] px-4 py-3 text-sm leading-7 text-[#5d6472]">
+                  <div key={item} className="rounded-[1.1rem] bg-[#f8f6f2] px-4 py-4 text-sm leading-7 text-[#5d6472]">
                     {item}
                   </div>
                 ))
               ) : (
-                <div className="rounded-[1rem] bg-[#f8f6f2] px-4 py-3 text-sm leading-7 text-[#5d6472]">
+                <div className="rounded-[1.1rem] bg-[#f8f6f2] px-4 py-4 text-sm leading-7 text-[#5d6472]">
                   {isZh ? '当前没有额外的补救建议。' : 'No additional mitigation advice is required.'}
                 </div>
               )}
@@ -251,8 +256,8 @@ export function ResultsSection({
           </div>
 
           {hasAnalysisEnhancementResults && analysisEnhancements && (
-            <div className="rounded-[1.8rem] border border-black/6 bg-white/90 p-6 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.2)]">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-[#667085]">{isZh ? '高级增强模块' : 'Enhancement modules'}</p>
+            <div className="rounded-[2rem] border border-black/6 bg-white/88 p-6 shadow-[0_22px_50px_-34px_rgba(15,23,42,0.18)]">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? 'Enhancement modules' : 'Enhancement modules'}</p>
               <p className="mt-3 text-sm leading-7 text-[#667085]">
                 {isZh ? '已启用更深层的识别、重排或物流估算模块。' : 'Deeper recognition, reranking, or logistics modules contributed to this result.'}
               </p>
