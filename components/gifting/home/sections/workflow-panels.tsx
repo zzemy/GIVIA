@@ -32,11 +32,11 @@ export function WorkflowPanels({
 }: WorkflowPanelsProps) {
   return (
     <>
-      <div ref={workflowRef} className={`rounded-[1.75rem] p-3.5 sm:p-4 ${homeSurface.quiet}`}>
-        <WorkflowProgress steps={workflowSteps} />
-      </div>
+      <section ref={workflowRef} className={`rounded-[2rem] p-4 sm:p-5 xl:p-6 ${homeSurface.secondary}`}>
+        <div className={`mb-5 rounded-[1.4rem] p-2.5 sm:p-3 ${homeSurface.inset}`}>
+          <WorkflowProgress steps={workflowSteps} />
+        </div>
 
-      <section className={`rounded-[2rem] p-4 sm:p-5 xl:p-6 ${homeSurface.secondary}`}>
         <div className="mb-6 flex flex-col gap-2.5 sm:mb-7">
           <p className="text-xs uppercase tracking-[0.22em] text-[#e7d2af]/78">
             {giftInputProps.locale === 'zh' ? '引导式流程' : 'GUIDED WORKFLOW'}
@@ -51,7 +51,7 @@ export function WorkflowPanels({
           </p>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.14fr)_minmax(18rem,0.86fr)] xl:items-start 2xl:gap-7">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.26fr)_minmax(20rem,0.74fr)] xl:items-start 2xl:gap-7">
           <div className="flex flex-col gap-5 sm:gap-6">
             <StepGiftInput {...giftInputProps} />
             <StepCountry {...countryProps} />

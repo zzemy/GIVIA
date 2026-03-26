@@ -89,7 +89,7 @@ export function InteractiveFlowDemo({ locale }: InteractiveFlowDemoProps) {
               key={step.id}
               type="button"
               onClick={() => setActiveStep(step.id)}
-              className={`rounded-xl border px-3 py-2.5 text-left text-xs transition-colors duration-200 ${
+              className={`min-w-0 rounded-xl border px-3 py-2.5 text-left text-xs transition-colors duration-200 ${
                 isActive
                   ? 'border-[#e7d2af]/34 bg-[#e7d2af]/10 text-[#f7e8cd]'
                   : 'border-white/8 bg-[#0d1a2e]/72 text-slate-300 hover:border-white/16 hover:bg-[#112239]'

@@ -71,7 +71,7 @@ export function WorkflowSupportAssistantPanel({
   const helperInputClassName = `${homeControl.input} mt-2`
 
   return (
-    <section className={`p-5 sm:p-6 ${homeSurface.inset}`}>
+    <section className={`xl:ml-auto xl:max-w-[27rem] p-5 sm:p-6 ${homeSurface.inset}`}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <div className="rounded-full border border-[#e7d2af]/18 bg-[#e7d2af]/8 p-2 text-[#f0ddb9]">

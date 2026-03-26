@@ -108,7 +108,7 @@ export function CountryStepAudienceCard({
         )}
       </div>
 
-      <div className="mt-4 grid auto-rows-fr gap-3 lg:grid-cols-2">
+      <div className="mt-4 grid auto-rows-fr gap-3 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
         <div className={`${profileFieldClassName} flex min-h-[10.5rem] flex-col`}>
           <p className={profileLabelClassName}>{isZh ? '场合关键词' : 'Occasion keywords'}</p>
           <input

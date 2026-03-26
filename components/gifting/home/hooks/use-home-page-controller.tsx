@@ -218,7 +218,7 @@ export function useHomePageController(routeLocale: Locale) {
     'rounded-2xl border border-cyan-200/14 bg-[#10253f]/62 p-4 shadow-[inset_0_1px_0_rgba(148,163,184,0.05)]'
   const profileLabelClassName = 'text-[11px] uppercase tracking-[0.14em] text-slate-400'
   const profileControlClassName =
-    'mt-3 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-3 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none'
+    'min-w-0 mt-3 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-3 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none'
 
   const shiftImpactCard = (delta: 1 | -1) => {
     setActiveImpactCard(prev => (prev + delta + impactCards.length) % impactCards.length)

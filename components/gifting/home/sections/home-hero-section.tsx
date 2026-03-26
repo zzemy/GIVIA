@@ -88,7 +88,7 @@ export function HomeHeroSection({
 
   return (
     <>
-      <header className="sticky top-0 z-[220] ml-[calc(50%-50vw)] w-screen border-b border-white/6 bg-[#071222]/78 backdrop-blur-xl">
+      <header className="fixed top-0 inset-x-0 z-[220] w-full border-b border-white/6 bg-[#071222]/78 backdrop-blur-xl">
         <div className={`mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-3 sm:px-5 xl:px-8 2xl:px-10 ${homeLayout.section}`}>
           <div className="flex min-w-0 items-center gap-3">
             <Image src={withBasePath('/brand/logo-mark.svg')} alt="GIVIA logo mark" width={42} height={42} priority />
@@ -121,12 +121,12 @@ export function HomeHeroSection({
         </div>
       </header>
 
-      <section className={`mt-6 ${homeLayout.section}`}>
-        <div className="grid gap-5 xl:grid-cols-12 xl:gap-6 2xl:gap-8">
+      <section className={`mt-[5.5rem] ${homeLayout.section}`}>
+        <div className="grid gap-5 xl:grid-cols-12 xl:items-start xl:gap-6 2xl:gap-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`relative overflow-hidden px-6 py-7 sm:px-7 sm:py-8 lg:px-9 xl:col-span-7 xl:px-10 xl:py-10 ${homeSurface.primary}`}
+            className={`relative overflow-hidden px-6 py-7 sm:px-7 sm:py-8 lg:px-9 min-w-0 xl:col-span-7 xl:px-10 xl:py-10 ${homeSurface.primary}`}
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-[radial-gradient(circle_at_top_left,rgba(231,210,175,0.14),transparent_60%)]" />
             <div className="pointer-events-none absolute right-0 top-0 h-48 w-48 bg-[radial-gradient(circle,rgba(125,211,252,0.08),transparent_72%)]" />
@@ -210,7 +210,7 @@ export function HomeHeroSection({
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className={`relative overflow-hidden p-5 sm:p-6 xl:col-span-5 ${homeSurface.secondary}`}
+            className={`relative overflow-hidden p-5 sm:p-6 min-w-0 xl:col-span-5 ${homeSurface.secondary}`}
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top_right,rgba(125,211,252,0.08),transparent_62%)]" />
 
@@ -291,7 +291,7 @@ export function HomeHeroSection({
           </div>
 
           <div
-            className="relative mt-6 hidden h-[23rem] overflow-hidden md:block xl:h-[24rem]"
+            className="relative mt-5 hidden h-[25rem] overflow-hidden md:block xl:h-[27rem]"
             onMouseEnter={() => onImpactPauseChange(true)}
             onMouseLeave={() => onImpactPauseChange(false)}
           >
@@ -306,15 +306,15 @@ export function HomeHeroSection({
                   key={card.id}
                   initial={false}
                   animate={{
-                    x: isVisibleLayer ? offset * 86 : side * 480,
-                    y: depth === 0 ? 0 : depth === 1 ? 10 : isVisibleLayer ? 18 : 22,
-                    scale: depth === 0 ? 1 : depth === 1 ? 0.94 : isVisibleLayer ? 0.88 : 0.84,
+                    x: isVisibleLayer ? offset * 68 : side * 380,
+                    y: depth === 0 ? 0 : depth === 1 ? 8 : isVisibleLayer ? 14 : 18,
+                    scale: depth === 0 ? 1 : depth === 1 ? 0.95 : isVisibleLayer ? 0.9 : 0.86,
                     rotate: isVisibleLayer ? offset * 1.4 : side * 3.4,
                     opacity: depth === 0 ? 1 : depth === 1 ? 0.56 : isVisibleLayer ? 0.28 : 0,
                   }}
                   transition={{ type: 'spring', stiffness: 220, damping: 28 }}
                   onClick={() => onJumpImpactCard(idx)}
-                  className={`absolute left-1/2 top-1 h-[20.75rem] w-[82%] max-w-[920px] -translate-x-1/2 overflow-hidden rounded-[1.7rem] border border-white/10 bg-gradient-to-br ${card.skin} p-6 shadow-[0_26px_80px_rgba(4,10,24,0.38)] xl:h-[21.75rem] xl:p-7 ${isVisibleLayer ? 'cursor-pointer' : 'pointer-events-none'}`}
+                  className={`absolute left-1/2 top-1 h-[22.5rem] w-[74%] max-w-[820px] -translate-x-1/2 overflow-hidden rounded-[1.7rem] border border-white/10 bg-gradient-to-br ${card.skin} p-5 shadow-[0_24px_72px_rgba(4,10,24,0.38)] xl:h-[24rem] xl:p-6 ${isVisibleLayer ? 'cursor-pointer' : 'pointer-events-none'}`}
                   style={{ zIndex: depth === 0 ? 100 : depth === 1 ? 80 : isVisibleLayer ? 60 : 1 }}
                 >
                   <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${card.glow} opacity-24`} />
@@ -327,12 +327,12 @@ export function HomeHeroSection({
                       <span className="text-xs tracking-[0.16em] text-slate-300/70">0{idx + 1}</span>
                     </div>
 
-                    <h4 className="home-balance mt-5 max-w-[18em] text-[1.8rem] font-semibold leading-[1.08] text-slate-50 xl:text-[2rem]">
+                    <h4 className="home-balance mt-4 max-w-[18em] text-[1.55rem] font-semibold leading-[1.08] text-slate-50 xl:text-[1.8rem]">
                       {card.title}
                     </h4>
-                    <p className="home-pretty mt-4 max-w-[42rem] text-sm leading-7 text-slate-200/92 xl:text-[0.98rem]">{card.desc}</p>
+                    <p className="home-pretty mt-3 max-w-[40rem] text-sm leading-6 text-slate-200/92">{card.desc}</p>
 
-                    <div className="mt-auto flex items-end justify-between gap-4 pt-7">
+                    <div className="mt-auto flex items-end justify-between gap-4 pt-5">
                       <div className="flex flex-wrap gap-2">
                         {card.chips.map(chip => (
                           <span key={chip} className={homeControl.pill}>
