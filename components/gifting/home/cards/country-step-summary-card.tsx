@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
-import { homeSurface } from '@/components/gifting/home/home-design-tokens'
+import { homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
 import { getCountryName } from '@/lib/countries'
 import type { SceneTemplate } from '@/lib/types/gifting-types'
 import type { Locale, SelectOption } from '@/components/gifting/home/types'
@@ -63,16 +63,16 @@ export function CountryStepSummaryCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.25 }}
       whileHover={{ y: -1 }}
-      className="flex h-full flex-col rounded-2xl border border-sky-200/18 bg-gradient-to-br from-[#132842]/88 to-[#0f2239]/82 p-4 shadow-[0_10px_28px_rgba(3,12,28,0.22)] backdrop-blur-md transition-all duration-300 hover:border-sky-200/34 sm:p-6"
+      className={`flex h-full flex-col p-4 transition-all duration-300 sm:p-6 ${homeSurface.inset}`}
     >
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '当前确认信息' : 'Current confirmation'}</p>
-          <p className="mt-1 text-sm text-slate-300/88">
+          <p className={`mt-1 text-sm ${homeText.body}`}>
             {isZh ? '这里只保留真正影响判断的关键信息，避免把表单内容重复堆叠。' : 'Keep only the values that truly shape the recommendation instead of repeating the full form.'}
           </p>
         </div>
-        <span className="shrink-0 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] text-slate-200">
+        <span className={homeSurface.glassStrip}>
           {isZh ? '实时生效' : 'Live values'}
         </span>
       </div>
@@ -96,14 +96,14 @@ export function CountryStepSummaryCard({
 
       <AnimatePresence>
         {selectedCountry && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="mt-4 rounded-2xl border border-sky-300/18 bg-sky-500/8 p-4 shadow-[inset_0_1px_0_rgba(186,230,253,0.08)]">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={`mt-4 p-4 ${homeSurface.quiet}`}>
             <div className="flex items-start gap-3">
-              <CheckCircle size={20} className="mt-0.5 flex-shrink-0 text-sky-300" />
+              <CheckCircle size={20} className="mt-0.5 flex-shrink-0 text-[#e7d2af]" />
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.16em] text-sky-100/85">{isZh ? '已确认信息' : 'Confirmed details'}</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-[#e7d2af]/78">{isZh ? '已确认信息' : 'Confirmed details'}</p>
                 <div className="mt-2 space-y-1.5 text-sm">
-                  <p className="text-gray-300">{isZh ? '国家:' : 'Country:'} <span className="font-semibold text-sky-200">{getCountryName(selectedCountry, locale)}</span></p>
-                  <p className="text-gray-300">{isZh ? '目标群体:' : 'Audience:'} <span className="font-semibold text-sky-200">{selectedAudienceLabel}</span></p>
+                  <p className="text-gray-300">{isZh ? '国家:' : 'Country:'} <span className="font-semibold text-[#f3ddba]">{getCountryName(selectedCountry, locale)}</span></p>
+                  <p className="text-gray-300">{isZh ? '目标群体:' : 'Audience:'} <span className="font-semibold text-[#f3ddba]">{selectedAudienceLabel}</span></p>
                   <p className="text-xs text-slate-300/95">
                     {isZh ? '结构化画像:' : 'Structured profile:'}{' '}
                     <span className="text-slate-200">

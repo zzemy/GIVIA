@@ -1,7 +1,7 @@
 'use client'
 
 import { Wallet, Truck } from 'lucide-react'
-import { homeSurface } from '@/components/gifting/home/home-design-tokens'
+import { homeButton, homeControl, homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { StoredAnalysisRecord } from '@/lib/storage/analysis-storage'
@@ -68,46 +68,49 @@ export function WorkflowSupportAssistantPanel({
   onRunLogisticsAssistant,
 }: AssistantPanelProps) {
   const isZh = locale === 'zh'
+  const helperInputClassName = `${homeControl.input} mt-2`
 
   return (
-    <section className={`p-5 sm:p-6 ${homeSurface.secondary}`}>
+    <section className={`p-5 sm:p-6 ${homeSurface.inset}`}>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Wallet size={18} className="text-[#f0ddb9]" />
+          <div className="rounded-full border border-[#e7d2af]/18 bg-[#e7d2af]/8 p-2 text-[#f0ddb9]">
+            <Wallet size={16} />
+          </div>
           <div>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[#e7d2af]/70">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#e7d2af]/68">
               {isZh ? '辅助模块' : 'Support module'}
             </p>
-            <h3 className="text-xl font-bold text-slate-100">
+            <h3 className="text-lg font-semibold text-slate-100 sm:text-xl">
               {isZh ? '跨境物流与支付助手' : 'Cross-border Logistics & Payment Assistant'}
             </h3>
           </div>
         </div>
-        <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
+        <span className={homeSurface.glassStrip}>
           {assistantResult?.rateSource === 'live' ? (isZh ? '实时汇率' : 'Live FX') : isZh ? '汇率回退' : 'Fallback FX'}
         </span>
       </div>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
         <div className={`p-3 ${homeSurface.quiet}`}>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+          <p className={`text-[11px] uppercase tracking-[0.14em] ${homeText.meta}`}>
             {isZh ? '礼物价格' : 'Gift price'}
           </p>
           <input
             value={assistantAmountInput}
             onChange={event => onAssistantAmountChange(event.target.value)}
-            className="mt-2 w-full rounded-lg border border-white/10 bg-[#0b1c31]/80 px-3 py-2 text-sm text-slate-100"
+            className={helperInputClassName}
           />
         </div>
 
         <div className={`p-3 ${homeSurface.quiet}`}>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+          <p className={`text-[11px] uppercase tracking-[0.14em] ${homeText.meta}`}>
             {isZh ? '币种' : 'Currency'}
           </p>
           <select
             value={assistantCurrency}
             onChange={event => onAssistantCurrencyChange(event.target.value as AssistantCurrency)}
-            className="mt-2 w-full rounded-lg border border-white/10 bg-[#0b1c31]/80 px-3 py-2 text-sm text-slate-100"
+            className={helperInputClassName}
           >
             {['USD', 'CNY', 'EUR', 'JPY', 'GBP'].map(currency => (
               <option key={currency} value={currency} className="bg-[#0f1f35] text-slate-100">
@@ -118,24 +121,24 @@ export function WorkflowSupportAssistantPanel({
         </div>
 
         <div className={`p-3 ${homeSurface.quiet}`}>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+          <p className={`text-[11px] uppercase tracking-[0.14em] ${homeText.meta}`}>
             {isZh ? '重量(kg)' : 'Weight (kg)'}
           </p>
           <input
             value={assistantWeightInput}
             onChange={event => onAssistantWeightChange(event.target.value)}
-            className="mt-2 w-full rounded-lg border border-white/10 bg-[#0b1c31]/80 px-3 py-2 text-sm text-slate-100"
+            className={helperInputClassName}
           />
         </div>
 
         <div className={`p-3 ${homeSurface.quiet}`}>
-          <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">
+          <p className={`text-[11px] uppercase tracking-[0.14em] ${homeText.meta}`}>
             {isZh ? '申报价值' : 'Declared value'}
           </p>
           <input
             value={assistantDeclaredValueInput}
             onChange={event => onAssistantDeclaredValueChange(event.target.value)}
-            className="mt-2 w-full rounded-lg border border-white/10 bg-[#0b1c31]/80 px-3 py-2 text-sm text-slate-100"
+            className={helperInputClassName}
           />
         </div>
       </div>
@@ -145,12 +148,12 @@ export function WorkflowSupportAssistantPanel({
           type="button"
           onClick={onRunLogisticsAssistant}
           disabled={isAssistantLoading}
-          className="border border-[#e7d2af]/35 bg-[#e7d2af]/12 text-[#f8ead2] hover:bg-[#e7d2af]/18"
+          className={homeButton.primary}
         >
           <Truck size={16} className="mr-2" />
           {isAssistantLoading ? (isZh ? '估算中...' : 'Estimating...') : isZh ? '估算物流与支付' : 'Estimate logistics & payment'}
         </Button>
-        {assistantError && <p className="text-sm text-red-300">{assistantError}</p>}
+        {assistantError && <p className="text-sm text-red-300/90">{assistantError}</p>}
       </div>
 
       {assistantResult && (
@@ -158,7 +161,7 @@ export function WorkflowSupportAssistantPanel({
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
             {Object.entries(assistantResult.convertedAmounts).map(([currency, value]) => (
               <div key={currency} className={`p-3 ${homeSurface.quiet}`}>
-                <p className="text-xs text-slate-400">{currency}</p>
+                <p className={`text-xs ${homeText.meta}`}>{currency}</p>
                 <p className="mt-1 text-lg font-semibold text-slate-100">{value.toFixed(2)}</p>
               </div>
             ))}
@@ -177,7 +180,7 @@ export function WorkflowSupportAssistantPanel({
                 <p className="mt-3 text-lg font-bold text-slate-100">
                   {quote.currency} {quote.estimatedCost.toFixed(2)}
                 </p>
-                <ul className="mt-2 space-y-1 text-xs text-slate-300">
+                <ul className="mt-2 space-y-1 text-xs text-slate-300/86">
                   {quote.notes.map(note => (
                     <li key={note}>• {note}</li>
                   ))}
@@ -186,16 +189,16 @@ export function WorkflowSupportAssistantPanel({
             ))}
           </div>
 
-          <div className="rounded-xl border border-[#e7d2af]/18 bg-[#e7d2af]/8 p-3">
-            <p className="text-sm font-semibold text-amber-200">
+          <div className={`${homeSurface.quiet} border-[#e7d2af]/16 bg-[#e7d2af]/6 p-3`}>
+            <p className="text-sm font-semibold text-amber-100/90">
               {isZh ? '清关注意事项' : 'Customs notes'}
             </p>
-            <ul className="mt-2 space-y-1 text-xs text-amber-100/90">
+            <ul className="mt-2 space-y-1 text-xs text-amber-100/82">
               {assistantResult.customsNotes.map(note => (
                 <li key={note}>• {note}</li>
               ))}
             </ul>
-            <p className="mt-2 text-[11px] text-amber-100/80">{assistantResult.disclaimer}</p>
+            <p className="mt-2 text-[11px] text-amber-100/72">{assistantResult.disclaimer}</p>
           </div>
         </div>
       )}
@@ -222,26 +225,25 @@ export function WorkflowSupportHistoryPanels({
       )}
     >
       {historyRecords.length > 0 && (
-        <section className={`p-4 sm:p-6 ${homeSurface.secondary}`}>
+        <section className={`p-4 sm:p-6 ${homeSurface.inset}`}>
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-2xl font-bold text-slate-100">{isZh ? '历史记录' : 'History'}</h2>
-              <p className="mt-1 text-sm text-slate-300">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-[#e7d2af]/66">{isZh ? '辅助回顾' : 'Support history'}</p>
+              <h2 className="mt-1 text-2xl font-semibold text-slate-100">{isZh ? '历史记录' : 'History'}</h2>
+              <p className={`mt-1 text-sm ${homeText.muted}`}>
                 {isZh
                   ? '最近 8 次分析会保存在本地浏览器，便于复盘和继续筛选。'
                   : 'The latest 8 analyses are stored locally for review and follow-up decisions.'}
               </p>
             </div>
-            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
-              {historyRecords.length}
-            </span>
+            <span className={homeSurface.glassStrip}>{historyRecords.length}</span>
           </div>
 
           <div className="mt-5 grid gap-3 lg:grid-cols-2">
             {historyRecords.map(record => (
               <article
                 key={record.id}
-                className={`p-4 shadow-[0_10px_26px_rgba(2,6,23,0.18)] ${homeSurface.quiet}`}
+                className={`p-4 shadow-[0_8px_22px_rgba(2,6,23,0.14)] ${homeSurface.quiet}`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -282,19 +284,18 @@ export function WorkflowSupportHistoryPanels({
       )}
 
       {favoriteGiftChecklist.length > 0 && (
-        <section className={`p-4 sm:p-6 ${homeSurface.secondary}`}>
+        <section className={`p-4 sm:p-6 ${homeSurface.inset}`}>
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-2xl font-bold text-slate-100">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-[#e7d2af]/66">{isZh ? '后续候选池' : 'Saved shortlist'}</p>
+              <h2 className="mt-1 text-2xl font-semibold text-slate-100">
                 {isZh ? '收藏礼物清单' : 'Favorite Gift List'}
               </h2>
-              <p className="mt-1 text-sm text-slate-300">
+              <p className={`mt-1 text-sm ${homeText.muted}`}>
                 {isZh ? '来自你的收藏记录，可作为后续送礼候选池。' : 'Saved picks from your previous analyses for future gifting checklists.'}
               </p>
             </div>
-            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
-              {favoriteGiftChecklist.length}
-            </span>
+            <span className={homeSurface.glassStrip}>{favoriteGiftChecklist.length}</span>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">

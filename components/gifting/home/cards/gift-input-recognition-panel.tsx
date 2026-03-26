@@ -3,6 +3,7 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
+import { homeButton, homeControl, homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
 import type { Locale, RecognitionResult, RecognitionSource } from '@/components/gifting/home/types'
 
 interface GiftInputRecognitionPanelProps {
@@ -21,7 +22,7 @@ interface GiftInputRecognitionPanelProps {
 const normalizeForCompare = (value: string) =>
   value
     .toLowerCase()
-    .replace(/[\s,，。.!！?？;；:：、'"“”‘’\-_/\\()[\]{}<>《》]/g, '')
+    .replace(/[\s,，。.!！?？;；:：、'"“”‘’\-_/\()[\]{}<>《》]/g, '')
     .trim()
 
 export function GiftInputRecognitionPanel({
@@ -43,10 +44,12 @@ export function GiftInputRecognitionPanel({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="mb-6 rounded-lg border border-sky-300/30 bg-sky-500/10 p-4"
+          className={`mb-6 p-4 sm:p-5 ${homeSurface.quiet} border-[#e7d2af]/14 bg-[#e7d2af]/[0.045]`}
         >
           <div className="flex items-start gap-3">
-            <CheckCircle size={20} className="mt-0.5 flex-shrink-0 text-sky-300" />
+            <div className="rounded-full border border-[#e7d2af]/18 bg-[#e7d2af]/8 p-2 text-[#f3ddba]">
+              <CheckCircle size={16} className="flex-shrink-0" />
+            </div>
             <div className="flex-1">
               {(() => {
                 const recognizedDisplay = locale === 'zh' ? recognition.itemZh : recognition.itemEn
@@ -56,19 +59,23 @@ export function GiftInputRecognitionPanel({
 
                 return (
                   <>
-                    <p className="mb-2 text-sm text-gray-300">
+                    <p className="mb-2 text-sm text-slate-300">
                       {locale === 'zh' ? '识别物件:' : 'Recognized item:'}{' '}
-                      <span className="font-semibold text-sky-200">{recognizedDisplay}</span>
+                      <span className="font-semibold text-[#f3ddba]">{recognizedDisplay}</span>
                     </p>
-                    <div className="space-y-1 text-xs text-gray-400">
-                      <p>{locale === 'zh' ? '类别:' : 'Category:'} {recognition.category}</p>
+                    <div className={`space-y-1 text-xs ${homeText.meta}`}>
+                      <p>
+                        {locale === 'zh' ? '类别:' : 'Category:'} {recognition.category}
+                      </p>
                       {shouldShowDetectedLabel && (
                         <p>
                           {locale === 'zh' ? '识别标签:' : 'Detected label:'}{' '}
                           <span className="text-slate-200">{detectedDisplay}</span>
                         </p>
                       )}
-                      <p>{locale === 'zh' ? '置信度:' : 'Confidence:'} {(recognition.confidence * 100).toFixed(0)}%</p>
+                      <p>
+                        {locale === 'zh' ? '置信度:' : 'Confidence:'} {(recognition.confidence * 100).toFixed(0)}%
+                      </p>
                       <p className="text-[11px] text-slate-400">
                         {recognitionSource === 'aliyun-dashscope-text'
                           ? locale === 'zh'
@@ -83,40 +90,47 @@ export function GiftInputRecognitionPanel({
                 )
               })()}
 
-              <div className="mt-3 space-y-2 border-t border-slate-600/40 pt-3">
-                <p className="text-[11px] text-slate-400">
+              <div className="mt-4 space-y-3 border-t border-white/8 pt-4">
+                <p className={`text-[11px] ${homeText.meta}`}>
                   {locale === 'zh' ? '识别结果可手动修正，分析会使用你修改后的内容。' : 'Recognition outputs are editable before analysis.'}
                 </p>
-                <input
-                  value={visionLabel}
-                  onChange={event => onVisionLabelChange(event.target.value)}
-                  placeholder={locale === 'zh' ? '可修改识别标签' : 'Edit detected label'}
-                  className="w-full rounded-lg border border-cyan-200/20 bg-[#0f1f35] px-2 py-1.5 text-xs text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-                />
-                <div className="flex items-center justify-between">
-                  <p className="text-[11px] text-slate-400">
-                    {locale === 'zh' ? '礼物描述（可直接修改识别结果）' : 'Gift description (editable recognition result)'}
+                <div className={`p-3 ${homeSurface.inset}`}>
+                  <p className={`mb-2 text-[11px] uppercase tracking-[0.14em] ${homeText.meta}`}>
+                    {locale === 'zh' ? '识别标签' : 'Detected label'}
                   </p>
-                  <button
-                    type="button"
-                    onClick={onBeautifyVisionDescription}
-                    disabled={!visionDescription.trim()}
-                    className="text-[11px] font-medium text-cyan-200/90 transition hover:text-cyan-100 disabled:cursor-not-allowed disabled:text-slate-500"
-                  >
-                    {locale === 'zh' ? '润色描述' : 'Polish'}
-                  </button>
+                  <input
+                    value={visionLabel}
+                    onChange={event => onVisionLabelChange(event.target.value)}
+                    placeholder={locale === 'zh' ? '可修改识别标签' : 'Edit detected label'}
+                    className={`${homeControl.input} text-sm`}
+                  />
                 </div>
-                <textarea
-                  ref={visionDescriptionRef}
-                  value={visionDescription}
-                  onChange={event => {
-                    onVisionDescriptionChange(event.target.value)
-                    autoResizeTextarea(event.target)
-                  }}
-                  rows={2}
-                  placeholder={locale === 'zh' ? '可直接修改识别输出的礼物描述' : 'Edit recognized gift description'}
-                  className="w-full resize-none overflow-hidden rounded-lg border border-cyan-200/20 bg-[#0f1f35] px-2 py-1.5 text-xs leading-5 text-slate-100 placeholder:text-slate-400 focus:border-cyan-200/45 focus:outline-none"
-                />
+                <div className={`p-3 ${homeSurface.inset}`}>
+                  <div className="mb-2 flex items-center justify-between gap-3">
+                    <p className={`text-[11px] uppercase tracking-[0.14em] ${homeText.meta}`}>
+                      {locale === 'zh' ? '礼物描述' : 'Gift description'}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={onBeautifyVisionDescription}
+                      disabled={!visionDescription.trim()}
+                      className={`${homeButton.secondary} px-3 py-1.5 text-[11px] disabled:cursor-not-allowed disabled:opacity-45`}
+                    >
+                      {locale === 'zh' ? '润色描述' : 'Polish'}
+                    </button>
+                  </div>
+                  <textarea
+                    ref={visionDescriptionRef}
+                    value={visionDescription}
+                    onChange={event => {
+                      onVisionDescriptionChange(event.target.value)
+                      autoResizeTextarea(event.target)
+                    }}
+                    rows={2}
+                    placeholder={locale === 'zh' ? '可直接修改识别输出的礼物描述' : 'Edit recognized gift description'}
+                    className={`${homeControl.input} resize-none overflow-hidden text-sm leading-6`}
+                  />
+                </div>
               </div>
             </div>
           </div>

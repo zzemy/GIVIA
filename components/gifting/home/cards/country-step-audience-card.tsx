@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { homeControl, homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
 import { cn } from '@/lib/utils'
 import type { AudienceGroup, Locale, SelectOption } from '@/components/gifting/home/types'
 
@@ -52,16 +53,14 @@ export function CountryStepAudienceCard({
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '对象与场景备注' : 'Audience and notes'}</p>
-          <p className="mt-1 text-sm text-slate-300/88">
+          <p className={`mt-1 text-sm ${homeText.body}`}>
             {isZh ? '先锁定对象，再补充场合和个性偏好。' : 'Lock the recipient type first, then add scenario notes and personal preferences.'}
           </p>
         </div>
-        <span className="shrink-0 whitespace-nowrap rounded-full border border-cyan-200/18 bg-cyan-100/6 px-3 py-1 text-[11px] text-cyan-50/88">
-          {selectedAudienceLabel}
-        </span>
+        <span className={homeSurface.glassStrip}>{selectedAudienceLabel}</span>
       </div>
 
-      <div className="mt-4 rounded-2xl border border-cyan-200/12 bg-[#0d1f35]/74 p-3.5 sm:p-4">
+      <div className={`mt-4 p-3.5 sm:p-4 ${homeSurface.quiet}`}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '群体标签' : 'Audience tags'}</p>
@@ -71,9 +70,7 @@ export function CountryStepAudienceCard({
                 : 'Lock the recipient type first, then add scenario notes and personal preferences.'}
             </p>
           </div>
-          <div className="shrink-0 whitespace-nowrap rounded-full border border-slate-200/10 bg-slate-100/5 px-3 py-1 text-[11px] text-slate-300/78">
-            {isZh ? '可继续自定义' : 'Fully customizable'}
-          </div>
+          <div className={homeSurface.glassStrip}>{isZh ? '可继续自定义' : 'Fully customizable'}</div>
         </div>
 
         <div className="-mx-1 mt-4 flex gap-2 overflow-x-auto px-1 pb-1.5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
@@ -88,8 +85,8 @@ export function CountryStepAudienceCard({
                 className={cn(
                   'shrink-0 rounded-full border px-3 py-2 text-left text-xs font-medium transition-all duration-200 sm:shrink',
                   isActive
-                    ? 'border-cyan-200/42 bg-cyan-300/12 text-cyan-50'
-                    : 'border-cyan-200/12 bg-[#0d1f35]/72 text-slate-200 hover:border-cyan-200/28 hover:bg-[#102740]',
+                    ? 'border-[#e7d2af]/24 bg-[#e7d2af]/10 text-[#f7e8cd] shadow-[0_8px_20px_rgba(12,16,30,0.14)]'
+                    : 'border-white/9 bg-white/[0.03] text-slate-200 hover:border-white/16 hover:bg-white/[0.045]',
                 )}
               >
                 {option.label}
@@ -99,7 +96,7 @@ export function CountryStepAudienceCard({
         </div>
 
         {targetGroup === 'other' && (
-          <div className="mt-3 rounded-2xl border border-cyan-200/12 bg-[#10253f]/62 p-3">
+          <div className={`mt-3 p-3 ${homeSurface.inset}`}>
             <p className={profileLabelClassName}>{isZh ? '自定义群体' : 'Custom audience'}</p>
             <input
               value={customAudienceGroup}
@@ -134,7 +131,7 @@ export function CountryStepAudienceCard({
             placeholder={
               isZh ? '例如品牌偏好、禁忌颜色、收礼人近期需求' : 'Brand preferences, colors to avoid, recipient needs'
             }
-            className="mt-3 h-11 w-full resize-none overflow-hidden rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-400 transition focus:border-cyan-200/45 focus:outline-none"
+            className={`${homeControl.input} mt-3 h-11 resize-none overflow-hidden`}
           />
           <p className="mt-2 min-h-10 text-xs leading-5 text-slate-400">
             {isZh ? '这些备注会同步影响替代礼物、包装和贺卡语气建议。' : 'These notes also flow into safer alternatives, packaging, and card tone.'}

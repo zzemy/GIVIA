@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { CountrySelector } from '@/components/gifting/country-selector'
+import { homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
 import { withBasePath } from '@/lib/asset-path'
 import { getCountryName } from '@/lib/countries'
 import type { Locale } from '@/components/gifting/home/types'
@@ -38,23 +39,23 @@ export function CountryStepSelectionCard({
     >
       <div className="mb-4 flex items-start justify-between gap-4 border-b border-slate-400/15 pb-4">
         <div>
-          <h2 className="mb-1.5 text-lg font-bold sm:text-xl">{title}</h2>
-          <p className="text-xs text-gray-400 sm:text-sm">{description}</p>
+          <h2 className="mb-1.5 text-lg font-semibold text-slate-100 sm:text-xl">{title}</h2>
+          <p className={`text-xs sm:text-sm ${homeText.muted}`}>{description}</p>
         </div>
         <Image src={withBasePath('/brand/step-country.svg')} alt="country step" width={36} height={36} />
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-cyan-100/80">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#e7d2af]/78">
             {isZh ? '国家选择' : 'Country selection'}
           </p>
-          <p className="mt-1 text-sm text-slate-300/88">
+          <p className={`mt-1 text-sm ${homeText.body}`}>
             {isZh ? '先锁定目标国家，下面的场景与画像会围绕这个国家输出。' : 'Lock the destination first, then refine the scenario and audience around it.'}
           </p>
         </div>
         {selectedCountry && (
-          <span className="rounded-full border border-cyan-200/22 bg-cyan-300/10 px-3 py-1 text-[11px] text-cyan-50/90">
+          <span className={homeSurface.glassStrip}>
             {getCountryName(selectedCountry, locale)}
           </span>
         )}

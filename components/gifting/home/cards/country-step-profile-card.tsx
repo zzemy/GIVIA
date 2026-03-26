@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { homeText } from '@/components/gifting/home/home-design-tokens'
 import type { Locale, SelectOption } from '@/components/gifting/home/types'
 
 interface CountryStepProfileCardProps {
@@ -94,7 +95,7 @@ export function CountryStepProfileCard({
       <div className="flex items-center justify-between gap-3">
         <div className="w-full">
           <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{isZh ? '高级画像' : 'Advanced profile'}</p>
-          <p className="mt-1 text-xs leading-5 text-slate-300/82">
+          <p className={`mt-1 text-xs leading-5 ${homeText.muted}`}>
             {isZh ? '年龄、职业、预算和正式度会影响推荐语气与替代方案。' : 'Age, occupation, budget, and formality refine tone and fallback suggestions.'}
           </p>
         </div>
