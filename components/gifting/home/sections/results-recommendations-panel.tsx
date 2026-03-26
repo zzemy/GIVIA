@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { homeSurface } from '@/components/gifting/home/home-design-tokens'
 import type { AnalysisResult, Locale } from '@/components/gifting/home/types'
 
 interface ResultsRecommendationsPanelProps {
@@ -21,10 +22,13 @@ export function ResultsRecommendationsPanel({
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-emerald-400/20 bg-white/5 p-6 backdrop-blur-sm">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`p-6 ${homeSurface.secondary}`}>
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h3 className="text-2xl font-bold">
+          <p className="text-xs uppercase tracking-[0.18em] text-[#e7d2af]/78">
+            {locale === 'zh' ? '推荐方案' : 'Recommended options'}
+          </p>
+          <h3 className="mt-2 text-2xl font-bold text-slate-100">
             {analysis.riskLevel === 'Low'
               ? locale === 'zh'
                 ? '可选升级推荐'
@@ -33,7 +37,7 @@ export function ResultsRecommendationsPanel({
                 ? '更稳妥的替代推荐'
                 : 'Safer alternatives'}
           </h3>
-          <p className="mt-1 text-sm text-slate-300">
+          <p className="mt-1 text-sm text-slate-300/78">
             {analysis.riskLevel === 'Low'
               ? locale === 'zh'
                 ? '当前礼物整体可送，以下是更稳、更匹配当前场景的升级选项。'
@@ -43,7 +47,7 @@ export function ResultsRecommendationsPanel({
                 : 'The current option carries risk. These safer replacements are ranked by country rules, scene template, budget, and recipient profile.'}
           </p>
         </div>
-        <div className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-xs text-emerald-200">
+        <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
           {analysis.riskLevel === 'Low'
             ? locale === 'zh'
               ? '升级参考'
@@ -60,10 +64,10 @@ export function ResultsRecommendationsPanel({
           const name = locale === 'zh' ? item.nameZh : item.nameEn
 
           return (
-            <div key={item.id} className="rounded-2xl border border-emerald-300/20 bg-[#10253b]/85 p-4">
+            <div key={item.id} className={`p-4 ${homeSurface.quiet}`}>
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-emerald-200/80">{item.category}</p>
+                  <p className="text-xs uppercase tracking-[0.14em] text-[#e7d2af]/78">{item.category}</p>
                   <h4 className="mt-2 text-lg font-semibold text-slate-50">{name}</h4>
                 </div>
                 <button
@@ -71,28 +75,28 @@ export function ResultsRecommendationsPanel({
                   onClick={() => onToggleFavoriteRecommendation(item.id)}
                   className={`rounded-full border px-3 py-1 text-xs transition ${
                     isFavorite
-                      ? 'border-amber-300/40 bg-amber-400/12 text-amber-100'
-                      : 'border-slate-500/40 bg-slate-800/70 text-slate-200 hover:border-slate-300/60'
+                      ? 'border-[#e7d2af]/35 bg-[#e7d2af]/12 text-[#f5e6cd]'
+                      : 'border-white/10 bg-white/[0.04] text-slate-200 hover:border-white/22'
                   }`}
                 >
                   {isFavorite ? (locale === 'zh' ? '已收藏' : 'Saved') : locale === 'zh' ? '收藏' : 'Save'}
                 </button>
               </div>
 
-              <div className="mt-3 text-3xl font-bold text-emerald-200">{item.score}</div>
-              <p className="mt-2 text-sm leading-6 text-slate-300">{locale === 'zh' ? item.reasonZh : item.reasonEn}</p>
+              <div className="mt-3 text-3xl font-bold text-[#f3ddba]">{item.score}</div>
+              <p className="mt-2 text-sm leading-6 text-slate-300/82">{locale === 'zh' ? item.reasonZh : item.reasonEn}</p>
 
               <div className="mt-4 space-y-2 text-xs text-slate-300">
-                <div className="rounded-lg border border-slate-600/60 bg-slate-900/50 px-3 py-2">
-                  <span className="text-emerald-200">{locale === 'zh' ? '送礼话术：' : 'Pitch: '}</span>
+                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2">
+                  <span className="text-[#f3ddba]">{locale === 'zh' ? '送礼话术：' : 'Pitch: '}</span>
                   {locale === 'zh' ? item.pitchZh : item.pitchEn}
                 </div>
-                <div className="rounded-lg border border-slate-600/60 bg-slate-900/50 px-3 py-2">
-                  <span className="text-emerald-200">{locale === 'zh' ? '包装建议：' : 'Packaging: '}</span>
+                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2">
+                  <span className="text-[#f3ddba]">{locale === 'zh' ? '包装建议：' : 'Packaging: '}</span>
                   {locale === 'zh' ? item.packagingTipZh : item.packagingTipEn}
                 </div>
-                <div className="rounded-lg border border-slate-600/60 bg-slate-900/50 px-3 py-2">
-                  <span className="text-emerald-200">{locale === 'zh' ? '寄送提示：' : 'Shipping: '}</span>
+                <div className="rounded-lg border border-white/8 bg-[#091426]/45 px-3 py-2">
+                  <span className="text-[#f3ddba]">{locale === 'zh' ? '寄送提示：' : 'Shipping: '}</span>
                   {locale === 'zh' ? item.shippingNoteZh : item.shippingNoteEn}
                 </div>
               </div>

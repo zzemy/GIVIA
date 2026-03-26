@@ -3,10 +3,12 @@
 import { motion } from 'framer-motion'
 import { RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { homeSurface } from '@/components/gifting/home/home-design-tokens'
 import { getCountryName } from '@/lib/countries'
 import { ResultsDetailPanels } from '@/components/gifting/home/sections/results-detail-panels'
 import { ResultsEnhancementPanels } from '@/components/gifting/home/sections/results-enhancement-panels'
 import { ResultsRecommendationsPanel } from '@/components/gifting/home/sections/results-recommendations-panel'
+import { ResultsSummaryPanel } from '@/components/gifting/home/sections/results-summary-panel'
 import type { AnalysisResult, EnhancedAnalysisState, Locale } from '@/components/gifting/home/types'
 
 interface RiskActionMeta {
@@ -60,6 +62,7 @@ export function ResultsSection({
   onToggleFavoriteRecommendation,
 }: ResultsSectionProps) {
   const isZh = locale === 'zh'
+  const contextLabel = `${selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '未选择国家' : 'No country'} · ${selectedAudienceLabel} · ${sceneLabel}`
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-12 space-y-6">
@@ -67,34 +70,39 @@ export function ResultsSection({
         <div className="flex items-center gap-3">
           <h2 className="text-3xl font-bold">{t('results.title')}</h2>
           {analysisSource && (
-            <div className="rounded-full border border-cyan-200/20 bg-cyan-300/10 px-3 py-1 text-xs text-cyan-100">
+            <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
               {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI + 规则引擎' : 'AI + Rules') : isZh ? '本地规则回退' : 'Local rules fallback'}
             </div>
           )}
         </div>
-        <Button onClick={onReset} className="flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2 text-white hover:bg-gray-600">
+        <Button onClick={onReset} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-white hover:bg-white/[0.08]">
           <RotateCcw size={16} />
           {isZh ? '重新开始' : 'Start Over'}
         </Button>
       </div>
 
-      <div className="rounded-xl border border-cyan-200/20 bg-[#11263e]/70 px-4 py-3 text-sm text-slate-200">
+      <div className={`px-4 py-3 text-sm text-slate-200 ${homeSurface.quiet}`}>
         <p>
           {isZh ? '分析上下文：' : 'Analysis context: '}
-          {selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '未选择国家' : 'No country'}
-          {' · '}
-          {selectedAudienceLabel}
-          {' · '}
-          {sceneLabel}
+          {contextLabel}
         </p>
         {!!(visionDescription.trim() || giftDescription.trim()) && (
-          <p className="mt-1 text-xs text-slate-300">
+          <p className="mt-1 text-xs text-slate-300/78">
             {isZh ? '礼物描述：' : 'Gift description: '}
             {visionDescription.trim() || giftDescription.trim()}
           </p>
         )}
-        {targetProfile.trim() && <p className="mt-1 text-xs text-slate-300">{targetProfile.trim()}</p>}
+        {targetProfile.trim() && <p className="mt-1 text-xs text-slate-300/78">{targetProfile.trim()}</p>}
       </div>
+
+      <ResultsSummaryPanel analysis={analysis} locale={locale} contextLabel={contextLabel} />
+
+      <ResultsRecommendationsPanel
+        analysis={analysis}
+        locale={locale}
+        favoriteRecommendationIds={favoriteRecommendationIds}
+        onToggleFavoriteRecommendation={onToggleFavoriteRecommendation}
+      />
 
       {hasAnalysisEnhancementResults && (
         <ResultsEnhancementPanels
@@ -104,13 +112,6 @@ export function ResultsSection({
           formatCurrencyAmount={formatCurrencyAmount}
         />
       )}
-
-      <ResultsRecommendationsPanel
-        analysis={analysis}
-        locale={locale}
-        favoriteRecommendationIds={favoriteRecommendationIds}
-        onToggleFavoriteRecommendation={onToggleFavoriteRecommendation}
-      />
 
       <ResultsDetailPanels
         analysis={analysis}

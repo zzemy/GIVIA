@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { homeSurface } from '@/components/gifting/home/home-design-tokens'
 import { InfoTooltip } from '@/components/ui/info-tooltip'
 import { cn } from '@/lib/utils'
 import type { AnalysisResult, Locale } from '@/components/gifting/home/types'
@@ -30,18 +31,20 @@ export function ResultsDetailPanels({
   riskActionMeta,
 }: ResultsDetailPanelsProps) {
   const isZh = locale === 'zh'
+  const detailPanelClassName = `rounded-2xl p-6 backdrop-blur-sm ${homeSurface.secondary}`
+  const quietBlockClassName = `rounded-lg px-3 py-2 ${homeSurface.quiet}`
 
   return (
     <>
       {analysis.matchedRules.length > 0 && (
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-amber-400/20 bg-white/5 p-6 backdrop-blur-sm">
-          <h3 className="text-xl font-bold">{isZh ? '命中的文化规则' : 'Matched Cultural Rules'}</h3>
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
+          <h3 className="text-xl font-bold text-slate-100">{isZh ? '命中的文化规则' : 'Matched Cultural Rules'}</h3>
           <div className="mt-4 grid gap-3 md:grid-cols-2">
             {analysis.matchedRules.map(rule => (
-              <div key={rule.id} className="rounded-xl border border-amber-300/20 bg-[#11263c]/80 p-4">
+              <div key={rule.id} className={`rounded-xl p-4 ${homeSurface.quiet}`}>
                 <div className="flex items-center justify-between gap-3">
-                  <span className="text-xs uppercase tracking-[0.14em] text-amber-200/80">{rule.ruleType}</span>
-                  <span className="rounded-full border border-amber-300/30 bg-amber-500/10 px-2 py-1 text-[11px] text-amber-100">
+                  <span className="text-xs uppercase tracking-[0.14em] text-[#e7d2af]/78">{rule.ruleType}</span>
+                  <span className="rounded-full border border-[#e7d2af]/25 bg-[#e7d2af]/10 px-2 py-1 text-[11px] text-[#f3ddba]">
                     +{rule.riskScore}
                   </span>
                 </div>
@@ -54,16 +57,16 @@ export function ResultsDetailPanels({
       )}
 
       <div className="grid gap-6 md:grid-cols-2">
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-fuchsia-400/20 bg-white/5 p-6 backdrop-blur-sm">
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold">{isZh ? '综合风险分' : 'Risk Score'}</h3>
-            <span className="rounded-full border border-fuchsia-400/30 bg-fuchsia-500/10 px-3 py-1 text-xs text-fuchsia-200">0-100</span>
+            <h3 className="text-xl font-bold text-slate-100">{isZh ? '综合风险分' : 'Risk Score'}</h3>
+            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">0-100</span>
           </div>
-          <div className="mt-4 text-5xl font-bold text-fuchsia-200">{analysis.riskScore}</div>
+          <div className="mt-4 text-5xl font-bold text-[#f3ddba]">{analysis.riskScore}</div>
           <div className="mt-3 h-2 rounded-full bg-slate-700/80">
-            <div className="h-full rounded-full bg-gradient-to-r from-fuchsia-400 to-rose-300" style={{ width: `${analysis.riskScore}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-[#e7d2af] to-rose-300" style={{ width: `${analysis.riskScore}%` }} />
           </div>
-          <p className="mt-3 text-sm text-slate-300">
+          <p className="mt-3 text-sm text-slate-300/78">
             {analysis.riskScore >= 72
               ? isZh
                 ? '当前礼物存在明显文化误读风险，建议优先考虑替代方案。'
@@ -78,12 +81,12 @@ export function ResultsDetailPanels({
           </p>
         </motion.div>
 
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="rounded-2xl border border-cyan-500/20 bg-white/5 p-6 backdrop-blur-sm">
-          <h3 className="text-xl font-bold">{isZh ? '结构化识别画像' : 'Structured gift profile'}</h3>
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
+          <h3 className="text-xl font-bold text-slate-100">{isZh ? '结构化识别画像' : 'Structured gift profile'}</h3>
           <div className="mt-4 flex flex-wrap gap-2">
             {analysis.giftProfile.semanticTags.length > 0 ? (
               analysis.giftProfile.semanticTags.map(tag => (
-                <span key={tag} className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-100">
+                <span key={tag} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-100">
                   {tag}
                 </span>
               ))
@@ -92,14 +95,14 @@ export function ResultsDetailPanels({
             )}
           </div>
           <div className="mt-4 grid gap-2 text-xs text-slate-300 sm:grid-cols-2">
-            <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">{isZh ? '类别' : 'Category'}: {analysis.giftProfile.category || '-'}</div>
-            <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">
+            <div className={quietBlockClassName}>{isZh ? '类别' : 'Category'}: {analysis.giftProfile.category || '-'}</div>
+            <div className={quietBlockClassName}>
               {isZh ? '颜色' : 'Colors'}: {analysis.giftProfile.colors.join(isZh ? '、' : ', ') || '-'}
             </div>
-            <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">
+            <div className={quietBlockClassName}>
               {isZh ? '材质' : 'Materials'}: {analysis.giftProfile.materials.join(isZh ? '、' : ', ') || '-'}
             </div>
-            <div className="rounded-lg border border-slate-600/50 bg-slate-800/50 px-3 py-2">
+            <div className={quietBlockClassName}>
               {isZh ? '风格' : 'Styles'}: {analysis.giftProfile.styles.join(isZh ? '、' : ', ') || '-'}
             </div>
           </div>
@@ -107,7 +110,7 @@ export function ResultsDetailPanels({
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h3 className="text-xl font-bold">{t('results.culturalFit')}</h3>
@@ -122,7 +125,7 @@ export function ResultsDetailPanels({
               <div className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-cyan-300 transition-all" style={{ width: `${analysis.fitScore}%` }} />
             </div>
           </div>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-slate-300/72">
             {analysis.fitScore >= 75
               ? isZh
                 ? '优秀的文化契合度'
@@ -160,7 +163,7 @@ export function ResultsDetailPanels({
           </div>
         </motion.div>
 
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <h3 className="text-xl font-bold">{t('results.riskLevel')}</h3>
@@ -181,7 +184,7 @@ export function ResultsDetailPanels({
             <span>{analysis.riskLevel === 'Low' ? t('results.low') : analysis.riskLevel === 'Medium' ? t('results.medium') : t('results.high')}</span>
           </div>
 
-          <div className="mt-4 rounded-lg border border-slate-600/70 bg-slate-800/60 p-3">
+          <div className={`mt-4 p-3 ${homeSurface.quiet}`}>
             <p className="text-sm text-slate-200">
               {analysis.warning ||
                 (isZh
@@ -201,7 +204,7 @@ export function ResultsDetailPanels({
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center gap-2">
             <h3 className="text-xl font-bold">
               {analysis.riskLevel === 'Low'
@@ -228,7 +231,7 @@ export function ResultsDetailPanels({
           <div className="space-y-2">
             {riskReasons.length > 0 ? (
               riskReasons.map(reason => (
-                <div key={reason} className="rounded-lg border border-slate-600/70 bg-slate-800/60 px-3 py-2 text-sm text-slate-200">
+                <div key={reason} className={`${quietBlockClassName} text-sm text-slate-200`}>
                   {reason}
                 </div>
               ))
@@ -238,7 +241,7 @@ export function ResultsDetailPanels({
           </div>
         </motion.div>
 
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center gap-2">
             <h3 className="text-xl font-bold">{riskActionMeta?.title}</h3>
             <InfoTooltip content={riskActionMeta?.tooltip ?? ''} />
@@ -249,7 +252,7 @@ export function ResultsDetailPanels({
               <div
                 key={tip}
                 className={cn(
-                  'rounded-lg px-3 py-2 text-sm',
+                  'rounded-lg border px-3 py-2 text-sm',
                   riskActionMeta?.panelClassName ?? 'border-cyan-500/30 bg-cyan-500/10',
                   riskActionMeta?.textClassName ?? 'text-cyan-100',
                 )}
@@ -279,7 +282,7 @@ export function ResultsDetailPanels({
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center gap-2">
             <h3 className="text-xl font-bold">{t('results.packaging')}</h3>
             <InfoTooltip content={t('tooltip.packaging')} />
@@ -289,7 +292,7 @@ export function ResultsDetailPanels({
             {analysis.packaging.style && (
               <div>
                 <p className="mb-2 text-sm font-semibold text-cyan-300">{isZh ? '包装风格' : 'Style'}</p>
-                <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm text-cyan-100">{analysis.packaging.style}</div>
+                <div className={`${quietBlockClassName} text-sm text-slate-100`}>{analysis.packaging.style}</div>
               </div>
             )}
 
@@ -298,7 +301,7 @@ export function ResultsDetailPanels({
                 <p className="mb-2 text-sm font-semibold text-cyan-300">{t('results.colors')}</p>
                 <div className="flex flex-wrap gap-2">
                   {analysis.packaging.colors.map((color, idx) => (
-                    <div key={idx} className="rounded-full border border-cyan-500/30 bg-cyan-500/20 px-3 py-1 text-sm text-cyan-200">
+                    <div key={idx} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-slate-100">
                       {color}
                     </div>
                   ))}
@@ -309,7 +312,7 @@ export function ResultsDetailPanels({
             {analysis.packaging.materials && (
               <div>
                 <p className="mb-2 text-sm font-semibold text-cyan-300">{isZh ? '材质建议' : 'Materials'}</p>
-                <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm text-cyan-100">{analysis.packaging.materials}</div>
+                <div className={`${quietBlockClassName} text-sm text-slate-100`}>{analysis.packaging.materials}</div>
               </div>
             )}
 
@@ -328,7 +331,7 @@ export function ResultsDetailPanels({
           </div>
         </motion.div>
 
-        <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
+        <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center gap-2">
             <h3 className="text-xl font-bold">{t('results.greetingCard')}</h3>
             <InfoTooltip content={t('tooltip.greetingCard')} />
@@ -338,23 +341,23 @@ export function ResultsDetailPanels({
             {analysis.greetingCard.tone && (
               <div>
                 <p className="mb-2 text-sm font-semibold text-cyan-300">{isZh ? '语气建议' : 'Tone'}</p>
-                <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-sm text-cyan-100">{analysis.greetingCard.tone}</div>
+                <div className={`${quietBlockClassName} text-sm text-slate-100`}>{analysis.greetingCard.tone}</div>
               </div>
             )}
 
-            <div className="space-y-1 rounded-lg border border-cyan-500/30 bg-cyan-500/10 p-4">
-              {analysis.greetingCard.opener && <p className="text-sm text-cyan-100">{analysis.greetingCard.opener}</p>}
-              {analysis.greetingCard.body && <p className="text-sm text-cyan-100">{analysis.greetingCard.body}</p>}
-              {analysis.greetingCard.closing && <p className="text-sm text-cyan-100">{analysis.greetingCard.closing}</p>}
+            <div className={`space-y-1 p-4 ${homeSurface.quiet}`}>
+              {analysis.greetingCard.opener && <p className="text-sm text-slate-100">{analysis.greetingCard.opener}</p>}
+              {analysis.greetingCard.body && <p className="text-sm text-slate-100">{analysis.greetingCard.body}</p>}
+              {analysis.greetingCard.closing && <p className="text-sm text-slate-100">{analysis.greetingCard.closing}</p>}
               {!analysis.greetingCard.opener && !analysis.greetingCard.body && !analysis.greetingCard.closing && (
-                <p className="text-sm text-cyan-100/80">{isZh ? '当前未返回完整贺卡文案。' : 'No full card copy was returned.'}</p>
+                <p className="text-sm text-slate-300/78">{isZh ? '当前未返回完整贺卡文案。' : 'No full card copy was returned.'}</p>
               )}
             </div>
           </div>
         </motion.div>
       </div>
 
-      <motion.div whileHover={{ y: -4, scale: 1.01 }} className="bg-white/5 border border-cyan-500/20 rounded-2xl p-6 backdrop-blur-sm">
+      <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
         <div className="mb-4 flex items-center gap-2">
           <h3 className="text-xl font-bold">{t('results.semanticSignals')}</h3>
           <InfoTooltip content={t('tooltip.semanticSignals')} />
@@ -366,7 +369,7 @@ export function ResultsDetailPanels({
               <p className="mb-2 text-sm font-semibold text-cyan-300">{isZh ? '风险标签' : 'Risk tags'}</p>
               <div className="flex flex-wrap gap-2">
                 {analysis.semanticSignals.tags.map((tag, idx) => (
-                  <div key={idx} className="rounded-full border border-cyan-500/30 bg-cyan-500/20 px-3 py-1 text-sm text-cyan-200">
+                  <div key={idx} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-slate-100">
                     {tag}
                   </div>
                 ))}
@@ -379,7 +382,7 @@ export function ResultsDetailPanels({
               <p className="mb-2 text-sm font-semibold text-cyan-300">{t('results.flowers')}</p>
               <div className="flex flex-wrap gap-2">
                 {analysis.semanticSignals.flowers.map((flower, idx) => (
-                  <div key={idx} className="rounded-full border border-cyan-500/30 bg-cyan-500/20 px-3 py-1 text-sm text-cyan-200">
+                  <div key={idx} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-slate-100">
                     {flower}
                   </div>
                 ))}
@@ -392,7 +395,7 @@ export function ResultsDetailPanels({
               <p className="mb-2 text-sm font-semibold text-cyan-300">{t('results.numbers')}</p>
               <div className="flex flex-wrap gap-2">
                 {analysis.semanticSignals.numbers.map((num, idx) => (
-                  <div key={idx} className="rounded-full border border-cyan-500/30 bg-cyan-500/20 px-3 py-1 text-sm text-cyan-200">
+                  <div key={idx} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-slate-100">
                     {num}
                   </div>
                 ))}
