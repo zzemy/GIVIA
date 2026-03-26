@@ -68,13 +68,13 @@ export function StepAnalysis({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      whileHover={{ y: -2, scale: 1.004 }}
-      className="rounded-2xl border border-cyan-200/18 bg-gradient-to-br from-[#162b46]/88 to-[#0f2037]/84 p-4 shadow-[0_12px_32px_rgba(3,12,28,0.28)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-200/28 sm:p-6"
+      whileHover={{ y: -2 }}
+      className={`rounded-2xl p-4 shadow-[0_12px_32px_rgba(3,12,28,0.24)] transition-all duration-300 hover:border-cyan-200/24 sm:p-6 ${homeSurface.secondary}`}
     >
       <div className="mb-5 flex items-start justify-between border-b border-slate-400/15 pb-4">
         <div>
-          <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">{t('analysis.title')}</h2>
-          <p className="text-xs text-gray-400 sm:text-sm">{t('analysis.description')}</p>
+          <h2 className="mb-1.5 text-lg font-semibold text-slate-100 sm:mb-2 sm:text-xl">{t('analysis.title')}</h2>
+          <p className="text-xs text-slate-400 sm:text-sm">{t('analysis.description')}</p>
         </div>
         <Image src={withBasePath('/brand/step-analysis.svg')} alt="analysis step" width={36} height={36} />
       </div>
@@ -109,7 +109,7 @@ export function StepAnalysis({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-cyan-200/12 bg-cyan-400/[0.045] p-3.5 sm:p-4">
+        <div className={`p-3.5 sm:p-4 ${homeSurface.inset}`}>
           <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div>
               <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-100/80">
@@ -155,7 +155,7 @@ export function StepAnalysis({
             <button
               type="button"
               onClick={() => setShowAdvancedModules(current => !current)}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.07]"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.06]"
             >
               <SlidersHorizontal size={14} />
               {showAdvancedModules

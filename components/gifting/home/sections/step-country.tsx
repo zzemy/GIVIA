@@ -6,6 +6,7 @@ import { CountryStepProfileCard } from '@/components/gifting/home/cards/country-
 import { CountryStepSceneCard } from '@/components/gifting/home/cards/country-step-scene-card'
 import { CountryStepSelectionCard } from '@/components/gifting/home/cards/country-step-selection-card'
 import { CountryStepSummaryCard } from '@/components/gifting/home/cards/country-step-summary-card'
+import { homeSurface } from '@/components/gifting/home/home-design-tokens'
 import type {
   AudienceGroup,
   Locale,
@@ -116,10 +117,10 @@ export function StepCountry({
   onFormalityChange,
 }: StepCountryProps) {
   const cardBaseClassName =
-    'rounded-2xl border border-cyan-200/18 bg-gradient-to-br from-[#132842]/88 to-[#0f2239]/82 p-4 shadow-[0_10px_28px_rgba(3,12,28,0.22)] backdrop-blur-md transition-all duration-300 hover:border-cyan-200/32 sm:p-6'
+    `${homeSurface.inset} p-4 shadow-[0_10px_28px_rgba(3,12,28,0.2)] transition-all duration-300 hover:border-cyan-200/26 sm:p-6`
 
   return (
-    <div className="grid gap-4 sm:gap-6">
+    <div className={`grid gap-4 rounded-2xl p-1 sm:gap-6 ${homeSurface.secondary}`}>
       <CountryStepSelectionCard
         locale={locale}
         apiLanguage={apiLanguage}

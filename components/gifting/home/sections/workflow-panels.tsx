@@ -51,17 +51,15 @@ export function WorkflowPanels({
           </p>
         </div>
 
-        <div className="grid gap-6 sm:gap-7 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:items-start 2xl:gap-8">
-          <div className="space-y-4 sm:space-y-6">
+        <div className="grid gap-6 sm:gap-7 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] xl:items-start 2xl:gap-8">
+          <div className="flex flex-col gap-5 sm:gap-6">
             <StepGiftInput {...giftInputProps} />
+            <StepCountry {...countryProps} />
             <StepAnalysis {...analysisProps} />
           </div>
 
-          <div className="flex h-full flex-col gap-5 sm:gap-6">
-            <StepCountry {...countryProps} />
-            <div className="xl:ml-auto xl:max-w-[38rem] xl:pl-8 2xl:max-w-[40rem] 2xl:pl-10">
-              <WorkflowSupportAssistantPanel {...assistantProps} />
-            </div>
+          <div className="xl:sticky xl:top-24">
+            <WorkflowSupportAssistantPanel {...assistantProps} />
           </div>
         </div>
       </section>

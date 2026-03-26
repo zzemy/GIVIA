@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
 import { GiftInputRecognitionPanel } from '@/components/gifting/home/cards/gift-input-recognition-panel'
 import { GiftInputTextEditor } from '@/components/gifting/home/cards/gift-input-text-editor'
 import { GiftInputUploadPanel } from '@/components/gifting/home/cards/gift-input-upload-panel'
@@ -78,15 +79,15 @@ export function StepGiftInput({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -4, scale: 1.01 }}
-      className="rounded-2xl border border-cyan-200/20 bg-[#14243b]/90 p-4 backdrop-blur-md transition-colors hover:border-cyan-200/35 sm:p-6"
+      whileHover={{ y: -2 }}
+      className={`rounded-2xl p-4 transition-colors sm:p-6 ${homeSurface.secondary}`}
     >
-      <div className="mb-3 flex items-start justify-between sm:mb-4">
+      <div className="mb-4 flex items-start justify-between border-b border-slate-400/15 pb-4 sm:mb-5">
         <div>
-          <h2 className="mb-1.5 text-lg font-bold sm:mb-2 sm:text-xl">
+          <h2 className="mb-1.5 text-lg font-semibold text-slate-100 sm:mb-2 sm:text-xl">
             {isZh ? '第一步：上传图片或输入礼物' : 'Step 1: Upload Image or Type the Gift'}
           </h2>
-          <p className="text-xs text-gray-400 sm:text-sm">
+          <p className={`text-xs sm:text-sm ${homeText.muted}`}>
             {isZh
               ? '支持图片识别，也支持直接输入礼物名称或场景描述。'
               : 'Use either image recognition or direct text input for the gift item.'}
@@ -144,7 +145,7 @@ export function StepGiftInput({
         className={`w-full rounded-lg py-2 font-semibold transition-all ${
           isRecognizing
             ? 'bg-slate-700/70 text-slate-300'
-            : 'border border-cyan-200/45 bg-cyan-300/14 text-cyan-100 hover:bg-cyan-300/22'
+            : 'border border-[#e7d2af]/35 bg-[#e7d2af]/12 text-[#f8ead2] hover:bg-[#e7d2af]/18'
         }`}
       >
         {isRecognizing ? (
