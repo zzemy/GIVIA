@@ -20,7 +20,8 @@ type StepTheme = {
   desc: string
   quote: string
   chapter: string
-  images: [string, string]
+  kicker: string
+  images: [string, string, string]
 }
 
 export default function GiftingPage() {
@@ -57,6 +58,7 @@ export default function GiftingPage() {
       accentBarClassName: 'bg-[#5368b5]',
       accentTextClassName: 'text-[#5368b5]',
       chapter: isZh ? 'Chapter 01' : 'Chapter 01',
+      kicker: isZh ? 'Object reading' : 'Object reading',
       title: isZh ? '让礼物先被准确看见。' : 'Let the gift be seen precisely first.',
       desc: isZh
         ? '从图像、名称与描述里提炼礼物的真实语义，避免后续所有判断都建立在错误认知之上。'
@@ -65,6 +67,7 @@ export default function GiftingPage() {
       images: [
         withBasePath('/brand/gift-ceremony.svg'),
         withBasePath('/brand/scene-business.svg'),
+        withBasePath('/brand/ambient-ribbon.svg'),
       ],
     },
     2: {
@@ -74,6 +77,7 @@ export default function GiftingPage() {
       accentBarClassName: 'bg-[#2d8a69]',
       accentTextClassName: 'text-[#2d8a69]',
       chapter: isZh ? 'Chapter 02' : 'Chapter 02',
+      kicker: isZh ? 'Context framing' : 'Context framing',
       title: isZh ? '把国家与对象写进语境。' : 'Write country and recipient into the context.',
       desc: isZh
         ? '礼物不是发往一个地址，而是进入一个由礼仪、关系与场合共同塑造的阅读环境。'
@@ -82,6 +86,7 @@ export default function GiftingPage() {
       images: [
         withBasePath('/brand/world-map.svg'),
         withBasePath('/brand/scene-family.svg'),
+        withBasePath('/brand/ambient-ribbon.svg'),
       ],
     },
     3: {
@@ -91,6 +96,7 @@ export default function GiftingPage() {
       accentBarClassName: 'bg-[#c67a1f]',
       accentTextClassName: 'text-[#c67a1f]',
       chapter: isZh ? 'Chapter 03' : 'Chapter 03',
+      kicker: isZh ? 'Editorial judgment' : 'Editorial judgment',
       title: isZh ? '把信息收束成文化判断。' : 'Narrow the information into a cultural read.',
       desc: isZh
         ? '这里不再增加素材，而是把礼物线索、文化禁忌和关系角色整合成真正可执行的建议。'
@@ -99,6 +105,7 @@ export default function GiftingPage() {
       images: [
         withBasePath('/brand/scene-festival.svg'),
         withBasePath('/brand/ambient-ribbon.svg'),
+        withBasePath('/brand/gift-ceremony.svg'),
       ],
     },
     4: {
@@ -108,6 +115,7 @@ export default function GiftingPage() {
       accentBarClassName: 'bg-[#7b58b9]',
       accentTextClassName: 'text-[#7b58b9]',
       chapter: isZh ? 'Chapter 04' : 'Chapter 04',
+      kicker: isZh ? 'Composition in progress' : 'Composition in progress',
       title: isZh ? '系统正在编织文化判断。' : 'The system is weaving the cultural read.',
       desc: isZh
         ? '多模态识别、规则判断和关系语境正在交叉校准，准备输出最终礼赠建议。'
@@ -116,6 +124,7 @@ export default function GiftingPage() {
       images: [
         withBasePath('/brand/world-map.svg'),
         withBasePath('/brand/hero-global-gift.svg'),
+        withBasePath('/brand/ambient-ribbon.svg'),
       ],
     },
     5: {
@@ -125,6 +134,7 @@ export default function GiftingPage() {
       accentBarClassName: 'bg-[#d84b74]',
       accentTextClassName: 'text-[#d84b74]',
       chapter: isZh ? 'Chapter 05' : 'Chapter 05',
+      kicker: isZh ? 'Final proposal' : 'Final proposal',
       title: isZh ? '把情感安全地送达。' : 'Deliver the emotion with precision.',
       desc: isZh
         ? '结果页不是评分终点，而是一份兼顾文化分寸、表达方式与替代方案的礼赠编辑稿。'
@@ -133,6 +143,7 @@ export default function GiftingPage() {
       images: [
         withBasePath('/brand/gift-ceremony.svg'),
         withBasePath('/brand/hero-global-gift.svg'),
+        withBasePath('/brand/scene-family.svg'),
       ],
     },
   }
@@ -181,8 +192,8 @@ export default function GiftingPage() {
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-10 flex flex-1 flex-col"
               >
-                <div className="grid h-[42vh] gap-4 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)]">
-                  <div className="relative overflow-hidden rounded-[2.75rem] border border-white/80 shadow-[0_32px_72px_-42px_rgba(15,23,42,0.28)]">
+                <div className="grid h-[43vh] gap-4 xl:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)]">
+                  <div className="relative overflow-hidden rounded-[2.9rem] border border-white/80 shadow-[0_32px_72px_-42px_rgba(15,23,42,0.28)]">
                     <div
                       className="absolute inset-0 bg-cover bg-center"
                       style={{
@@ -201,8 +212,8 @@ export default function GiftingPage() {
                     </div>
                   </div>
 
-                  <div className="grid gap-4">
-                    <div className="relative overflow-hidden rounded-[2.15rem] border border-white/80 shadow-[0_24px_52px_-34px_rgba(15,23,42,0.24)]">
+                  <div className="grid grid-rows-[1.08fr_0.92fr] gap-4">
+                    <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 shadow-[0_24px_52px_-34px_rgba(15,23,42,0.24)]">
                       <div
                         className="absolute inset-0 bg-cover bg-center"
                         style={{
@@ -216,16 +227,26 @@ export default function GiftingPage() {
                       </div>
                     </div>
 
-                    <div className="rounded-[2.15rem] border border-white/70 bg-white/58 p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.24)] backdrop-blur-2xl">
-                      <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
-                        {isZh ? 'Narrative note' : 'Narrative note'}
-                      </p>
-                      <p className="mt-3 text-base leading-8 text-[#5d6472]">{currentContent.desc}</p>
+                    <div className="grid grid-cols-[0.88fr_1.12fr] gap-4">
+                      <div className="relative overflow-hidden rounded-[2rem] border border-white/78 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.24)]">
+                        <div
+                          className="absolute inset-0 bg-cover bg-center"
+                          style={{
+                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,23,22,0.28)), url(${currentContent.images[2]})`,
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.28),transparent_28%)] mix-blend-screen" />
+                      </div>
+
+                      <div className="rounded-[2.15rem] border border-white/70 bg-white/58 p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.24)] backdrop-blur-2xl">
+                        <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>{currentContent.kicker}</p>
+                        <p className="mt-3 text-base leading-8 text-[#5d6472]">{currentContent.desc}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-10 max-w-[32rem]">
+                <div className="mt-10 max-w-[33rem]">
                   <div className="mb-5 flex items-center gap-3">
                     <span className={`h-[2px] w-11 rounded-full ${currentContent.accentBarClassName}`} />
                     <span className={`text-sm font-semibold uppercase tracking-[0.18em] ${currentContent.accentTextClassName}`}>
@@ -238,6 +259,15 @@ export default function GiftingPage() {
                   <p className="mt-5 max-w-[29rem] text-lg font-light leading-9 text-[#5d6472]">
                     {currentContent.desc}
                   </p>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {[isZh ? 'Editorial pacing' : 'Editorial pacing', isZh ? 'Human mood' : 'Human mood', isZh ? 'Soft luxury' : 'Soft luxury'].map(
+                      item => (
+                        <span key={item} className="rounded-full border border-black/8 bg-white/56 px-4 py-2 text-xs uppercase tracking-[0.16em] text-[#7f8696]">
+                          {item}
+                        </span>
+                      ),
+                    )}
+                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -298,7 +328,7 @@ export default function GiftingPage() {
                   transition={{ duration: 0.45, ease: 'easeOut' }}
                   className="flex flex-1 flex-col"
                 >
-                  <div className="mb-10 max-w-3xl">
+                  <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
                       {isZh ? 'Step 01 / Gift signal' : 'Step 01 / Gift signal'}
                     </p>
@@ -337,7 +367,7 @@ export default function GiftingPage() {
                   transition={{ duration: 0.45, ease: 'easeOut' }}
                   className="flex flex-1 flex-col"
                 >
-                  <div className="mb-10 max-w-3xl">
+                  <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
                       {isZh ? 'Step 02 / Cultural context' : 'Step 02 / Cultural context'}
                     </p>
@@ -383,7 +413,7 @@ export default function GiftingPage() {
                   transition={{ duration: 0.45, ease: 'easeOut' }}
                   className="flex flex-1 flex-col"
                 >
-                  <div className="mb-10 max-w-3xl">
+                  <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
                       {isZh ? 'Step 03 / Cultural judgment' : 'Step 03 / Cultural judgment'}
                     </p>
