@@ -16,6 +16,18 @@ export function ResultsSummaryPanel({
 }: ResultsSummaryPanelProps) {
   const isZh = locale === 'zh'
   const topRecommendation = analysis.recommendations[0]
+  const localizedRiskLevel =
+    analysis.riskLevel === 'Low'
+      ? isZh
+        ? '低风险'
+        : 'Low'
+      : analysis.riskLevel === 'Medium'
+        ? isZh
+          ? '中风险'
+          : 'Medium'
+        : isZh
+          ? '高风险'
+          : 'High'
 
   const summaryHeadline =
     analysis.isTaboo || analysis.riskLevel === 'High'
@@ -103,10 +115,10 @@ export function ResultsSummaryPanel({
               ? 'border border-emerald-400/25 bg-emerald-500/12 text-emerald-100'
               : analysis.riskLevel === 'Medium'
                 ? 'border border-amber-400/25 bg-amber-500/12 text-amber-100'
-                : 'border border-red-400/25 bg-red-500/12 text-red-100'
+              : 'border border-red-400/25 bg-red-500/12 text-red-100'
           }`}
         >
-          {isZh ? `风险等级 ${analysis.riskLevel}` : `Risk level ${analysis.riskLevel}`}
+          {isZh ? `风险等级 ${localizedRiskLevel}` : `Risk level ${localizedRiskLevel}`}
         </span>
       </div>
     </section>

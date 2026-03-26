@@ -39,7 +39,7 @@ export function WorkflowPanels({
       <section className={`mb-10 rounded-[2rem] p-4 sm:p-5 lg:mb-12 xl:p-6 ${homeSurface.quiet}`}>
         <div className="mb-6 flex flex-col gap-2 sm:mb-7">
           <p className="text-xs uppercase tracking-[0.22em] text-[#e7d2af]/78">
-            {giftInputProps.locale === 'zh' ? 'GUIDED WORKFLOW' : 'GUIDED WORKFLOW'}
+            {giftInputProps.locale === 'zh' ? '引导式流程' : 'GUIDED WORKFLOW'}
           </p>
           <h2 className="text-2xl font-semibold text-slate-100">
             {giftInputProps.locale === 'zh' ? '按真实送礼顺序完成判断' : 'Follow the real gifting decision sequence'}

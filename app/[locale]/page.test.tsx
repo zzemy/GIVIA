@@ -47,6 +47,7 @@ describe('Localized gifting page', () => {
     expect(screen.getByAltText(/GIVIA/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /立即进入分析流程/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /查看流程|了解流程|see how it works/i })).toBeInTheDocument()
+    expect(screen.getByText(/引导式流程/i)).toBeInTheDocument()
   })
 
   it('renders language switch buttons', () => {

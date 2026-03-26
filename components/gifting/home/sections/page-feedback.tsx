@@ -33,7 +33,7 @@ export function PageFeedback({
             className={`mt-8 px-5 py-5 text-center ${homeSurface.secondary}`}
           >
             <p className="text-[11px] uppercase tracking-[0.2em] text-[#e7d2af]/78">
-              {locale === 'zh' ? 'ANALYSIS IN PROGRESS' : 'ANALYSIS IN PROGRESS'}
+              {locale === 'zh' ? '分析进行中' : 'ANALYSIS IN PROGRESS'}
             </p>
             <div className="mx-auto mt-4 h-2 w-full max-w-md overflow-hidden rounded-full bg-white/10">
               <motion.div

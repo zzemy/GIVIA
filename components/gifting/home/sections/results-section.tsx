@@ -106,7 +106,7 @@ export function ResultsSection({
 
       <div className="space-y-3">
         <p className="text-xs uppercase tracking-[0.2em] text-[#e7d2af]/76">
-          {isZh ? 'SUPPORTING ANALYSIS' : 'SUPPORTING ANALYSIS'}
+          {isZh ? '支持分析' : 'SUPPORTING ANALYSIS'}
         </p>
 
         {hasAnalysisEnhancementResults && (

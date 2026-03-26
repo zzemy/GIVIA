@@ -97,5 +97,7 @@ describe('ResultsSection', () => {
     expect(screen.getByRole('button', { name: /重新开始/i })).toBeInTheDocument()
     expect(screen.getByText(/高风险处理建议/i)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /赠礼顾问结论|advisor summary/i })).toBeInTheDocument()
+    expect(screen.getByText(/支持分析/i)).toBeInTheDocument()
+    expect(screen.getByText(/风险等级 高风险/i)).toBeInTheDocument()
   })
 })
