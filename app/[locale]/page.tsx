@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { HomeBackground } from '@/components/gifting/home/sections/home-background'
-import { withBasePath } from '@/lib/asset-path'
 
 type EditorialFrame = {
   eyebrow: string
@@ -20,32 +19,29 @@ export default function Home() {
   const isZh = params?.locale !== 'en'
   const locale = isZh ? 'zh' : 'en'
 
-  const editorialFrames: EditorialFrame[] = [
+  const photographyFrames: EditorialFrame[] = [
     {
-      eyebrow: isZh ? 'Cultural read' : 'Cultural read',
-      title: isZh ? '礼物先被理解，关系才会被理解。' : 'The gift is read before the relationship is felt.',
-      copy: isZh
-        ? '把物件语义、送礼距离和文化秩序放进同一套编辑系统里。'
-        : 'Object meaning, emotional distance, and cultural order are edited into one system.',
-      image: withBasePath('/brand/gift-ceremony.svg'),
+      eyebrow: isZh ? 'Human ritual' : 'Human ritual',
+      title: isZh ? '礼物属于关系，而不是仓促寄出的一件物品。' : 'A gift belongs to a relationship, not to rushed delivery.',
+      copy: isZh ? '从手势、神情与场景里，重新理解送达的分寸。' : 'Read tact again through gesture, expression, and setting.',
+      image:
+        'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
       align: 'bottom',
     },
     {
-      eyebrow: isZh ? 'Human scene' : 'Human scene',
-      title: isZh ? '不是地区标签，而是人如何接收一份心意。' : 'Not a geography tag, but how a person receives a gesture.',
-      copy: isZh
-        ? '把场景、关系和表达分寸重构成真正国际化的人文体验。'
-        : 'Occasion, relationship, and tact are rebuilt into a genuinely international human experience.',
-      image: withBasePath('/brand/scene-family.svg'),
+      eyebrow: isZh ? 'Cultural warmth' : 'Cultural warmth',
+      title: isZh ? '国际化不等于抽空文化，而是更细腻地理解文化。' : 'International does not mean culture-less. It means understanding culture with more nuance.',
+      copy: isZh ? '让礼物进入真实的城市、人群与生活质感。' : 'Let the gift enter real cities, people, and lived textures.',
+      image:
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80',
       align: 'top',
     },
     {
-      eyebrow: isZh ? 'Global protocol' : 'Global protocol',
-      title: isZh ? '让送礼从避免出错，升级成高质量表达。' : 'Move gifting beyond avoiding mistakes into high-quality expression.',
-      copy: isZh
-        ? '从包装、问候语到替代方案，输出的是一份礼赠编辑稿。'
-        : 'Packaging, greeting tone, and alternatives become one editorial gifting brief.',
-      image: withBasePath('/brand/world-map.svg'),
+      eyebrow: isZh ? 'Global mood' : 'Global mood',
+      title: isZh ? '摄影不是装饰，而是品牌情绪与文化气氛。' : 'Photography is not decoration. It is brand mood and cultural atmosphere.',
+      copy: isZh ? '让首页像一本国际杂志的封面，而不是一个工具落地页。' : 'Make the homepage feel like an international magazine cover, not a utility landing page.',
+      image:
+        'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80',
       align: 'bottom',
     },
   ]
@@ -205,7 +201,7 @@ export default function Home() {
 
                   <div className="grid min-h-[39rem] grid-cols-[0.92fr_1.08fr] gap-4">
                     <div className="grid gap-4">
-                      {editorialFrames.slice(0, 2).map(frame => (
+                      {photographyFrames.slice(0, 2).map(frame => (
                         <article
                           key={frame.title}
                           className={`relative overflow-hidden rounded-[2.2rem] border border-white/90 shadow-[0_24px_54px_-34px_rgba(15,23,42,0.24)] ${
@@ -214,7 +210,7 @@ export default function Home() {
                         >
                           <div
                             className="absolute inset-0 bg-cover bg-center opacity-95"
-                            style={{ backgroundImage: `url(${frame.image})` }}
+                        style={{ backgroundImage: `url(${frame.image})`, backgroundSize: 'cover' }}
                           />
                           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(26,24,21,0.54))]" />
                           <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,255,255,0.34),transparent_28%)] mix-blend-screen" />
@@ -231,7 +227,7 @@ export default function Home() {
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,#f7f3ec_0%,#ece4da_100%)]" />
                       <div
                         className="absolute inset-0 bg-center bg-no-repeat opacity-[0.98]"
-                        style={{ backgroundImage: `url(${editorialFrames[2].image})`, backgroundSize: '112% auto' }}
+                        style={{ backgroundImage: `url(${photographyFrames[2].image})`, backgroundSize: 'cover' }}
                       />
                       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(24,22,19,0.44))]" />
                       <div className="absolute left-5 top-5 rounded-full border border-white/30 bg-white/16 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-white/84 backdrop-blur-md">

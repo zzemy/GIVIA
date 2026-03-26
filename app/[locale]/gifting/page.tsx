@@ -9,8 +9,6 @@ import { StepCountry } from '@/components/gifting/home/sections/step-country'
 import { StepGiftInput } from '@/components/gifting/home/sections/step-gift-input'
 import { ResultsSection } from '@/components/gifting/home/sections/results-section'
 import { useHomePageController } from '@/components/gifting/home/hooks/use-home-page-controller'
-import { withBasePath } from '@/lib/asset-path'
-
 type StepTheme = {
   theme: string
   buttonClassName: string
@@ -50,6 +48,34 @@ export default function GiftingPage() {
     }
   }, [analysisProps.isAnalyzing, currentStep, feedbackProps.error, resultsProps])
 
+  const photoSets: Record<number, [string, string, string]> = {
+    1: [
+      'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80',
+    ],
+    2: [
+      'https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80',
+    ],
+    3: [
+      'https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80',
+    ],
+    4: [
+      'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1493894473891-10fc1e5dbd22?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80',
+    ],
+    5: [
+      'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1600&q=80',
+      'https://images.unsplash.com/photo-1519741491041-6750297b4d0d?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80',
+    ],
+  }
+
   const editorialContent: Record<number, StepTheme> = {
     1: {
       theme: 'from-[#eef3ff] via-[#f6f8fc] to-[#fffdf9]',
@@ -64,11 +90,7 @@ export default function GiftingPage() {
         ? '从图像、名称与描述里提炼礼物的真实语义，避免后续所有判断都建立在错误认知之上。'
         : 'Extract the gift’s real meaning from image, name, and description before every later decision inherits the wrong premise.',
       quote: isZh ? 'Every gesture starts with the object itself.' : 'Every gesture starts with the object itself.',
-      images: [
-        withBasePath('/brand/gift-ceremony.svg'),
-        withBasePath('/brand/scene-business.svg'),
-        withBasePath('/brand/ambient-ribbon.svg'),
-      ],
+      images: photoSets[1],
     },
     2: {
       theme: 'from-[#eef8f3] via-[#f8fbfa] to-[#fffdf9]',
@@ -83,11 +105,7 @@ export default function GiftingPage() {
         ? '礼物不是发往一个地址，而是进入一个由礼仪、关系与场合共同塑造的阅读环境。'
         : 'A gift does not ship to an address. It enters a reading environment shaped by etiquette, relationship, and occasion.',
       quote: isZh ? 'Context changes how the same object is felt.' : 'Context changes how the same object is felt.',
-      images: [
-        withBasePath('/brand/world-map.svg'),
-        withBasePath('/brand/scene-family.svg'),
-        withBasePath('/brand/ambient-ribbon.svg'),
-      ],
+      images: photoSets[2],
     },
     3: {
       theme: 'from-[#fff4e7] via-[#fffaf4] to-[#fffdf9]',
@@ -102,11 +120,7 @@ export default function GiftingPage() {
         ? '这里不再增加素材，而是把礼物线索、文化禁忌和关系角色整合成真正可执行的建议。'
         : 'This is where gift signals, cultural taboos, and relationship roles are edited into an actionable recommendation.',
       quote: isZh ? 'Precision matters most at the moment of judgment.' : 'Precision matters most at the moment of judgment.',
-      images: [
-        withBasePath('/brand/scene-festival.svg'),
-        withBasePath('/brand/ambient-ribbon.svg'),
-        withBasePath('/brand/gift-ceremony.svg'),
-      ],
+      images: photoSets[3],
     },
     4: {
       theme: 'from-[#f6f0ff] via-[#fbf8ff] to-[#fffdf9]',
@@ -121,11 +135,7 @@ export default function GiftingPage() {
         ? '多模态识别、规则判断和关系语境正在交叉校准，准备输出最终礼赠建议。'
         : 'Multimodal recognition, rules, and relationship context are being cross-checked to shape the final gifting recommendation.',
       quote: isZh ? 'Editorial intelligence is being composed.' : 'Editorial intelligence is being composed.',
-      images: [
-        withBasePath('/brand/world-map.svg'),
-        withBasePath('/brand/hero-global-gift.svg'),
-        withBasePath('/brand/ambient-ribbon.svg'),
-      ],
+      images: photoSets[4],
     },
     5: {
       theme: 'from-[#fff1f4] via-[#fff8f8] to-[#fffdf9]',
@@ -140,11 +150,7 @@ export default function GiftingPage() {
         ? '结果页不是评分终点，而是一份兼顾文化分寸、表达方式与替代方案的礼赠编辑稿。'
         : 'The result is not a scorecard. It is an editorial gifting brief balancing tact, expression, and alternatives.',
       quote: isZh ? 'A gift lands through feeling, not through raw utility.' : 'A gift lands through feeling, not through raw utility.',
-      images: [
-        withBasePath('/brand/gift-ceremony.svg'),
-        withBasePath('/brand/hero-global-gift.svg'),
-        withBasePath('/brand/scene-family.svg'),
-      ],
+      images: photoSets[5],
     },
   }
 
