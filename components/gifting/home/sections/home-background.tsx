@@ -3,15 +3,21 @@ import { withBasePath } from '@/lib/asset-path'
 export function HomeBackground() {
   return (
     <>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(231,210,175,0.08),transparent_26%),radial-gradient(circle_at_82%_9%,rgba(125,211,252,0.06),transparent_28%),radial-gradient(circle_at_50%_88%,rgba(148,163,184,0.04),transparent_36%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(3,10,21,0.1)_0%,rgba(3,10,21,0)_34%,rgba(3,10,21,0.16)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_10%,rgba(255,234,211,0.36),transparent_34%),radial-gradient(circle_at_88%_14%,rgba(201,219,248,0.3),transparent_32%),radial-gradient(circle_at_52%_88%,rgba(216,232,223,0.28),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.58)_0%,rgba(248,244,238,0.34)_38%,rgba(244,239,233,0.72)_100%)]" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.07] [background-size:1240px_auto,920px_auto] [background-position:center_8%,center_94%] [background-repeat:no-repeat,no-repeat]"
+        className="pointer-events-none absolute inset-0 opacity-[0.055] [background-size:1280px_auto,1120px_auto] [background-position:center_11%,center_95%] [background-repeat:no-repeat,no-repeat]"
         style={{
           backgroundImage: `url('${withBasePath('/brand/world-map.svg')}'),url('${withBasePath('/brand/world-map.svg')}')`,
         }}
       />
-      <div className="pointer-events-none absolute inset-0 opacity-[0.015] [background-image:repeating-linear-gradient(90deg,rgba(148,163,184,0.06)_0_1px,transparent_1px_132px),repeating-linear-gradient(0deg,rgba(148,163,184,0.04)_0_1px,transparent_1px_108px)]" />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-[-6%] h-[58%] opacity-[0.16] [background-position:center_bottom] [background-repeat:no-repeat] [background-size:min(1180px,92vw)_auto]"
+        style={{
+          backgroundImage: `url('${withBasePath('/brand/ambient-ribbon.svg')}')`,
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.02] [background-image:repeating-linear-gradient(90deg,rgba(71,85,105,0.12)_0_1px,transparent_1px_148px),repeating-linear-gradient(0deg,rgba(71,85,105,0.08)_0_1px,transparent_1px_128px)]" />
     </>
   )
 }
