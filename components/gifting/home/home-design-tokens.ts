@@ -1,9 +1,9 @@
 export const homeSurface = {
   primary:
-    'rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(231,210,175,0.04)_38%,rgba(147,197,253,0.05)_100%)] shadow-[0_32px_90px_rgba(4,10,24,0.48)] backdrop-blur-xl',
+    'rounded-[2rem] border border-white/9 bg-[linear-gradient(135deg,rgba(255,255,255,0.045),rgba(231,210,175,0.05)_38%,rgba(147,197,253,0.045)_100%)] shadow-[0_30px_82px_rgba(4,10,24,0.42)] backdrop-blur-xl',
   secondary:
-    'rounded-[1.75rem] border border-white/9 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))] shadow-[0_24px_70px_rgba(4,10,24,0.36)] backdrop-blur-xl',
-  quiet: 'rounded-[1.25rem] border border-white/7 bg-white/[0.035] backdrop-blur-md',
+    'rounded-[1.75rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.018))] shadow-[0_20px_56px_rgba(4,10,24,0.28)] backdrop-blur-xl',
+  quiet: 'rounded-[1.25rem] border border-white/6 bg-white/[0.03] backdrop-blur-md',
 } as const
 
 export const homeAccent = {

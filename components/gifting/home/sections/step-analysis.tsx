@@ -69,7 +69,7 @@ export function StepAnalysis({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
       whileHover={{ y: -2, scale: 1.004 }}
-      className="rounded-2xl border border-cyan-200/24 bg-gradient-to-br from-[#162b46]/92 to-[#0f2037]/88 p-4 shadow-[0_14px_36px_rgba(3,12,28,0.34)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-200/40 sm:p-6"
+      className="rounded-2xl border border-cyan-200/18 bg-gradient-to-br from-[#162b46]/88 to-[#0f2037]/84 p-4 shadow-[0_12px_32px_rgba(3,12,28,0.28)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-cyan-200/28 sm:p-6"
     >
       <div className="mb-5 flex items-start justify-between border-b border-slate-400/15 pb-4">
         <div>
@@ -80,7 +80,7 @@ export function StepAnalysis({
       </div>
 
       <div className="grid gap-4 sm:gap-5">
-        <div className="rounded-2xl border border-slate-200/12 bg-slate-900/34 p-3.5 sm:p-4">
+        <div className="rounded-2xl border border-slate-200/10 bg-slate-900/28 p-3.5 sm:p-4">
           <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{isZh ? '分析摘要' : 'Analysis summary'}</p>
           <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
             {[
@@ -109,7 +109,7 @@ export function StepAnalysis({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-cyan-200/14 bg-cyan-400/5 p-3.5 sm:p-4">
+        <div className="rounded-2xl border border-cyan-200/12 bg-cyan-400/[0.045] p-3.5 sm:p-4">
           <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div>
               <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-100/80">
@@ -125,7 +125,7 @@ export function StepAnalysis({
               </p>
             </div>
             <div className="shrink-0 text-right">
-              <span className="inline-flex whitespace-nowrap rounded-full border border-cyan-200/18 bg-cyan-300/10 px-3 py-1 text-[11px] leading-none text-cyan-100">
+              <span className="inline-flex whitespace-nowrap rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] leading-none text-slate-200">
                 {hasEnabledAnalysisEnhancement
                   ? isZh
                     ? `已启用 ${enabledEnhancementCount} 项`
@@ -219,7 +219,7 @@ export function StepAnalysis({
         </div>
 
         {canAnalyze && !hasAnalysis && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-slate-200/12 bg-slate-800/24 p-3.5 sm:p-4">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-2xl border border-slate-200/10 bg-slate-800/20 p-3.5 sm:p-4">
             <p className="mb-3 flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-slate-400">
               <Sparkles size={14} />
               {locale === 'zh' ? '分析准备清单' : 'Analysis Checklist'}
@@ -254,7 +254,7 @@ export function StepAnalysis({
           </motion.div>
         )}
 
-        <div className="rounded-2xl border border-slate-200/12 bg-slate-700/30 px-4 py-3.5">
+        <div className="rounded-2xl border border-slate-200/10 bg-slate-700/24 px-4 py-3.5">
           <p className="text-sm text-gray-300">
             {hasAnalysis
               ? locale === 'zh'

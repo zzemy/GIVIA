@@ -42,16 +42,16 @@ export function ResultsSummaryPanel({
           : 'Prefer the safer alternative path and adjust packaging and wording together.'))
 
   return (
-    <section className={`overflow-hidden p-6 md:p-7 ${homeSurface.primary}`}>
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+    <section className={`overflow-hidden p-6 md:p-8 ${homeSurface.primary}`}>
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-3xl">
           <h3 className="text-xs uppercase tracking-[0.22em] text-[#e7d2af]/80">
             {isZh ? '赠礼顾问结论' : 'Advisor summary'}
           </h3>
-          <p className="mt-3 text-3xl font-semibold leading-tight text-slate-50 md:text-[2.15rem]">
+          <p className="mt-3 text-3xl font-semibold leading-tight text-slate-50 md:text-[2.2rem]">
             {summaryHeadline}
           </p>
-          <p className="mt-4 text-sm leading-7 text-slate-200/84 md:text-base">
+          <p className="mt-5 max-w-[46rem] text-sm leading-7 text-slate-200/82 md:text-base">
             {summaryBody}
           </p>
         </div>
@@ -90,7 +90,7 @@ export function ResultsSummaryPanel({
         </div>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-2">
         <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-slate-200">
           {contextLabel}
         </span>

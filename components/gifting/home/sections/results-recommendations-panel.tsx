@@ -22,7 +22,7 @@ export function ResultsRecommendationsPanel({
   }
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`p-6 ${homeSurface.secondary}`}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`p-6 md:p-7 ${homeSurface.secondary}`}>
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-[#e7d2af]/78">
@@ -58,7 +58,7 @@ export function ResultsRecommendationsPanel({
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 lg:grid-cols-3">
+      <div className="mt-5 grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
         {analysis.recommendations.map(item => {
           const isFavorite = favoriteRecommendationIds.includes(item.id)
           const name = locale === 'zh' ? item.nameZh : item.nameEn

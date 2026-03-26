@@ -31,7 +31,7 @@ export function ResultsDetailPanels({
   riskActionMeta,
 }: ResultsDetailPanelsProps) {
   const isZh = locale === 'zh'
-  const detailPanelClassName = `rounded-2xl p-6 backdrop-blur-sm ${homeSurface.secondary}`
+  const detailPanelClassName = `rounded-2xl p-5 md:p-6 backdrop-blur-sm ${homeSurface.secondary}`
   const quietBlockClassName = `rounded-lg px-3 py-2 ${homeSurface.quiet}`
 
   return (
@@ -56,7 +56,7 @@ export function ResultsDetailPanels({
         </motion.div>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2">
         <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="flex items-center justify-between">
             <h3 className="text-xl font-bold text-slate-100">{isZh ? '综合风险分' : 'Risk Score'}</h3>
@@ -109,7 +109,7 @@ export function ResultsDetailPanels({
         </motion.div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2">
         <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -203,7 +203,7 @@ export function ResultsDetailPanels({
         </motion.div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2">
         <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center gap-2">
             <h3 className="text-xl font-bold">
@@ -281,7 +281,7 @@ export function ResultsDetailPanels({
         </motion.div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2">
         <motion.div whileHover={{ y: -4 }} className={detailPanelClassName}>
           <div className="mb-4 flex items-center gap-2">
             <h3 className="text-xl font-bold">{t('results.packaging')}</h3>

@@ -109,11 +109,11 @@ export function HomeHeroSection({
         </div>
       </header>
 
-      <section className="mb-12 mt-8 grid gap-6 lg:grid-cols-[1.12fr_0.88fr] lg:items-stretch">
+      <section className="mb-14 mt-8 grid gap-6 lg:grid-cols-[1.12fr_0.88fr] lg:items-stretch xl:gap-7">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`relative flex h-full flex-col overflow-hidden px-7 py-8 md:px-9 md:py-10 ${homeSurface.primary}`}
+          className={`relative flex h-full flex-col overflow-hidden px-7 py-8 md:px-9 md:py-11 ${homeSurface.primary}`}
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top_left,rgba(231,210,175,0.18),transparent_58%)]" />
 
@@ -144,7 +144,7 @@ export function HomeHeroSection({
 
             <p className={`mt-6 max-w-2xl text-base leading-8 md:text-[1.05rem] ${homeText.body}`}>{t('hero.description')}</p>
 
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
               <span className={`inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-sm ${homeSurface.quiet} ${homeText.body}`}>
                 <ShieldCheck size={14} /> {t('hero.trust1')}
               </span>
@@ -153,12 +153,12 @@ export function HomeHeroSection({
               </span>
             </div>
 
-            <div className="mt-7 flex flex-wrap gap-2 text-xs text-slate-200/90">
+            <div className="mt-8 flex flex-wrap gap-2 text-xs text-slate-200/90">
               {['Tokyo', 'Dubai', 'Paris', 'Sao Paulo', 'Singapore'].map(city => (
                 <motion.span
                   key={city}
                   whileHover={{ y: -1 }}
-                  className="rounded-full border border-white/8 bg-white/[0.035] px-3 py-1.5 text-slate-300/78"
+                  className="rounded-full border border-white/6 bg-white/[0.025] px-3 py-1.5 text-slate-300/62"
                 >
                   {city}
                 </motion.span>
@@ -166,13 +166,13 @@ export function HomeHeroSection({
             </div>
           </div>
 
-          <div className="relative mt-auto flex flex-wrap items-center gap-3 pt-9">
+          <div className="relative mt-auto flex flex-col items-stretch gap-3 pt-10 sm:flex-row sm:flex-wrap sm:items-center">
             <motion.button
               type="button"
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={onEnterFlow}
-              className="inline-flex items-center gap-2 rounded-full border border-[#e7d2af]/35 bg-[#e7d2af]/12 px-5 py-3 text-sm font-semibold text-[#f9ead2] hover:bg-[#e7d2af]/18"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#e7d2af]/35 bg-[#e7d2af]/12 px-5 py-3 text-sm font-semibold text-[#f9ead2] hover:bg-[#e7d2af]/18 sm:w-auto sm:justify-start"
             >
               {isZh ? '立即进入分析流程' : 'Start the flow now'} <ArrowRight size={15} />
             </motion.button>
@@ -180,13 +180,13 @@ export function HomeHeroSection({
             <button
               type="button"
               onClick={onSeeHowItWorks}
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/8 bg-white/[0.025] px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.05] sm:w-auto sm:justify-start"
             >
               <Sparkles size={15} />
               {isZh ? '了解流程' : 'See how it works'}
             </button>
 
-            <p className={`w-full text-sm ${homeText.muted}`}>
+            <p className={`w-full pt-1 text-sm ${homeText.muted}`}>
               {isZh ? '先判断文化表达是否得体，再决定礼物如何被送出。' : 'Understand the cultural signal first, then decide how the gift should land.'}
             </p>
           </div>
@@ -207,7 +207,7 @@ export function HomeHeroSection({
             </h2>
             <p className={`mt-3 text-sm leading-7 ${homeText.body}`}>{t('hero.panelDesc')}</p>
 
-            <div className="mt-6 grid gap-3">
+            <div className="mt-7 grid gap-3">
               {credibilityItems.map(item => (
                 <div key={item.id} className={`flex items-start gap-3 px-4 py-4 ${homeSurface.quiet}`}>
                   <div className="mt-0.5 rounded-full border border-[#e7d2af]/20 bg-[#e7d2af]/10 p-2 text-[#f3ddba]">{item.icon}</div>
@@ -220,13 +220,13 @@ export function HomeHeroSection({
             </div>
           </div>
 
-          <div className="relative mt-6 rounded-[1.5rem] border border-white/8 bg-[#0d1a2d]/55 p-2">
+          <div className="relative mt-7 rounded-[1.5rem] border border-white/6 bg-[#0d1a2d]/45 p-2">
             <InteractiveFlowDemo locale={apiLanguage} />
           </div>
         </motion.div>
       </section>
 
-      <section ref={insightsRef} className="mb-10">
+      <section ref={insightsRef} className="mb-14">
         <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-[#e7d2af]/80">CULTURAL GIFT INSIGHTS</p>
@@ -272,7 +272,7 @@ export function HomeHeroSection({
         </div>
 
         <div
-          className="relative h-[24.8rem] overflow-visible md:h-[26.4rem]"
+          className="relative h-[24.8rem] overflow-visible md:h-[26.7rem]"
           onMouseEnter={() => onImpactPauseChange(true)}
           onMouseLeave={() => onImpactPauseChange(false)}
         >

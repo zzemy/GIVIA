@@ -65,7 +65,7 @@ export function ResultsSection({
   const contextLabel = `${selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '未选择国家' : 'No country'} · ${selectedAudienceLabel} · ${sceneLabel}`
 
   return (
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-12 space-y-6">
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-14 space-y-6 sm:space-y-7">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <h2 className="text-3xl font-bold">{t('results.title')}</h2>
@@ -104,23 +104,29 @@ export function ResultsSection({
         onToggleFavoriteRecommendation={onToggleFavoriteRecommendation}
       />
 
-      {hasAnalysisEnhancementResults && (
-        <ResultsEnhancementPanels
-          analysis={analysis}
-          analysisEnhancements={analysisEnhancements}
-          locale={locale}
-          formatCurrencyAmount={formatCurrencyAmount}
-        />
-      )}
+      <div className="space-y-3">
+        <p className="text-xs uppercase tracking-[0.2em] text-[#e7d2af]/76">
+          {isZh ? 'SUPPORTING ANALYSIS' : 'SUPPORTING ANALYSIS'}
+        </p>
 
-      <ResultsDetailPanels
-        analysis={analysis}
-        locale={locale}
-        t={t}
-        riskReasons={riskReasons}
-        mustSendAdvice={mustSendAdvice}
-        riskActionMeta={riskActionMeta}
-      />
+        {hasAnalysisEnhancementResults && (
+          <ResultsEnhancementPanels
+            analysis={analysis}
+            analysisEnhancements={analysisEnhancements}
+            locale={locale}
+            formatCurrencyAmount={formatCurrencyAmount}
+          />
+        )}
+
+        <ResultsDetailPanels
+          analysis={analysis}
+          locale={locale}
+          t={t}
+          riskReasons={riskReasons}
+          mustSendAdvice={mustSendAdvice}
+          riskActionMeta={riskActionMeta}
+        />
+      </div>
     </motion.div>
   )
 }

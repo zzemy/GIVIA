@@ -32,12 +32,12 @@ export function WorkflowPanels({
 }: WorkflowPanelsProps) {
   return (
     <>
-      <div ref={workflowRef} className={`mb-6 rounded-[1.75rem] p-4 sm:p-5 ${homeSurface.quiet}`}>
+      <div ref={workflowRef} className={`mb-7 rounded-[1.75rem] p-4 sm:p-5 ${homeSurface.quiet}`}>
         <WorkflowProgress steps={workflowSteps} />
       </div>
 
-      <section className={`mb-8 rounded-[2rem] p-4 sm:p-5 lg:mb-10 xl:p-6 ${homeSurface.quiet}`}>
-        <div className="mb-5 flex flex-col gap-2 sm:mb-6">
+      <section className={`mb-10 rounded-[2rem] p-4 sm:p-5 lg:mb-12 xl:p-6 ${homeSurface.quiet}`}>
+        <div className="mb-6 flex flex-col gap-2 sm:mb-7">
           <p className="text-xs uppercase tracking-[0.22em] text-[#e7d2af]/78">
             {giftInputProps.locale === 'zh' ? 'GUIDED WORKFLOW' : 'GUIDED WORKFLOW'}
           </p>
@@ -51,15 +51,15 @@ export function WorkflowPanels({
           </p>
         </div>
 
-        <div className="grid gap-5 sm:gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] xl:items-start 2xl:gap-7">
+        <div className="grid gap-6 sm:gap-7 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] xl:items-start 2xl:gap-8">
           <div className="space-y-4 sm:space-y-6">
             <StepGiftInput {...giftInputProps} />
             <StepAnalysis {...analysisProps} />
           </div>
 
-          <div className="flex h-full flex-col gap-4 sm:gap-6">
+          <div className="flex h-full flex-col gap-5 sm:gap-6">
             <StepCountry {...countryProps} />
-            <div className="xl:pl-8 2xl:pl-10">
+            <div className="xl:ml-auto xl:max-w-[38rem] xl:pl-8 2xl:max-w-[40rem] 2xl:pl-10">
               <WorkflowSupportAssistantPanel {...assistantProps} />
             </div>
           </div>
