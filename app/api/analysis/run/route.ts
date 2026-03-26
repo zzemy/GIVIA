@@ -261,7 +261,7 @@ export async function POST(request: Request) {
             countryCode ||
             country ||
             'US',
-          locale: (body.locale || 'zh') as 'en' | 'zh' | 'ja' | 'fr',
+          locale: ((body.locale || 'zh') === 'en' ? 'en' : 'zh') as 'en' | 'zh',
           budget: body.enhancements?.budget,
           includeLLM: true,
           includeMultimodal: body.enhancements?.multimodal,

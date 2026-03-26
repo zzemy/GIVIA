@@ -1,15 +1,8 @@
 /**
- * P1: Multi-language Expansion Manager
- * Full support for ja/fr (beyond P0 basic structure)
- * 
- * Features:
- * - Complete message translations for ja/fr
- * - Dynamic language switching
- * - Locale-aware formatting (dates, numbers, currency)
- * - RTL support placeholder for future Arabic enhancement
+ * Lightweight locale helpers for the active product languages.
  */
 
-export type SupportedLocale = 'en' | 'zh' | 'ja' | 'fr'
+export type SupportedLocale = 'en' | 'zh'
 
 export interface LocaleMessages {
   common: Record<string, string>
@@ -19,115 +12,11 @@ export interface LocaleMessages {
   errors: Record<string, string>
 }
 
-// Japanese translations
-export const messagesJa: LocaleMessages = {
-  common: {
-    welcome: 'クロスボーダーギフト アシスタントへようこそ',
-    selectRecipient: '受取人を選択',
-    selectOccasion: 'ギフト機会を選択',
-    selectCountry: 'ギフト配送先の国を選択',
-    continue: '続ける',
-    back: '戻る',
-    cancel: 'キャンセル',
-    loading: '読み込み中...',
-    error: 'エラーが発生しました',
-    success: '成功',
-  },
-  analysis: {
-    riskAnalysis: 'リスク分析',
-    analyzing: 'ギフトの配送可能性を分析中...',
-    culturalRisk: 'カルチャル・リスク',
-    customsRisk: '税関リスク',
-    prohibited: '禁止',
-    acceptable: '許可',
-    caution: '注意',
-    contextSensitivity: 'コンテキスト感度',
-    detailsLabel: '詳細情報',
-  },
-  recommendations: {
-    topRecommendations: 'トップ推奨事項',
-    bestMatch: '最適なマッチ',
-    whyRecommended: 'なぜこれが推奨されているのか',
-    riskLevel: 'リスク レベル',
-    budget: '予算',
-    occasion: 'ギフト機会',
-    viewDetails: '詳細を表示',
-  },
-  logistics: {
-    shippingOptions: '配送オプション',
-    estimatedCost: '見積もり費用',
-    estimatedDays: '見積もり日数',
-    carrier: 'キャリア',
-    customsDuties: 'カスタムズ デューティ',
-    importRestrictions: '輸入制限',
-  },
-  errors: {
-    invalidCountry: '無効な国コード',
-    invalidOccasion: '無効なギフト機会',
-    apiError: 'API エラー',
-    networkError: 'ネットワーク エラー',
-  },
-}
-
-// French translations
-export const messagesFr: LocaleMessages = {
-  common: {
-    welcome: 'Bienvenue dans Cross-Border Gift Assistant',
-    selectRecipient: 'Sélectionner le destinataire',
-    selectOccasion: 'Sélectionner l\'occasion du cadeau',
-    selectCountry: 'Sélectionner le pays de livraison',
-    continue: 'Continuer',
-    back: 'Retour',
-    cancel: 'Annuler',
-    loading: 'Chargement...',
-    error: 'Une erreur est survenue',
-    success: 'Succès',
-  },
-  analysis: {
-    riskAnalysis: 'Analyse des risques',
-    analyzing: 'Analyse de la compatibilité du cadeau...',
-    culturalRisk: 'Risque culturel',
-    customsRisk: 'Risque douanier',
-    prohibited: 'Interdit',
-    acceptable: 'Acceptable',
-    caution: 'Attention',
-    contextSensitivity: 'Sensibilité contextuelle',
-    detailsLabel: 'Informations détaillées',
-  },
-  recommendations: {
-    topRecommendations: 'Recommandations privilégiées',
-    bestMatch: 'Meilleur choix',
-    whyRecommended: 'Pourquoi celui-ci est recommandé',
-    riskLevel: 'Niveau de risque',
-    budget: 'Budget',
-    occasion: 'Occasion du cadeau',
-    viewDetails: 'Voir les détails',
-  },
-  logistics: {
-    shippingOptions: 'Options d\'expédition',
-    estimatedCost: 'Coût estimé',
-    estimatedDays: 'Jours estimés',
-    carrier: 'Transporteur',
-    customsDuties: 'Droits de douane',
-    importRestrictions: 'Restrictions d\'importation',
-  },
-  errors: {
-    invalidCountry: 'Code de pays invalide',
-    invalidOccasion: 'Occasion du cadeau invalide',
-    apiError: 'Erreur API',
-    networkError: 'Erreur réseau',
-  },
-}
-
 /**
  * Get messages for a specific locale
  */
 export function getMessages(locale: SupportedLocale): LocaleMessages {
   switch (locale) {
-    case 'ja':
-      return messagesJa
-    case 'fr':
-      return messagesFr
     case 'zh':
       // Import from actual zh.json in production
       return {
@@ -235,9 +124,6 @@ export function getMessages(locale: SupportedLocale): LocaleMessages {
  * Format number according to locale
  */
 export function formatNumber(value: number, locale: SupportedLocale): string {
-  if (locale === 'ja' || locale === 'fr') {
-    return new Intl.NumberFormat(locale === 'ja' ? 'ja-JP' : 'fr-FR').format(value)
-  }
   if (locale === 'zh') {
     return new Intl.NumberFormat('zh-CN').format(value)
   }
@@ -255,8 +141,6 @@ export function formatCurrency(
   const localeMap: Record<SupportedLocale, string> = {
     en: 'en-US',
     zh: 'zh-CN',
-    ja: 'ja-JP',
-    fr: 'fr-FR',
   }
 
   return new Intl.NumberFormat(localeMap[locale], {
@@ -274,8 +158,6 @@ export function formatDate(date: Date, locale: SupportedLocale, style: 'short' |
   const localeMap: Record<SupportedLocale, string> = {
     en: 'en-US',
     zh: 'zh-CN',
-    ja: 'ja-JP',
-    fr: 'fr-FR',
   }
 
   return new Intl.DateTimeFormat(localeMap[locale], {
@@ -299,20 +181,14 @@ export function translateAnalysisResult(
     prohibited: {
       en: 'Prohibited',
       zh: '禁止',
-      ja: '禁止',
-      fr: 'Interdit',
     },
     caution: {
       en: 'Caution',
       zh: '小心',
-      ja: '注意',
-      fr: 'Attention',
     },
     acceptable: {
       en: 'Acceptable',
       zh: '可接受',
-      ja: '許可',
-      fr: 'Acceptable',
     },
   }
 
@@ -333,8 +209,6 @@ export function getLocalizedDeliveryRange(minDays: number, maxDays: number, loca
   const labels: Record<SupportedLocale, { day: string; to: string }> = {
     en: { day: 'day', to: 'to' },
     zh: { day: '天', to: '至' },
-    ja: { day: '日', to: '〜' },
-    fr: { day: 'jour', to: 'à' },
   }
 
   const label = labels[locale]
@@ -345,12 +219,12 @@ export function getLocalizedDeliveryRange(minDays: number, maxDays: number, loca
  * Get supported locales list
  */
 export function getSupportedLocales(): SupportedLocale[] {
-  return ['en', 'zh', 'ja', 'fr']
+  return ['en', 'zh']
 }
 
 /**
  * Check if locale is supported
  */
 export function isSupportedLocale(locale: string): locale is SupportedLocale {
-  return ['en', 'zh', 'ja', 'fr'].includes(locale)
+  return ['en', 'zh'].includes(locale)
 }

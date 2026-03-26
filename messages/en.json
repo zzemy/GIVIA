@@ -1,7 +1,7 @@
 {
   "workflow": {
     "title": "Givia",
-    "subtitle": "AI-Powered Cross-Cultural Gift Recommendation Platform",
+    "subtitle": "A bright editorial gifting experience for international relationships",
     "steps": {
       "recognize": "Recognize",
       "country": "Country",
@@ -9,26 +9,26 @@
     }
   },
   "hero": {
-    "badge": "Global Cultural Gifting Intelligence",
-    "headline": "Make every gift feel understood across cultures",
-    "description": "Upload a gift image and get clear cultural guidance that helps you gift with confidence, respect, and warmth in any market.",
-    "trust1": "Cultural Taboo Risk Shield",
-    "trust2": "International Brand Gifting",
-    "panelTitle": "Cross-Border AI Engine",
-    "panelHeadline": "A global gifting experience built for real people",
-    "panelDesc": "Beyond generic outputs, it explains why a choice is appropriate so your intent lands with care.",
-    "panelCta": "Launch Branded Gifting Flow"
+    "badge": "Light Editorial High-End",
+    "headline": "Let the gift be understood before the gesture is delivered",
+    "description": "Givia edits gift semantics, relationship distance, and cultural tact into one executable gifting brief for a more refined international experience.",
+    "trust1": "Culture-first framing",
+    "trust2": "International brand storytelling",
+    "panelTitle": "Givia Editorial Flow",
+    "panelHeadline": "An authored gifting proposal for global relationships",
+    "panelDesc": "Not just whether a gift works, but why it lands, how it should be sent, and what to change when it does not.",
+    "panelCta": "Enter the gifting editorial flow"
   },
   "recognition": {
-    "title": "Step 1: Upload Gift Image",
-    "description": "Use AI image recognition to identify the gift you want to send",
-    "upload": "Click to upload or drag and drop",
-    "placeholder": "Supports JPG and PNG formats, max 5MB",
-    "loading": "Recognizing image, please wait..."
+    "title": "Chapter 1: Create the gift profile",
+    "description": "Upload the key visual and add object notes so the system understands the gift before cultural judgment begins.",
+    "upload": "Click to upload or drag the gift image",
+    "placeholder": "Supports JPG, PNG, WEBP; clearer material and packaging details are better",
+    "loading": "Composing the gift reading, please wait..."
   },
   "country": {
-    "title": "Step 2: Select Target Country",
-    "description": "Choose the recipient's country to get accurate cultural taboos and recommendations",
+    "title": "Chapter 2: Compose the cultural frame",
+    "description": "Choose the destination and add recipient, occasion, and tact so the gift enters a real social context.",
     "search": "Search countries...",
     "popular": "Popular Countries",
     "regions": {
@@ -40,22 +40,22 @@
     }
   },
   "analysis": {
-    "title": "Step 3: Get Cultural Analysis",
-    "description": "AI generates risk assessment and personalized recommendations based on gift and target country culture",
-    "analyze": "Analyze",
-    "loading": "Generating cultural analysis, may take a moment due to network conditions...",
+    "title": "Chapter 3: Generate the proposal",
+    "description": "The system turns gift signals, etiquette, and relationship roles into one final recommendation and alternative path.",
+    "analyze": "Generate proposal",
+    "loading": "Composing the cultural proposal, this may take a moment...",
     "noRecognition": "Please upload and recognize a gift first",
     "noCountry": "Please select a target country first"
   },
   "results": {
-    "title": "Analysis Results",
+    "title": "Editorial gifting brief",
     "culturalFit": "Cultural Fit Score",
-    "riskLevel": "Cultural Risk Level",
+    "riskLevel": "Cultural Friction Level",
     "low": "Low Risk",
     "medium": "Medium Risk",
     "high": "High Risk",
-    "packaging": "Packaging Recommendation",
-    "greetingCard": "Greeting Card Suggestion",
+    "packaging": "Packaging Direction",
+    "greetingCard": "Greeting Tone",
     "metrics": "Detailed Metrics",
     "semanticSignals": "Semantic Signals",
     "colors": "Recommended Colors",
@@ -65,11 +65,11 @@
     "copySuccess": "Copied"
   },
   "tooltip": {
-    "culturalFit": "Cultural Fit Score measures how well the gift aligns with the target country's cultural expectations on a scale of 0-100. Higher scores indicate better cultural compatibility.",
-    "riskLevel": "Cultural Risk Level indicates whether the gift contains cultural taboos or could cause offense in the target country. It assesses color taboos, number taboos, flower taboos, and other cultural dimensions.",
-    "semanticSignals": "Semantic Signals refer to the potential meanings and symbolic significance the gift carries in that culture. For example, certain flowers may symbolize death, and certain colors may be inappropriate for specific occasions.",
-    "packaging": "Packaging recommendations include color combinations, pattern choices, and visual elements that ensure the entire gift experience aligns with cultural expectations.",
-    "greetingCard": "Greeting card suggestions provide culturally appropriate messages, color schemes, and forbidden text, helping you convey your wishes completely and respectfully."
+    "culturalFit": "Cultural Fit measures how comfortably the gift aligns with the target context. Higher scores suggest it will be received more naturally and tactfully.",
+    "riskLevel": "Cultural Friction Level reflects the degree of misreading, discomfort, or etiquette conflict the gift may trigger in the destination culture.",
+    "semanticSignals": "Semantic Signals describe the symbolic readings, associations, and social interpretations the gift may activate in that culture.",
+    "packaging": "Packaging Direction helps shape the first impression through color, material, texture, and presentation choices.",
+    "greetingCard": "Greeting Tone helps your wording feel aligned with the gift, the relationship, and the social context."
   },
   "errors": {
     "uploadFailed": "Image upload failed, please try again",

@@ -1,7 +1,7 @@
 {
   "workflow": {
     "title": "Givia",
-    "subtitle": "AI驱动的跨文化礼物推荐平台",
+    "subtitle": "明亮、国际化、叙事型的礼赠编辑体验",
     "steps": {
       "recognize": "AI识别",
       "country": "目标国家",
@@ -9,26 +9,26 @@
     }
   },
   "hero": {
-    "badge": "Global Cultural Gifting Intelligence",
-    "headline": "把每一次送礼，变成被理解的跨文化心意",
-    "description": "上传礼物图片后，你会得到清晰易懂的文化提醒与建议，帮助你在不同国家都送得得体、真诚、体面。",
-    "trust1": "文化禁忌风险防护",
-    "trust2": "国际品牌礼赠体验",
-    "panelTitle": "Cross-Border AI Engine",
-    "panelHeadline": "面向全球用户的礼赠体验引擎",
-    "panelDesc": "不只是给出结论，而是告诉你为什么这样送更合适，让每一份礼物更有温度。",
-    "panelCta": "进入品牌化礼赠流程"
+    "badge": "Light Editorial High-End",
+    "headline": "让礼物先被理解，再让心意被稳妥送达",
+    "description": "Givia 将礼物语义、关系距离与文化分寸编排成一份可执行的礼赠编辑稿，帮助你以更国际化、更高端的人文方式完成表达。",
+    "trust1": "文化语境优先",
+    "trust2": "国际品牌叙事体验",
+    "panelTitle": "Givia Editorial Flow",
+    "panelHeadline": "为跨文化关系编辑一份礼赠提案",
+    "panelDesc": "不只是输出能不能送，而是把为什么、怎么送、如何更得体，一并整理成清晰结论。",
+    "panelCta": "进入礼赠编辑流程"
   },
   "recognition": {
-    "title": "第一步：上传礼物图片",
-    "description": "通过AI图像识别系统来识别您想要赠送的礼物",
-    "upload": "点击上传或拖拽图片",
-    "placeholder": "支持JPG、PNG格式，最大5MB",
-    "loading": "正在识别图片，请稍候..."
+    "title": "第一章：建立礼物主档",
+    "description": "上传礼物主视觉，并补充物件说明，让系统先理解这份礼物本身。",
+    "upload": "点击上传或拖拽礼物图片",
+    "placeholder": "支持 JPG、PNG、WEBP，建议清晰展示材质与包装",
+    "loading": "正在整理礼物语义，请稍候..."
   },
   "country": {
-    "title": "第二步：选择目标国家",
-    "description": "选择受礼人所在的国家，以获得准确的文化禁忌和推荐",
+    "title": "第二章：编排文化语境",
+    "description": "选择目的地并补充对象、场合与分寸，让礼物进入真实的社会语境。",
     "search": "搜索国家...",
     "popular": "热门国家",
     "regions": {
@@ -40,22 +40,22 @@
     }
   },
   "analysis": {
-    "title": "第三步：获取文化分析",
-    "description": "AI根据礼物和目标国家文化生成风险评估和个性化建议",
-    "analyze": "开始分析",
-    "loading": "正在生成文化分析，网络波动时可能稍有延迟...",
+    "title": "第三章：生成礼赠提案",
+    "description": "系统将把礼物信号、国家礼仪与关系角色收束成最终判断与替代建议。",
+    "analyze": "生成提案",
+    "loading": "正在编排文化提案，网络波动时可能稍有延迟...",
     "noRecognition": "请先上传并识别礼物",
     "noCountry": "请先选择目标国家"
   },
   "results": {
-    "title": "分析结果",
+    "title": "礼赠编辑稿",
     "culturalFit": "文化契合度",
-    "riskLevel": "文化风险等级",
+    "riskLevel": "文化摩擦等级",
     "low": "低风险",
     "medium": "中等风险",
     "high": "高风险",
-    "packaging": "包装建议",
-    "greetingCard": "贺卡建议",
+    "packaging": "包装方向",
+    "greetingCard": "问候语语气",
     "metrics": "详细指标",
     "semanticSignals": "语义信号",
     "colors": "推荐色彩",
@@ -65,11 +65,11 @@
     "copySuccess": "已复制"
   },
   "tooltip": {
-    "culturalFit": "文化契合度是指礼物在目标国家文化背景下的接受度和适合程度，从0-100分评分。分数越高，表示礼物越符合该国文化期望。",
-    "riskLevel": "文化风险等级表示礼物在目标国家是否存在文化禁忌或可能引发不适。包括颜色禁忌、数字禁忌、花卉禁忌等多个维度的综合评估。",
-    "semanticSignals": "语义信号是指礼物在该文化中传递的潜在含义和象征意义。例如，某些花卉可能象征死亡，某些颜色可能不适合特定场合。",
-    "packaging": "包装建议包括推荐的色彩搭配、图案选择和视觉元素，确保整个赠礼体验符合文化期望。",
-    "greetingCard": "贺卡建议提供了适合该文化的问候语、颜色搭配和禁忌文字，帮助您完整传达祝福。"
+    "culturalFit": "文化契合度用于衡量礼物与目标文化语境的适配程度。分数越高，说明这份礼物越容易被得体地接收。",
+    "riskLevel": "文化摩擦等级表示礼物在目标国家可能产生误读、不适或礼仪冲突的程度，是对整体送达风险的综合评估。",
+    "semanticSignals": "语义信号指礼物在该文化中可能触发的象征意义、联想和社会阅读方式。",
+    "packaging": "包装方向帮助你控制礼物的第一印象，包括色彩、材质、图案与整体氛围。",
+    "greetingCard": "问候语建议帮助你以合适的语气完成表达，让文字与礼物本身保持一致。"
   },
   "errors": {
     "uploadFailed": "图片上传失败，请重试",

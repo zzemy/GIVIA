@@ -20,7 +20,7 @@ export interface EnhancedAnalysisRequest {
   recipientProfile: AudienceProfileInput
   country: string
   shippingCountry: string
-  locale: 'en' | 'zh' | 'ja' | 'fr'
+  locale: 'en' | 'zh'
   budget?: number
   includeLLM?: boolean // P0 feature
   includeMultimodal?: boolean // P1 feature
@@ -172,7 +172,7 @@ export async function runEnhancedAnalysis(request: EnhancedAnalysisRequest): Pro
 
   // Step 4: Localization (optional)
   if (request.locale && request.locale !== 'en') {
-    const localeKey = request.locale as 'en' | 'zh' | 'ja' | 'fr'
+    const localeKey = request.locale as 'en' | 'zh'
     const messages = getMessages(localeKey)
     let formattedRecommendations = ''
 
@@ -198,7 +198,7 @@ export async function runEnhancedAnalysis(request: EnhancedAnalysisRequest): Pro
  */
 export function formatEnhancedAnalysisForDisplay(
   analysisResult: EnhancedAnalysisResult,
-  locale: 'en' | 'zh' | 'ja' | 'fr' = 'en',
+  locale: 'en' | 'zh' = 'en',
 ): string {
   const messages = getMessages(locale)
   let output = `## ${messages.analysis.riskAnalysis}\n\n`

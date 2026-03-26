@@ -117,7 +117,7 @@ export const COUNTRIES_BY_REGION = {
   oceania: COUNTRIES.filter(c => c.region === 'oceania'),
 }
 
-export function getCountryName(code: string, locale: 'en' | 'zh' | 'ja' | 'fr'): string {
+export function getCountryName(code: string, locale: 'en' | 'zh'): string {
   const country = COUNTRIES.find(c => c.code === code)
   if (!country) return code
   return locale === 'zh' ? country.nameZh : country.nameEn
