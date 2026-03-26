@@ -35,7 +35,7 @@ jest.mock('next/image', () => ({
 }))
 
 describe('Localized gifting page', () => {
-  it('renders workflow title and primary actions', () => {
+  it('renders the premium advisor hero with primary and secondary actions', () => {
     render(<Home />)
 
     expect(
@@ -45,8 +45,8 @@ describe('Localized gifting page', () => {
       }),
     ).toBeInTheDocument()
     expect(screen.getByAltText(/GIVIA/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /AI\s+识别物件/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /开始分析/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /立即进入分析流程/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /查看流程|了解流程|see how it works/i })).toBeInTheDocument()
   })
 
   it('renders language switch buttons', () => {
