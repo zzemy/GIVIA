@@ -53,5 +53,6 @@ AGENTS.md
 CLAUDE.md
 .github/copilot-instructions.md
 .agents/
+.superpowers/
 skills-lock.json
 .mcp.json
