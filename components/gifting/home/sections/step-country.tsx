@@ -176,7 +176,7 @@ export function StepCountry({
                 </option>
               ))}
             </select>
-            {activeSceneTemplate && <p className="mt-3 text-sm leading-7 text-[#667085]">{isZh ? activeSceneTemplate.hintZh : activeSceneTemplate.hintEn}</p>}
+            {activeSceneTemplate && <p className="mt-3 text-sm leading-7 text-[#667085]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
           </div>
 
           <div className="rounded-[1.85rem] border border-black/6 bg-[linear-gradient(180deg,#fff,#fcfaf7)] p-5">
