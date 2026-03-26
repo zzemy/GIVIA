@@ -55,14 +55,14 @@ export function CountrySelector({
         type="button"
         onClick={() => handleSelect(country.code)}
         className={cn(
-          'w-full rounded-[1rem] border px-4 py-3 text-left transition-all duration-200',
+          'w-full rounded-[1.1rem] border px-4 py-3 text-left transition-all duration-200',
           isActive
-            ? 'border-[#4a5f97]/22 bg-[#eef2ff] shadow-[0_16px_30px_-24px_rgba(74,95,151,0.4)]'
+            ? 'border-[#5b72d1]/18 bg-[#eef2ff] shadow-[0_18px_30px_-24px_rgba(91,114,209,0.24)]'
             : 'border-transparent bg-transparent hover:border-black/6 hover:bg-[#faf6f0]',
         )}
       >
         <div className="flex items-center justify-between gap-3">
-          <span className="text-sm text-[#1f2937]">{locale === 'en' ? country.nameEn : country.nameZh}</span>
+          <span className="text-sm text-[#1d1a17]">{locale === 'en' ? country.nameEn : country.nameZh}</span>
           <span className="text-[11px] tracking-[0.12em] text-[#98a2b3]">{country.code}</span>
         </div>
       </button>
@@ -75,16 +75,16 @@ export function CountrySelector({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          `${homeControl.input} flex items-center justify-between gap-3 rounded-[1.25rem] px-4 py-3 text-left`,
-          'bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,244,238,0.94))] shadow-[0_16px_30px_-24px_rgba(15,23,42,0.16)] hover:border-[#4a5f97]/24 hover:bg-white',
+          `${homeControl.input} flex items-center justify-between gap-3 rounded-[1.45rem] px-4 py-3 text-left`,
+          'bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,244,238,0.94))] shadow-[0_16px_30px_-24px_rgba(15,23,42,0.16)] hover:border-[#5b72d1]/22 hover:bg-white',
         )}
       >
         <div className="flex min-w-0 items-center gap-2.5">
-          <div className="rounded-full border border-[#4a5f97]/14 bg-[#eef2ff] p-1.5 text-[#4a5f97]">
+          <div className="rounded-full border border-[#5b72d1]/16 bg-[#eef2ff] p-1.5 text-[#5b72d1]">
             <Globe size={15} />
           </div>
           <div className="min-w-0">
-            <p className={`truncate text-sm ${selectedCountry ? 'text-[#1f2937]' : 'text-[#667085]'}`}>
+            <p className={`truncate text-sm ${selectedCountry ? 'text-[#1d1a17]' : 'text-[#69707d]'}`}>
               {selectedCountry
                 ? locale === 'en'
                   ? selectedCountry.nameEn
@@ -99,8 +99,8 @@ export function CountrySelector({
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-[calc(100%+0.75rem)] z-[190] w-full rounded-[1.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,238,0.98))] p-3 shadow-[0_32px_80px_-42px_rgba(15,23,42,0.3)] backdrop-blur-2xl">
-          <div className="rounded-[1.25rem] border border-black/6 bg-[#fcfaf7] p-3">
+        <div className="absolute left-0 top-[calc(100%+0.75rem)] z-[190] w-full rounded-[1.8rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,238,0.98))] p-3 shadow-[0_32px_80px_-42px_rgba(15,23,42,0.22)] backdrop-blur-2xl">
+          <div className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-3">
             <div className="relative">
               <Search size={16} className="absolute left-3 top-3 text-[#98a2b3]" />
               <input
@@ -117,19 +117,19 @@ export function CountrySelector({
           <div className="country-selector-scroll mt-2 max-h-96 space-y-2 overflow-y-auto pr-1">
             {filteredCountries ? (
               filteredCountries.length > 0 ? (
-                <div className="space-y-1 rounded-[1.25rem] border border-black/6 bg-[#fcfaf7] p-2">
+                <div className="space-y-1 rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-2">
                   {filteredCountries.map(country => renderCountryRow(country))}
                 </div>
               ) : (
-                <div className="rounded-[1.25rem] border border-black/6 bg-[#fcfaf7] px-4 py-6 text-center text-sm text-[#667085]">
+                <div className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] px-4 py-6 text-center text-sm text-[#69707d]">
                   {locale === 'en' ? 'No results' : '未找到'}
                 </div>
               )
             ) : (
               <>
                 {POPULAR_COUNTRIES.length > 0 && (
-                  <div className="rounded-[1.25rem] border border-black/6 bg-[#fcfaf7] p-2">
-                    <div className="flex items-center gap-2 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#8b6b2d]">
+                  <div className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-2">
+                    <div className="flex items-center gap-2 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#9b6b20]">
                       <Star size={13} /> {locale === 'en' ? 'Popular' : '热门'}
                     </div>
                     <div className="space-y-1">{POPULAR_COUNTRIES.map(country => renderCountryRow(country))}</div>
@@ -144,7 +144,7 @@ export function CountrySelector({
                   }
 
                   return (
-                    <div key={region} className="rounded-[1.25rem] border border-black/6 bg-[#fcfaf7] p-2">
+                    <div key={region} className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-2">
                       <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#98a2b3]">
                         {regionLabels[region] || region}
                       </div>
