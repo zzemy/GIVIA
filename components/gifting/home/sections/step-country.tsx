@@ -117,10 +117,10 @@ export function StepCountry({
   onFormalityChange,
 }: StepCountryProps) {
   const cardBaseClassName =
-    `${homeSurface.inset} p-4 shadow-[0_10px_28px_rgba(3,12,28,0.2)] transition-all duration-300 hover:border-cyan-200/26 sm:p-6`
+    `${homeSurface.inset} p-4 shadow-[0_14px_36px_rgba(3,12,28,0.22)] transition-all duration-300 hover:border-white/14 sm:p-6`
 
   return (
-    <div className={`grid gap-4 rounded-2xl p-1 sm:gap-6 ${homeSurface.secondary}`}>
+    <div className={`grid gap-4 rounded-[1.75rem] p-4 sm:gap-6 sm:p-5 ${homeSurface.secondary}`}>
       <CountryStepSelectionCard
         locale={locale}
         apiLanguage={apiLanguage}

@@ -30,14 +30,14 @@ export function PageFeedback({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={`mt-8 px-5 py-5 text-center ${homeSurface.secondary}`}
+            className={`px-5 py-5 text-center ${homeSurface.secondary}`}
           >
             <p className="text-[11px] uppercase tracking-[0.2em] text-[#e7d2af]/78">
               {locale === 'zh' ? '分析进行中' : 'ANALYSIS IN PROGRESS'}
             </p>
             <div className="mx-auto mt-4 h-2 w-full max-w-md overflow-hidden rounded-full bg-white/10">
               <motion.div
-                className="h-full w-1/3 rounded-full bg-gradient-to-r from-[#e7d2af] via-sky-300 to-cyan-100"
+                className="h-full w-1/3 rounded-full bg-gradient-to-r from-[#e7d2af] via-[#eedcb7] to-[#d4e0ea]"
                 animate={{ x: ['-120%', '320%'] }}
                 transition={{ duration: 1.15, ease: 'linear', repeat: Infinity }}
               />
@@ -78,7 +78,7 @@ export function PageFeedback({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="mt-8 flex items-start gap-3 rounded-[1.4rem] border border-red-400/30 bg-[rgba(127,29,29,0.24)] p-4 backdrop-blur-md"
+            className="flex items-start gap-3 rounded-[1.4rem] border border-red-300/22 bg-[rgba(91,26,26,0.22)] p-4 backdrop-blur-md"
           >
             <AlertTriangle size={20} className="mt-0.5 flex-shrink-0 text-red-400" />
             <p className="text-red-200">{error}</p>

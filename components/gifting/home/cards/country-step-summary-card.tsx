@@ -72,7 +72,7 @@ export function CountryStepSummaryCard({
             {isZh ? '这里只保留真正影响判断的关键信息，避免把表单内容重复堆叠。' : 'Keep only the values that truly shape the recommendation instead of repeating the full form.'}
           </p>
         </div>
-        <span className={homeSurface.glassStrip}>
+        <span className={`${homeSurface.glassStrip} home-pill-nowrap home-status-pill`}>
           {isZh ? '实时生效' : 'Live values'}
         </span>
       </div>

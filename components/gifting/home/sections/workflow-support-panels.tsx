@@ -86,12 +86,12 @@ export function WorkflowSupportAssistantPanel({
             </h3>
           </div>
         </div>
-        <span className={homeSurface.glassStrip}>
+        <span className={`${homeSurface.glassStrip} home-pill-nowrap home-status-pill`}>
           {assistantResult?.rateSource === 'live' ? (isZh ? '实时汇率' : 'Live FX') : isZh ? '汇率回退' : 'Fallback FX'}
         </span>
       </div>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 2xl:grid-cols-4">
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 2xl:grid-cols-2">
         <div className={`p-3 ${homeSurface.quiet}`}>
           <p className={`text-[11px] uppercase tracking-[0.14em] ${homeText.meta}`}>
             {isZh ? '礼物价格' : 'Gift price'}
@@ -158,7 +158,7 @@ export function WorkflowSupportAssistantPanel({
 
       {assistantResult && (
         <div className="mt-5 space-y-4">
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
             {Object.entries(assistantResult.convertedAmounts).map(([currency, value]) => (
               <div key={currency} className={`p-3 ${homeSurface.quiet}`}>
                 <p className={`text-xs ${homeText.meta}`}>{currency}</p>
@@ -236,7 +236,7 @@ export function WorkflowSupportHistoryPanels({
                   : 'The latest 8 analyses are stored locally for review and follow-up decisions.'}
               </p>
             </div>
-            <span className={homeSurface.glassStrip}>{historyRecords.length}</span>
+            <span className={`${homeSurface.glassStrip} home-pill-nowrap`}>{historyRecords.length}</span>
           </div>
 
           <div className="mt-5 grid gap-3 lg:grid-cols-2">
@@ -295,7 +295,7 @@ export function WorkflowSupportHistoryPanels({
                 {isZh ? '来自你的收藏记录，可作为后续送礼候选池。' : 'Saved picks from your previous analyses for future gifting checklists.'}
               </p>
             </div>
-            <span className={homeSurface.glassStrip}>{favoriteGiftChecklist.length}</span>
+            <span className={`${homeSurface.glassStrip} home-pill-nowrap`}>{favoriteGiftChecklist.length}</span>
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
+import { homeButton, homeSurface, homeText } from '@/components/gifting/home/home-design-tokens'
 import { GiftInputRecognitionPanel } from '@/components/gifting/home/cards/gift-input-recognition-panel'
 import { GiftInputTextEditor } from '@/components/gifting/home/cards/gift-input-text-editor'
 import { GiftInputUploadPanel } from '@/components/gifting/home/cards/gift-input-upload-panel'
@@ -79,15 +79,15 @@ export function StepGiftInput({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2 }}
-      className={`rounded-2xl p-4 transition-colors sm:p-6 ${homeSurface.secondary}`}
+      whileHover={{ y: -1 }}
+      className={`rounded-[1.75rem] p-4 transition-colors sm:p-6 ${homeSurface.secondary}`}
     >
-      <div className="mb-4 flex items-start justify-between border-b border-slate-400/15 pb-4 sm:mb-5">
+      <div className="mb-5 flex items-start justify-between border-b border-white/8 pb-4 sm:mb-6">
         <div>
           <h2 className="mb-1.5 text-lg font-semibold text-slate-100 sm:mb-2 sm:text-xl">
             {isZh ? '第一步：上传图片或输入礼物' : 'Step 1: Upload Image or Type the Gift'}
           </h2>
-          <p className={`text-xs sm:text-sm ${homeText.muted}`}>
+          <p className={`home-pretty text-xs sm:text-sm ${homeText.muted}`}>
             {isZh
               ? '支持图片识别，也支持直接输入礼物名称或场景描述。'
               : 'Use either image recognition or direct text input for the gift item.'}
@@ -142,10 +142,10 @@ export function StepGiftInput({
       <Button
         onClick={onRecognize}
         disabled={!canRecognize || isRecognizing}
-        className={`w-full rounded-lg py-2 font-semibold transition-all ${
+        className={`w-full rounded-full py-3 font-semibold transition-all ${
           isRecognizing
             ? 'bg-slate-700/70 text-slate-300'
-            : 'border border-[#e7d2af]/35 bg-[#e7d2af]/12 text-[#f8ead2] hover:bg-[#e7d2af]/18'
+            : homeButton.primary
         }`}
       >
         {isRecognizing ? (
