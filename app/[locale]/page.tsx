@@ -1,17 +1,9 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { HomeBackground } from '@/components/gifting/home/sections/home-background'
-
-type EditorialFrame = {
-  eyebrow: string
-  title: string
-  copy: string
-  image: string
-  align?: 'top' | 'bottom'
-}
 
 export default function Home() {
   const params = useParams<{ locale?: string }>()
@@ -19,51 +11,11 @@ export default function Home() {
   const isZh = params?.locale !== 'en'
   const locale = isZh ? 'zh' : 'en'
 
-  const photographyFrames: EditorialFrame[] = [
-    {
-      eyebrow: isZh ? 'A first impression' : 'A first impression',
-      title: isZh ? '同一份礼物，落进不同关系里，会变成不同的意思。' : 'The same gift can mean very different things in different relationships.',
-      copy: isZh ? '亲疏、身份与场合，会决定它被读成贴心、越界，还是只是客气。' : 'Distance, role, and occasion decide whether it feels thoughtful, overfamiliar, or merely polite.',
-      image:
-        'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
-      align: 'bottom',
-    },
-    {
-      eyebrow: isZh ? 'Another place, another reading' : 'Another place, another reading',
-      title: isZh ? '跨过边界之后，礼物会被另一套文化经验重新解释。' : 'Once it crosses a border, the gift is interpreted by another cultural memory.',
-      copy: isZh ? '问题不只在于送什么，更在于它在那里会联想到什么。' : 'The question is not only what you send, but what it may suggest there.',
-      image:
-        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80',
-      align: 'top',
-    },
-    {
-      eyebrow: isZh ? 'A better ending' : 'A better ending',
-      title: isZh ? '最后留下来的，不只是结论，而是一种更成熟的送达方式。' : 'What remains in the end is not only a verdict, but a more mature way to let the gesture land.',
-      copy: isZh ? '包括替代方向、包装建议与表达语气，让心意落地得更自然，也更被理解。' : 'Including alternatives, packaging direction, and message tone so the gesture lands more naturally—and is better understood.',
-      image:
-        'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1600&q=80',
-      align: 'bottom',
-    },
-  ]
-
-  const editorialValues = [
-    {
-      label: isZh ? '故事起点' : 'The beginning',
-      value: isZh ? '先看见礼物将被怎样阅读' : 'See how the gift may be read before it arrives',
-    },
-    {
-      label: isZh ? '故事张力' : 'The tension',
-      value: isZh ? '避免文化误读、关系失分与表达失准' : 'Avoid cultural misreading, awkwardness, and the wrong tone',
-    },
-    {
-      label: isZh ? '故事落点' : 'The ending',
-      value: isZh ? '一份更稳妥的礼赠建议与表达方式' : 'A more tactful recommendation and expression',
-    },
-  ]
-
-  const editorialBullets = isZh
-    ? ['看见礼物将被如何阅读', '识别文化与关系中的隐性张力', '找到更自然的送达方式']
-    : ['See how the gift may be read', 'Identify hidden cultural and relational tension', 'Find a more natural way for the gesture to land']
+  const heroPhotos = {
+    gift: 'https://unsplash.com/photos/IsOQu4nML-Y/download?force=true&w=1600',
+    hands: 'https://unsplash.com/photos/EVeqqKNCzRo/download?force=true&w=1200',
+    market: 'https://unsplash.com/photos/74bXIcqEa20/download?force=true&w=1200',
+  }
 
   return (
     <div className={`home-editorial-shell relative min-h-screen overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
@@ -100,72 +52,61 @@ export default function Home() {
         </header>
 
         <main className="flex flex-1 items-center py-8 lg:py-12">
-          <div className="grid w-full gap-10 lg:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)] lg:gap-12">
+          <div className="grid w-full gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
             <motion.section
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col justify-between"
+              className="flex max-w-[34rem] flex-col justify-center"
             >
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-[#6d82d8]/14 bg-white/68 px-4 py-2 text-sm text-[#566fd1] shadow-[0_12px_30px_-26px_rgba(86,111,209,0.52)] backdrop-blur-xl">
-                  <Sparkles className="h-4 w-4" />
-                  {isZh ? '每一份跨文化礼物，都会先被阅读，再被接收' : 'Every cross-cultural gift is read before it is received'}
+                <div className="inline-flex items-center gap-2 rounded-full border border-[#d9dded] bg-white/82 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-[#6c78ab] shadow-[0_14px_34px_-26px_rgba(15,23,42,0.12)]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#6c78ab]" />
+                  {isZh ? '每一份跨文化礼物，都会先被阅读' : 'Every cross-cultural gift is read first'}
                 </div>
 
                 <h1
-                  className={`mt-8 max-w-[11ch] text-[4rem] leading-[0.9] tracking-[-0.075em] text-[#1d1915] sm:text-[5rem] xl:text-[6.4rem] ${
+                  className={`mt-8 max-w-[10ch] text-[4.1rem] leading-[0.9] tracking-[-0.08em] text-[#1d1915] sm:text-[5.1rem] xl:text-[6.2rem] ${
                     isZh ? 'font-display-zh font-semibold' : 'font-serif font-semibold'
                   }`}
                 >
                   {isZh ? (
                     <>
-                      <span className="block">有些礼物送出去，</span>
-                      <span className="block text-[#566fd1]">是被珍重接住；</span>
-                      <span className="block">有些礼物送出去，</span>
-                      <span className="block">却会被误读。</span>
+                      <span className="block">让心意，</span>
+                      <span className="block text-[#5f73d7]">跨越山海，</span>
+                      <span className="block">也不失分寸。</span>
                     </>
                   ) : (
                     <>
-                      <span className="block">Some gifts arrive</span>
-                      <span className="block text-[#566fd1]">as warmth;</span>
-                      <span className="block">some arrive</span>
-                      <span className="block">as misunderstanding.</span>
+                      <span className="block">Let the gesture</span>
+                      <span className="block text-[#5f73d7]">cross borders</span>
+                      <span className="block">without losing tact.</span>
                     </>
                   )}
                 </h1>
 
-                <p className="mt-8 max-w-[34rem] text-lg font-light leading-9 text-[#69707d]">
+                <p className="mt-8 max-w-[31rem] text-lg font-light leading-9 text-[#676d79]">
                   {isZh
-                    ? '在跨文化关系里，礼物从来不是单独的一件物品。它会连同关系远近、场合气氛与文化联想一起，被对方完整地阅读。Givia 帮你先看见这场阅读。'
-                    : 'In cross-cultural relationships, a gift is never just an object. It is read together with social distance, occasion, and cultural association. Givia helps you see that reading before the gesture leaves you.'}
+                    ? '融合全球文化图谱与 AI 洞察，在送出之前先判断这份礼物会如何被理解。Givia 帮你避开文化误读、关系失分与表达失准，让好意更自然地被接住。'
+                    : 'Blending cultural knowledge with AI reading, Givia helps you judge how a gift may be understood before it leaves you, so the gesture can arrive with more grace and less risk of misreading.'}
                 </p>
 
                 <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
                   <button
                     type="button"
                     onClick={() => router.push(`/${locale}/gifting`)}
-                    className="inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#5b72d1] via-[#4e63bb] to-[#4455a6] px-8 py-4 text-base font-medium text-white shadow-[0_22px_44px_-24px_rgba(91,114,209,0.56)] transition hover:-translate-y-1"
+                    className="inline-flex items-center justify-center gap-3 rounded-full bg-[#5f73d7] px-8 py-4 text-base font-medium text-white shadow-[0_24px_48px_-28px_rgba(95,115,215,0.48)] transition hover:-translate-y-0.5 hover:bg-[#5668c7]"
                   >
-                    {isZh ? '开始这段礼赠判断' : 'Begin the gifting story'}
+                    {isZh ? '开始心意之旅' : 'Begin the gifting story'}
                     <ArrowRight className="h-5 w-5" />
                   </button>
-                  <div className="rounded-full border border-black/6 bg-white/54 px-5 py-3 text-sm text-[#69707d] backdrop-blur-xl">
-                    {isZh ? '物件 → 语境 → 判断 → 提案' : 'Object → Context → Judgment → Proposal'}
-                  </div>
                 </div>
-              </div>
 
-              <div className="mt-12 grid gap-3 sm:grid-cols-3">
-                {editorialValues.map(item => (
-                  <div
-                    key={item.label}
-                    className="rounded-[1.65rem] border border-white/80 bg-white/58 px-5 py-5 shadow-[0_18px_38px_-28px_rgba(15,23,42,0.18)] backdrop-blur-xl"
-                  >
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{item.label}</p>
-                    <p className="mt-3 text-sm leading-7 text-[#31343c]">{item.value}</p>
-                  </div>
-                ))}
+                <p className="mt-6 text-sm leading-7 text-[#8b909b]">
+                  {isZh
+                    ? '物件 → 语境 → 判断 → 提案'
+                    : 'Object → Context → Judgment → Proposal'}
+                </p>
               </div>
             </motion.section>
 
@@ -175,95 +116,59 @@ export default function Home() {
               transition={{ duration: 0.85, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="relative"
             >
-              <div className="absolute -left-10 top-10 hidden h-48 w-48 rounded-full bg-[#dfe7fe] blur-3xl lg:block" />
-              <div className="absolute -right-6 bottom-14 hidden h-56 w-56 rounded-full bg-[#f5ddcc] blur-3xl lg:block" />
-
-              <div className="relative overflow-hidden rounded-[3rem] border border-white/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.88),rgba(248,243,236,0.74))] p-5 shadow-[0_42px_96px_-52px_rgba(15,23,42,0.36)] backdrop-blur-2xl lg:p-6">
-                <div className="grid gap-4 xl:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)]">
-                  <div className="rounded-[2.35rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(250,246,240,0.92))] p-6 shadow-[0_20px_42px_-30px_rgba(15,23,42,0.16)]">
-                    <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">
-                      {isZh ? '故事从误读开始被避免' : 'Where misunderstanding is prevented'}
-                    </p>
-                    <p className="mt-5 text-[2.25rem] font-serif leading-[1.05] tracking-[-0.05em] text-[#1d1915]">
-                      {isZh ? '真正困难的，从来不是挑礼物本身，而是判断它会在另一个文化里，被读成亲近、体面、冒犯，还是疏离。' : 'The real difficulty is rarely choosing the object itself. It is judging whether it will be read as thoughtful, elegant, awkward, or intrusive in another culture.'}
-                    </p>
-                    <div className="mt-8 space-y-3">
-                      {editorialBullets.map(item => (
-                        <div
-                          key={item}
-                          className="rounded-full border border-black/6 bg-white/68 px-4 py-3 text-sm text-[#4b5563]"
-                        >
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="grid min-h-[39rem] grid-cols-[0.92fr_1.08fr] gap-4">
-                    <div className="grid gap-4">
-                      {photographyFrames.slice(0, 2).map(frame => (
-                        <article
-                          key={frame.title}
-                          className={`relative overflow-hidden rounded-[2.2rem] border border-white/90 shadow-[0_24px_54px_-34px_rgba(15,23,42,0.24)] ${
-                            frame.align === 'top' ? 'min-h-[14rem]' : 'min-h-[18rem]'
-                          }`}
-                        >
-                          <div
-                            className="absolute inset-0 bg-cover bg-center opacity-95"
-                        style={{ backgroundImage: `url(${frame.image})`, backgroundSize: 'cover' }}
-                          />
-                          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(26,24,21,0.54))]" />
-                          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,255,255,0.34),transparent_28%)] mix-blend-screen" />
-                          <div className="relative flex h-full flex-col justify-end p-5">
-                            <p className="text-[11px] uppercase tracking-[0.22em] text-white/72">{frame.eyebrow}</p>
-                            <h3 className="mt-2 text-[1.55rem] font-serif leading-tight text-white">{frame.title}</h3>
-                            <p className="mt-3 max-w-xs text-sm leading-7 text-white/78">{frame.copy}</p>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-
-                    <article className="relative overflow-hidden rounded-[2.55rem] border border-white/90 shadow-[0_28px_60px_-36px_rgba(15,23,42,0.26)]">
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,#f7f3ec_0%,#ece4da_100%)]" />
-                      <div
-                        className="absolute inset-0 bg-center bg-no-repeat opacity-[0.98]"
-                        style={{ backgroundImage: `url(${photographyFrames[2].image})`, backgroundSize: 'cover' }}
-                      />
-                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(24,22,19,0.44))]" />
-                      <div className="absolute left-5 top-5 rounded-full border border-white/30 bg-white/16 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-white/84 backdrop-blur-md">
-                        {isZh ? 'Before you decide' : 'Before you decide'}
+              <div className="mx-auto max-w-[860px]">
+                <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_14rem]">
+                  <article className="relative overflow-hidden rounded-[2.8rem] border border-white/92 bg-[#efe8de] shadow-[0_40px_80px_-48px_rgba(15,23,42,0.28)]">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${heroPhotos.gift})` }}
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(33,26,22,0.24))]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.3),transparent_30%)] mix-blend-screen" />
+                    <div className="relative flex aspect-[4/5] flex-col justify-between p-6 sm:p-8">
+                      <div className="inline-flex w-fit items-center rounded-full border border-white/50 bg-white/34 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white/88 backdrop-blur-md">
+                        {isZh ? 'Cultural connection' : 'Cultural connection'}
                       </div>
-                      <div className="relative flex h-full min-h-[39rem] flex-col justify-between p-6">
-                        <div className="flex justify-end">
-                          <div className="max-w-[14rem] rounded-[1.7rem] border border-white/28 bg-white/14 p-4 text-right backdrop-blur-xl">
-                            <p className="text-[11px] uppercase tracking-[0.2em] text-white/68">
-                              {isZh ? 'Soft luxury' : 'Soft luxury'}
-                            </p>
-                            <p className="mt-3 text-sm leading-7 text-white/82">
-                              {isZh ? '克制的留白，配合叙事型摄影与柔和光影。' : 'Restrained whitespace, narrative photography, and a quieter light.'}
-                            </p>
-                          </div>
-                        </div>
 
-                        <div className="space-y-4">
-                          <div className="inline-flex items-center gap-2 rounded-full border border-white/24 bg-white/12 px-4 py-2 text-xs text-white/84 backdrop-blur-md">
-                            <Sparkles className="h-3.5 w-3.5" />
-                            {isZh ? '为跨文化送礼而设计' : 'Built for cross-cultural gifting'}
-                          </div>
-                          <div className="rounded-[2rem] border border-white/24 bg-white/14 p-5 backdrop-blur-xl">
-                            <p className="text-[11px] uppercase tracking-[0.22em] text-white/70">
-                              {isZh ? '故事最后会落到这里' : 'Where the story arrives'}
-                            </p>
-                            <p className="mt-3 text-[1.75rem] font-serif leading-tight text-white">
-                              {isZh ? '这份礼物是否合适，哪里可能失准，以及怎样让心意更自然地被接住。' : 'Whether the gift feels appropriate, where it may lose its balance, and how the gesture can be received more naturally.'}
-                            </p>
-                            <p className="mt-4 text-sm leading-7 text-white/78">
-                              {isZh
-                                ? '你会看到一条完整的叙事线：物件本身、目标文化、关系场景与表达语气，究竟是哪一环改变了礼物的意义。'
-                                : 'You see the full narrative line: the object itself, the destination culture, the relationship setting, and which part of the expression changes the meaning of the gift.'}
-                            </p>
-                          </div>
-                        </div>
+                      <div className="max-w-[24rem]">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/76">
+                          {isZh ? '礼物不只是一件物品' : 'A gift is never just an object'}
+                        </p>
+                        <p className="mt-4 text-[2rem] font-serif leading-[1.06] tracking-[-0.04em] text-white sm:text-[2.5rem]">
+                          {isZh
+                            ? '它会连同包装、气氛与关系，一起被对方阅读。'
+                            : 'It arrives with packaging, atmosphere, and relationship already attached to it.'}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+
+                  <div className="flex flex-col justify-between gap-5">
+                    <article className="relative overflow-hidden rounded-[2.25rem] border border-white/92 shadow-[0_28px_56px_-36px_rgba(15,23,42,0.22)]">
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${heroPhotos.hands})` }}
+                      />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(31,24,20,0.44))]" />
+                      <div className="relative flex aspect-[3/4] items-end p-5">
+                        <p className="max-w-[10rem] text-[1.35rem] font-serif leading-tight text-white">
+                          {isZh ? '关系，决定礼物被读成什么。' : 'Relationship shapes how the gift is read.'}
+                        </p>
+                      </div>
+                    </article>
+
+                    <article className="relative overflow-hidden rounded-[2.25rem] border border-white/92 shadow-[0_28px_56px_-36px_rgba(15,23,42,0.22)]">
+                      <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${heroPhotos.market})` }}
+                      />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(20,18,16,0.52))]" />
+                      <div className="relative flex aspect-[3/4] items-end p-5">
+                        <p className="max-w-[10rem] text-sm leading-7 text-white/88">
+                          {isZh
+                            ? '换一个地方，同样的礼物，也会被另一套文化经验重新解释。'
+                            : 'In another place, the same gift is re-read through another cultural memory.'}
+                        </p>
                       </div>
                     </article>
                   </div>
