@@ -51,8 +51,6 @@ export interface StepCountryProps {
   budgetOptions: SelectOption[]
   formality: string
   formalityOptions: SelectOption[]
-  relationshipLabel: string
-  occupationLabel: string
   onSelectedCountryChange: (value: string) => void
   onSceneTemplateChange: (value: string) => void
   onTargetGroupChange: (value: AudienceGroup) => void
@@ -104,8 +102,6 @@ export function StepCountry({
   budgetOptions,
   formality,
   formalityOptions,
-  relationshipLabel,
-  occupationLabel,
   onSelectedCountryChange,
   onSceneTemplateChange,
   onTargetGroupChange,
@@ -201,9 +197,7 @@ export function StepCountry({
           activeSceneTemplate={activeSceneTemplate}
           sceneTemplate={sceneTemplate}
           selectedAudienceLabel={selectedAudienceLabel}
-          relationshipLabel={relationshipLabel}
           budgetLabel={budgetLabel}
-          occupationLabel={occupationLabel}
           formalityLabel={formalityLabel}
           ageBand={ageBand}
           ageBandOptions={ageBandOptions}

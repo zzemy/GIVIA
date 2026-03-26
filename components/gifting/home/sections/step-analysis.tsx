@@ -1,9 +1,11 @@
 'use client'
 
+import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Sparkles, CheckCircle, Zap } from 'lucide-react'
+import { Sparkles, CheckCircle, Zap, SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { homeSurface } from '@/components/gifting/home/home-design-tokens'
 import { withBasePath } from '@/lib/asset-path'
 import { getCountryName } from '@/lib/countries'
 import type { SceneTemplate } from '@/lib/types/gifting-types'
@@ -57,7 +59,9 @@ export function StepAnalysis({
   onAnalyze,
 }: StepAnalysisProps) {
   const isZh = locale === 'zh'
-  const statTileClassName = 'rounded-xl border border-slate-200/10 bg-slate-950/24 px-3 py-2.5'
+  const statTileClassName = `px-3 py-2.5 ${homeSurface.quiet}`
+  const [showAdvancedModules, setShowAdvancedModules] = React.useState(false)
+  const enabledEnhancementCount = Object.values(analysisEnhancementSettings).filter(Boolean).length
 
   return (
     <motion.div
@@ -108,63 +112,108 @@ export function StepAnalysis({
         <div className="rounded-2xl border border-cyan-200/14 bg-cyan-400/5 p-3.5 sm:p-4">
           <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-100/80">P1 / P2</p>
+              <p className="text-[11px] uppercase tracking-[0.16em] text-cyan-100/80">
+                {isZh ? '可选增强' : 'Optional enhancements'}
+              </p>
               <h3 className="mt-1 text-sm font-semibold text-slate-100">
-                {isZh ? '增强分析模块' : 'Enhanced analysis modules'}
+                {isZh ? '高级判断补充项' : 'Advanced analysis add-ons'}
               </h3>
               <p className="mt-1 text-xs leading-5 text-slate-300">
                 {isZh
-                  ? '把多模态识别、协同过滤、物流估算、知识图谱和 Wide & Deep 排序接到同一次分析里。'
-                  : 'Run multimodal recognition, collaborative filtering, logistics, knowledge graph, and Wide & Deep reranking in the same analysis.'}
+                  ? '默认主流程已经够用；只有在你需要更细的识别、物流或重排判断时，再展开这些设置。'
+                  : 'The core flow is enough by default. Open these settings only when you need finer recognition, logistics, or reranking support.'}
               </p>
             </div>
-            <span className="shrink-0 whitespace-nowrap rounded-full border border-cyan-200/18 bg-cyan-300/10 px-3 py-1 text-[11px] leading-none text-cyan-100">
-              {hasEnabledAnalysisEnhancement ? (isZh ? '已启用增强' : 'Enhancements on') : isZh ? '仅基础分析' : 'P0 only'}
-            </span>
+            <div className="shrink-0 text-right">
+              <span className="inline-flex whitespace-nowrap rounded-full border border-cyan-200/18 bg-cyan-300/10 px-3 py-1 text-[11px] leading-none text-cyan-100">
+                {hasEnabledAnalysisEnhancement
+                  ? isZh
+                    ? `已启用 ${enabledEnhancementCount} 项`
+                    : `${enabledEnhancementCount} enabled`
+                  : isZh
+                    ? '仅基础分析'
+                    : 'Core only'}
+              </span>
+            </div>
           </div>
 
-          <div className="mt-3 grid gap-2.5 md:grid-cols-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             {([
               { key: 'multimodal', label: isZh ? '多模态识别' : 'Multimodal recognition' },
               { key: 'collaborativeFiltering', label: isZh ? '协同过滤重排' : 'Collaborative reranking' },
               { key: 'logistics', label: isZh ? '物流与清关估算' : 'Logistics estimate' },
               { key: 'knowledgeGraph', label: isZh ? '知识图谱打分' : 'Knowledge graph scoring' },
               { key: 'wideDeep', label: isZh ? 'Wide & Deep 排序' : 'Wide & Deep reranking' },
-            ] as Array<{ key: keyof EnhancementSettings; label: string }>).map(option => (
-              <label
-                key={option.key}
-                className="flex min-h-[2.9rem] cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200/10 bg-slate-900/38 px-3 py-2.5 text-sm text-slate-200 transition-colors hover:border-cyan-200/24"
-              >
-                <span className="leading-5">{option.label}</span>
-                <input
-                  type="checkbox"
-                  checked={analysisEnhancementSettings[option.key]}
-                  onChange={event => onEnhancementSettingChange(option.key, event.target.checked)}
-                  className="h-4 w-4 rounded border-slate-500 bg-slate-950 text-cyan-300 accent-cyan-300"
-                />
-              </label>
-            ))}
+            ] as Array<{ key: keyof EnhancementSettings; label: string }>).map(option =>
+              analysisEnhancementSettings[option.key] ? (
+                <span key={option.key} className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1 text-[11px] text-slate-200">
+                  {option.label}
+                </span>
+              ) : null,
+            )}
+
+            <button
+              type="button"
+              onClick={() => setShowAdvancedModules(current => !current)}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.07]"
+            >
+              <SlidersHorizontal size={14} />
+              {showAdvancedModules
+                ? isZh
+                  ? '收起高级设置'
+                  : 'Hide advanced settings'
+                : isZh
+                  ? '展开高级设置'
+                  : 'Show advanced settings'}
+            </button>
           </div>
 
-          {analysisEnhancementSettings.logistics && (
-            <div className="mt-3 rounded-xl border border-slate-200/10 bg-slate-950/35 p-3.5">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{isZh ? '物流出发地' : 'Shipping origin'}</p>
-              <select
-                value={enhancementOriginCountry}
-                onChange={event => onEnhancementOriginCountryChange(event.target.value)}
-                className="mt-2 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none"
-              >
-                {enhancementOriginOptions.map(option => (
-                  <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
-                    {option.label}
-                  </option>
+          {showAdvancedModules && (
+            <div className="mt-3 space-y-3">
+              <div className="grid gap-2.5 md:grid-cols-2">
+                {([
+                  { key: 'multimodal', label: isZh ? '多模态识别' : 'Multimodal recognition' },
+                  { key: 'collaborativeFiltering', label: isZh ? '协同过滤重排' : 'Collaborative reranking' },
+                  { key: 'logistics', label: isZh ? '物流与清关估算' : 'Logistics estimate' },
+                  { key: 'knowledgeGraph', label: isZh ? '知识图谱打分' : 'Knowledge graph scoring' },
+                  { key: 'wideDeep', label: isZh ? 'Wide & Deep 排序' : 'Wide & Deep reranking' },
+                ] as Array<{ key: keyof EnhancementSettings; label: string }>).map(option => (
+                  <label
+                    key={option.key}
+                    className="flex min-h-[2.9rem] cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-200/10 bg-slate-900/38 px-3 py-2.5 text-sm text-slate-200 transition-colors hover:border-cyan-200/24"
+                  >
+                    <span className="leading-5">{option.label}</span>
+                    <input
+                      type="checkbox"
+                      checked={analysisEnhancementSettings[option.key]}
+                      onChange={event => onEnhancementSettingChange(option.key, event.target.checked)}
+                      className="h-4 w-4 rounded border-slate-500 bg-slate-950 text-cyan-300 accent-cyan-300"
+                    />
+                  </label>
                 ))}
-              </select>
-              <p className="mt-2 text-xs text-slate-400">
-                {isZh
-                  ? '主流程中的物流估算会按“发货地 → 目标国家”计算；详细报价仍可在下方物流助手继续核算。'
-                  : 'The main analysis estimates shipping from the selected origin to the target country; use the logistics assistant below for a more detailed quote.'}
-              </p>
+              </div>
+
+              {analysisEnhancementSettings.logistics && (
+                <div className={`p-3.5 ${homeSurface.quiet}`}>
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{isZh ? '物流出发地' : 'Shipping origin'}</p>
+                  <select
+                    value={enhancementOriginCountry}
+                    onChange={event => onEnhancementOriginCountryChange(event.target.value)}
+                    className="mt-2 w-full rounded-xl border border-cyan-200/18 bg-[#0b1c31] px-3 py-2 text-sm text-slate-100 transition focus:border-cyan-200/45 focus:outline-none"
+                  >
+                    {enhancementOriginOptions.map(option => (
+                      <option key={option.value} value={option.value} className="bg-[#0f1f35] text-slate-100">
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="mt-2 text-xs text-slate-400">
+                    {isZh
+                      ? '主流程中的物流估算会按“发货地 → 目标国家”计算；详细报价仍可在下方物流助手继续核算。'
+                      : 'The main analysis estimates shipping from the selected origin to the target country; use the logistics assistant below for a more detailed quote.'}
+                  </p>
+                </div>
+              )}
             </div>
           )}
         </div>

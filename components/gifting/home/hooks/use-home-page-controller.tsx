@@ -103,6 +103,7 @@ export function useHomePageController(routeLocale: Locale) {
   const [error, setError] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const workflowRef = useRef<HTMLDivElement>(null)
+  const insightsRef = useRef<HTMLElement>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState('')
   const [giftName, setGiftName] = useState('')
@@ -184,8 +185,6 @@ export function useHomePageController(routeLocale: Locale) {
     relationshipOptions,
     budgetOptions,
     formalityOptions,
-    occupationLabel,
-    relationshipLabel,
     budgetLabel,
     formalityLabel,
     templateHasAudienceOverride,
@@ -250,6 +249,10 @@ export function useHomePageController(routeLocale: Locale) {
 
   const handleEnterFlow = () => {
     workflowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const handleSeeHowItWorks = () => {
+    insightsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const workflowSteps = [
@@ -633,12 +636,14 @@ export function useHomePageController(routeLocale: Locale) {
       t,
       onLanguageSwitch: handleLanguageSwitch,
       onEnterFlow: handleEnterFlow,
+      onSeeHowItWorks: handleSeeHowItWorks,
       impactCards,
       activeImpactCard,
       onShiftImpactCard: shiftImpactCard,
       onJumpImpactCard: jumpImpactCard,
       getImpactCardOffset,
       onImpactPauseChange: setIsImpactPaused,
+      insightsRef,
     },
     workflowPanelsProps: {
       workflowRef,
@@ -737,8 +742,6 @@ export function useHomePageController(routeLocale: Locale) {
         budgetOptions,
         formality,
         formalityOptions,
-        relationshipLabel,
-        occupationLabel,
         onSelectedCountryChange: clearAnalysisOnChange(setSelectedCountry),
         onSceneTemplateChange: handleSceneTemplateChange,
         onTargetGroupChange: (value: AudienceGroup) => {

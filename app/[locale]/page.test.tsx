@@ -68,8 +68,7 @@ describe('Localized gifting page', () => {
   it('renders enhanced analysis module controls', () => {
     render(<Home />)
 
-    expect(screen.getByText(/增强分析模块/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/多模态识别/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/Wide & Deep 排序/i)).toBeInTheDocument()
+    expect(screen.getByText(/高级判断补充项/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /展开高级设置/i })).toBeInTheDocument()
   })
 })

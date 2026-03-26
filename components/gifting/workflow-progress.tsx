@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { homeSurface } from '@/components/gifting/home/home-design-tokens'
 
 interface WorkflowStep {
   id: number
@@ -24,19 +25,23 @@ export function WorkflowProgress({ steps }: WorkflowProgressProps) {
               {/* Step */}
               <div className="flex flex-col items-center flex-1">
                 <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+                  className={`flex h-12 w-12 items-center justify-center rounded-full transition-all ${
                     step.status === 'completed'
-                      ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/50'
+                      ? 'border border-[#e7d2af]/30 bg-[#e7d2af]/14 text-[#f7e7cc] shadow-[0_10px_30px_rgba(231,210,175,0.18)]'
                       : step.status === 'current'
-                        ? 'bg-cyan-400 text-gray-900 shadow-lg shadow-cyan-400/50 ring-2 ring-cyan-300'
-                        : 'bg-gray-700 text-gray-400'
+                        ? 'border border-sky-200/24 bg-sky-200/12 text-slate-50 ring-1 ring-sky-100/18'
+                        : 'border border-white/8 bg-white/[0.03] text-slate-400'
                   }`}
                 >
                   {step.status === 'completed' ? '✓' : step.icon}
                 </div>
                 <p
-                  className={`mt-2 text-sm font-medium text-center ${
-                    step.status === 'current' ? 'text-cyan-300 font-semibold' : 'text-gray-400'
+                  className={`mt-2 text-center text-sm font-medium ${
+                    step.status === 'completed'
+                      ? 'text-[#f5e4c7]'
+                      : step.status === 'current'
+                        ? 'font-semibold text-slate-100'
+                        : 'text-slate-400'
                   }`}
                 >
                   {step.label}
@@ -49,8 +54,8 @@ export function WorkflowProgress({ steps }: WorkflowProgressProps) {
                   <div
                     className={`h-1 rounded-full transition-all ${
                       step.status === 'completed'
-                        ? 'bg-cyan-500 shadow-lg shadow-cyan-500/50'
-                        : 'bg-gray-700'
+                        ? 'bg-[#e7d2af]/75'
+                        : 'bg-white/10'
                     }`}
                   />
                 </div>
@@ -62,16 +67,16 @@ export function WorkflowProgress({ steps }: WorkflowProgressProps) {
 
       {/* Mobile view */}
       <div className="md:hidden">
-        <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-2 rounded-[1.25rem] p-3 ${homeSurface.quiet}`}>
           {steps.map((step, idx) => (
             <React.Fragment key={step.id}>
               <div
                 className={`flex-1 h-2 rounded-full transition-all ${
                   step.status === 'completed'
-                    ? 'bg-cyan-500 shadow-lg shadow-cyan-500/50'
+                    ? 'bg-[#e7d2af]/75'
                     : step.status === 'current'
-                      ? 'bg-cyan-400 shadow-lg shadow-cyan-400/50'
-                      : 'bg-gray-700'
+                      ? 'bg-sky-200/70'
+                      : 'bg-white/10'
                 }`}
               />
               {idx < steps.length - 1 && <div className="w-1" />}
@@ -80,8 +85,8 @@ export function WorkflowProgress({ steps }: WorkflowProgressProps) {
         </div>
         <div className="flex justify-between mt-2">
           {steps.map(step => (
-            <p key={step.id} className="text-xs text-center text-gray-400 flex-1">
-              <span className={step.status === 'current' ? 'text-cyan-300' : ''}>
+            <p key={step.id} className="flex-1 text-center text-xs text-slate-400">
+              <span className={step.status === 'current' ? 'text-slate-100' : step.status === 'completed' ? 'text-[#f5e4c7]' : ''}>
                 {step.label}
               </span>
             </p>

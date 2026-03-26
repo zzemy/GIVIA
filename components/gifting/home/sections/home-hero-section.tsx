@@ -27,12 +27,14 @@ interface HomeHeroSectionProps {
   t: (path: string) => string
   onLanguageSwitch: (locale: Locale) => void
   onEnterFlow: () => void
+  onSeeHowItWorks: () => void
   impactCards: ImpactCard[]
   activeImpactCard: number
   onShiftImpactCard: (delta: 1 | -1) => void
   onJumpImpactCard: (index: number) => void
   getImpactCardOffset: (index: number) => number
   onImpactPauseChange: (paused: boolean) => void
+  insightsRef: React.RefObject<HTMLElement | null>
 }
 
 export function HomeHeroSection({
@@ -42,12 +44,14 @@ export function HomeHeroSection({
   t,
   onLanguageSwitch,
   onEnterFlow,
+  onSeeHowItWorks,
   impactCards,
   activeImpactCard,
   onShiftImpactCard,
   onJumpImpactCard,
   getImpactCardOffset,
   onImpactPauseChange,
+  insightsRef,
 }: HomeHeroSectionProps) {
   const credibilityItems = [
     {
@@ -175,7 +179,7 @@ export function HomeHeroSection({
 
             <button
               type="button"
-              onClick={onEnterFlow}
+              onClick={onSeeHowItWorks}
               className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
             >
               <Sparkles size={15} />
@@ -222,12 +226,12 @@ export function HomeHeroSection({
         </motion.div>
       </section>
 
-      <section className="mb-10">
+      <section ref={insightsRef} className="mb-10">
         <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-[#e7d2af]/80">CULTURAL GIFT INSIGHTS</p>
             <h3 className="mt-2 text-2xl font-semibold text-slate-100 md:text-3xl">
-              {isZh ? '送礼判断的四个关键能力' : 'Four decision layers for gifting well'}
+              {isZh ? '送礼判断的五个关键能力' : 'Five decision layers for gifting well'}
             </h3>
             <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-300/76">
               {isZh
