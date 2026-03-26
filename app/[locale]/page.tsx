@@ -20,7 +20,7 @@ export default function Home() {
     <div className={`relative min-h-screen overflow-x-hidden bg-[#061225] text-white ${isZh ? 'font-sans-zh' : ''}`}>
       <HomeBackground />
 
-      <main className="relative mx-auto max-w-[1480px] px-5 pb-16 pt-0 xl:px-8">
+      <main className="relative mx-auto flex w-full max-w-[1600px] flex-col gap-12 px-4 pb-20 pt-0 sm:px-5 lg:gap-14 xl:px-8 2xl:px-10">
         <HomeHeroSection {...heroProps} />
         <WorkflowPanels {...workflowPanelsProps} />
         <PageFeedback {...feedbackProps} />

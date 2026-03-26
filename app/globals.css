@@ -145,6 +145,27 @@
   font-family: var(--app-font-display-zh);
 }
 
+.home-measure {
+  max-width: 42rem;
+}
+
+.home-balance {
+  text-wrap: balance;
+}
+
+.home-pretty {
+  text-wrap: pretty;
+}
+
+.home-pill-nowrap {
+  white-space: nowrap;
+  word-break: keep-all;
+}
+
+.home-status-pill {
+  min-inline-size: 5.5rem;
+}
+
 .country-selector-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(103, 232, 249, 0.38) rgba(15, 26, 47, 0.55);
