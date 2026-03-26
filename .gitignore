@@ -56,3 +56,6 @@ CLAUDE.md
 .superpowers/
 skills-lock.json
 .mcp.json
+
+# local assistant workspace
+.claude/
