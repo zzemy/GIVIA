@@ -81,6 +81,11 @@ export function ResultsSection({
         ? '建议优先参考替代推荐，并结合包装与表达方式一起调整。'
         : 'Prefer the alternative recommendations and adjust packaging and wording together.')
 
+  const resultPhotos = [
+    'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1519741491041-6750297b4d0d?auto=format&fit=crop&w=1200&q=80',
+  ]
+
   return (
     <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -132,6 +137,38 @@ export function ResultsSection({
         </div>
 
         <div className="space-y-4">
+          <div className="grid grid-cols-[0.92fr_1.08fr] gap-4">
+            <div
+              className="relative overflow-hidden rounded-[2rem] border border-white/90 shadow-[0_22px_48px_-30px_rgba(15,23,42,0.22)]"
+              style={{
+                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.1),rgba(22,20,18,0.42)),url(${resultPhotos[0]})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="relative flex min-h-[15rem] items-end p-5">
+                <div className="rounded-full border border-white/28 bg-white/14 px-4 py-2 text-[11px] uppercase tracking-[0.2em] text-white/84 backdrop-blur-md">
+                  {isZh ? 'Final mood' : 'Final mood'}
+                </div>
+              </div>
+            </div>
+            <div
+              className="relative overflow-hidden rounded-[2rem] border border-white/90 shadow-[0_22px_48px_-30px_rgba(15,23,42,0.22)]"
+              style={{
+                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.14),rgba(22,20,18,0.34)),url(${resultPhotos[1]})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="relative flex min-h-[15rem] flex-col justify-end p-5">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-white/72">{isZh ? 'Human landing' : 'Human landing'}</p>
+                <p className="mt-2 text-[1.2rem] font-serif leading-tight text-white">
+                  {isZh ? '礼物最后落地的是情绪与关系。' : 'What lands in the end is feeling and relationship.'}
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="rounded-[2.1rem] border border-black/6 bg-white/82 p-5 shadow-[0_20px_50px_-34px_rgba(15,23,42,0.16)]">
             <div className="flex items-start gap-3">
               <div className="rounded-full bg-[#eef6ef] p-2 text-emerald-600">
