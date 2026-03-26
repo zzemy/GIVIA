@@ -74,8 +74,8 @@ export function InteractiveFlowDemo({ locale }: InteractiveFlowDemoProps) {
   }, [steps.length])
 
   return (
-    <div className="relative mt-5 rounded-2xl border border-cyan-200/20 bg-[#0f1f35]/75 p-4">
-      <p className="text-[11px] uppercase tracking-[0.18em] text-cyan-100/80">
+    <div className="relative mt-5 rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(11,24,41,0.88),rgba(8,18,32,0.9))] p-4 shadow-[0_18px_48px_rgba(4,10,24,0.32)]">
+      <p className="text-[11px] uppercase tracking-[0.18em] text-[#e7d2af]/82">
         {isZh ? '可交互流程演示（点击切换）' : 'Interactive flow demo (click to switch)'}
       </p>
 
@@ -87,10 +87,10 @@ export function InteractiveFlowDemo({ locale }: InteractiveFlowDemoProps) {
               key={step.id}
               type="button"
               onClick={() => setActiveStep(step.id)}
-              className={`rounded-lg border px-3 py-2 text-left text-xs transition-colors ${
+              className={`rounded-lg border px-3 py-2 text-left text-xs transition-colors duration-200 ${
                 isActive
-                  ? 'border-cyan-300/70 bg-cyan-300/12 text-cyan-50'
-                  : 'border-slate-500/40 bg-[#0d1a2e]/80 text-slate-300 hover:border-slate-300/60'
+                  ? 'border-[#e7d2af]/40 bg-[#e7d2af]/12 text-[#f7e8cd]'
+                  : 'border-white/10 bg-[#0d1a2e]/78 text-slate-300 hover:border-white/20 hover:bg-[#12243b]'
               }`}
             >
               <p className="font-semibold">{isZh ? `步骤 ${step.id}` : `Step ${step.id}`}</p>
@@ -100,9 +100,9 @@ export function InteractiveFlowDemo({ locale }: InteractiveFlowDemoProps) {
         })}
       </div>
 
-      <div className="mt-3 h-1 rounded-full bg-slate-700/70">
+      <div className="mt-3 h-1 rounded-full bg-white/10">
         <motion.div
-          className="h-full rounded-full bg-cyan-300"
+          className="h-full rounded-full bg-gradient-to-r from-[#e7d2af] to-sky-200"
           animate={{ width: `${(activeStep / steps.length) * 100}%` }}
           transition={{ duration: 0.25 }}
         />
@@ -113,13 +113,13 @@ export function InteractiveFlowDemo({ locale }: InteractiveFlowDemoProps) {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
-        className="mt-4 rounded-xl border border-sky-200/25 bg-[#11263e]/90 p-3"
+        className="mt-4 rounded-xl border border-white/10 bg-[#0f2238]/88 p-3"
       >
-        <p className="text-sm font-semibold text-sky-100">{current.title}</p>
-        <p className="mt-1 text-xs leading-6 text-slate-300">{current.summary}</p>
+        <p className="text-sm font-semibold text-slate-100">{current.title}</p>
+        <p className="mt-1 text-xs leading-6 text-slate-300/86">{current.summary}</p>
         <div className="mt-2 space-y-1">
           {current.payload.map(item => (
-            <p key={item} className="rounded-md border border-slate-400/25 bg-[#0b172a]/80 px-2 py-1 text-[11px] text-slate-200">
+            <p key={item} className="rounded-md border border-white/10 bg-[#0b172a]/82 px-2 py-1 text-[11px] text-slate-200/92">
               {item}
             </p>
           ))}
