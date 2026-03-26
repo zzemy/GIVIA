@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { homeControl } from '@/components/gifting/home/home-design-tokens'
 import { CountrySelector } from '@/components/gifting/country-selector'
 import { getCountryName } from '@/lib/countries'
 import type { SceneTemplate } from '@/lib/types/gifting-types'
@@ -58,6 +57,9 @@ export interface StepCountryProps {
   onFormalityChange: (value: string) => void
 }
 
+const inputClassName =
+  'w-full rounded-[1.55rem] border border-black/7 bg-white/72 px-5 py-4 text-[15px] leading-7 text-[#1d1a17] placeholder:text-[#9aa1af] transition focus:border-[#5b72d1]/45 focus:bg-white focus:outline-none focus:shadow-[0_0_0_4px_rgba(91,114,209,0.08)]'
+
 export function StepCountry({
   locale,
   apiLanguage,
@@ -96,47 +98,48 @@ export function StepCountry({
   onFormalityChange,
 }: StepCountryProps) {
   const isZh = locale === 'zh'
-  const selectClass = `${homeControl.input} pr-10`
   const destinationLabel = selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '尚未选择国家' : 'No country selected'
-  const contextSummary = [
-    destinationLabel,
-    selectedAudienceLabel,
-    activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : sceneTemplate,
-    budgetLabel,
-    formalityLabel,
+  const activeSceneLabel = activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : sceneTemplate
+  const contextSummary = [destinationLabel, selectedAudienceLabel, activeSceneLabel, budgetLabel, formalityLabel]
+
+  const profileCards = [
+    { label: isZh ? '年龄段' : 'Age band', value: ageBand, options: ageBandOptions, onChange: onAgeBandChange },
+    { label: isZh ? '职业' : 'Occupation', value: occupation, options: occupationOptions, onChange: onOccupationChange },
+    { label: isZh ? '关系' : 'Relationship', value: relationship, options: relationshipOptions, onChange: onRelationshipChange },
   ]
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-[2.3rem] border border-black/6 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(247,244,238,0.94))] p-6 shadow-[0_30px_80px_-46px_rgba(15,23,42,0.24)] backdrop-blur-2xl sm:p-8"
+      className="rounded-[2.6rem] border border-black/6 bg-[linear-gradient(155deg,rgba(255,255,255,0.96),rgba(247,244,238,0.94))] p-6 shadow-[0_36px_84px_-48px_rgba(15,23,42,0.24)] backdrop-blur-2xl sm:p-8"
     >
-      <div className="rounded-[1.9rem] border border-black/6 bg-white/72 p-5 shadow-[0_18px_42px_-30px_rgba(15,23,42,0.16)]">
-        <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Context briefing' : 'Context briefing'}</p>
-        <p className="mt-3 text-[1.85rem] font-serif leading-tight text-[#1c1a17]">
-          {isZh ? '让礼物进入一个真实的文化场景。' : 'Place the gift inside a real cultural situation.'}
+      <div className="rounded-[2rem] border border-black/6 bg-white/66 p-5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.16)]">
+        <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? 'Context composition' : 'Context composition'}</p>
+        <p className="mt-3 text-[1.95rem] font-serif leading-tight text-[#1d1a17]">
+          {isZh ? '把国家、对象与分寸写成同一段文化语境。' : 'Compose country, recipient, and tact into one cultural frame.'}
         </p>
-        <p className="mt-3 max-w-3xl text-sm leading-8 text-[#667085]">
+        <p className="mt-3 max-w-3xl text-sm leading-8 text-[#69707d]">
           {isZh
-            ? '国家、对象、预算和正式度不再分散填写，而是共同定义这份礼物会被怎样理解。'
-            : 'Country, recipient, budget, and formality do not stand alone. Together they define how the gift will be interpreted.'}
+            ? '这里不是机械填表，而是在定义：同一份礼物，会在怎样的关系、场合和文化秩序里被理解。'
+            : 'This is not mechanical form filling. It defines the relationship, occasion, and cultural order in which the same gift will be interpreted.'}
         </p>
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)]">
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
         <div className="space-y-5">
-          <div className="rounded-[2rem] border border-black/6 bg-[linear-gradient(180deg,#fcfaf7,#f7f1e9)] p-5">
-            <div className="mb-5 flex items-center justify-between gap-3">
+          <div className="rounded-[2.15rem] border border-black/6 bg-[linear-gradient(180deg,#fcfaf7,#f7f0e8)] p-5">
+            <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Destination' : 'Destination'}</p>
-                <p className="mt-2 text-[1.7rem] font-serif leading-tight text-[#1c1a17]">{destinationLabel}</p>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Destination' : 'Destination'}</p>
+                <p className="mt-2 text-[1.8rem] font-serif leading-tight text-[#1d1a17]">{destinationLabel}</p>
               </div>
               {selectedCountry && (
-                <span className="rounded-full border border-[#4a5f97]/20 bg-[#eef2ff] px-3 py-1 text-xs text-[#3c4d8d]">{selectedCountry}</span>
+                <span className="rounded-full border border-[#5b72d1]/16 bg-[#eef2ff] px-4 py-2 text-xs uppercase tracking-[0.14em] text-[#4a5db0]">
+                  {selectedCountry}
+                </span>
               )}
             </div>
-
             <CountrySelector
               value={selectedCountry}
               onChange={onSelectedCountryChange}
@@ -151,11 +154,11 @@ export function StepCountry({
             />
           </div>
 
-          <div className="rounded-[1.9rem] border border-black/6 bg-white/76 p-5">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Current edit' : 'Current edit'}</p>
+          <div className="rounded-[2rem] border border-black/6 bg-white/74 p-5">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Current context strip' : 'Current context strip'}</p>
             <div className="mt-4 flex flex-wrap gap-2">
               {contextSummary.map(item => (
-                <span key={item} className="rounded-full border border-black/8 bg-[#fcfaf7] px-4 py-2 text-sm text-[#475467]">
+                <span key={item} className="rounded-full border border-black/8 bg-[#fcfaf7] px-4 py-2 text-sm text-[#4b5563]">
                   {item}
                 </span>
               ))}
@@ -163,103 +166,101 @@ export function StepCountry({
           </div>
         </div>
 
-        <div className="grid gap-4">
-          <div className="rounded-[1.85rem] border border-black/6 bg-white/76 p-5">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Scene' : 'Scene'}</p>
-              <p className="mt-2 text-lg font-serif text-[#1c1a17]">{isZh ? '先定义礼物被理解的社会场景。' : 'Define the social frame in which the gift will be read.'}</p>
+        <div className="space-y-5">
+          <div className="grid gap-4 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+            <div className="rounded-[1.95rem] border border-black/6 bg-white/74 p-5">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Scene script' : 'Scene script'}</p>
+              <p className="mt-2 text-base font-serif text-[#1d1a17]">
+                {isZh ? '先决定礼物将被放进什么样的社会脚本。' : 'Decide the social script in which the gift will appear.'}
+              </p>
+              <select value={sceneTemplate} onChange={event => onSceneTemplateChange(event.target.value)} className={`${inputClassName} mt-4 appearance-none`}>
+                {sceneTemplateOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {activeSceneTemplate && <p className="mt-3 text-sm leading-7 text-[#69707d]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
             </div>
-            <select value={sceneTemplate} onChange={event => onSceneTemplateChange(event.target.value)} className={`${selectClass} mt-4`}>
-              {sceneTemplateOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            {activeSceneTemplate && <p className="mt-3 text-sm leading-7 text-[#667085]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
+
+            <div className="rounded-[1.95rem] border border-black/6 bg-[linear-gradient(180deg,#fff,#fcfaf7)] p-5">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Audience dossier' : 'Audience dossier'}</p>
+              <select value={targetGroup} onChange={event => onTargetGroupChange(event.target.value as AudienceGroup)} className={`${inputClassName} mt-4 appearance-none`}>
+                {audienceOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {targetGroup === 'other' && (
+                <input
+                  value={customAudienceGroup}
+                  onChange={event => onCustomAudienceGroupChange(event.target.value)}
+                  placeholder={isZh ? '补充对象描述' : 'Describe the audience'}
+                  className={`${inputClassName} mt-4`}
+                />
+              )}
+              <input
+                value={occasion}
+                onChange={event => onOccasionChange(event.target.value)}
+                placeholder={isZh ? '场景说明，例如生日、拜访、商务见面' : 'Occasion, e.g. birthday, visit, business meeting'}
+                className={`${inputClassName} mt-4`}
+              />
+            </div>
           </div>
 
-          <div className="rounded-[1.85rem] border border-black/6 bg-[linear-gradient(180deg,#fff,#fcfaf7)] p-5">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Recipient dossier' : 'Recipient dossier'}</p>
-            <select value={targetGroup} onChange={event => onTargetGroupChange(event.target.value as AudienceGroup)} className={`${selectClass} mt-4`}>
-              {audienceOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            {targetGroup === 'other' && (
-              <input
-                value={customAudienceGroup}
-                onChange={event => onCustomAudienceGroupChange(event.target.value)}
-                placeholder={isZh ? '补充对象描述' : 'Describe the audience'}
-                className={`${homeControl.input} mt-4`}
-              />
-            )}
-            <input
-              value={occasion}
-              onChange={event => onOccasionChange(event.target.value)}
-              placeholder={isZh ? '场景说明，例如生日、拜访、商务见面' : 'Occasion, e.g. birthday, visit, business meeting'}
-              className={`${homeControl.input} mt-4`}
-            />
+          <div className="rounded-[2rem] border border-black/6 bg-white/74 p-5">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Human profile note' : 'Human profile note'}</p>
             <textarea
               value={targetProfile}
               onChange={event => onTargetProfileChange(event.target.value)}
-              placeholder={isZh ? '补充目标对象画像、兴趣或文化背景' : 'Add profile details, interests, or cultural notes'}
-              rows={3}
-              className={`${homeControl.input} mt-4 resize-none leading-7`}
+              placeholder={isZh ? '补充目标对象画像、兴趣、职业气质或文化背景' : 'Add recipient profile, interests, professional tone, or cultural background'}
+              rows={4}
+              className={`${inputClassName} mt-4 resize-none`}
             />
           </div>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-[1.65rem] border border-black/6 bg-white/76 p-4">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '年龄段' : 'Age band'}</p>
-          <select value={ageBand} onChange={event => onAgeBandChange(event.target.value)} className={`${selectClass} mt-3`}>
-            {ageBandOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+      <div className="mt-6 grid gap-4 xl:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)]">
+        <div className="grid gap-4 md:grid-cols-3">
+          {profileCards.map(card => (
+            <div key={card.label} className="rounded-[1.8rem] border border-black/6 bg-white/74 p-4">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{card.label}</p>
+              <select value={card.value} onChange={event => card.onChange(event.target.value)} className={`${inputClassName} mt-3 appearance-none`}>
+                {card.options.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
         </div>
-        <div className="rounded-[1.65rem] border border-black/6 bg-white/76 p-4">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '职业' : 'Occupation'}</p>
-          <select value={occupation} onChange={event => onOccupationChange(event.target.value)} className={`${selectClass} mt-3`}>
-            {occupationOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="rounded-[1.65rem] border border-black/6 bg-white/76 p-4">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '关系' : 'Relationship'}</p>
-          <select value={relationship} onChange={event => onRelationshipChange(event.target.value)} className={`${selectClass} mt-3`}>
-            {relationshipOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="rounded-[1.65rem] border border-black/6 bg-white/76 p-4">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '预算 / 正式度' : 'Budget / formality'}</p>
-          <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={`${selectClass} mt-3`}>
-            {budgetOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={`${selectClass} mt-3`}>
-            {formalityOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+
+        <div className="rounded-[2rem] border border-[#e8decd] bg-[linear-gradient(180deg,#fffdf8,#fff5e7)] p-5 shadow-[0_24px_50px_-36px_rgba(184,129,45,0.2)]">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-[#9b6b20]">{isZh ? 'Budget and protocol' : 'Budget and protocol'}</p>
+          <div className="mt-4 grid gap-3 md:grid-cols-2">
+            <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={`${inputClassName} appearance-none`}>
+              {budgetOptions.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={`${inputClassName} appearance-none`}>
+              {formalityOptions.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <p className="mt-4 text-sm leading-7 text-[#6f5a35]">
+            {isZh
+              ? '预算决定材质与包装期待，正式度决定表达语言与送达方式。'
+              : 'Budget shapes material and packaging expectations, while formality shapes language and delivery tone.'}
+          </p>
         </div>
       </div>
     </motion.section>
