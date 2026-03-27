@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Givia | Light Editorial High-End Gifting',
+  title: '礼智极意 | Givia',
   description:
-    'A cross-cultural gifting experience rebuilt with bright editorial storytelling, human context, and high-end international brand direction.',
+    '礼智极意（Givia）是一个跨文化礼赠编辑系统，围绕关系、场景与文化语气，帮助每一份心意更得体地抵达。',
 }
 
 export default async function RootLayout({

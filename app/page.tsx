@@ -31,7 +31,10 @@ export default function RootPage() {
       <main className="relative z-10 mx-auto flex h-screen max-w-[1540px] flex-col overflow-hidden px-6 pb-8 pt-6 sm:px-8 lg:px-12">
         <header className="flex items-center justify-between gap-4 py-3">
           <div className="flex items-center gap-3">
-            <span className="text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
+            <div className="flex flex-col leading-none">
+              <span className="text-[0.78rem] font-medium tracking-[0.18em] text-[#7f8696]">礼智极意</span>
+              <span className="mt-1 text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
+            </div>
             <span className="h-1.5 w-1.5 rounded-full bg-[#6678c8]" />
           </div>
 
@@ -62,7 +65,7 @@ export default function RootPage() {
               it enters another life
             </h1>
             <p className="mt-8 max-w-[31rem] text-[1.04rem] leading-9 text-[#666d79]">
-              Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands.
+              礼智极意 / Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands.
             </p>
 
             <div className="mt-10 flex items-center gap-5">
@@ -71,7 +74,7 @@ export default function RootPage() {
                 onClick={() => router.push('/zh')}
                 className="inline-flex items-center gap-3 rounded-full bg-[#6678c8] px-7 py-4 text-sm uppercase tracking-[0.12em] text-white shadow-[0_24px_44px_-26px_rgba(102,120,200,0.44)] transition hover:-translate-y-0.5 hover:bg-[#5c6eba]"
               >
-                Enter Givia
+                Enter / 进入
                 <ArrowRight className="h-4 w-4" />
               </button>
               <p className="max-w-[12rem] text-sm leading-7 text-[#8b9099]">A quieter entry in Chinese or English. Redirecting in a moment.</p>

@@ -26,7 +26,17 @@ export default function Home() {
       <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1540px] flex-col overflow-hidden px-6 pb-8 pt-6 sm:px-8 lg:px-12">
         <header className="flex items-center justify-between gap-4 py-3">
           <div className="flex items-center gap-3">
-            <span className="text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
+            {isZh ? (
+              <div className="flex flex-col leading-none">
+                <span className="text-[1.2rem] font-display-zh font-semibold tracking-[0.02em] text-[#211d18]">礼智极意</span>
+                <span className="mt-1 text-[0.72rem] uppercase tracking-[0.22em] text-[#7f8696]">Givia</span>
+              </div>
+            ) : (
+              <div className="flex flex-col leading-none">
+                <span className="text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
+                <span className="mt-1 text-[0.78rem] font-medium tracking-[0.18em] text-[#7f8696]">礼智极意</span>
+              </div>
+            )}
             <span className="h-1.5 w-1.5 rounded-full bg-[#6678c8]" />
           </div>
 
@@ -43,7 +53,7 @@ export default function Home() {
               onClick={() => router.push(`/${locale}/gifting`)}
               className="rounded-full bg-[#171513] px-5 py-2.5 text-sm text-white transition hover:bg-[#23201d]"
             >
-              {isZh ? '进入礼赠编辑' : 'Enter Givia'}
+              {isZh ? '进入礼赠编辑' : 'Enter the editorial'}
             </button>
           </div>
         </header>
@@ -56,7 +66,7 @@ export default function Home() {
             className="flex max-w-[35rem] flex-col justify-center"
           >
             <p className="text-[11px] uppercase tracking-[0.28em] text-[#6c78ab]">
-              {isZh ? '礼智极意' : 'Bring gifting back to people and culture'}
+              {isZh ? '礼智极意' : 'Givia'}
             </p>
 
             <h1
@@ -81,7 +91,7 @@ export default function Home() {
             <p className="mt-8 max-w-[31rem] text-[1.04rem] leading-9 text-[#666d79]">
               {isZh
                 ? '礼智极意会先陪你看清关系、场景与文化语气，再把这份好意整理成更得体、更国际化的送达方式。'
-                : 'Givia helps you read relationship, setting, and cultural tone first, then shapes the gesture into a more tactful way to arrive.'}
+                : 'Givia reads relationship, setting, and cultural tone first, then shapes the gesture into a more tactful way to arrive.'}
             </p>
 
             <div className="mt-10 flex items-center gap-5">

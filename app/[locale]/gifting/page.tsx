@@ -182,10 +182,17 @@ export default function GiftingPage() {
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div>
-                <p className="text-xl font-serif font-medium tracking-tight text-[#1c1a17]">Givia</p>
-                <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
-                  {isZh ? 'Editorial Gifting Story' : 'Editorial Gifting Story'}
-                </p>
+                {isZh ? (
+                  <>
+                    <p className="text-[1.15rem] font-display-zh font-semibold tracking-[0.02em] text-[#1c1a17]">礼智极意</p>
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">Givia</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xl font-serif font-medium tracking-tight text-[#1c1a17]">Givia</p>
+                    <p className="mt-1 text-[11px] tracking-[0.16em] text-[#98a2b3]">礼智极意</p>
+                  </>
+                )}
               </div>
             </div>
 

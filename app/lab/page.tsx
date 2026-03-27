@@ -27,7 +27,7 @@ export default function LabPage() {
         <div className="rounded-[2.2rem] border border-black/6 bg-white/76 p-6 shadow-[0_20px_48px_-34px_rgba(15,23,42,0.16)] backdrop-blur-xl">
           <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">Immersive components</p>
           <p className="mt-3 max-w-[44rem] text-base leading-8 text-[#69707d]">
-            The lab remains experimental, but its framing, pacing, and surrounding whitespace are now aligned with the broader Givia editorial system.
+            The lab remains experimental, but its framing, pacing, and surrounding whitespace are now aligned with the broader 礼智极意 / Givia editorial system.
           </p>
         </div>
         <XRayDetail />
