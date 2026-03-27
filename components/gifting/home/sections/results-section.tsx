@@ -118,7 +118,7 @@ export function ResultsSection({
               <div>
                 <div className="flex flex-wrap gap-2">
                   <span className="rounded-full border border-black/6 bg-white/80 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
-                    {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI 与文化规则共读' : 'AI with cultural rules') : isZh ? '本地判断回退' : 'Local fallback reading'}
+                    {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI 与文化线索共读' : 'AI-assisted cultural reading') : isZh ? '本地文化判断' : 'Local cultural reading'}
                   </span>
                   <span className="rounded-full border border-black/6 bg-white/80 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
                     {isZh ? `契合度 ${analysis.fitScore}` : `Fit ${analysis.fitScore}`}
@@ -131,7 +131,7 @@ export function ResultsSection({
 
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 {[
-                  { label: isZh ? '此刻的判断' : 'Current reading', value: analysis.riskLevel },
+                  { label: isZh ? '当前结论' : 'Current conclusion', value: analysis.riskLevel },
                   { label: isZh ? '包装方向' : 'Packaging direction', value: analysis.packaging.style },
                   { label: isZh ? '表达语气' : 'Message tone', value: analysis.greetingCard.tone },
                 ].map(item => (

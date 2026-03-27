@@ -93,10 +93,10 @@ export default function RootPage() {
                 whileTap={{ scale: 0.985 }}
                 className="inline-flex items-center gap-3 rounded-full bg-[#6678c8] px-7 py-4 text-sm uppercase tracking-[0.12em] text-white shadow-[0_24px_44px_-26px_rgba(102,120,200,0.44)] transition hover:-translate-y-0.5 hover:bg-[#5c6eba]"
               >
-                Enter the house
+                Begin the story
                 <ArrowRight className="h-4 w-4" />
               </motion.button>
-              <p className="max-w-[13rem] text-sm leading-7 text-[#8b9099]">Chinese and English editions live inside the same editorial brand world.</p>
+              <p className="max-w-[13rem] text-sm leading-7 text-[#8b9099]">Choose the language in which this gesture begins its journey.</p>
             </motion.div>
           </motion.div>
 

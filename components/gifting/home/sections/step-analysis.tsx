@@ -128,7 +128,7 @@ export function StepAnalysis({
         <div className="border-b border-black/8 pb-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="max-w-[36rem]">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Judgment modules' : 'Judgment modules'}</p>
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '判断图层' : 'Judgment layers'}</p>
               <h3 className="mt-3 text-[2.2rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
                 {isZh ? '基础判断通常已经足够，增强模块只在必要时打开。' : 'Core judgment is usually enough. Enhancement modules open only when necessary.'}
               </h3>
@@ -153,7 +153,7 @@ export function StepAnalysis({
         <div className="grid min-h-0 flex-1 gap-6 overflow-hidden pt-6 xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
           <div className="space-y-5 overflow-auto pr-1">
             <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.9),rgba(255,255,255,0.82))] p-5">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Current editorial scope' : 'Current editorial scope'}</p>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '当前判断范围' : 'Current reading scope'}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {(Object.entries(analysisEnhancementSettings) as Array<[keyof EnhancementSettings, boolean]>).map(([key, enabled]) =>
                   enabled ? (

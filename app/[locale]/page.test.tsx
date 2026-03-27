@@ -32,7 +32,7 @@ describe('Localized homepage', () => {
         name: /智连全球文化[\s\S]*礼赠每一份心意/i,
       }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Enter the editorial|开始这次礼赠编辑/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Enter the story|开始这次礼赠编辑/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /开始这次礼赠编辑/i })).toBeInTheDocument()
     expect(screen.getByText(/礼智极意/i)).toBeInTheDocument()
   })

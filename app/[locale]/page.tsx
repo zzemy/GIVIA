@@ -67,7 +67,7 @@ export default function Home() {
               onClick={() => router.push(`/${locale}/gifting`)}
               className="rounded-full bg-[#171513] px-5 py-2.5 text-sm text-white transition duration-500 hover:-translate-y-0.5 hover:bg-[#23201d]"
             >
-              {isZh ? '进入礼赠编辑' : 'Enter the editorial'}
+              {isZh ? '进入礼赠编辑' : 'Enter the story'}
             </button>
           </motion.div>
         </motion.header>
@@ -116,7 +116,7 @@ export default function Home() {
                 whileTap={{ scale: 0.985 }}
                 className="inline-flex items-center gap-3 rounded-full bg-[#6678c8] px-7 py-4 text-sm uppercase tracking-[0.12em] text-white shadow-[0_24px_44px_-26px_rgba(102,120,200,0.44)] transition hover:-translate-y-0.5 hover:bg-[#5c6eba]"
               >
-                {isZh ? '开始这次礼赠编辑' : 'Begin the gifting editorial'}
+                {isZh ? '开始这次礼赠编辑' : 'Begin the story'}
                 <ArrowRight className="h-4 w-4" />
               </motion.button>
               <p className="max-w-[11rem] text-sm leading-7 text-[#8b9099]">

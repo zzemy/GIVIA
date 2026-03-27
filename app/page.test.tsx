@@ -21,7 +21,7 @@ describe('Root editorial routing page', () => {
   it('renders the editorial routing hero', () => {
     render(<RootPage />)
 
-    expect(screen.getByRole('heading', { level: 1, name: /enter the[\s\S]*editorial flow/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: /before a gesture[\s\S]*crosses a border[\s\S]*it enters another life/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /中文进入/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /enter in english/i })).toBeInTheDocument()
   })
