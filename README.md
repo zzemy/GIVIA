@@ -1,11 +1,16 @@
 # Givia
 
 <p align="center">
-  <strong>An editorial system for cross-cultural gifting, shaped for globally fluent teams and brands.</strong>
+  <strong>Editorial intelligence for gestures that travel across cultures.</strong>
 </p>
 
 <p align="center">
-  <a href="./README_zh.md">中文文档</a>
+  Givia is a premium cross-cultural gifting system that turns taste, etiquette, symbolism, and delivery tone into a composed editorial workflow.
+</p>
+
+<p align="center">
+  <a href="./README_zh.md">中文文档</a> ·
+  <a href="https://github.com/zzemy/GIVIA/actions">Actions</a>
 </p>
 
 <p align="center">
@@ -21,85 +26,72 @@
   <img src="https://img.shields.io/badge/License-AGPL--3.0-0b5fff" alt="AGPL-3.0" />
 </p>
 
-## What Givia is
+---
 
-Givia is a cross-cultural gifting editorial engine.
+## Why Givia exists
 
-Instead of treating gifting as a generic product picker, it frames each decision through context: recipient identity, market etiquette, symbolic sensitivity, tone of expression, and the final story the gift tells.
+A gift rarely arrives as an object alone.
 
-The current web experience is designed as a bright editorial journey rather than a dashboard. Users move from narrative entry, to gift framing, to cultural reading, and finally into a polished dossier-style recommendation.
+It arrives with implication, etiquette, memory, hierarchy, timing, and tone already attached. What feels thoughtful in one place can feel excessive, intimate, ceremonial, awkward, or even inappropriate in another.
 
-## Experience structure
+**Givia** exists to read that difference before the gesture is sent.
 
-The product currently centers on three surfaces:
+Instead of behaving like a generic recommendation engine, it treats cross-cultural gifting as an editorial problem: something to be framed, interpreted, revised, and delivered with tact.
 
-1. **Root entry** — a brand-forward landing surface at `/`
-2. **Localized editorial home** — the bilingual experience at `/zh` and `/en`
-3. **Gifting workflow** — the guided gifting story at `/[locale]/gifting`
+## What makes it distinct
 
-The result is not a catalog. It is a composed recommendation flow for cross-border gift decisions.
+- **Editorial, not dashboard-driven** — the experience is built as a narrative flow rather than a SaaS control panel.
+- **Cross-cultural by design** — gift reading is grounded in recipient context, market etiquette, symbolic risk, and delivery tone.
+- **Recommendation with judgment** — the system does not only score; it rewrites, reframes, and proposes more suitable directions.
+- **Bilingual brand system** — Chinese and English routes are treated as first-class product surfaces, not afterthought translations.
+- **Premium product language** — the interface, copy, and result framing are built to feel composed, calm, and internationally credible.
+
+## Experience surfaces
+
+Givia currently ships as a multi-surface editorial web experience:
+
+| Surface | Route | Role |
+| --- | --- | --- |
+| Brand entry | `/` | Global entry into the product world |
+| Localized home | `/zh`, `/en` | Language-specific landing surfaces |
+| Editorial workflow | `/[locale]/gifting` | Guided gifting composition and analysis |
+| Final dossier | in workflow | Report-like recommendation and rewrite output |
+
+The product is not a gift marketplace and not a simple rule checker. It is a composed decision surface for gestures moving between cultures.
 
 ## Core capabilities
 
-| Capability | What it does |
+| Capability | Description |
 | --- | --- |
 | Gift recognition | Reads a gift candidate from image or text input |
-| Cultural reading | Evaluates symbolic, etiquette, and market-sensitive risk |
-| Recipient framing | Adapts recommendations to relationship and audience context |
-| Editorial rewriting | Produces refined gifting direction and message suggestions |
-| Bilingual presentation | Supports both Chinese and English routes with brand-aware copy |
+| Cultural reading | Evaluates symbolism, etiquette, and market-sensitive risk |
+| Recipient framing | Interprets relationship, scene, and audience context |
+| Editorial rewrite | Produces more tactful gifting directions and message suggestions |
+| Delivery guidance | Extends recommendations into packaging and logistics considerations |
+| Bilingual presentation | Preserves brand clarity across Chinese and English routes |
 
-## Tech stack
+## System snapshot
+
+### Application stack
 
 - Next.js 16 App Router
 - React 19 + TypeScript
 - Tailwind CSS v4
 - Framer Motion
 - Jest + Testing Library
-- GitHub Actions for CI and Pages deployment
+- GitHub Actions for CI and GitHub Pages deployment
 - Optional Tauri wrapper in `src-tauri/`
 
-## Local development
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Open `http://localhost:3000`.
-
-## Validation
-
-```bash
-pnpm lint
-pnpm test -- --runInBand
-pnpm build
-pnpm exec tsc --noEmit
-```
-
-## Environment variables
-
-Create `.env.local` in the project root.
-
-| Variable | Required | Default |
-| --- | --- | --- |
-| `ALIYUN_DASHSCOPE_API_KEY` | Yes for AI routes | - |
-| `ALIYUN_DASHSCOPE_BASE_URL` | No | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
-| `ALIYUN_DASHSCOPE_VISION_MODEL` | No | `qwen-vl-plus-latest` |
-| `ALIYUN_DASHSCOPE_TEXT_MODEL` | No | `qwen-plus-latest` |
-
-If the API key is absent, server-side AI routes will fail by design.
-
-## API surfaces
+### API surfaces
 
 | Method | Route | Purpose |
 | --- | --- | --- |
-| `POST` | `/api/analysis/run` | Runs the full gifting analysis pipeline |
+| `POST` | `/api/analysis/run` | Runs the end-to-end gifting analysis pipeline |
 | `POST` | `/api/vision-recognize` | Recognizes a gift candidate from image or text |
-| `POST` | `/api/cultural-generate` | Produces cultural guidance and editorial suggestions |
+| `POST` | `/api/cultural-generate` | Generates cultural guidance and editorial suggestions |
 | `POST` | `/api/logistics-assistant` | Returns delivery and logistics guidance |
 
-## Project layout
+### Project layout
 
 ```text
 .
@@ -114,36 +106,73 @@ If the API key is absent, server-side AI routes will fail by design.
 └── src-tauri/
 ```
 
-## CI
+## Run locally
 
-GitHub Actions CI runs on pushes and pull requests to `main` and `master`.
+```bash
+pnpm install
+pnpm dev
+```
 
-The verification workflow checks:
+Open `http://localhost:3000`.
 
+### Verification
+
+```bash
+pnpm lint
+pnpm test --runInBand
+pnpm build
+pnpm exec tsc --noEmit
+```
+
+## Environment variables
+
+Create `.env.local` in the project root.
+
+| Variable | Required | Default |
+| --- | --- | --- |
+| `ALIYUN_DASHSCOPE_API_KEY` | Yes for AI-backed routes | - |
+| `ALIYUN_DASHSCOPE_BASE_URL` | No | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
+| `ALIYUN_DASHSCOPE_VISION_MODEL` | No | `qwen-vl-plus-latest` |
+| `ALIYUN_DASHSCOPE_TEXT_MODEL` | No | `qwen-plus-latest` |
+
+If the API key is missing, AI-backed server routes fail by design.
+
+## CI and deployment boundary
+
+### CI
+
+The repository CI workflow runs on pushes and pull requests to `main` and `master`.
+
+It verifies:
 - ESLint
-- TypeScript type-checking
-- Jest tests
+- TypeScript type checking
+- Jest test suite
 - Next.js production build
 
 Workflow file: `.github/workflows/ci.yml`
 
-## GitHub Pages
+### GitHub Pages
 
-This repository also includes a Pages workflow: `.github/workflows/deploy-pages.yml`.
+The repository also ships a Pages workflow at `.github/workflows/deploy-pages.yml`.
 
-Pages uses the static export generated by Next.js (`output: "export"`) and publishes the `out/` directory.
+Pages publishes the static export produced by Next.js (`output: "export"`) from the `out/` directory.
 
 Important boundary:
+- GitHub Pages can host the static editorial shell
+- GitHub Pages cannot execute Next.js server-side route handlers
+- `/api/*` capabilities require a server-capable deployment target
 
-- GitHub Pages can host the static experience shell
-- GitHub Pages cannot execute Next.js server routes
-- API endpoints under `/api/*` require a server-capable deployment target
+In other words: Pages is a valid surface for the static brand experience, but not for live AI-backed analysis.
 
-That means Pages is suitable for the static editorial surface, but not for live AI-backed analysis.
+## Brand note
+
+**Givia** is the global-facing brand name of the system.
+
+In Chinese contexts, the product also appears as **礼智极意** — a localized brand expression that carries the same editorial, premium, and cross-cultural positioning.
 
 ## Language statistics note
 
-This is a TypeScript-first repository. A small `.gitattributes` file is included to help GitHub Linguist ignore generated or auxiliary files when calculating language percentages. GitHub may take some time to refresh the repository language bar after changes are pushed.
+This is a TypeScript-first repository. `.gitattributes` is included to help GitHub Linguist ignore generated or auxiliary artifacts when calculating language percentages. GitHub may take some time to refresh language statistics after a push.
 
 ## License
 
