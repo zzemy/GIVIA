@@ -15,16 +15,24 @@ export default function Home() {
     <div className={`relative h-screen overflow-hidden bg-[#f7f2eb] ${isZh ? 'font-sans-zh' : ''}`}>
       <HomeBackground />
 
-      <div
-        className="absolute inset-y-0 right-0 w-full bg-cover bg-center lg:w-[54%]"
-        style={{
-          backgroundImage: isZh
-            ? 'linear-gradient(180deg,rgba(250,247,243,0.04),rgba(17,15,14,0.48)), url(https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80)'
-            : 'linear-gradient(180deg,rgba(250,247,243,0.04),rgba(17,15,14,0.48)), url(https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1800&q=80)',
-        }}
-      />
-      <div className="absolute inset-y-0 right-0 w-full bg-[linear-gradient(90deg,rgba(247,242,235,0.98)_0%,rgba(247,242,235,0.86)_30%,rgba(247,242,235,0.16)_62%,rgba(247,242,235,0)_100%)] lg:w-[54%]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(255,255,255,0.18),transparent_26%)]" />
+      <div className="absolute inset-y-0 right-0 hidden w-[56%] lg:block">
+        <div
+          className="absolute inset-[2rem_2rem_2rem_0] overflow-hidden rounded-[2.8rem]"
+          style={{
+            backgroundImage: isZh
+              ? 'linear-gradient(180deg,rgba(255,255,255,0.04),rgba(18,15,14,0.52)), url(https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80)'
+              : 'linear-gradient(180deg,rgba(255,255,255,0.04),rgba(18,15,14,0.5)), url(https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1800&q=80)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,255,255,0.22),transparent_26%)] mix-blend-screen" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,15,14,0.06),rgba(17,15,14,0.22))]" />
+        </div>
+      </div>
+
+      <div className="absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,rgba(247,242,235,0.98)_0%,rgba(247,242,235,0.95)_38%,rgba(247,242,235,0.72)_58%,rgba(247,242,235,0.18)_72%,rgba(247,242,235,0)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_16%,rgba(255,255,255,0.36),transparent_24%)]" />
 
       <main className="relative z-10 mx-auto flex h-screen max-w-[1600px] flex-col px-6 py-6 sm:px-8 lg:px-12">
         <motion.header
@@ -42,7 +50,7 @@ export default function Home() {
             ) : (
               <>
                 <p className="text-[0.72rem] uppercase tracking-[0.24em] text-[#7e8696]">Givia</p>
-                <p className="mt-1 text-[2.45rem] font-serif tracking-[-0.08em] text-[#1c1815]">Editorial house</p>
+                <p className="mt-1 text-[2.45rem] font-serif tracking-[-0.08em] text-[#1c1815]">Editorial gifting</p>
               </>
             )}
           </div>
@@ -61,7 +69,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.92, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex max-w-[38rem] flex-col justify-end pb-6 lg:pb-14"
+            className="relative z-10 flex max-w-[40rem] flex-col justify-end pb-6 lg:pb-12"
           >
             <p className="text-[11px] uppercase tracking-[0.34em] text-[#7485d4]">{isZh ? '礼赠前言' : 'Editorial preface'}</p>
             <h1
@@ -90,6 +98,15 @@ export default function Home() {
                 : 'This is not a generic gifting form, but an editorial passage through relationship, culture, tone, and delivery.'}
             </p>
 
+            <div className="mt-10 max-w-[34rem] border-t border-black/10 pt-5">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '品牌主张' : 'Brand note'}</p>
+              <p className="mt-3 text-[1.18rem] font-serif leading-8 text-[#1c1815]">
+                {isZh
+                  ? '真正决定礼物是否高级的，往往不是价格，而是它是否懂得尊重另一种生活方式。'
+                  : 'What makes a gift feel elevated is rarely price alone, but whether it knows how to respect another way of living.'}
+              </p>
+            </div>
+
             <motion.button
               type="button"
               onClick={() => router.push(`/${locale}/gifting`)}
@@ -111,12 +128,12 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="hidden items-end justify-end lg:flex"
           >
-            <div className="mb-12 mr-5 max-w-[20rem] rounded-[2rem] border border-white/18 bg-white/12 px-5 py-5 text-white/88 backdrop-blur-md">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-white/58">{isZh ? 'Culture / Relation / Tone' : 'Culture / Relation / Tone'}</p>
-              <p className="mt-4 text-[1.35rem] font-serif leading-tight">
+            <div className="mb-10 mr-8 max-w-[22rem] border-l border-white/26 pl-6 text-white">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-white/56">{isZh ? 'Culture / Relation / Tone' : 'Culture / Relation / Tone'}</p>
+              <p className="mt-4 text-[1.45rem] font-serif leading-tight text-white/92">
                 {isZh
-                  ? '真正决定礼物是否得体的，往往不是价格，而是它如何被对方理解。'
-                  : 'What decides whether a gift feels right is rarely price alone, but how the other person is likely to read it.'}
+                  ? '一份礼物进入陌生文化之前，先要学会如何安静而准确地被理解。'
+                  : 'Before a gift enters an unfamiliar culture, it must first learn how to be read with calm precision.'}
               </p>
             </div>
           </motion.section>

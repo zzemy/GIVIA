@@ -76,15 +76,19 @@ export function StepGiftInput({
   const isZh = locale === 'zh'
   const hasTextDraft = Boolean(giftName.trim() || giftDescription.trim())
   const objectPrompt = isZh ? '这份物件，第一眼应该被如何称呼？' : 'How should this object be named at first glance?'
-  const objectNotePrompt = isZh ? '如果把它写进一段礼赠描述，它会呈现怎样的材质、气质与场景？' : 'If it were written into a gifting note, what material, mood, and scene would it carry?'
+  const objectNotePrompt = isZh
+    ? '如果把它写进一段礼赠描述，它会呈现怎样的材质、气质与场景？'
+    : 'If it were written into a gifting note, what material, mood, and scene would it carry?'
   const cuePrompt = isZh ? '它更接近哪一种社会气质或文化线索？' : 'What social or cultural cue does it feel closest to?'
-  const editorialPrompt = isZh ? '如果把它放进跨文化语境，它会让人联想到怎样的距离、礼仪与情绪？' : 'Placed in a cross-cultural setting, what distance, etiquette, and feeling might it suggest?'
+  const editorialPrompt = isZh
+    ? '如果把它放进跨文化语境，它会让人联想到怎样的距离、礼仪与情绪？'
+    : 'Placed in a cross-cultural setting, what distance, etiquette, and feeling might it suggest?'
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-10 overflow-hidden xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+      className="grid flex-1 gap-8 overflow-hidden xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
     >
       <div className="flex min-h-0 flex-col overflow-hidden border-r border-black/6 pr-0 xl:pr-10">
         <input ref={fileInputRef} type="file" accept="image/*" onChange={onFileSelect} className="hidden" />
@@ -93,28 +97,32 @@ export function StepGiftInput({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="group flex h-full min-h-[28rem] w-full flex-col items-center justify-center border border-black/6 bg-[rgba(255,255,255,0.52)] px-8 text-center transition duration-700 hover:bg-[rgba(255,255,255,0.76)]"
+            className="group relative flex h-full min-h-[30rem] w-full flex-col justify-end overflow-hidden rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,240,234,0.92))] px-8 py-8 text-left shadow-[0_34px_80px_-56px_rgba(15,23,42,0.16)] transition duration-700 hover:-translate-y-0.5 hover:shadow-[0_42px_90px_-56px_rgba(15,23,42,0.18)]"
           >
-            <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-[#dfe5f6] bg-[#f4f6fb] text-[#5e72c2]">
-              <ImagePlus size={36} />
+            <div className="absolute right-[-3rem] top-[-3rem] h-40 w-40 rounded-full bg-[#e8eefc] blur-3xl" />
+            <div className="relative z-10">
+              <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#dfe5f6] bg-white/86 text-[#5e72c2] shadow-[0_16px_34px_-24px_rgba(94,114,194,0.35)]">
+                <ImagePlus size={32} />
+              </div>
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Object opening' : 'Object opening'}</p>
+              <p className="mt-4 text-[2.45rem] font-serif leading-[1.02] text-[#1d1a17]">{isZh ? '上传礼物主视觉' : 'Upload the gift key visual'}</p>
+              <p className="mt-4 max-w-md text-sm leading-8 text-[#6c7380]">
+                {isZh
+                  ? '这张图会成为礼物档案的开篇。材质、边角、包装与光线，都会成为后续文化判断的第一层线索。'
+                  : 'This image opens the object dossier. Material, edges, packaging, and light become the first cues in the later cultural reading.'}
+              </p>
             </div>
-            <p className="text-[2.3rem] font-serif leading-tight text-[#1d1a17]">{isZh ? '上传礼物主视觉' : 'Upload the gift key visual'}</p>
-            <p className="mt-4 max-w-md text-sm leading-8 text-[#6c7380]">
-              {isZh
-                ? '这张图会成为礼物档案的开篇。材质、边角、包装与光线，都会成为后续文化判断的第一层线索。'
-                : 'This image opens the object dossier. Material, edges, packaging, and light become the first cues in the later cultural reading.'}
-            </p>
           </button>
         ) : (
-          <div className="grid h-full min-h-0 gap-4 lg:grid-rows-[minmax(0,1fr)_auto]">
-            <div className="group relative min-h-0 overflow-hidden border border-black/6">
+          <div className="grid h-full min-h-0 gap-5 lg:grid-rows-[minmax(0,1fr)_auto]">
+            <div className="group relative min-h-0 overflow-hidden rounded-[2.6rem] border border-black/6 shadow-[0_34px_80px_-56px_rgba(15,23,42,0.18)]">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.26),transparent_28%)] mix-blend-screen" />
-              <div className="relative h-full min-h-[23rem]">
+              <div className="relative h-full min-h-[24rem]">
                 <Image src={imagePreview} alt="Gift preview" fill unoptimized className="object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.03]" />
               </div>
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/68 via-black/18 to-transparent px-5 pb-5 pt-16 text-white">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent px-6 pb-6 pt-20 text-white">
                 <p className="text-[11px] uppercase tracking-[0.24em] text-white/72">{isZh ? 'Object cover' : 'Object cover'}</p>
-                <p className="mt-2 truncate text-base">{selectedFile?.name ?? (isZh ? '已上传礼物图像' : 'Uploaded gift image')}</p>
+                <p className="mt-2 truncate text-[1.08rem] font-medium">{selectedFile?.name ?? (isZh ? '已上传礼物图像' : 'Uploaded gift image')}</p>
               </div>
             </div>
 
@@ -141,10 +149,10 @@ export function StepGiftInput({
       <div className="flex min-h-0 flex-col overflow-hidden pt-1 xl:pl-2">
         <div className="border-b border-black/8 pb-6">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Editorial object sheet' : 'Editorial object sheet'}</p>
-          <h3 className="mt-4 max-w-[32rem] text-[2.55rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
+          <h3 className="mt-4 max-w-[32rem] text-[2.7rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
             {isZh ? '先把礼物写成一份有质感的对象档案。' : 'Write the gift first as a refined object profile.'}
           </h3>
-          <p className="mt-4 max-w-[40rem] text-sm leading-8 text-[#69707d]">
+          <p className="mt-4 max-w-[42rem] text-sm leading-8 text-[#69707d]">
             {imagePreview
               ? isZh
                 ? '现在请补上它的气质：它像什么、适合怎样的关系、会让人想到怎样的场景与分寸。'
@@ -156,13 +164,13 @@ export function StepGiftInput({
         </div>
 
         <div className="grid min-h-0 flex-1 gap-8 overflow-hidden pt-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-          <div className="space-y-8">
+          <div className="space-y-8 overflow-auto pr-1">
             {!shouldHideGiftInputs && (
-              <article className="border-b border-black/8 pb-5">
+              <article className="border-b border-black/8 pb-6">
                 <label htmlFor="gift-name" className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
                   {isZh ? 'Object title / 物件题名' : 'Object title'}
                 </label>
-                <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{objectPrompt}</p>
+                <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{objectPrompt}</p>
                 <input
                   id="gift-name"
                   type="text"
@@ -184,14 +192,14 @@ export function StepGiftInput({
             )}
 
             {recognition && (
-              <article className="border-b border-black/8 pb-5">
-              <div className="flex items-start gap-4">
-                <div className="rounded-full border border-[#dfe5f6] bg-[#f4f6fb] p-2.5 text-[#5e72c2]">
-                  <Sparkles size={16} />
-                </div>
-                <div>
+              <article className="border-b border-black/8 pb-6">
+                <div className="flex items-start gap-4">
+                  <div className="rounded-full border border-[#dfe5f6] bg-[#f4f6fb] p-2.5 text-[#5e72c2]">
+                    <Sparkles size={16} />
+                  </div>
+                  <div>
                     <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Machine observation' : 'Machine observation'}</p>
-                    <p className="mt-2 text-[1.35rem] font-serif leading-tight text-[#1d1a17]">{isZh ? recognition.itemZh : recognition.itemEn}</p>
+                    <p className="mt-2 text-[1.42rem] font-serif leading-tight text-[#1d1a17]">{isZh ? recognition.itemZh : recognition.itemEn}</p>
                     <p className="mt-3 text-sm leading-7 text-[#69707d]">
                       {isZh ? '类别' : 'Category'} · {recognition.category} · {isZh ? '置信度' : 'Confidence'} {(recognition.confidence * 100).toFixed(0)}%
                     </p>
@@ -201,7 +209,7 @@ export function StepGiftInput({
               </article>
             )}
 
-            <article className="border-b border-black/8 pb-5">
+            <article className="border-b border-black/8 pb-6">
               <div className="flex items-center justify-between gap-3">
                 <label htmlFor="vision-label" className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
                   {isZh ? 'Editorial cue / 编辑线索' : 'Editorial cue'}
@@ -214,17 +222,11 @@ export function StepGiftInput({
                     className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <Sparkles size={12} />
-                    {isRecognizing
-                      ? isZh
-                        ? `识别中 ${recognizingElapsedSeconds}s`
-                        : `Reading ${recognizingElapsedSeconds}s`
-                      : isZh
-                        ? '再次细读图像'
-                        : 'Read image again'}
+                    {isRecognizing ? (isZh ? `识别中 ${recognizingElapsedSeconds}s` : `Reading ${recognizingElapsedSeconds}s`) : isZh ? '再次细读图像' : 'Read image again'}
                   </button>
                 )}
               </div>
-              <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{cuePrompt}</p>
+              <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{cuePrompt}</p>
               <input
                 id="vision-label"
                 value={visionLabel}
@@ -237,7 +239,7 @@ export function StepGiftInput({
 
           <div className="space-y-8 overflow-auto pr-1">
             {!shouldHideGiftInputs && (
-              <article className="border-b border-black/8 pb-5">
+              <article className="border-b border-black/8 pb-6">
                 <div className="flex items-center justify-between gap-3">
                   <label htmlFor="gift-description" className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
                     {isZh ? 'Object note / 物件描述' : 'Object note'}
@@ -252,7 +254,7 @@ export function StepGiftInput({
                     {isZh ? '整理文气' : 'Refine tone'}
                   </button>
                 </div>
-                <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{objectNotePrompt}</p>
+                <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{objectNotePrompt}</p>
                 <textarea
                   ref={giftDescriptionRef}
                   id="gift-description"
@@ -287,7 +289,7 @@ export function StepGiftInput({
                   {isZh ? '整理文气' : 'Refine tone'}
                 </button>
               </div>
-              <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{editorialPrompt}</p>
+              <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{editorialPrompt}</p>
               <textarea
                 ref={visionDescriptionRef}
                 id="vision-description"

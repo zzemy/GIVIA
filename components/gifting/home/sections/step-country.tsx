@@ -116,11 +116,11 @@ export function StepCountry({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-10 overflow-hidden xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]"
+      className="grid flex-1 gap-8 overflow-hidden xl:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)]"
     >
       <div className="flex min-h-0 flex-col overflow-hidden border-r border-black/6 pr-0 xl:pr-10">
         <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Destination frame' : 'Destination frame'}</p>
-        <h3 className="mt-4 max-w-[30rem] text-[2.45rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
+        <h3 className="mt-4 max-w-[31rem] text-[2.6rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
           {isZh ? '让国家、对象与场景站进同一段关系里。' : 'Place country, person, and occasion inside one relationship frame.'}
         </h3>
         <p className="mt-4 text-sm leading-8 text-[#69707d]">
@@ -128,42 +128,39 @@ export function StepCountry({
             ? '礼物的分寸，取决于它会进入怎样的生活秩序、社交语气与关系边界。'
             : 'The tact of a gift depends on the social order, tone, and relational boundary into which it will enter.'}
         </p>
-        <p className="mt-4 text-[1.02rem] font-serif leading-8 text-[#1d1a17]">{destinationPrompt}</p>
+        <p className="mt-4 text-[1.04rem] font-serif leading-8 text-[#1d1a17]">{destinationPrompt}</p>
 
-        <div className="mt-6 border-y border-black/8 py-5">
+        <div className="mt-6 rounded-[2.4rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(246,241,235,0.9))] p-5 shadow-[0_30px_70px_-52px_rgba(15,23,42,0.14)]">
           <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Selected destination' : 'Selected destination'}</p>
-          <p className="mt-2 text-[1.8rem] font-serif leading-tight text-[#1d1a17]">{destinationLabel}</p>
+          <p className="mt-3 text-[2rem] font-serif leading-tight text-[#1d1a17]">{destinationLabel}</p>
           {selectedCountry && <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[#6c78ab]">{selectedCountry}</p>}
+
+          <div className="mt-5 min-h-0 overflow-auto">
+            <CountrySelector
+              value={selectedCountry}
+              onChange={onSelectedCountryChange}
+              locale={apiLanguage}
+              regionLabels={{
+                asia: locale === 'zh' ? '亚洲' : 'Asia',
+                europe: locale === 'zh' ? '欧洲' : 'Europe',
+                americas: locale === 'zh' ? '美洲' : 'Americas',
+                africa: locale === 'zh' ? '非洲' : 'Africa',
+                oceania: locale === 'zh' ? '大洋洲' : 'Oceania',
+              }}
+            />
+          </div>
         </div>
 
-        <div className="mt-6 min-h-0 flex-1 overflow-auto border border-black/6 bg-[rgba(255,255,255,0.38)] p-4">
-          <CountrySelector
-            value={selectedCountry}
-            onChange={onSelectedCountryChange}
-            locale={apiLanguage}
-            regionLabels={{
-              asia: locale === 'zh' ? '亚洲' : 'Asia',
-              europe: locale === 'zh' ? '欧洲' : 'Europe',
-              americas: locale === 'zh' ? '美洲' : 'Americas',
-              africa: locale === 'zh' ? '非洲' : 'Africa',
-              oceania: locale === 'zh' ? '大洋洲' : 'Oceania',
-            }}
-          />
-        </div>
-
-        <div className="mt-5 flex flex-wrap gap-2 border-t border-black/6 pt-4">
-          {contextSummary.map(item => (
-            <span key={item} className="rounded-full border border-black/8 bg-white/72 px-4 py-2 text-xs uppercase tracking-[0.14em] text-[#5f6672]">
-              {item}
-            </span>
-          ))}
+        <div className="mt-6 border-t border-black/6 pt-4">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Context line' : 'Context line'}</p>
+          <p className="mt-3 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{contextSummary.filter(Boolean).join(' · ')}</p>
         </div>
       </div>
 
       <div className="flex min-h-0 flex-col overflow-hidden pt-1 xl:pl-2">
         <div className="border-b border-black/8 pb-6">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Human context sheet' : 'Human context sheet'}</p>
-          <h3 className="mt-4 max-w-[34rem] text-[2.55rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
+          <h3 className="mt-4 max-w-[36rem] text-[2.7rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
             {isZh ? '礼物会被谁接住，也要写得足够具体。' : 'The receiver and the situation must be written with equal precision.'}
           </h3>
           <p className="mt-4 max-w-[42rem] text-sm leading-8 text-[#69707d]">
@@ -175,9 +172,9 @@ export function StepCountry({
 
         <div className="grid min-h-0 flex-1 gap-8 overflow-hidden pt-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <div className="space-y-8 overflow-auto pr-1">
-            <article className="border-b border-black/8 pb-5">
+            <article className="border-b border-black/8 pb-6">
               <label className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Scene script' : 'Scene script'}</label>
-              <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{scenePrompt}</p>
+              <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{scenePrompt}</p>
               <div className="mt-2 px-1">
                 <select value={sceneTemplate} onChange={event => onSceneTemplateChange(event.target.value)} className={inputClassName}>
                   {sceneTemplateOptions.map(option => (
@@ -190,9 +187,9 @@ export function StepCountry({
               {activeSceneTemplate && <p className="mt-3 text-sm leading-7 text-[#7b808c]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
             </article>
 
-            <article className="border-b border-black/8 pb-5">
+            <article className="border-b border-black/8 pb-6">
               <label className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Recipient / 关系对象' : 'Recipient'}</label>
-              <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{recipientPrompt}</p>
+              <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{recipientPrompt}</p>
               <div className="mt-2 px-1">
                 <select value={targetGroup} onChange={event => onTargetGroupChange(event.target.value as AudienceGroup)} className={inputClassName}>
                   {audienceOptions.map(option => (
@@ -220,7 +217,7 @@ export function StepCountry({
 
             <article>
               <label className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Human profile note / 人物侧写' : 'Human profile note'}</label>
-              <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{profilePrompt}</p>
+              <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{profilePrompt}</p>
               <textarea
                 value={targetProfile}
                 onChange={event => onTargetProfileChange(event.target.value)}
@@ -234,7 +231,7 @@ export function StepCountry({
           <div className="space-y-8 overflow-auto pr-1">
             <div className="grid gap-5 sm:grid-cols-3">
               {profileCards.map(card => (
-                <div key={card.label} className="border-b border-black/8 pb-4">
+                <div key={card.label} className="border-b border-black/8 pb-5">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{card.label}</p>
                   <div className="mt-2 px-1">
                     <select value={card.value} onChange={event => card.onChange(event.target.value)} className={inputClassName}>
@@ -250,7 +247,7 @@ export function StepCountry({
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
-              <div className="border-b border-black/8 pb-4">
+              <div className="border-b border-black/8 pb-5">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Budget' : 'Budget'}</p>
                 <div className="mt-2 px-1">
                   <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={inputClassName}>
@@ -263,7 +260,7 @@ export function StepCountry({
                 </div>
               </div>
 
-              <div className="border-b border-black/8 pb-4">
+              <div className="border-b border-black/8 pb-5">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Formality' : 'Formality'}</p>
                 <div className="mt-2 px-1">
                   <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={inputClassName}>
