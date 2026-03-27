@@ -65,7 +65,7 @@ export default function RootPage() {
               it enters another life
             </h1>
             <p className="mt-8 max-w-[31rem] text-[1.04rem] leading-9 text-[#666d79]">
-              礼智极意 / Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands.
+              Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands.
             </p>
 
             <div className="mt-10 flex items-center gap-5">

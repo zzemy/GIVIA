@@ -188,10 +188,7 @@ export default function GiftingPage() {
                     <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">Givia</p>
                   </>
                 ) : (
-                  <>
-                    <p className="text-xl font-serif font-medium tracking-tight text-[#1c1a17]">Givia</p>
-                    <p className="mt-1 text-[11px] tracking-[0.16em] text-[#98a2b3]">礼智极意</p>
-                  </>
+                  <p className="text-xl font-serif font-medium tracking-tight text-[#1c1a17]">Givia</p>
                 )}
               </div>
             </div>

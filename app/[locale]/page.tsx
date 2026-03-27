@@ -32,10 +32,7 @@ export default function Home() {
                 <span className="mt-1 text-[0.72rem] uppercase tracking-[0.22em] text-[#7f8696]">Givia</span>
               </div>
             ) : (
-              <div className="flex flex-col leading-none">
-                <span className="text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
-                <span className="mt-1 text-[0.78rem] font-medium tracking-[0.18em] text-[#7f8696]">礼智极意</span>
-              </div>
+              <span className="text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
             )}
             <span className="h-1.5 w-1.5 rounded-full bg-[#6678c8]" />
           </div>
