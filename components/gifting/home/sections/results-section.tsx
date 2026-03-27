@@ -87,7 +87,7 @@ export function ResultsSection({
   }
 
   return (
-    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex flex-1 flex-col gap-6 overflow-hidden">
+    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex flex-1 flex-col gap-6 overflow-hidden">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-[56rem]">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">Editorial dossier</p>
@@ -107,13 +107,13 @@ export function ResultsSection({
           className="rounded-full border border-black/8 bg-white/76 px-5 py-3 text-[#495161] shadow-[0_16px_32px_-24px_rgba(15,23,42,0.16)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_22px_40px_-24px_rgba(15,23,42,0.2)]"
         >
           <RotateCcw size={16} />
-          {isZh ? '重新开启新的礼赠叙事' : 'Begin a new editorial story'}
+          {isZh ? '开启下一份终稿' : 'Open a new dossier'}
         </Button>
       </div>
 
       <div className="grid min-h-0 flex-1 gap-6 xl:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)]">
         <div className="grid min-h-0 gap-6 grid-rows-[minmax(0,0.96fr)_minmax(0,1.04fr)]">
-          <article className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(246,242,236,0.94))] shadow-[0_38px_88px_-52px_rgba(15,23,42,0.18)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+          <motion.article whileHover={{ y: -3 }} transition={{ duration: 0.45 }} className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(246,242,236,0.94))] shadow-[0_38px_88px_-52px_rgba(15,23,42,0.18)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
             <div className="flex min-h-0 flex-col justify-between p-7 lg:p-8">
               <div>
                 <div className="flex flex-wrap gap-2">
@@ -185,9 +185,9 @@ export function ResultsSection({
                 </div>
               </div>
             </div>
-          </article>
+          </motion.article>
 
-          <article className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(250,247,242,0.9))] shadow-[0_30px_72px_-46px_rgba(15,23,42,0.14)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+          <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.4 }} className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(250,247,242,0.9))] shadow-[0_30px_72px_-46px_rgba(15,23,42,0.14)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
             <div className="border-b border-black/6 p-7 lg:border-b-0 lg:border-r lg:p-8">
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '语境纪要' : 'Context memorandum'}</p>
               <p className="mt-4 text-[1.55rem] font-serif leading-tight text-[#1c1a17]">
@@ -214,11 +214,11 @@ export function ResultsSection({
                 {isZh ? '这里提供的是更适合这段关系与文化语境的改写方向。' : 'This offers a rewritten direction that better fits the relationship and cultural context.'}
               </p>
             </div>
-          </article>
+          </motion.article>
         </div>
 
         <div className="grid min-h-0 gap-6 grid-rows-[minmax(0,1.04fr)_minmax(0,0.96fr)]">
-          <article className="min-h-0 overflow-auto rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(248,245,240,0.93))] p-7 shadow-[0_30px_70px_-46px_rgba(15,23,42,0.14)] lg:p-8">
+          <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.4 }} className="min-h-0 overflow-auto rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(248,245,240,0.93))] p-7 shadow-[0_30px_70px_-46px_rgba(15,23,42,0.14)] lg:p-8">
             <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '改写方向' : 'Edited directions'}</p>
             <h3 className="mt-3 text-[2rem] font-serif leading-tight text-[#1c1a17]">
               {isZh ? '如果要把这份心意改写得更克制、更高级、更妥帖。' : 'If the gesture were to be rewritten with greater restraint, tact, and elegance.'}
@@ -264,10 +264,10 @@ export function ResultsSection({
                 )
               })}
             </div>
-          </article>
+          </motion.article>
 
           <div className="grid min-h-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <article className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
+            <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.35 }} className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
               <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '文化边注' : 'Cultural margins'}</p>
               <div className="mt-4 space-y-3">
                 {riskReasons.length > 0 ? (
@@ -282,9 +282,9 @@ export function ResultsSection({
                   </p>
                 )}
               </div>
-            </article>
+            </motion.article>
 
-            <article className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
+            <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.35 }} className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
               <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '终稿边注' : 'Final editorial notes'}</p>
               <div className="mt-4 space-y-3">
                 {mustSendAdvice.length > 0 ? (
@@ -308,7 +308,7 @@ export function ResultsSection({
                   </p>
                 </div>
               )}
-            </article>
+            </motion.article>
           </div>
         </div>
       </div>
