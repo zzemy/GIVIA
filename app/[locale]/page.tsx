@@ -27,9 +27,9 @@ export default function Home() {
 
       <main className="relative z-10 mx-auto flex h-full w-full max-w-[1580px] flex-col px-6 py-4 sm:px-8 xl:px-12">
         <motion.header
-          initial={{ opacity: 0, y: -16 }}
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-none items-start justify-between gap-4"
         >
           <div>
@@ -51,9 +51,9 @@ export default function Home() {
 
         <div className="grid min-h-0 flex-1 items-center gap-8 py-4 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:gap-16">
           <motion.section
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.95, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col justify-center min-h-0 lg:pb-8"
           >
             <div className="xl:pl-4">
@@ -65,7 +65,7 @@ export default function Home() {
                 {isZh ? (
                   <>
                     <span className="inline-block whitespace-nowrap">
-                      在跨越国界<em className="font-light italic text-[#7282c6] px-1.5 opacity-90">之前</em>
+                      在<em className="font-light italic text-[#7282c6] px-1.5 opacity-90">跨越国界</em>之前
                     </span>
                     <br />
                     <span className="relative inline-block mt-2">
@@ -138,14 +138,14 @@ export default function Home() {
               hidden: { opacity: 0 },
               show: {
                 opacity: 1,
-                transition: { staggerChildren: 0.2, delayChildren: 0.15 }
+                transition: { staggerChildren: 0.1, delayChildren: 0.1 }
               }
             }}
             className="grid h-[85%] max-h-[44rem] min-h-[22rem] gap-3 pb-2 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:grid-rows-[minmax(0,1fr)_minmax(0,0.82fr)]"
           >
             <motion.article variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.96 },
-                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                hidden: { opacity: 0, y: 16 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
               }}
               className="relative overflow-hidden rounded-[2.75rem] shadow-[0_36px_84px_-48px_rgba(15,23,42,0.22)] lg:row-span-2"
               style={{
@@ -173,8 +173,8 @@ export default function Home() {
             </motion.article>
 
             <motion.article variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.96 },
-                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                hidden: { opacity: 0, y: 16 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
               }}
               className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
               style={{
@@ -193,8 +193,8 @@ export default function Home() {
             </motion.article>
 
             <motion.article variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.96 },
-                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                hidden: { opacity: 0, y: 16 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
               }}
               className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
               style={{
