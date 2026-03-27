@@ -113,7 +113,7 @@ export function StepAnalysis({
                 </div>
               </div>
               <span className={`rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.16em] ${item.done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                {item.done ? 'ready' : 'pending'}
+                {item.done ? (isZh ? '已就绪' : 'Ready') : isZh ? '待补充' : 'Pending'}
               </span>
             </div>
           ))}
@@ -142,10 +142,10 @@ export function StepAnalysis({
             <button
               type="button"
               onClick={() => setShowAdvanced(current => !current)}
-              className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/74 px-4 py-2.5 text-xs uppercase tracking-[0.14em] text-[#495161] shadow-[0_12px_24px_-22px_rgba(15,23,42,0.18)] transition hover:bg-white"
+              className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/74 px-4 py-2.5 text-xs uppercase tracking-[0.14em] text-[#495161] shadow-[0_12px_24px_-22px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_18px_32px_-24px_rgba(15,23,42,0.22)]"
             >
               <SlidersHorizontal size={14} />
-              {showAdvanced ? (isZh ? '收起增强模块' : 'Hide modules') : isZh ? '展开增强模块' : 'Show modules'}
+              {showAdvanced ? (isZh ? '收起增强模块' : 'Close modules') : isZh ? '展开增强模块' : 'Open modules'}
             </button>
           </div>
         </div>
@@ -153,7 +153,7 @@ export function StepAnalysis({
         <div className="grid min-h-0 flex-1 gap-6 overflow-hidden pt-6 xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
           <div className="space-y-5 overflow-auto pr-1">
             <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.9),rgba(255,255,255,0.82))] p-5">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Current strategy' : 'Current strategy'}</p>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Current editorial scope' : 'Current editorial scope'}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {(Object.entries(analysisEnhancementSettings) as Array<[keyof EnhancementSettings, boolean]>).map(([key, enabled]) =>
                   enabled ? (
@@ -164,7 +164,7 @@ export function StepAnalysis({
                 )}
                 {!hasEnabledAnalysisEnhancement && (
                   <span className="rounded-full border border-black/8 bg-white/84 px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-[#667085]">
-                    {isZh ? '仅基础判断' : 'Core judgment only'}
+                    {isZh ? '仅基础判断' : 'Editorial core only'}
                   </span>
                 )}
               </div>

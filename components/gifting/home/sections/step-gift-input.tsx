@@ -38,10 +38,10 @@ export interface StepGiftInputProps {
 }
 
 const fieldClassName =
-  'w-full border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] placeholder:text-[#9aa1af] transition focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
+  'w-full border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] placeholder:text-[#9aa1af] transition duration-500 focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
 
 const actionClassName =
-  'inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/72 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-[#495161] shadow-[0_12px_24px_-22px_rgba(15,23,42,0.18)] transition hover:bg-white'
+  'inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/72 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-[#495161] shadow-[0_12px_24px_-22px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_18px_32px_-24px_rgba(15,23,42,0.22)]'
 
 export function StepGiftInput({
   locale,
@@ -93,7 +93,7 @@ export function StepGiftInput({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="group flex h-full min-h-[23rem] w-full flex-col items-center justify-center rounded-[2rem] border border-black/6 bg-white/74 px-8 text-center transition hover:bg-white hover:shadow-[0_26px_58px_-36px_rgba(15,23,42,0.2)]"
+            className="group flex h-full min-h-[23rem] w-full flex-col items-center justify-center rounded-[2rem] border border-black/6 bg-white/74 px-8 text-center transition duration-700 hover:-translate-y-1 hover:bg-white hover:shadow-[0_30px_64px_-36px_rgba(15,23,42,0.24)]"
           >
             <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-[#eef2ff] text-[#5e72c2] shadow-[0_18px_36px_-22px_rgba(94,114,194,0.35)]">
               <ImagePlus size={36} />
@@ -219,8 +219,8 @@ export function StepGiftInput({
                         ? `识别中 ${recognizingElapsedSeconds}s`
                         : `Reading ${recognizingElapsedSeconds}s`
                       : isZh
-                        ? '重读图像'
-                        : 'Re-read image'}
+                        ? '再次细读图像'
+                        : 'Read image again'}
                   </button>
                 )}
               </div>

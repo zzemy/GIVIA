@@ -58,7 +58,7 @@ export interface StepCountryProps {
 }
 
 const inputClassName =
-  'w-full appearance-none border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] transition focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
+  'w-full appearance-none border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] transition duration-500 focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
 
 export function StepCountry({
   locale,
@@ -206,14 +206,14 @@ export function StepCountry({
                 <input
                   value={customAudienceGroup}
                   onChange={event => onCustomAudienceGroupChange(event.target.value)}
-                  placeholder={isZh ? '补充对象描述' : 'Describe the recipient'}
+                  placeholder={isZh ? '补充对象描述' : 'Add a finer note on the recipient'}
                   className={`${inputClassName} mt-3`}
                 />
               )}
               <input
                 value={occasion}
                 onChange={event => onOccasionChange(event.target.value)}
-                placeholder={isZh ? '例如：生日、拜访、合作初见、节庆问候' : 'e.g. birthday, visit, first meeting, festive greeting'}
+                placeholder={isZh ? '例如：生日、拜访、合作初见、节庆问候' : 'e.g. birthday, first visit, opening meeting, festive greeting'}
                 className={`${inputClassName} mt-3`}
               />
             </article>

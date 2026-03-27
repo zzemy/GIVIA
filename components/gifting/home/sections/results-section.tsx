@@ -104,7 +104,7 @@ export function ResultsSection({
 
         <Button
           onClick={onReset}
-          className="rounded-full border border-black/8 bg-white/76 px-5 py-3 text-[#495161] shadow-[0_16px_32px_-24px_rgba(15,23,42,0.16)] transition hover:bg-white"
+          className="rounded-full border border-black/8 bg-white/76 px-5 py-3 text-[#495161] shadow-[0_16px_32px_-24px_rgba(15,23,42,0.16)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_22px_40px_-24px_rgba(15,23,42,0.2)]"
         >
           <RotateCcw size={16} />
           {isZh ? '重新开启新的礼赠叙事' : 'Begin a new editorial story'}
@@ -240,11 +240,11 @@ export function ResultsSection({
                       <button
                         type="button"
                         onClick={() => onToggleFavoriteRecommendation(item.id)}
-                        className={`rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
+                        className={`rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.14em] transition duration-500 hover:-translate-y-0.5 ${
                           saved ? 'border-[#6c78ab]/18 bg-[#eef2ff] text-[#5b67aa]' : 'border-black/8 bg-white/84 text-[#5f6672] hover:bg-white'
                         }`}
                       >
-                        {saved ? (isZh ? '已收录' : 'Saved') : isZh ? '收录' : 'Save'}
+                        {saved ? (isZh ? '已归档' : 'Archived') : isZh ? '归档' : 'Archive'}
                       </button>
                     </div>
 
