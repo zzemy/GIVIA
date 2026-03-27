@@ -157,7 +157,7 @@ export function ResultsSection({
                 <div>
                   <div className="flex flex-wrap gap-2">
                     <span className="rounded-full border border-black/6 bg-white/84 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
-                      {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI 与文化线索共读' : 'AI-assisted cultural reading') : isZh ? '本地文化判断' : 'Local cultural reading'}
+                      {analysisSource === 'hybrid-ai-rules' ? (isZh ? '文化线索共读' : 'Cultural reading') : isZh ? '在地文化判断' : 'Local cultural reading'}
                     </span>
                     <span className="rounded-full border border-black/6 bg-white/84 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
                       {isZh ? `契合度 ${analysis.fitScore}` : `Fit ${analysis.fitScore}`}

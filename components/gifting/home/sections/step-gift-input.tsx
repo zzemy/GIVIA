@@ -198,7 +198,7 @@ export function StepGiftInput({
                     <Sparkles size={16} />
                   </div>
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Machine observation' : 'Machine observation'}</p>
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '识别线索' : 'Observed signal'}</p>
                     <p className="mt-2 text-[1.42rem] font-serif leading-tight text-[#1d1a17]">{isZh ? recognition.itemZh : recognition.itemEn}</p>
                     <p className="mt-3 text-sm leading-7 text-[#69707d]">
                       {isZh ? '类别' : 'Category'} · {recognition.category} · {isZh ? '置信度' : 'Confidence'} {(recognition.confidence * 100).toFixed(0)}%
@@ -222,7 +222,7 @@ export function StepGiftInput({
                     className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <Sparkles size={12} />
-                    {isRecognizing ? (isZh ? `识别中 ${recognizingElapsedSeconds}s` : `Reading ${recognizingElapsedSeconds}s`) : isZh ? '再次细读图像' : 'Read image again'}
+                    {isRecognizing ? (isZh ? `识别中 ${recognizingElapsedSeconds}s` : `Reading ${recognizingElapsedSeconds}s`) : isZh ? '再次细读' : 'Read once more'}
                   </button>
                 )}
               </div>

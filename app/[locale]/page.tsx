@@ -17,7 +17,7 @@ export default function Home() {
 
       <div className="absolute inset-y-0 right-0 hidden w-[56%] lg:block">
         <div
-          className="absolute inset-[2rem_2rem_2rem_0] overflow-hidden rounded-[2.8rem]"
+          className="absolute inset-[2rem_2rem_2rem_0] overflow-hidden rounded-[2.8rem] shadow-[0_42px_92px_-54px_rgba(15,23,42,0.28)]"
           style={{
             backgroundImage: isZh
               ? 'linear-gradient(180deg,rgba(255,255,255,0.04),rgba(18,15,14,0.52)), url(https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80)'
@@ -103,7 +103,7 @@ export default function Home() {
               <p className="mt-3 text-[1.18rem] font-serif leading-8 text-[#1c1815]">
                 {isZh
                   ? '真正决定礼物是否高级的，往往不是价格，而是它是否懂得尊重另一种生活方式。'
-                  : 'What makes a gift feel elevated is rarely price alone, but whether it knows how to respect another way of living.'}
+                  : 'What gives a gift its poise is rarely price alone, but whether it knows how to respect another way of living.'}
               </p>
             </div>
 
