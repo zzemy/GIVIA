@@ -87,11 +87,11 @@ export function StepAnalysis({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-6 overflow-hidden rounded-[2.9rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(248,244,238,0.9))] p-5 shadow-[0_36px_88px_-52px_rgba(15,23,42,0.18)] xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:p-6"
+      className="grid flex-1 gap-10 overflow-hidden xl:grid-cols-[minmax(0,0.86fr)_minmax(0,1.14fr)]"
     >
-      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.35rem] bg-[linear-gradient(180deg,#faf7f2,#f2ebe1)] p-6">
+      <div className="flex min-h-0 flex-col overflow-hidden border-r border-black/6 pr-0 xl:pr-10">
         <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Editorial readiness' : 'Editorial readiness'}</p>
-        <h3 className="mt-3 text-[2.15rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
+        <h3 className="mt-4 max-w-[30rem] text-[2.45rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
           {isZh ? '判断之前，先确认这份心意是否已具备被阅读的条件。' : 'Before judgment, confirm the gesture is ready to be read.'}
         </h3>
         <p className="mt-4 text-sm leading-8 text-[#69707d]">
@@ -102,7 +102,7 @@ export function StepAnalysis({
 
         <div className="mt-6 grid min-h-0 flex-1 gap-3 overflow-auto pr-1">
           {checklist.map(item => (
-            <div key={item.label} className="flex items-start justify-between gap-4 rounded-[1.8rem] border border-black/6 bg-white/82 px-5 py-4 shadow-[0_18px_32px_-28px_rgba(15,23,42,0.1)]">
+            <div key={item.label} className="flex items-start justify-between gap-4 border-b border-black/8 py-4">
               <div className="flex items-start gap-3">
                 <div className={`mt-0.5 rounded-full p-1.5 ${item.done ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
                   <CheckCircle2 size={15} />
@@ -112,7 +112,7 @@ export function StepAnalysis({
                   <p className="mt-1 text-xs leading-6 text-[#98a2b3]">{item.value}</p>
                 </div>
               </div>
-              <span className={`rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.16em] ${item.done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+              <span className={`px-0 py-1 text-[10px] uppercase tracking-[0.16em] ${item.done ? 'text-emerald-700' : 'text-slate-500'}`}>
                 {item.done ? (isZh ? '已就绪' : 'Ready') : isZh ? '待补充' : 'Pending'}
               </span>
             </div>
@@ -124,12 +124,12 @@ export function StepAnalysis({
         </p>
       </div>
 
-      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.35rem] bg-white/62 p-6 backdrop-blur-2xl xl:p-8">
+      <div className="flex min-h-0 flex-col overflow-hidden pt-1 xl:pl-2">
         <div className="border-b border-black/8 pb-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="max-w-[36rem]">
               <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '判断图层' : 'Judgment layers'}</p>
-              <h3 className="mt-3 text-[2.2rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
+              <h3 className="mt-4 max-w-[34rem] text-[2.55rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
                 {isZh ? '基础判断通常已经足够，增强模块只在必要时打开。' : 'Core judgment is usually enough. Enhancement modules open only when necessary.'}
               </h3>
               <p className="mt-4 text-sm leading-8 text-[#69707d]">
@@ -142,7 +142,7 @@ export function StepAnalysis({
             <button
               type="button"
               onClick={() => setShowAdvanced(current => !current)}
-              className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/74 px-4 py-2.5 text-xs uppercase tracking-[0.14em] text-[#495161] shadow-[0_12px_24px_-22px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_18px_32px_-24px_rgba(15,23,42,0.22)]"
+              className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-xs uppercase tracking-[0.14em] text-[#556070] transition duration-500 hover:text-[#1d1a17]"
             >
               <SlidersHorizontal size={14} />
               {showAdvanced ? (isZh ? '收起增强模块' : 'Close modules') : isZh ? '展开增强模块' : 'Open modules'}
@@ -152,7 +152,7 @@ export function StepAnalysis({
 
         <div className="grid min-h-0 flex-1 gap-6 overflow-hidden pt-6 xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
           <div className="space-y-5 overflow-auto pr-1">
-            <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.9),rgba(255,255,255,0.82))] p-5">
+            <div className="border-b border-black/8 pb-5">
               <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '当前判断范围' : 'Current reading scope'}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {(Object.entries(analysisEnhancementSettings) as Array<[keyof EnhancementSettings, boolean]>).map(([key, enabled]) =>
@@ -200,7 +200,7 @@ export function StepAnalysis({
             )}
           </div>
 
-          <div className="flex min-h-0 flex-col justify-between rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,243,237,0.9))] p-6 shadow-[0_22px_42px_-34px_rgba(15,23,42,0.14)]">
+          <div className="flex min-h-0 flex-col justify-between border-l border-black/8 pl-0 xl:pl-8">
             <div>
               <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Editorial decision' : 'Editorial decision'}</p>
               <p className="mt-4 text-[1.55rem] font-serif leading-tight text-[#1d1a17]">

@@ -41,7 +41,7 @@ const fieldClassName =
   'w-full border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] placeholder:text-[#9aa1af] transition duration-500 focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
 
 const actionClassName =
-  'inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/72 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-[#495161] shadow-[0_12px_24px_-22px_rgba(15,23,42,0.18)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_18px_32px_-24px_rgba(15,23,42,0.22)]'
+  'inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.18em] text-[#556070] transition duration-500 hover:text-[#1d1a17]'
 
 export function StepGiftInput({
   locale,
@@ -84,18 +84,18 @@ export function StepGiftInput({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-6 overflow-hidden rounded-[2.9rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,244,238,0.9))] p-5 shadow-[0_36px_88px_-52px_rgba(15,23,42,0.18)] xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] xl:p-6"
+      className="grid flex-1 gap-10 overflow-hidden xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
     >
-      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.3rem] bg-[linear-gradient(180deg,#faf7f2,#f3ece2)] p-4">
+      <div className="flex min-h-0 flex-col overflow-hidden border-r border-black/6 pr-0 xl:pr-10">
         <input ref={fileInputRef} type="file" accept="image/*" onChange={onFileSelect} className="hidden" />
 
         {!imagePreview ? (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="group flex h-full min-h-[23rem] w-full flex-col items-center justify-center rounded-[2rem] border border-black/6 bg-white/74 px-8 text-center transition duration-700 hover:-translate-y-1 hover:bg-white hover:shadow-[0_30px_64px_-36px_rgba(15,23,42,0.24)]"
+            className="group flex h-full min-h-[28rem] w-full flex-col items-center justify-center border border-black/6 bg-[rgba(255,255,255,0.52)] px-8 text-center transition duration-700 hover:bg-[rgba(255,255,255,0.76)]"
           >
-            <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-[#eef2ff] text-[#5e72c2] shadow-[0_18px_36px_-22px_rgba(94,114,194,0.35)]">
+            <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full border border-[#dfe5f6] bg-[#f4f6fb] text-[#5e72c2]">
               <ImagePlus size={36} />
             </div>
             <p className="text-[2.3rem] font-serif leading-tight text-[#1d1a17]">{isZh ? '上传礼物主视觉' : 'Upload the gift key visual'}</p>
@@ -107,7 +107,7 @@ export function StepGiftInput({
           </button>
         ) : (
           <div className="grid h-full min-h-0 gap-4 lg:grid-rows-[minmax(0,1fr)_auto]">
-            <div className="group relative min-h-0 overflow-hidden rounded-[2.1rem] shadow-[0_30px_68px_-40px_rgba(15,23,42,0.26)]">
+            <div className="group relative min-h-0 overflow-hidden border border-black/6">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.26),transparent_28%)] mix-blend-screen" />
               <div className="relative h-full min-h-[23rem]">
                 <Image src={imagePreview} alt="Gift preview" fill unoptimized className="object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.03]" />
@@ -118,7 +118,7 @@ export function StepGiftInput({
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 border-t border-black/6 pt-3">
+            <div className="flex flex-wrap gap-5 border-t border-black/6 pt-4">
               <button type="button" onClick={() => fileInputRef.current?.click()} className={actionClassName}>
                 <Upload size={14} />
                 {isZh ? '替换图像' : 'Replace image'}
@@ -138,10 +138,10 @@ export function StepGiftInput({
         )}
       </div>
 
-      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.3rem] bg-white/62 p-6 backdrop-blur-2xl xl:p-8">
+      <div className="flex min-h-0 flex-col overflow-hidden pt-1 xl:pl-2">
         <div className="border-b border-black/8 pb-6">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Editorial object sheet' : 'Editorial object sheet'}</p>
-          <h3 className="mt-3 text-[2.2rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
+          <h3 className="mt-4 max-w-[32rem] text-[2.55rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
             {isZh ? '先把礼物写成一份有质感的对象档案。' : 'Write the gift first as a refined object profile.'}
           </h3>
           <p className="mt-4 max-w-[40rem] text-sm leading-8 text-[#69707d]">
@@ -185,11 +185,11 @@ export function StepGiftInput({
 
             {recognition && (
               <article className="border-b border-black/8 pb-5">
-                <div className="flex items-start gap-3">
-                  <div className="rounded-full bg-[#eef2ff] p-2.5 text-[#5e72c2]">
-                    <Sparkles size={16} />
-                  </div>
-                  <div>
+              <div className="flex items-start gap-4">
+                <div className="rounded-full border border-[#dfe5f6] bg-[#f4f6fb] p-2.5 text-[#5e72c2]">
+                  <Sparkles size={16} />
+                </div>
+                <div>
                     <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Machine observation' : 'Machine observation'}</p>
                     <p className="mt-2 text-[1.35rem] font-serif leading-tight text-[#1d1a17]">{isZh ? recognition.itemZh : recognition.itemEn}</p>
                     <p className="mt-3 text-sm leading-7 text-[#69707d]">
@@ -211,7 +211,7 @@ export function StepGiftInput({
                     type="button"
                     onClick={onRecognize}
                     disabled={!canRecognize || isRecognizing}
-                    className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[#495161] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <Sparkles size={12} />
                     {isRecognizing
@@ -246,7 +246,7 @@ export function StepGiftInput({
                     type="button"
                     onClick={onBeautifyGiftDescription}
                     disabled={!giftDescription.trim()}
-                    className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[#495161] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <WandSparkles size={12} />
                     {isZh ? '整理文气' : 'Refine tone'}
@@ -281,7 +281,7 @@ export function StepGiftInput({
                   type="button"
                   onClick={onBeautifyVisionDescription}
                   disabled={!visionDescription.trim()}
-                  className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[#495161] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <WandSparkles size={12} />
                   {isZh ? '整理文气' : 'Refine tone'}

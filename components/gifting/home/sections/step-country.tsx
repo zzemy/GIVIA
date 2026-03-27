@@ -116,11 +116,11 @@ export function StepCountry({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-6 overflow-hidden rounded-[2.9rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,244,238,0.9))] p-5 shadow-[0_36px_88px_-52px_rgba(15,23,42,0.18)] xl:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)] xl:p-6"
+      className="grid flex-1 gap-10 overflow-hidden xl:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)]"
     >
-      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.3rem] bg-[linear-gradient(180deg,#faf7f2,#f3ece2)] p-6">
+      <div className="flex min-h-0 flex-col overflow-hidden border-r border-black/6 pr-0 xl:pr-10">
         <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Destination frame' : 'Destination frame'}</p>
-        <h3 className="mt-3 text-[2.1rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
+        <h3 className="mt-4 max-w-[30rem] text-[2.45rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
           {isZh ? '让国家、对象与场景站进同一段关系里。' : 'Place country, person, and occasion inside one relationship frame.'}
         </h3>
         <p className="mt-4 text-sm leading-8 text-[#69707d]">
@@ -130,13 +130,13 @@ export function StepCountry({
         </p>
         <p className="mt-4 text-[1.02rem] font-serif leading-8 text-[#1d1a17]">{destinationPrompt}</p>
 
-        <div className="mt-6 rounded-[2rem] bg-white/74 p-5 shadow-[0_18px_36px_-28px_rgba(15,23,42,0.12)]">
+        <div className="mt-6 border-y border-black/8 py-5">
           <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Selected destination' : 'Selected destination'}</p>
           <p className="mt-2 text-[1.8rem] font-serif leading-tight text-[#1d1a17]">{destinationLabel}</p>
           {selectedCountry && <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[#6c78ab]">{selectedCountry}</p>}
         </div>
 
-        <div className="mt-5 min-h-0 flex-1 overflow-auto rounded-[2rem] bg-white/58 p-4">
+        <div className="mt-6 min-h-0 flex-1 overflow-auto border border-black/6 bg-[rgba(255,255,255,0.38)] p-4">
           <CountrySelector
             value={selectedCountry}
             onChange={onSelectedCountryChange}
@@ -160,10 +160,10 @@ export function StepCountry({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.3rem] bg-white/62 p-6 backdrop-blur-2xl xl:p-8">
+      <div className="flex min-h-0 flex-col overflow-hidden pt-1 xl:pl-2">
         <div className="border-b border-black/8 pb-6">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Human context sheet' : 'Human context sheet'}</p>
-          <h3 className="mt-3 text-[2.2rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
+          <h3 className="mt-4 max-w-[34rem] text-[2.55rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
             {isZh ? '礼物会被谁接住，也要写得足够具体。' : 'The receiver and the situation must be written with equal precision.'}
           </h3>
           <p className="mt-4 max-w-[42rem] text-sm leading-8 text-[#69707d]">
@@ -178,7 +178,7 @@ export function StepCountry({
             <article className="border-b border-black/8 pb-5">
               <label className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Scene script' : 'Scene script'}</label>
               <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{scenePrompt}</p>
-              <div className="mt-2 rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.86),rgba(255,255,255,0.72))] px-4 py-1">
+              <div className="mt-2 px-1">
                 <select value={sceneTemplate} onChange={event => onSceneTemplateChange(event.target.value)} className={inputClassName}>
                   {sceneTemplateOptions.map(option => (
                     <option key={option.value} value={option.value}>
@@ -193,7 +193,7 @@ export function StepCountry({
             <article className="border-b border-black/8 pb-5">
               <label className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Recipient / 关系对象' : 'Recipient'}</label>
               <p className="mt-2 text-[1.05rem] font-serif leading-8 text-[#1d1a17]">{recipientPrompt}</p>
-              <div className="mt-2 rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.86),rgba(255,255,255,0.72))] px-4 py-1">
+              <div className="mt-2 px-1">
                 <select value={targetGroup} onChange={event => onTargetGroupChange(event.target.value as AudienceGroup)} className={inputClassName}>
                   {audienceOptions.map(option => (
                     <option key={option.value} value={option.value}>
@@ -236,7 +236,7 @@ export function StepCountry({
               {profileCards.map(card => (
                 <div key={card.label} className="border-b border-black/8 pb-4">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{card.label}</p>
-                  <div className="mt-2 rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.86),rgba(255,255,255,0.72))] px-4 py-1">
+                  <div className="mt-2 px-1">
                     <select value={card.value} onChange={event => card.onChange(event.target.value)} className={inputClassName}>
                       {card.options.map(option => (
                         <option key={option.value} value={option.value}>
@@ -252,7 +252,7 @@ export function StepCountry({
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="border-b border-black/8 pb-4">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Budget' : 'Budget'}</p>
-                <div className="mt-2 rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.86),rgba(255,255,255,0.72))] px-4 py-1">
+                <div className="mt-2 px-1">
                   <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={inputClassName}>
                     {budgetOptions.map(option => (
                       <option key={option.value} value={option.value}>
@@ -265,7 +265,7 @@ export function StepCountry({
 
               <div className="border-b border-black/8 pb-4">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Formality' : 'Formality'}</p>
-                <div className="mt-2 rounded-[1.4rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.86),rgba(255,255,255,0.72))] px-4 py-1">
+                <div className="mt-2 px-1">
                   <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={inputClassName}>
                     {formalityOptions.map(option => (
                       <option key={option.value} value={option.value}>
@@ -277,7 +277,7 @@ export function StepCountry({
               </div>
             </div>
 
-            <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(247,244,238,0.88),rgba(255,255,255,0.78))] p-5">
+            <div className="border-t border-black/8 pt-5">
               <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
               <p className="mt-3 text-sm leading-8 text-[#69707d]">
                 {isZh
