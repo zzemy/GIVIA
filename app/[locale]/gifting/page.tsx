@@ -263,15 +263,15 @@ export default function GiftingPage() {
             )}
 
             {currentStep === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col h-full min-h-0 gap-6 max-w-4xl mx-auto w-full pt-10">
-                <div className="min-h-0 overflow-y-auto w-full">
+              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col gap-6 pt-4">
+                <div className="min-h-0 w-full overflow-hidden">
                   <StepCountry {...countryProps} />
-                  <div className="mt-8 flex justify-between w-full pb-10">
-                    <button onClick={() => setCurrentStep(1)} className="bg-white border border-[#E5E0D8] text-[#5C5A55] px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg flex items-center gap-3">
+                  <div className="mt-4 flex w-full justify-between pb-4">
+                    <button onClick={() => setCurrentStep(1)} className="inline-flex items-center gap-3 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/78 px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-[#5C5A55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]">
                       <ArrowLeft className="w-5 h-5"/> {isZh ? '返回上一步' : 'Back'}
                     </button>
-                    <button onClick={() => setCurrentStep(3)} disabled={!canAdvanceFromStep2} className="bg-emerald-600 text-white px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center gap-3">
-                      {isZh ? '下一步：开始判断' : 'Next: AI Judgment'} <ArrowRight className="w-5 h-5"/>
+                    <button onClick={() => setCurrentStep(3)} disabled={!canAdvanceFromStep2} className="inline-flex items-center gap-3 rounded-full bg-[#2d8a69] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-28px_rgba(45,138,105,0.34)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0">
+                      {isZh ? '下一步：送达编排' : 'Next: Arrival composition'} <ArrowRight className="w-5 h-5"/>
                     </button>
                   </div>
                 </div>
@@ -279,12 +279,12 @@ export default function GiftingPage() {
             )}
 
             {currentStep === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col h-full min-h-0 gap-6 max-w-4xl mx-auto w-full pt-10">
+              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col gap-6 pt-4">
                 <div className="min-h-0 overflow-y-auto w-full">
                   {feedbackProps.error && <div className="mb-6 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-4 text-sm text-rose-700">{feedbackProps.error}</div>}
                   <StepAnalysis {...analysisProps} />
-                  <div className="mt-8 flex justify-between w-full pb-10">
-                    <button onClick={() => setCurrentStep(2)} className="bg-white border border-[#E5E0D8] text-[#5C5A55] px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg flex items-center gap-3">
+                  <div className="mt-6 flex w-full justify-between pb-8">
+                    <button onClick={() => setCurrentStep(2)} className="inline-flex items-center gap-3 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/78 px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-[#5C5A55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]">
                       <ArrowLeft className="w-5 h-5"/> {isZh ? '返回上一步' : 'Back'}
                     </button>
                   </div>

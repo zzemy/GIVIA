@@ -78,6 +78,8 @@ export function useHomePageController(routeLocale: Locale) {
   const [formality, setFormality] = useState('semi-formal')
   const [occasion, setOccasion] = useState('')
   const [targetProfile, setTargetProfile] = useState('')
+  const [deliverySetting, setDeliverySetting] = useState<'private' | 'shared' | 'public'>('private')
+  const [deliveryNarrative, setDeliveryNarrative] = useState('')
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null)
   const [analysisEnhancements, setAnalysisEnhancements] = useState<EnhancedAnalysisState | null>(null)
   const [analysisSource, setAnalysisSource] = useState('')
@@ -189,6 +191,9 @@ export function useHomePageController(routeLocale: Locale) {
     relationshipOptions,
     budgetOptions,
     formalityOptions,
+    ageBandLabel,
+    occupationLabel,
+    relationshipLabel,
     budgetLabel,
     formalityLabel,
     templateHasAudienceOverride,
@@ -535,6 +540,8 @@ export function useHomePageController(routeLocale: Locale) {
             budgetRange,
             formality,
             notes: targetProfile.trim(),
+            deliverySetting,
+            deliveryNarrative: deliveryNarrative.trim(),
           },
           locale: apiLanguage,
           enhancements: hasEnabledAnalysisEnhancement
@@ -604,6 +611,8 @@ export function useHomePageController(routeLocale: Locale) {
     setFormality('semi-formal')
     setOccasion('')
     setTargetProfile('')
+    setDeliverySetting('private')
+    setDeliveryNarrative('')
     setAnalysis(null)
     setAnalysisEnhancements(null)
     setAnalysisSource('')
@@ -750,6 +759,19 @@ export function useHomePageController(routeLocale: Locale) {
         selectedFile,
         selectedAudienceLabel,
         activeSceneTemplate,
+        sceneTemplate,
+        sceneTemplateOptions,
+        occasion,
+        targetProfile,
+        deliverySetting,
+        deliveryNarrative,
+        budgetRange,
+        budgetLabel,
+        formality,
+        formalityLabel,
+        ageBandLabel,
+        occupationLabel,
+        relationshipLabel,
         hasEnabledAnalysisEnhancement,
         analysisEnhancementSettings,
         enhancementOriginCountry,
@@ -766,6 +788,13 @@ export function useHomePageController(routeLocale: Locale) {
             [key]: checked,
           })),
         onEnhancementOriginCountryChange: setEnhancementOriginCountry,
+        onSceneTemplateChange: handleSceneTemplateChange,
+        onOccasionChange: clearAnalysisOnChange(setOccasion),
+        onTargetProfileChange: clearAnalysisOnChange(setTargetProfile),
+        onDeliverySettingChange: clearAnalysisOnChange(setDeliverySetting),
+        onDeliveryNarrativeChange: clearAnalysisOnChange(setDeliveryNarrative),
+        onBudgetRangeChange: clearAnalysisOnChange(setBudgetRange),
+        onFormalityChange: clearAnalysisOnChange(setFormality),
         onAnalyze: handleAnalyze,
       },
       countryProps: {
@@ -799,8 +828,11 @@ export function useHomePageController(routeLocale: Locale) {
         genderOptions,
         occupation,
         occupationOptions,
+        ageBandLabel,
+        occupationLabel,
         relationship,
         relationshipOptions,
+        relationshipLabel,
         budgetRange,
         budgetOptions,
         formality,
