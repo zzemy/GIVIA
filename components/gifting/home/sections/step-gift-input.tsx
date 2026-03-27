@@ -38,7 +38,7 @@ export interface StepGiftInputProps {
 }
 
 const fieldClassName =
-  'w-full border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] placeholder:text-[#9aa1af] transition duration-500 focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
+  'w-full border-0 border-b border-[#E5E0D8]/80 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1C1A17] placeholder:text-[#A09A8F] transition duration-500 focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
 
 const stagePhotography = {
   editorial:
@@ -99,7 +99,7 @@ export function StepGiftInput({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="group relative flex min-h-[26rem] w-full flex-col justify-between overflow-hidden rounded-[2.8rem] text-left shadow-[0_36px_88px_-52px_rgba(15,23,42,0.22)]"
+            className="group relative flex min-h-[26rem] w-full flex-col justify-between overflow-hidden rounded-[2.8rem] text-left shadow-[0_36px_88px_-52px_rgba(0,0,0,0.06)]"
             style={{
               backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.04),rgba(14,11,10,0.42)),url(${stagePhotography.editorial})`,
               backgroundSize: 'cover',
@@ -127,7 +127,7 @@ export function StepGiftInput({
             </div>
           </button>
         ) : (
-          <div className="relative min-h-[26rem] overflow-hidden rounded-[2.8rem] shadow-[0_36px_88px_-52px_rgba(15,23,42,0.22)]">
+          <div className="relative min-h-[26rem] overflow-hidden rounded-[2.8rem] shadow-[0_36px_88px_-52px_rgba(0,0,0,0.06)]">
             <Image src={imagePreview} alt="Gift preview" fill unoptimized className="object-cover" />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(13,11,10,0.44))]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_14%,rgba(255,255,255,0.22),transparent_28%)] mix-blend-screen" />
@@ -151,9 +151,9 @@ export function StepGiftInput({
           </div>
         )}
 
-        <div className="grid gap-4 rounded-[2.2rem] border border-black/6 bg-white/74 p-6 shadow-[0_24px_60px_-46px_rgba(15,23,42,0.18)] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+        <div className="grid gap-4 rounded-[2.5rem] border border-[#E5E0D8]/50 bg-white p-6 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.03)] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '章节提示' : 'Chapter note'}</p>
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[#A09A8F]">{isZh ? '章节提示' : 'Chapter note'}</p>
             <div className="mt-3 space-y-2">
               {chapterNotes.map(line => (
                 <p key={line} className="text-sm leading-7 text-[#667085]">
@@ -162,9 +162,9 @@ export function StepGiftInput({
               ))}
             </div>
             {recognition && recognitionLabel && (
-              <div className="mt-4 border-t border-black/8 pt-4">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '已识别线索' : 'Observed signal'}</p>
-                <p className="mt-2 text-[1.1rem] font-serif text-[#1d1a17]">{recognitionLabel}</p>
+              <div className="mt-4 border-t border-[#E5E0D8]/80 pt-4">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#A09A8F]">{isZh ? '已识别线索' : 'Observed signal'}</p>
+                <p className="mt-2 text-[1.1rem] font-serif text-[#1C1A17]">{recognitionLabel}</p>
                 <p className="mt-2 text-xs leading-6 text-[#7b808c]">
                   {recognitionSource} · {isZh ? '置信度' : 'Confidence'} {(recognition.confidence * 100).toFixed(0)}%
                 </p>
@@ -175,10 +175,10 @@ export function StepGiftInput({
           <div className="flex flex-wrap gap-4 sm:justify-end">
             {imagePreview && (
               <>
-                <button type="button" onClick={() => fileInputRef.current?.click()} className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17]">
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1C1A17]">
                   {isZh ? '替换图像' : 'Replace image'}
                 </button>
-                <button type="button" onClick={onClearSelectedImage} className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17]">
+                <button type="button" onClick={onClearSelectedImage} className="border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1C1A17]">
                   {isZh ? '移除图像' : 'Remove image'}
                 </button>
               </>
@@ -187,13 +187,13 @@ export function StepGiftInput({
               type="button"
               onClick={onRecognize}
               disabled={!canRecognize || isRecognizing}
-              className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17] disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1C1A17] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <Sparkles size={12} />
               {isRecognizing ? (isZh ? `识别中 ${recognizingElapsedSeconds}s` : `Reading ${recognizingElapsedSeconds}s`) : isZh ? '开始细读' : 'Read the object'}
             </button>
             {recognition && (
-              <button type="button" onClick={onToggleTextEditor} className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17]">
+              <button type="button" onClick={onToggleTextEditor} className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1C1A17]">
                 <PencilLine size={12} />
                 {shouldHideGiftInputs ? (isZh ? '展开对象稿' : 'Show object sheet') : isZh ? '收起对象稿' : 'Hide object sheet'}
               </button>
@@ -203,9 +203,9 @@ export function StepGiftInput({
       </div>
 
       <div className="min-h-0 overflow-auto pr-1">
-        <div className="border-b border-black/8 pb-6">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Object dossier' : 'Object dossier'}</p>
-          <h3 className="mt-4 max-w-[32rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
+        <div className="border-b border-[#E5E0D8]/80 pb-6">
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#A09A8F]">{isZh ? 'Object dossier' : 'Object dossier'}</p>
+          <h3 className="mt-4 max-w-[32rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1C1A17]">
             {isZh ? '先只写礼物最核心的对象信息。' : 'Begin with only the object information that matters most.'}
           </h3>
           <p className="mt-4 max-w-[34rem] text-sm leading-8 text-[#69707d]">
@@ -218,15 +218,15 @@ export function StepGiftInput({
         <div className="space-y-8 pt-6">
           {!shouldHideGiftInputs && (
             <>
-              <article className="border-b border-black/8 pb-7">
+              <article className="border-b border-[#E5E0D8]/80 pb-7">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Object title' : 'Object title'}</p>
-                    <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#A09A8F]">{isZh ? 'Object title' : 'Object title'}</p>
+                    <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1C1A17]">
                       {isZh ? '先给它一个准确、优雅、没有歧义的称呼。' : 'Give it a name that is precise, elegant, and free of ambiguity.'}
                     </p>
                   </div>
-                  {hasTextDraft && <p className="pt-1 text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '对象已起稿' : 'Draft started'}</p>}
+                  {hasTextDraft && <p className="pt-1 text-[10px] uppercase tracking-[0.2em] text-[#A09A8F]">{isZh ? '对象已起稿' : 'Draft started'}</p>}
                 </div>
                 <input
                   id="gift-name"
@@ -238,11 +238,11 @@ export function StepGiftInput({
                 />
               </article>
 
-              <article className="border-b border-black/8 pb-7">
+              <article className="border-b border-[#E5E0D8]/80 pb-7">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Material and mood' : 'Material and mood'}</p>
-                    <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#A09A8F]">{isZh ? 'Material and mood' : 'Material and mood'}</p>
+                    <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1C1A17]">
                       {isZh ? '写下材质、色调、包装和它给人的第一层印象。' : 'Write the material, tone, packaging, and the first impression it gives.'}
                     </p>
                   </div>
@@ -250,7 +250,7 @@ export function StepGiftInput({
                     type="button"
                     onClick={onBeautifyGiftDescription}
                     disabled={!giftDescription.trim()}
-                    className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <WandSparkles size={12} />
                     {isZh ? '整理文气' : 'Refine tone'}
@@ -279,23 +279,23 @@ export function StepGiftInput({
           <article>
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Optional AI notes' : 'Optional AI notes'}</p>
-                <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#A09A8F]">{isZh ? 'Optional AI notes' : 'Optional AI notes'}</p>
+                <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1C1A17]">
                   {isZh ? '如果这份礼物有很强的文化暗示，再补给 AI 更细的线索。' : 'If the object carries strong cultural signals, add a finer note for the AI.'}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowAiNotes(current => !current)}
-                className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] transition hover:text-[#1d1a17]"
+                className="border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] transition hover:text-[#1C1A17]"
               >
                 {showAiNotes ? (isZh ? '收起补充' : 'Hide notes') : isZh ? '补充线索' : 'Add notes'}
               </button>
             </div>
             {showAiNotes && (
-              <div className="mt-5 space-y-6 rounded-[2rem] border border-black/6 bg-white/60 p-5">
+              <div className="mt-5 space-y-6 rounded-[2rem] border border-[#E5E0D8]/50 bg-[#FCFAFA] p-5">
                 <div>
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-[#A09A8F]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
                   <input
                     id="vision-label"
                     value={visionLabel}
@@ -307,12 +307,12 @@ export function StepGiftInput({
 
                 <div>
                   <div className="flex items-center justify-between gap-4">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#A09A8F]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
                     <button
                       type="button"
                       onClick={onBeautifyVisionDescription}
                       disabled={!visionDescription.trim()}
-                      className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
+                      className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <WandSparkles size={12} />
                       {isZh ? '整理文气' : 'Refine tone'}

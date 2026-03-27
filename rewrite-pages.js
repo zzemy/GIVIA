@@ -1,4 +1,16 @@
-'use client'
+const fs = require('fs');
+
+// 1. Rewrite app/page.tsx to be a simple redirect
+const rootPageContent = `import { redirect } from 'next/navigation'
+
+export default function RootPage() {
+  redirect('/zh')
+}
+`;
+fs.writeFileSync('app/page.tsx', rootPageContent);
+
+// 2. Draft the new content for app/[locale]/page.tsx
+const localePageContent = `'use client'
 
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
@@ -11,7 +23,7 @@ const routePhotography = {
   tea:
     'https://images.pexels.com/photos/5976086/pexels-photo-5976086.jpeg?cs=srgb&dl=pexels-roman-odintsov-5976086.jpg&fm=jpg',
   meeting:
-    'https://images.unsplash.com/photo-1608755728617-aefab37d2edd?q=80&w=2000&auto=format&fit=crop',
+    'https://images.pexels.com/photos/7937690/pexels-photo-7937690.jpeg?cs=srgb&dl=pexels-pavel-danilyuk-7937690.jpg&fm=jpg',
 }
 
 export default function Home() {
@@ -21,7 +33,7 @@ export default function Home() {
   const locale = isZh ? 'zh' : 'en'
 
   return (
-    <div className={`relative h-[100dvh] w-full overflow-hidden bg-[#f6f1ea] text-[#181614] ${isZh ? 'font-sans-zh' : ''}`}>
+    <div className={\`relative h-[100dvh] w-full overflow-hidden bg-[#f6f1ea] text-[#181614] \${isZh ? 'font-sans-zh' : ''}\`}>
       <HomeBackground />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_16%,rgba(255,255,255,0.76),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(206,217,242,0.2),transparent_24%),linear-gradient(180deg,rgba(246,241,234,0.82),rgba(249,246,241,0.96))]" />
 
@@ -34,7 +46,7 @@ export default function Home() {
         >
           <div>
             <p className="text-[0.72rem] uppercase tracking-[0.28em] text-[#7e8696]">The Art of Gifting</p>
-            <p className={`mt-2 text-[2.8rem] tracking-[-0.08em] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>{isZh ? '礼智极意' : 'Givia'}</p>
+            <p className="mt-2 text-[2.8rem] font-serif tracking-[-0.08em] text-[#1b1714]">{isZh ? '礼智极意' : 'Givia'}</p>
             <p className="mt-3 text-[0.78rem] tracking-[0.16em] text-[#8a919e] uppercase">
               {isZh ? '智联全球文化，礼赠每一份心意' : 'Human tact, cultural intelligence, considered arrival'}
             </p>
@@ -42,7 +54,7 @@ export default function Home() {
           
           <button
             type="button"
-            onClick={() => router.push(`/${isZh ? 'en' : 'zh'}`)}
+            onClick={() => router.push(\`/\${isZh ? 'en' : 'zh'}\`)}
             className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#8e95a2] transition hover:text-[#1b1714] mt-3"
           >
             {isZh ? 'EN Edition' : 'ZH Edition'}
@@ -61,17 +73,12 @@ export default function Home() {
                 <span className="h-[1px] w-6 bg-[#7f89b4]/50" />
                 {isZh ? '文化·人情·叙事' : 'Editorial preface'}
               </p>
-              <h1 className={`mt-6 text-[3.6rem] leading-[1.05] tracking-[-0.04em] text-[#1b1714] sm:text-[4.6rem] xl:text-[5.2rem] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+              <h1 className="mt-6 text-[3.6rem] font-serif leading-[1.05] tracking-[-0.04em] text-[#1b1714] sm:text-[4.6rem] xl:text-[5.2rem]">
                 {isZh ? (
                   <>
-                    <span className="inline-block whitespace-nowrap">
-                      在跨越国界<em className="font-light italic text-[#7282c6] px-1.5 opacity-90">之前</em>
-                    </span>
-                    <br />
-                    <span className="relative inline-block mt-2">
-                      <span className="relative z-10">让心意得体着陆</span>
-                      <span className="absolute bottom-2 left-0 -z-10 h-4 w-full rounded-sm bg-[#e1e7f5]" />
-                    </span>
+                    <span>在跨越国界<em className="font-light italic text-[#7282c6] px-1.5">之前</em>，</span><br />
+                    <span className="opacity-90">让每一份心意，</span><br />
+                    <span className="relative inline-block mt-2"><span className="relative z-10">都获得最得体的</span><span className="absolute bottom-3 left-0 -z-10 h-3.5 w-full rounded-full bg-[#e1e7f5]" /></span> 归处。
                   </>
                 ) : (
                   <>
@@ -90,7 +97,7 @@ export default function Home() {
               <div className="mt-8 grid gap-4 border-t border-black/10 pt-4 md:grid-cols-2">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '风尚理念' : 'Brand note'}</p>
-                  <p className={`mt-2 text-[1rem] leading-[1.6] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                  <p className="mt-2 text-[1rem] font-serif leading-[1.6] text-[#1b1714]">
                     {isZh
                       ? '真正高级的礼物，不只被看见。它需被一种懂分寸的智慧轻轻托起。'
                       : 'A refined gift is not merely seen. It is gently calibrated against cultural tact.'}
@@ -109,7 +116,7 @@ export default function Home() {
               <div className="mt-8 border-t border-black/10 pt-6">
                 <motion.button
                   type="button"
-                  onClick={() => router.push(`/${locale}/gifting`)}
+                  onClick={() => router.push(\`/\${locale}/gifting\`)}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   className="group flex w-full flex-col items-start justify-between rounded-[1.5rem] bg-transparent p-6 transition-all duration-500 hover:bg-white hover:shadow-[0_8px_40px_rgba(0,0,0,0.06)] border border-black/[0.08] hover:border-transparent sm:flex-row sm:items-center"
@@ -120,7 +127,7 @@ export default function Home() {
                       <p className="text-[10px] font-medium tracking-[0.28em] text-[#8e95a2] uppercase">{isZh ? '进入主叙事' : 'Enter the editorial'}</p>
                     </div>
                     <p className="mt-4 text-[1.5rem] font-medium font-sans tracking-[0.1em] text-[#1b1714] sm:mt-2">
-                      {isZh ? '定制礼赠纪要' : 'Begin the gifting journey'}
+                      {isZh ? '开启礼智极意' : 'Begin the gifting journey'}
                     </p>
                   </div>
                   <div className="mt-4 flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-transparent transition-all duration-500 group-hover:border-transparent group-hover:bg-[#1b1714] sm:mt-0">
@@ -132,24 +139,15 @@ export default function Home() {
           </motion.section>
 
           <motion.section
-            initial="hidden"
-            animate="show"
-            variants={{
-              hidden: { opacity: 0 },
-              show: {
-                opacity: 1,
-                transition: { staggerChildren: 0.2, delayChildren: 0.15 }
-              }
-            }}
+            initial={{ opacity: 0, x: 22 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.05, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="grid h-[85%] max-h-[44rem] min-h-[22rem] gap-3 pb-2 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:grid-rows-[minmax(0,1fr)_minmax(0,0.82fr)]"
           >
-            <motion.article variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.96 },
-                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-              }}
+            <article
               className="relative overflow-hidden rounded-[2.75rem] shadow-[0_36px_84px_-48px_rgba(15,23,42,0.22)] lg:row-span-2"
               style={{
-                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.02),rgba(16,13,10,0.34)),url(${routePhotography.wrapped})`,
+                backgroundImage: \`linear-gradient(180deg,rgba(255,255,255,0.02),rgba(16,13,10,0.34)),url(\${routePhotography.wrapped})\`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
@@ -163,57 +161,55 @@ export default function Home() {
                   <p className="text-[11px] uppercase tracking-[0.22em] text-white/64">
                     {isZh ? '第一眼感官' : 'The first glance'}
                   </p>
-                  <p className={`mt-3 text-[1.4rem] leading-snug drop-shadow-sm ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                  <p className="mt-3 text-[1.4rem] font-serif leading-snug drop-shadow-sm">
                     {isZh
                       ? '不仅仅是包裹之物，更是它呈现在异国眼前的全部仪态与修养。'
                       : 'More than the object itself—it is the posture and grace with which it arrives.'}
                   </p>
                 </div>
               </div>
-            </motion.article>
+            </article>
 
-            <motion.article variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.96 },
-                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-              }}
+            <article
               className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
               style={{
-                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.04),rgba(22,18,16,0.28)),url(${routePhotography.tea})`,
+                backgroundImage: \`linear-gradient(180deg,rgba(255,255,255,0.04),rgba(22,18,16,0.28)),url(\${routePhotography.tea})\`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
               <div className="relative flex h-full items-end p-6">
-                <p className={`max-w-[15rem] text-[1.12rem] leading-tight text-white drop-shadow-sm ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                <p className="max-w-[15rem] text-[1.12rem] font-serif leading-tight text-white drop-shadow-sm">
                   {isZh
                     ? '附赠的只言片语，往往比礼物本身更考验跨文化的共情。'
                     : 'Tone and wording carry the weight of translation far beyond the gift itself.'}
                 </p>
               </div>
-            </motion.article>
+            </article>
 
-            <motion.article variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.96 },
-                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-              }}
+            <article
               className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
               style={{
-                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.02),rgba(18,14,12,0.26)),url(${routePhotography.meeting})`,
+                backgroundImage: \`linear-gradient(180deg,rgba(255,255,255,0.02),rgba(18,14,12,0.26)),url(\${routePhotography.meeting})\`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
               <div className="relative flex h-full items-end p-6">
-                <p className={`max-w-[15rem] text-[1.12rem] leading-tight text-white drop-shadow-sm ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                <p className="max-w-[15rem] text-[1.12rem] font-serif leading-tight text-white drop-shadow-sm">
                   {isZh
                     ? '递送的方式与距离，决定了这份善意将以何种姿态被温柔接纳。'
                     : 'Delivery timing and ceremony determine exactly how your goodwill is received.'}
                 </p>
               </div>
-            </motion.article>
+            </article>
           </motion.section>
         </div>
       </main>
     </div>
   )
 }
+`;
+fs.writeFileSync('app/[locale]/page.tsx', localePageContent);
+
+console.log("Rewrite completed.");

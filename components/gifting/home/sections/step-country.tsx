@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { CountrySelector } from '@/components/gifting/country-selector'
 import { getCountryName } from '@/lib/countries'
+import { MapPin, Target, Sparkles, Globe2, Layers, BookA } from 'lucide-react'
 import type { SceneTemplate } from '@/lib/types/gifting-types'
 import type { AudienceGroup, Locale, RecognitionResult, SceneTemplateOption, SelectOption } from '@/components/gifting/home/types'
 
@@ -56,265 +57,103 @@ export interface StepCountryProps {
   onRelationshipChange: (value: string) => void
   onBudgetRangeChange: (value: string) => void
   onFormalityChange: (value: string) => void
+  accentClass?: string
+  textAccent?: string
+  themeBg?: string
 }
 
-const controlClassName =
-  'w-full appearance-none border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] transition duration-500 focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
-
-export function StepCountry({
-  locale,
-  apiLanguage,
-  selectedCountry,
-  activeSceneTemplate,
-  sceneTemplate,
-  sceneTemplateOptions,
-  selectedAudienceLabel,
-  budgetLabel,
-  formalityLabel,
-  audienceOptions,
-  targetGroup,
-  customAudienceGroup,
-  occasion,
-  targetProfile,
-  ageBand,
-  ageBandOptions,
-  occupation,
-  occupationOptions,
-  relationship,
-  relationshipOptions,
-  budgetRange,
-  budgetOptions,
-  formality,
-  formalityOptions,
-  onSelectedCountryChange,
-  onSceneTemplateChange,
-  onTargetGroupChange,
-  onCustomAudienceGroupChange,
-  onOccasionChange,
-  onTargetProfileChange,
-  onAgeBandChange,
-  onOccupationChange,
-  onRelationshipChange,
-  onBudgetRangeChange,
-  onFormalityChange,
-}: StepCountryProps) {
+export function StepCountry(props: StepCountryProps) {
+  const {
+    locale, t, selectedCountry, sceneTemplate, sceneTemplateOptions,
+    onSelectedCountryChange, onSceneTemplateChange, occasion, onOccasionChange,
+    accentClass = "bg-emerald-500", textAccent = "text-emerald-600", themeBg = "bg-emerald-50"
+  } = props
   const isZh = locale === 'zh'
-  const [showProfileDetails, setShowProfileDetails] = React.useState(false)
-  const destinationLabel = selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '尚未选择目的地' : 'Destination not selected'
-  const activeSceneLabel = activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : isZh ? '尚未设定场景' : 'Scene not set'
-
-  const contextRibbon = [destinationLabel, selectedAudienceLabel, activeSceneLabel, budgetLabel, formalityLabel].filter(Boolean)
-
-  const profileSelectors = [
-    { label: isZh ? '年龄段' : 'Age band', value: ageBand, options: ageBandOptions, onChange: onAgeBandChange },
-    { label: isZh ? '职业' : 'Occupation', value: occupation, options: occupationOptions, onChange: onOccupationChange },
-    { label: isZh ? '关系边界' : 'Relationship', value: relationship, options: relationshipOptions, onChange: onRelationshipChange },
-  ]
+  const isCustomScene = sceneTemplate === 'custom'
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-6 overflow-hidden xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]"
-    >
-      <div className="grid min-h-0 gap-4 xl:grid-rows-[auto_minmax(0,1fr)_auto]">
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Destination chapter' : 'Destination chapter'}</p>
-          <h3 className="mt-4 max-w-[26rem] text-[2.15rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
-            {isZh ? '先确定礼物要进入哪一种文化现场。' : 'First decide which cultural setting the gift is entering.'}
-          </h3>
-          <p className="mt-3 max-w-[30rem] text-sm leading-8 text-[#69707d]">
-            {isZh
-              ? '先把目的地、场景和预算语气写清，AI 才能开始判断“得体”的边界。'
-              : 'Clarify the destination, scene, and spending register first so the AI can begin judging the boundary of tact.'}
-          </p>
-        </div>
-
-        <div className="rounded-[2.8rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,240,234,0.9))] p-6 shadow-[0_34px_82px_-56px_rgba(15,23,42,0.16)] sm:p-7">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '文化落点' : 'Cultural destination'}</p>
-          <p className="mt-4 text-[2rem] font-serif leading-tight text-[#1d1a17]">{destinationLabel}</p>
-          {selectedCountry && <p className="mt-2 text-[10px] uppercase tracking-[0.24em] text-[#6c78ab]">{selectedCountry}</p>}
-
-          <div className="mt-8">
-            <CountrySelector
-              value={selectedCountry}
-              onChange={onSelectedCountryChange}
-              locale={apiLanguage}
-              regionLabels={{
-                asia: locale === 'zh' ? '亚洲' : 'Asia',
-                europe: locale === 'zh' ? '欧洲' : 'Europe',
-                americas: locale === 'zh' ? '美洲' : 'Americas',
-                africa: locale === 'zh' ? '非洲' : 'Africa',
-                oceania: locale === 'zh' ? '大洋洲' : 'Oceania',
-              }}
-            />
+    <div className="w-full space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
+      <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.03)] border border-[#E5E0D8]/50">
+        <div className="flex items-center gap-4 mb-8">
+          <div className={`w-14 h-14 rounded-full ${themeBg} ${textAccent} flex items-center justify-center`}>
+            <Globe2 className="w-7 h-7" />
           </div>
-
-          <div className="mt-8 grid gap-4 border-t border-black/8 pt-5">
-            {[
-              isZh ? '不要只想国家名，要想当地生活里“得体”的样子。' : 'Think beyond the country name and imagine what “appropriate” looks like there.',
-              isZh ? '同一份礼物，换一个场合、换一种关系，文化读法也会立刻改变。' : 'The same gift is read differently as soon as the occasion or relationship changes.',
-            ].map(line => (
-              <p key={line} className="text-sm leading-7 text-[#69707d]">
-                {line}
-              </p>
-            ))}
+          <div>
+            <h2 className="text-3xl font-serif text-[#1C1A17] tracking-tight">{isZh ? '选择文化语境' : 'Cultural Context'}</h2>
+            <p className="text-[#A09A8F] mt-1">{isZh ? '定位礼物抵达的真实地标' : 'Select the destination landmark'}</p>
           </div>
         </div>
-
-        <div className="border-t border-black/8 pt-4">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Context ribbon' : 'Context ribbon'}</p>
-          <p className="mt-3 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{contextRibbon.join(' · ')}</p>
+        <div className="pt-4">
+          <CountrySelector
+            value={selectedCountry}
+            onChange={onSelectedCountryChange}
+            locale={locale}
+            
+          />
         </div>
       </div>
 
-      <div className="min-h-0 overflow-auto pr-1">
-        <div className="border-b border-black/8 pb-5">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Human context sheet' : 'Human context sheet'}</p>
-          <h3 className="mt-4 max-w-[34rem] text-[2.12rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
-            {isZh ? '再写送礼时刻与接收对象。' : 'Then write the gifting moment and the receiving person.'}
-          </h3>
-          <p className="mt-3 max-w-[34rem] text-sm leading-8 text-[#69707d]">
-            {isZh
-              ? '这一页只先保留最会改变判断的关系和场景信息。更细的人设补充，可以在下方按需展开。'
-              : 'This page keeps only the relationship and scene details most likely to change the judgment. Deeper portrait detail stays optional below.'}
-          </p>
+      <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.03)] border border-[#E5E0D8]/50">
+        <div className="flex items-center gap-4 mb-8">
+          <div className={`w-14 h-14 rounded-full ${themeBg} ${textAccent} flex items-center justify-center`}>
+            <Layers className="w-7 h-7" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-serif text-[#1C1A17] tracking-tight">{isZh ? '定义送礼场景' : 'Define Scene'}</h2>
+            <p className="text-[#A09A8F] mt-1">{isZh ? '准确的受众映射与背景' : 'Audience mapping and background'}</p>
+          </div>
         </div>
 
-        <div className="space-y-7 pt-6">
-          <div className="grid gap-6 border-b border-black/8 pb-7 md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
-            <article>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Scene script' : 'Scene script'}</p>
-              <p className="mt-2 max-w-[25rem] text-[1.18rem] font-serif leading-8 text-[#1d1a17]">
-                {isZh ? '它更像会出现在哪一种时刻与社会脚本里？' : 'What kind of moment or social script is this gesture entering?'}
-              </p>
-              <select value={sceneTemplate} onChange={event => onSceneTemplateChange(event.target.value)} className={`${controlClassName} mt-4`}>
-                {sceneTemplateOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              {activeSceneTemplate && <p className="mt-4 max-w-[30rem] text-sm leading-8 text-[#7b808c]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
-            </article>
-
-            <article className="border-t border-black/8 pt-1 md:border-l md:border-t-0 md:pl-6">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Budget and register' : 'Budget and register'}</p>
-              <div className="mt-4 grid gap-5">
-                <div>
-                  <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '预算范围' : 'Budget'}</p>
-                  <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                    {budgetOptions.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '正式程度' : 'Formality'}</p>
-                  <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                    {formalityOptions.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </article>
+        <div className="pt-4 space-y-8">
+          <div>
+            <label className="block text-sm font-medium text-[#1C1A17] mb-4">
+              {isZh ? '选择场景模板' : 'Scene Template'}
+            </label>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {sceneTemplateOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => onSceneTemplateChange(opt.value)}
+                  className={`flex flex-col items-start p-5 rounded-2xl border transition-all text-left group
+                    ${sceneTemplate === opt.value
+                      ? `${themeBg} border-transparent shadow-sm`
+                      : 'bg-[#FCFAFA] border-[#E5E0D8] hover:border-[#D0CBC1]'
+                    }`}
+                >
+                  <span className={`text-base font-medium mb-1 ${sceneTemplate === opt.value ? textAccent : 'text-[#1C1A17] group-hover:text-[#5C5A55]'}`}>
+                    {opt.label}
+                  </span>
+                  <span className={`text-sm ${sceneTemplate === opt.value ? `${textAccent} opacity-80` : 'text-[#A09A8F]'}`}>
+                    {opt.hint}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          <article className="grid gap-6 border-b border-black/8 pb-7 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Recipient' : 'Recipient'}</p>
-              <p className="mt-2 max-w-[20rem] text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
-                {isZh ? '谁会接住它？这段关系更接近怎样的边界与礼貌？' : 'Who receives it, and what kind of boundary or courtesy defines the relationship?'}
-              </p>
-            </div>
-
-            <div className="grid gap-4">
-              <select value={targetGroup} onChange={event => onTargetGroupChange(event.target.value as AudienceGroup)} className={controlClassName}>
-                {audienceOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-
-              {targetGroup === 'other' && (
-                <input
-                  value={customAudienceGroup}
-                  onChange={event => onCustomAudienceGroupChange(event.target.value)}
-                  placeholder={isZh ? '补充对象描述' : 'Add a finer note on the recipient'}
-                  className={controlClassName}
-                />
-              )}
-
-              <input
-                value={occasion}
-                onChange={event => onOccasionChange(event.target.value)}
-                placeholder={isZh ? '例如：到访、生日、合作初见、节庆问候' : 'e.g. first visit, birthday, opening meeting, festive greeting'}
-                className={controlClassName}
-              />
-            </div>
-          </article>
-
-          <article>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Optional recipient portrait' : 'Optional recipient portrait'}</p>
-                <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
-                  {isZh ? '如果这份礼物很讲究对象差异，再补人物侧写。' : 'If the gift depends strongly on who the person is, add a deeper recipient portrait.'}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowProfileDetails(current => !current)}
-                className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] transition hover:text-[#1d1a17]"
+          <AnimatePresence mode="popLayout">
+            {isCustomScene && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="space-y-6 pt-4 border-t border-[#E5E0D8]"
               >
-                {showProfileDetails ? (isZh ? '收起细节' : 'Hide details') : isZh ? '补充细节' : 'Add details'}
-              </button>
-            </div>
-
-            {showProfileDetails && (
-              <div className="mt-5 space-y-6 rounded-[2rem] border border-black/6 bg-white/60 p-5">
-                <div className="grid gap-5 md:grid-cols-3">
-                  {profileSelectors.map(selector => (
-                    <div key={selector.label}>
-                      <p className="text-sm font-medium text-[#1d1a17]">{selector.label}</p>
-                      <select value={selector.value} onChange={event => selector.onChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                        {selector.options.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  ))}
-                </div>
-
                 <div>
-                  <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Human profile note' : 'Human profile note'}</p>
-                  <textarea
-                    value={targetProfile}
-                    onChange={event => onTargetProfileChange(event.target.value)}
-                    placeholder={isZh ? '补充兴趣、生活方式、职业语气、文化背景和你们之间的距离。' : 'Add interests, lifestyle, professional tone, cultural background, and the distance between you.'}
-                    rows={5}
-                    className={`${controlClassName} mt-3 min-h-[9rem] resize-none`}
+                  <label className="block text-sm font-medium text-[#1C1A17] mb-2">{isZh ? '场合 / 目的' : 'Occasion / Core Objective'}</label>
+                  <input
+                    type="text"
+                    value={occasion}
+                    onChange={(e) => onOccasionChange(e.target.value)}
+                    placeholder={isZh ? '例如：初次拜访高潜力渠道商...' : 'e.g., First visit to a high-potential distributor...'}
+                    className="w-full bg-[#FCFAFA] border border-[#E5E0D8] text-[#1C1A17] placeholder:text-[#A09A8F] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
                   />
                 </div>
-              </div>
+              </motion.div>
             )}
-
-            <p className="mt-4 text-sm leading-7 text-[#7b808c]">
-              {isZh
-                ? '真正高级的跨文化礼赠，首先来自对人的理解；但不是每一次都需要把人物信息写得过满。'
-                : 'Refined cross-cultural gifting begins with understanding the person, but not every case requires an over-written profile.'}
-            </p>
-          </article>
+          </AnimatePresence>
         </div>
       </div>
-    </motion.section>
+    </div>
   )
 }

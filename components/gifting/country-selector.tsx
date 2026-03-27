@@ -58,7 +58,7 @@ export function CountrySelector({
         type="button"
         onClick={() => handleSelect(country.code)}
         className={cn(
-          'group flex w-full items-center justify-between gap-4 border-t border-black/6 py-3 text-left transition first:border-t-0',
+          'group flex w-full items-center justify-between gap-4 border-t border-[#E5E0D8]/80 py-3 text-left transition first:border-t-0',
           isActive ? 'text-[#1b1714]' : 'text-[#5d6572] hover:text-[#1b1714]',
         )}
       >
@@ -83,7 +83,7 @@ export function CountrySelector({
       <button
         type="button"
         onClick={() => setIsOpen(open => !open)}
-        className="flex w-full items-center justify-between gap-4 border-b border-black/10 pb-4 text-left"
+        className="flex w-full items-center justify-between gap-4 border-b border-[#E5E0D8]/80 pb-4 text-left"
       >
         <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-[0.22em] text-[#98a2b3]">{locale === 'en' ? 'Destination' : '目的地'}</p>
@@ -102,14 +102,14 @@ export function CountrySelector({
 
       {isOpen && (
         <>
-          <div className="absolute left-0 top-[calc(100%+1rem)] z-[190] w-full overflow-hidden rounded-[2.2rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,238,0.98))] shadow-[0_36px_90px_-46px_rgba(15,23,42,0.18)] backdrop-blur-2xl">
-            <div className="border-b border-black/6 px-5 py-5">
+          <div className="absolute left-0 top-[calc(100%+1rem)] z-[190] w-full overflow-hidden rounded-[2.5rem] border border-[#E5E0D8]/80 bg-white/95 shadow-[0_36px_90px_-46px_rgba(0,0,0,0.06)] backdrop-blur-2xl">
+            <div className="border-b border-[#E5E0D8]/80 px-5 py-5">
               <p className="text-[10px] uppercase tracking-[0.24em] text-[#98a2b3]">{locale === 'en' ? 'Cultural destination' : '文化目的地'}</p>
               <p className="mt-3 max-w-[28rem] text-[1.4rem] font-serif leading-tight text-[#1b1714]">
                 {locale === 'en' ? 'Choose where this gesture will be interpreted.' : '选择这份心意将被怎样的文化语境所理解。'}
               </p>
 
-              <div className="relative mt-5 border-b border-black/8 pb-3">
+              <div className="relative mt-5 border-b border-[#E5E0D8]/80 pb-3">
                 <Search size={16} className="absolute left-0 top-1 text-[#98a2b3]" />
                 <input
                   type="text"

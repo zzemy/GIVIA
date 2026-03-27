@@ -22,69 +22,7 @@ type StepTheme = {
   quote: string
 }
 
-type AiCompanionEntry = {
-  label: string
-  title: string
-  body: string
-  bullets: string[]
-}
 
-function EditorialAiAside({
-  entry,
-  accentTextClassName,
-  aiAsideTheme,
-  glow,
-  isZh,
-  primaryAction,
-  secondaryAction,
-  footer,
-}: {
-  entry: AiCompanionEntry
-  accentTextClassName: string
-  aiAsideTheme: string
-  glow: string
-  isZh: boolean
-  primaryAction?: React.ReactNode
-  secondaryAction?: React.ReactNode
-  footer?: React.ReactNode
-}) {
-  return (
-    <aside className="relative min-h-0 overflow-hidden rounded-[2.6rem] border border-black/6 bg-white/55 px-5 py-6 shadow-[0_28px_64px_-52px_rgba(15,23,42,0.16)] backdrop-blur-[2px]">
-      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b opacity-90 ${aiAsideTheme}`} />
-      <div className="pointer-events-none absolute inset-y-5 left-5 w-px bg-black/7" />
-      <div className="pointer-events-none absolute right-[-4.5rem] top-[-3.5rem] h-28 w-28 rounded-full blur-3xl" style={{ backgroundColor: glow }} />
-
-      <div className="relative flex h-full flex-col">
-        <div>
-          <p className={`pl-5 text-[10px] uppercase tracking-[0.3em] ${accentTextClassName}`}>{entry.label}</p>
-          <div className="mt-5 pl-5">
-            <p className="text-[0.72rem] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '编辑页边批注' : 'Editorial marginalia'}</p>
-            <h3 className="mt-3 max-w-[15rem] text-[1.42rem] font-serif leading-[1.08] text-[#1c1a17]">{entry.title}</h3>
-            <p className="mt-4 max-w-[15.5rem] text-[0.94rem] leading-8 text-[#667085]">{entry.body}</p>
-          </div>
-        </div>
-
-        <div className="relative mt-8 space-y-4 pl-5">
-          {entry.bullets.map((item, index) => (
-            <div key={item} className="flex gap-3">
-              <span className={`pt-0.5 text-[10px] uppercase tracking-[0.22em] ${accentTextClassName}`}>0{index + 1}</span>
-              <p className="text-[0.92rem] leading-7 text-[#5f6672]">{item}</p>
-            </div>
-          ))}
-        </div>
-
-        {footer ? <div className="mt-6 pl-5">{footer}</div> : null}
-
-        {(secondaryAction || primaryAction) && (
-          <div className="mt-auto flex flex-wrap gap-3 pl-5 pt-7">
-            {secondaryAction}
-            {primaryAction}
-          </div>
-        )}
-      </div>
-    </aside>
-  )
-}
 
 export default function GiftingPage() {
   const params = useParams<{ locale?: string }>()
@@ -289,21 +227,21 @@ export default function GiftingPage() {
             <button
               type="button"
               onClick={() => router.push(`/${routeLocale}`)}
-              className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
+              className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
             >
               <ArrowLeft className="h-4 w-4" />
               {isZh ? '返回首页' : 'Back home'}
             </button>
           </header>
 
-          <div className="mt-8 grid gap-6 border-t border-black/8 pt-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,18rem)]">
+          <div className="mt-8 grid gap-6 border-t border-[#E5E0D8]/80 pt-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,18rem)]">
             <div>
               <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
               <h1 className="mt-4 text-[3.3rem] font-serif leading-[0.96] tracking-[-0.06em] text-[#1c1a17] md:text-[4rem]">{currentContent.title}</h1>
               <p className="mt-4 max-w-[40rem] text-base leading-8 text-[#667085]">{currentContent.desc}</p>
             </div>
 
-            <div className="flex flex-col justify-end border-l border-black/8 pl-6">
+            <div className="flex flex-col justify-end border-l border-[#E5E0D8]/80 pl-6">
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{currentContent.kicker}</p>
               <p className="mt-3 text-[1.18rem] font-serif leading-tight text-[#1c1a17]">{currentContent.quote}</p>
             </div>
@@ -313,7 +251,7 @@ export default function GiftingPage() {
             {resultsProps ? (
               <ResultsSection {...resultsProps} />
             ) : (
-              <div className="rounded-[2rem] border border-black/6 bg-white/72 p-16 text-center text-[#98a2b3]">{isZh ? '报告生成失败，请重试。' : 'Failed to generate the report. Please try again.'}</div>
+              <div className="rounded-[2rem] border border-[#E5E0D8]/80 bg-white/72 p-16 text-center text-[#98a2b3]">{isZh ? '报告生成失败，请重试。' : 'Failed to generate the report. Please try again.'}</div>
             )}
           </main>
         </div>
@@ -342,7 +280,7 @@ export default function GiftingPage() {
             <button
               type="button"
               onClick={() => router.push(`/${routeLocale}`)}
-              className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
+              className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
             >
               <ArrowLeft className="h-4 w-4" />
               {isZh ? '返回首页' : 'Back home'}
@@ -350,7 +288,7 @@ export default function GiftingPage() {
           </div>
         </header>
 
-        <div className="mt-4 grid gap-4 border-t border-black/8 pt-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,16.5rem)]">
+        <div className="mt-4 grid gap-4 border-t border-[#E5E0D8]/80 pt-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,16.5rem)]">
           <div>
             <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
             <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -362,7 +300,7 @@ export default function GiftingPage() {
             <p className="mt-2 max-w-[37rem] text-[0.96rem] leading-8 text-[#667085]">{currentContent.desc}</p>
           </div>
 
-          <div className="flex flex-col justify-between border-l border-black/8 pl-4">
+          <div className="flex flex-col justify-between border-l border-[#E5E0D8]/80 pl-4">
             <p className="text-[0.96rem] font-serif leading-snug text-[#1c1a17]">{currentContent.quote}</p>
             <div className="mt-4">
               <div className="flex items-center gap-3">
@@ -388,98 +326,54 @@ export default function GiftingPage() {
           </div>
         </div>
 
-        <main className="mt-5 min-h-0 flex-1 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,242,236,0.88))] px-5 py-5 shadow-[0_36px_88px_-58px_rgba(15,23,42,0.14)] sm:px-6 sm:py-6 xl:px-7 xl:py-7">
+        <main className="mt-5 min-h-0 flex-1 overflow-hidden rounded-[3rem] border border-[#E5E0D8]/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,242,236,0.88))] px-5 py-5 shadow-[0_36px_88px_-58px_rgba(0,0,0,0.04)] sm:px-6 sm:py-6 xl:px-7 xl:py-7">
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="grid h-full min-h-0 gap-6 xl:grid-cols-[minmax(0,1.16fr)_18.5rem]">
-                <div className="min-h-0 overflow-hidden">
+              <motion.div key="step1" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col h-full min-h-0 gap-6 max-w-4xl mx-auto w-full pt-10">
+                <div className="min-h-0 overflow-y-auto w-full">
                   <StepGiftInput {...giftInputProps} />
+                  <div className="mt-8 flex justify-end w-full pb-10">
+                    <button onClick={() => setCurrentStep(2)} disabled={!canAdvanceFromStep1} className="bg-indigo-600 text-white px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center gap-3">
+                      {isZh ? '下一步：配置场景' : 'Next: Configure Scene'} <ArrowRight className="w-5 h-5"/>
+                    </button>
+                  </div>
                 </div>
-
-                {currentAiCompanion ? (
-                  <EditorialAiAside
-                    entry={currentAiCompanion}
-                    accentTextClassName={currentContent.accentTextClassName}
-                    aiAsideTheme={aiAsideTheme ?? ''}
-                    glow={currentContent.glow}
-                    isZh={isZh}
-                    primaryAction={
-                      <button type="button" onClick={() => setCurrentStep(2)} disabled={!canAdvanceFromStep1} className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-7 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}>
-                        {isZh ? '进入下一章' : 'Continue'}
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
-                    }
-                  />
-                ) : null}
               </motion.div>
             )}
 
             {currentStep === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="grid h-full min-h-0 gap-5 xl:grid-cols-[minmax(0,1.14fr)_18.5rem]">
-                <div className="min-h-0 overflow-hidden">
+              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col h-full min-h-0 gap-6 max-w-4xl mx-auto w-full pt-10">
+                <div className="min-h-0 overflow-y-auto w-full">
                   <StepCountry {...countryProps} />
+                  <div className="mt-8 flex justify-between w-full pb-10">
+                    <button onClick={() => setCurrentStep(1)} className="bg-white border border-[#E5E0D8] text-[#5C5A55] px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg flex items-center gap-3">
+                      <ArrowLeft className="w-5 h-5"/> {isZh ? '返回上一步' : 'Back'}
+                    </button>
+                    <button onClick={() => setCurrentStep(3)} disabled={!canAdvanceFromStep2} className="bg-emerald-600 text-white px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center gap-3">
+                      {isZh ? '下一步：开始判断' : 'Next: AI Judgment'} <ArrowRight className="w-5 h-5"/>
+                    </button>
+                  </div>
                 </div>
-
-                {currentAiCompanion ? (
-                  <EditorialAiAside
-                    entry={currentAiCompanion}
-                    accentTextClassName={currentContent.accentTextClassName}
-                    aiAsideTheme={aiAsideTheme ?? ''}
-                    glow={currentContent.glow}
-                    isZh={isZh}
-                    secondaryAction={
-                      <button type="button" onClick={() => setCurrentStep(1)} className="rounded-full border border-black/8 bg-white/84 px-5 py-4 text-[#475467] transition hover:bg-white">
-                        {isZh ? '返回' : 'Back'}
-                      </button>
-                    }
-                    primaryAction={
-                      <button type="button" onClick={() => setCurrentStep(3)} disabled={!canAdvanceFromStep2} className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-7 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}>
-                        {isZh ? '交给 AI' : 'Hand off'}
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
-                    }
-                  />
-                ) : null}
               </motion.div>
             )}
 
             {currentStep === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="grid h-full min-h-0 gap-5 xl:grid-cols-[minmax(0,1.14fr)_18.5rem]">
-                <div className="min-h-0 overflow-hidden">
+              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col h-full min-h-0 gap-6 max-w-4xl mx-auto w-full pt-10">
+                <div className="min-h-0 overflow-y-auto w-full">
                   {feedbackProps.error && <div className="mb-6 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-4 text-sm text-rose-700">{feedbackProps.error}</div>}
                   <StepAnalysis {...analysisProps} />
+                  <div className="mt-8 flex justify-between w-full pb-10">
+                    <button onClick={() => setCurrentStep(2)} className="bg-white border border-[#E5E0D8] text-[#5C5A55] px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg flex items-center gap-3">
+                      <ArrowLeft className="w-5 h-5"/> {isZh ? '返回上一步' : 'Back'}
+                    </button>
+                  </div>
                 </div>
-
-                {currentAiCompanion ? (
-                  <EditorialAiAside
-                    entry={currentAiCompanion}
-                    accentTextClassName={currentContent.accentTextClassName}
-                    aiAsideTheme={aiAsideTheme ?? ''}
-                    glow={currentContent.glow}
-                    isZh={isZh}
-                    footer={
-                      <div className="rounded-[1.8rem] border border-black/6 bg-[rgba(248,244,238,0.66)] p-4">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'AI 稿件范围' : 'AI output range'}</p>
-                        <p className="mt-3 text-sm leading-7 text-[#5f6672]">
-                          {isZh
-                            ? '文化风险、关系语气、包装建议、替代方向'
-                            : 'Cultural risk, relationship tone, packaging guidance, alternative directions'}
-                        </p>
-                      </div>
-                    }
-                    secondaryAction={
-                      <button type="button" onClick={() => setCurrentStep(2)} className="rounded-full border border-black/8 bg-white/84 px-6 py-4 text-[#475467] transition hover:bg-white">
-                        {isZh ? '返回上一章' : 'Back'}
-                      </button>
-                    }
-                  />
-                ) : null}
               </motion.div>
             )}
 
             {currentStep === 4 && (
               <motion.div key="step4" initial={{ opacity: 0, scale: 0.985 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.01 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex h-full items-center justify-center">
-                <div className="w-full max-w-[66rem] overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(247,242,236,0.9))] shadow-[0_36px_86px_-52px_rgba(15,23,42,0.16)]">
+                <div className="w-full max-w-[66rem] overflow-hidden rounded-[3rem] border border-[#E5E0D8]/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(247,242,236,0.9))] shadow-[0_36px_86px_-52px_rgba(0,0,0,0.03)]">
                   <div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
                     <div className="relative min-h-[24rem] overflow-hidden bg-[linear-gradient(180deg,rgba(123,88,185,0.08),rgba(40,38,34,0.44)),url(https://images.pexels.com/photos/10479673/pexels-photo-10479673.jpeg?cs=srgb&dl=pexels-jonathanborba-10479673.jpg&fm=jpg)] bg-cover bg-center">
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.24),transparent_30%)] mix-blend-screen" />
@@ -507,7 +401,7 @@ export default function GiftingPage() {
                           isZh ? '文化分寸' : 'Cultural tact',
                           isZh ? '关系语境' : 'Relationship context',
                         ].map(item => (
-                          <div key={item} className="border-t border-black/8 pt-4 text-sm text-[#475467]">
+                          <div key={item} className="border-t border-[#E5E0D8]/80 pt-4 text-sm text-[#475467]">
                             {item}
                           </div>
                         ))}
