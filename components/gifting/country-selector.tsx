@@ -55,15 +55,18 @@ export function CountrySelector({
         type="button"
         onClick={() => handleSelect(country.code)}
         className={cn(
-          'w-full rounded-[1.1rem] border px-4 py-3 text-left transition-all duration-200',
+          'group w-full rounded-[1.35rem] border px-4 py-3 text-left transition-all duration-300',
           isActive
-            ? 'border-[#5b72d1]/18 bg-[#eef2ff] shadow-[0_18px_30px_-24px_rgba(91,114,209,0.24)]'
-            : 'border-transparent bg-transparent hover:border-black/6 hover:bg-[#faf6f0]',
+            ? 'border-[#6478cf]/18 bg-[#eef2ff] shadow-[0_18px_34px_-26px_rgba(100,120,207,0.28)]'
+            : 'border-transparent bg-transparent hover:border-black/6 hover:bg-white',
         )}
       >
         <div className="flex items-center justify-between gap-3">
-          <span className="text-sm text-[#1d1a17]">{locale === 'en' ? country.nameEn : country.nameZh}</span>
-          <span className="text-[11px] tracking-[0.12em] text-[#98a2b3]">{country.code}</span>
+          <div>
+            <p className="text-sm text-[#1d1a17]">{locale === 'en' ? country.nameEn : country.nameZh}</p>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-[#98a2b3] group-hover:text-[#6b7280]">{country.code}</p>
+          </div>
+          {isActive && <span className="text-[10px] uppercase tracking-[0.16em] text-[#6478cf]">Selected</span>}
         </div>
       </button>
     )
@@ -75,16 +78,17 @@ export function CountrySelector({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          `${homeControl.input} flex items-center justify-between gap-3 rounded-[1.45rem] px-4 py-3 text-left`,
-          'bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,244,238,0.94))] shadow-[0_16px_30px_-24px_rgba(15,23,42,0.16)] hover:border-[#5b72d1]/22 hover:bg-white',
+          `${homeControl.input} flex items-center justify-between gap-3 rounded-[1.7rem] px-4 py-4 text-left`,
+          'bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(247,242,236,0.94))] shadow-[0_18px_34px_-26px_rgba(15,23,42,0.14)] hover:border-[#5b72d1]/18 hover:bg-white',
         )}
       >
-        <div className="flex min-w-0 items-center gap-2.5">
-          <div className="rounded-full border border-[#5b72d1]/16 bg-[#eef2ff] p-1.5 text-[#5b72d1]">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="rounded-full border border-[#5b72d1]/14 bg-[#eef2ff] p-2 text-[#5b72d1]">
             <Globe size={15} />
           </div>
           <div className="min-w-0">
-            <p className={`truncate text-sm ${selectedCountry ? 'text-[#1d1a17]' : 'text-[#69707d]'}`}>
+            <p className="text-[10px] uppercase tracking-[0.18em] text-[#98a2b3]">{locale === 'en' ? 'Destination' : '目的地'}</p>
+            <p className={`mt-1 truncate text-sm ${selectedCountry ? 'text-[#1d1a17]' : 'text-[#69707d]'}`}>
               {selectedCountry
                 ? locale === 'en'
                   ? selectedCountry.nameEn
@@ -95,42 +99,57 @@ export function CountrySelector({
             </p>
           </div>
         </div>
-        <ChevronDown size={18} className={`shrink-0 text-[#98a2b3] transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown size={18} className={`shrink-0 text-[#98a2b3] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 top-[calc(100%+0.75rem)] z-[190] w-full rounded-[1.8rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,238,0.98))] p-3 shadow-[0_32px_80px_-42px_rgba(15,23,42,0.22)] backdrop-blur-2xl">
-          <div className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-3">
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-3 text-[#98a2b3]" />
-              <input
-                type="text"
-                placeholder={locale === 'en' ? 'Search...' : '搜索...'}
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                className={`${homeControl.input} py-3 pl-10 pr-3 text-sm`}
-                autoFocus
-              />
+        <div className="absolute left-0 top-[calc(100%+0.9rem)] z-[190] w-full overflow-hidden rounded-[2rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,244,238,0.98))] shadow-[0_36px_90px_-46px_rgba(15,23,42,0.2)] backdrop-blur-2xl">
+          <div className="border-b border-black/6 px-5 py-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{locale === 'en' ? 'Editorial selection' : '编辑选址'}</p>
+                <p className="mt-2 text-[1.2rem] font-serif text-[#1d1a17]">
+                  {locale === 'en' ? 'Choose the cultural destination' : '选择这份心意将抵达的文化目的地'}
+                </p>
+              </div>
+              {selectedCountry && <p className="text-[10px] uppercase tracking-[0.18em] text-[#6478cf]">{selectedCountry.code}</p>}
+            </div>
+
+            <div className="mt-4 rounded-[1.4rem] border border-black/6 bg-[#fcfaf7] p-3">
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-3 text-[#98a2b3]" />
+                <input
+                  type="text"
+                  placeholder={locale === 'en' ? 'Search country or region mood...' : '搜索国家或文化目的地...'}
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                  className={`${homeControl.input} py-3 pl-10 pr-3 text-sm`}
+                  autoFocus
+                />
+              </div>
             </div>
           </div>
 
-          <div className="country-selector-scroll mt-2 max-h-96 space-y-2 overflow-y-auto pr-1">
+          <div className="country-selector-scroll max-h-[32rem] overflow-y-auto px-4 py-4">
             {filteredCountries ? (
               filteredCountries.length > 0 ? (
-                <div className="space-y-1 rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-2">
-                  {filteredCountries.map(country => renderCountryRow(country))}
+                <div className="rounded-[1.5rem] border border-black/6 bg-[#fcfaf7] p-2">
+                  <div className="px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-[#98a2b3]">
+                    {locale === 'en' ? 'Search results' : '搜索结果'}
+                  </div>
+                  <div className="space-y-1">{filteredCountries.map(country => renderCountryRow(country))}</div>
                 </div>
               ) : (
-                <div className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] px-4 py-6 text-center text-sm text-[#69707d]">
-                  {locale === 'en' ? 'No results' : '未找到'}
+                <div className="rounded-[1.5rem] border border-black/6 bg-[#fcfaf7] px-5 py-8 text-center text-sm text-[#69707d]">
+                  {locale === 'en' ? 'No country matched the current search.' : '没有找到匹配的国家。'}
                 </div>
               )
             ) : (
-              <>
+              <div className="space-y-3">
                 {POPULAR_COUNTRIES.length > 0 && (
-                  <div className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-2">
-                    <div className="flex items-center gap-2 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#9b6b20]">
-                      <Star size={13} /> {locale === 'en' ? 'Popular' : '热门'}
+                  <div className="rounded-[1.5rem] border border-black/6 bg-[#fcfaf7] p-2">
+                    <div className="flex items-center gap-2 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-[#9b6b20]">
+                      <Star size={12} /> {locale === 'en' ? 'Frequently chosen' : '常选目的地'}
                     </div>
                     <div className="space-y-1">{POPULAR_COUNTRIES.map(country => renderCountryRow(country))}</div>
                   </div>
@@ -144,15 +163,13 @@ export function CountrySelector({
                   }
 
                   return (
-                    <div key={region} className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-2">
-                      <div className="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#98a2b3]">
-                        {regionLabels[region] || region}
-                      </div>
+                    <div key={region} className="rounded-[1.5rem] border border-black/6 bg-[#fcfaf7] p-2">
+                      <div className="px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-[#98a2b3]">{regionLabels[region] || region}</div>
                       <div className="space-y-1">{regionalCountries.map(country => renderCountryRow(country))}</div>
                     </div>
                   )
                 })}
-              </>
+              </div>
             )}
           </div>
         </div>
