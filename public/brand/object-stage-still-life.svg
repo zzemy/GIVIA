@@ -1,0 +1,76 @@
+<svg width="1600" height="1080" viewBox="0 0 1600 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="276" y1="92" x2="1308" y2="980" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2B313A"/>
+      <stop offset="0.42" stop-color="#1E242C"/>
+      <stop offset="1" stop-color="#181A1F"/>
+    </linearGradient>
+    <radialGradient id="glowLeft" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(468 248) rotate(45.8318) scale(410.162 291.895)">
+      <stop stop-color="#C9965D" stop-opacity="0.88"/>
+      <stop offset="0.55" stop-color="#B07C48" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#B07C48" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowRight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1180 286) rotate(139.909) scale(302.245 242.093)">
+      <stop stop-color="#F5E3C9" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#F5E3C9" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cloth" x1="304" y1="804" x2="1212" y2="1028" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A88A66"/>
+      <stop offset="0.52" stop-color="#C1A17A"/>
+      <stop offset="1" stop-color="#917050"/>
+    </linearGradient>
+    <linearGradient id="envelope" x1="430" y1="330" x2="1012" y2="804" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5ECD8"/>
+      <stop offset="1" stop-color="#DCCEB7"/>
+    </linearGradient>
+    <linearGradient id="envelopeTop" x1="510" y1="364" x2="1080" y2="698" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FCF4E4"/>
+      <stop offset="1" stop-color="#D9C6AB"/>
+    </linearGradient>
+    <linearGradient id="case" x1="964" y1="734" x2="1334" y2="918" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4A311D"/>
+      <stop offset="0.5" stop-color="#6A472C"/>
+      <stop offset="1" stop-color="#28190F"/>
+    </linearGradient>
+    <linearGradient id="penMetal" x1="994" y1="766" x2="1302" y2="888" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#CDB088"/>
+      <stop offset="0.55" stop-color="#F1E3C8"/>
+      <stop offset="1" stop-color="#AA8359"/>
+    </linearGradient>
+    <filter id="blur" x="0" y="0" width="1600" height="1080" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="42"/>
+    </filter>
+    <filter id="shadow" x="245" y="203" width="1150" height="792" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="24"/>
+      <feGaussianBlur stdDeviation="38"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.03 0 0 0 0 0.02 0 0 0 0 0.015 0 0 0 0.42 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="1080" fill="url(#bg)"/>
+  <g opacity="0.72" filter="url(#blur)">
+    <ellipse cx="312" cy="972" rx="388" ry="154" fill="#77685B"/>
+    <ellipse cx="1268" cy="936" rx="302" ry="126" fill="#5C4C3D"/>
+  </g>
+  <ellipse cx="468" cy="248" rx="294" ry="214" fill="url(#glowLeft)"/>
+  <ellipse cx="1180" cy="286" rx="214" ry="156" fill="url(#glowRight)"/>
+  <path d="M188 774C450 706 731 702 1051 760C1224 792 1378 842 1476 892V1080H188V774Z" fill="url(#cloth)"/>
+  <g filter="url(#shadow)">
+    <rect x="362" y="310" width="706" height="476" rx="26" transform="rotate(7.5 362 310)" fill="url(#envelope)"/>
+    <path d="M445 387L1015 462L770 702L445 387Z" fill="url(#envelopeTop)" fill-opacity="0.92"/>
+    <path d="M691 574C738 582 774 578 814 557" stroke="#705841" stroke-width="5.5" stroke-linecap="round" stroke-opacity="0.42"/>
+    <path d="M709 606C774 615 832 610 881 582" stroke="#705841" stroke-width="5.5" stroke-linecap="round" stroke-opacity="0.3"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="926" y="726" width="426" height="108" rx="54" transform="rotate(10.5 926 726)" fill="url(#case)"/>
+    <rect x="1000" y="770" width="276" height="34" rx="17" transform="rotate(10.5 1000 770)" fill="url(#penMetal)"/>
+    <rect x="1008" y="780" width="168" height="13" rx="6.5" transform="rotate(10.5 1008 780)" fill="#FAF1E4" fill-opacity="0.7"/>
+    <path d="M1250 811L1352 830L1300 877L1236 865L1250 811Z" fill="#E9D8BB"/>
+    <path d="M1340 832L1391 842L1318 915L1285 907L1340 832Z" fill="#8F6B46"/>
+  </g>
+  <path d="M1260 203C1247 241 1228 271 1201 298" stroke="#FAE7CA" stroke-opacity="0.38" stroke-width="6" stroke-linecap="round"/>
+  <path d="M1293 235C1284 265 1267 295 1245 321" stroke="#FAE7CA" stroke-opacity="0.22" stroke-width="4" stroke-linecap="round"/>
+</svg>

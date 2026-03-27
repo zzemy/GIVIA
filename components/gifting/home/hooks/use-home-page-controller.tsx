@@ -108,6 +108,8 @@ export function useHomePageController(routeLocale: Locale) {
   const [imagePreview, setImagePreview] = useState('')
   const [giftName, setGiftName] = useState('')
   const [giftDescription, setGiftDescription] = useState('')
+  const [suggestedGiftName, setSuggestedGiftName] = useState('')
+  const [suggestedGiftDescription, setSuggestedGiftDescription] = useState('')
   const [visionDescription, setVisionDescription] = useState('')
   const giftDescriptionRef = useRef<HTMLTextAreaElement>(null)
   const visionDescriptionRef = useRef<HTMLTextAreaElement>(null)
@@ -118,6 +120,8 @@ export function useHomePageController(routeLocale: Locale) {
   const [isImpactPaused, setIsImpactPaused] = useState(false)
   const [recognizingElapsedSeconds, setRecognizingElapsedSeconds] = useState(0)
   const [analyzingElapsedSeconds, setAnalyzingElapsedSeconds] = useState(0)
+  const [isBeautifyingGiftDescription, setIsBeautifyingGiftDescription] = useState(false)
+  const [isBeautifyingVisionDescription, setIsBeautifyingVisionDescription] = useState(false)
 
   React.useEffect(() => {
     setHistoryRecords(loadAnalysisHistory())
@@ -284,6 +288,8 @@ export function useHomePageController(routeLocale: Locale) {
     setImagePreview('')
     setRecognition(null)
     setRecognitionSource(null)
+    setSuggestedGiftName('')
+    setSuggestedGiftDescription('')
     setVisionDescription('')
     setVisionLabel('')
     setRecognitionRawLabels([])
@@ -298,6 +304,8 @@ export function useHomePageController(routeLocale: Locale) {
     setSelectedFile(file)
     setRecognition(null)
     setRecognitionSource(null)
+    setSuggestedGiftName('')
+    setSuggestedGiftDescription('')
     setVisionDescription('')
     setVisionLabel('')
     setRecognitionRawLabels([])
@@ -321,31 +329,78 @@ export function useHomePageController(routeLocale: Locale) {
     setAnalysis(null)
   }
 
-  const handleBeautifyGiftDescription = () => {
-    const polished = beautifyDescriptionText(giftDescription, isZh)
-    if (!polished || polished === giftDescription.trim()) return
-    setGiftDescription(polished)
-    setAnalysis(null)
+  const requestAiRefineText = async (text: string): Promise<string> => {
+    const response = await fetch('/api/text-refine', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        language: apiLanguage,
+      }),
+    })
+
+    const data = (await response.json().catch(() => null)) as { text?: string; error?: string } | null
+    if (!response.ok) {
+      throw new Error(data?.error || (isZh ? '文气优化失败，请稍后再试。' : 'Failed to refine text.'))
+    }
+
+    const polished = typeof data?.text === 'string' ? data.text.trim() : ''
+    return polished || beautifyDescriptionText(text, isZh)
   }
 
-  const handleBeautifyVisionDescription = () => {
-    const polished = beautifyDescriptionText(visionDescription, isZh)
-    if (polished === visionDescription.trim()) return
-    setVisionDescription(polished)
-    setAnalysis(null)
+  const handleBeautifyGiftDescription = async () => {
+    if (!giftDescription.trim()) return
+    setIsBeautifyingGiftDescription(true)
+    setError('')
+    try {
+      const polished = await requestAiRefineText(giftDescription)
+      if (!polished || polished === giftDescription.trim()) return
+      setGiftDescription(polished)
+      setAnalysis(null)
+    } catch (beautifyError) {
+      setError((beautifyError as Error).message)
+    } finally {
+      setIsBeautifyingGiftDescription(false)
+    }
+  }
+
+  const handleBeautifyVisionDescription = async () => {
+    if (!visionDescription.trim()) return
+    setIsBeautifyingVisionDescription(true)
+    setError('')
+    try {
+      const polished = await requestAiRefineText(visionDescription)
+      if (!polished || polished === visionDescription.trim()) return
+      setVisionDescription(polished)
+      setAnalysis(null)
+    } catch (beautifyError) {
+      setError((beautifyError as Error).message)
+    } finally {
+      setIsBeautifyingVisionDescription(false)
+    }
   }
 
   const applyRecognitionPayload = (payload: ParsedRecognitionPayload) => {
     const polishedDescription = beautifyDescriptionText(payload.description, isZh)
     setRecognition(payload.recognition)
     setRecognitionSource(payload.source)
-    if (!giftDescription.trim() && polishedDescription) setGiftDescription(polishedDescription)
+    setSuggestedGiftName(isZh ? payload.recognition.itemZh : payload.recognition.itemEn)
+    setSuggestedGiftDescription(polishedDescription)
     setVisionDescription(polishedDescription)
     setVisionLabel(payload.detectedLabel)
     setRecognitionRawLabels(payload.rawLabels)
-    if (!giftName.trim()) {
-      setGiftName(isZh ? payload.recognition.itemZh : payload.recognition.itemEn)
-    }
+  }
+
+  const handleAcceptSuggestedGiftName = () => {
+    if (!suggestedGiftName.trim()) return
+    setGiftName(suggestedGiftName)
+    setAnalysis(null)
+  }
+
+  const handleAcceptSuggestedGiftDescription = () => {
+    if (!suggestedGiftDescription.trim()) return
+    setGiftDescription(suggestedGiftDescription)
+    setAnalysis(null)
   }
 
   const recognizeByText = async (): Promise<ParsedRecognitionPayload> => {
@@ -556,6 +611,8 @@ export function useHomePageController(routeLocale: Locale) {
     setImagePreview('')
     setGiftName('')
     setGiftDescription('')
+    setSuggestedGiftName('')
+    setSuggestedGiftDescription('')
     setVisionDescription('')
     setVisionLabel('')
     setRecognitionRawLabels([])
@@ -658,6 +715,8 @@ export function useHomePageController(routeLocale: Locale) {
         shouldHideGiftInputs,
         giftName,
         giftDescription,
+        suggestedGiftName,
+        suggestedGiftDescription,
         giftDescriptionRef,
         visionLabel,
         visionDescription,
@@ -666,11 +725,15 @@ export function useHomePageController(routeLocale: Locale) {
         isRecognizing,
         isTextOnlyRecognition,
         recognizingElapsedSeconds,
+        isBeautifyingGiftDescription,
+        isBeautifyingVisionDescription,
         onFileSelect: handleFileSelect,
         onClearSelectedImage: clearSelectedImage,
         onToggleTextEditor: () => setShowGiftInputsAfterImageRecognition(prev => !prev),
         onGiftNameChange: clearAnalysisOnChange(setGiftName),
         onGiftDescriptionChange: clearAnalysisOnChange(setGiftDescription),
+        onAcceptSuggestedGiftName: handleAcceptSuggestedGiftName,
+        onAcceptSuggestedGiftDescription: handleAcceptSuggestedGiftDescription,
         onVisionLabelChange: clearAnalysisOnChange(setVisionLabel),
         onVisionDescriptionChange: clearAnalysisOnChange(setVisionDescription),
         onBeautifyGiftDescription: handleBeautifyGiftDescription,

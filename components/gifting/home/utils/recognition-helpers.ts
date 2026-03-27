@@ -168,6 +168,37 @@ function isDuplicateDescription(primary: string, secondary: string): boolean {
   return shorter.length >= 8 && longer.includes(shorter)
 }
 
+function refineChineseProse(text: string): string {
+  return text
+    .replace(/\s+/g, '')
+    .replace(/装饰有/g, '点缀')
+    .replace(/搭配有/g, '配有')
+    .replace(/和/g, '与')
+    .replace(/非常/g, '')
+    .replace(/看起来/g, '呈现出')
+    .replace(/有一种/g, '带有')
+    .replace(/给人一种/g, '带来')
+    .replace(/，+/g, '，')
+    .replace(/。+/g, '。')
+}
+
+function refineEnglishProse(text: string): string {
+  return text
+    .replace(/\s+/g, ' ')
+    .replace(/\s+,/g, ',')
+    .replace(/\s+\./g, '.')
+    .replace(/\band\b/gi, 'with')
+    .replace(/\blooks\b/gi, 'feels')
+    .replace(/\bvery\b/gi, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
+function shouldUseChinesePeriod(text: string): boolean {
+  const compact = text.replace(/[，、；：,\s]/g, '')
+  return compact.length >= 18
+}
+
 export function beautifyDescriptionText(raw: string, isZh: boolean): string {
   const compact = normalizeDescription(raw, '')
 
@@ -188,12 +219,18 @@ export function beautifyDescriptionText(raw: string, isZh: boolean): string {
   chunks.forEach(chunk => {
     const duplicated = dedupedChunks.some(existing => isDuplicateDescription(existing, chunk))
     if (!duplicated) {
-      dedupedChunks.push(chunk)
+      dedupedChunks.push(isZh ? refineChineseProse(chunk) : refineEnglishProse(chunk))
     }
   })
 
   const merged = isZh ? dedupedChunks.join('，') : dedupedChunks.join(', ')
-  const punctuated = /[。.!！?？]$/.test(merged) ? merged : `${merged}${isZh ? '。' : '.'}`
+  const punctuated = /[。.!！?？]$/.test(merged)
+    ? merged
+    : isZh
+      ? shouldUseChinesePeriod(merged)
+        ? `${merged}。`
+        : merged
+      : `${merged}.`
 
   return shortenText(punctuated, 240)
 }

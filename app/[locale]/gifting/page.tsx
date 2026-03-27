@@ -119,7 +119,7 @@ export default function GiftingPage() {
   }
 
   const currentContent = editorialContent[currentStep] ?? editorialContent[1]
-  const canAdvanceFromStep1 = Boolean(giftInputProps.recognition || giftInputProps.giftName.trim() || giftInputProps.selectedFile)
+  const canAdvanceFromStep1 = Boolean(giftInputProps.giftName.trim() || giftInputProps.giftDescription.trim())
   const canAdvanceFromStep2 = Boolean(countryProps.selectedCountry)
 
   const railLabels = [
@@ -130,89 +130,10 @@ export default function GiftingPage() {
     isZh ? '终稿报告' : 'Dossier',
   ]
 
-  const aiCompanion = {
-    1: {
-      label: isZh ? 'AI 对象识别' : 'AI object reading',
-      title: isZh
-        ? giftInputProps.recognition
-          ? `我先把它理解成「${giftInputProps.recognition.itemZh}」`
-          : '先给我一张图，或一句准确描述。'
-        : giftInputProps.recognition
-          ? `I am currently reading this as “${giftInputProps.recognition.itemEn}”`
-          : 'Give me an image, or one precise object description first.',
-      body: isZh
-        ? giftInputProps.recognition
-          ? '接下来我会继续抓取材质、包装和社会气质，帮你判断这份礼物在别的文化里会被怎样第一眼阅读。'
-          : '我会先识别礼物类型，再帮你提炼材质、气质与文化暗示。你不需要一开始就写很多。'
-        : giftInputProps.recognition
-          ? 'Next I will keep extracting material, packaging, and social mood to judge how the object may be read elsewhere.'
-          : 'I will identify the object first, then help you refine its material, mood, and cultural suggestion. You do not need to write everything at once.',
-      bullets: isZh
-        ? [
-            giftInputProps.selectedFile ? '已收到礼物主图' : '还没有主图',
-            giftInputProps.giftName.trim() ? `名称：${giftInputProps.giftName.trim()}` : '还没有名称',
-            giftInputProps.giftDescription.trim() ? '已补充对象描述' : '建议先写一句材质与用途',
-          ]
-        : [
-            giftInputProps.selectedFile ? 'Gift image received' : 'No key image yet',
-            giftInputProps.giftName.trim() ? `Name: ${giftInputProps.giftName.trim()}` : 'No title yet',
-            giftInputProps.giftDescription.trim() ? 'Object description added' : 'Start with one sentence on material and use',
-          ],
-    },
-    2: {
-      label: isZh ? 'AI 语境建模' : 'AI context reading',
-      title: isZh
-        ? countryProps.selectedCountry
-          ? `我正在把礼物放进「${countryProps.selectedCountry}」对应的文化语境`
-          : '先告诉我礼物要进入哪里。'
-        : countryProps.selectedCountry
-          ? `I am placing the gift inside the cultural context of “${countryProps.selectedCountry}”`
-          : 'Tell me where the gift is going first.',
-      body: isZh
-        ? countryProps.selectedCountry
-          ? '国家、场景、预算和语气已经足够让我开始判断“得体”的边界。人物细节只有在真正影响判断时才需要补。'
-          : '我需要先知道国家和场景。没有这些信息，再好的礼物也无法判断是否得体。'
-        : countryProps.selectedCountry
-          ? 'Country, scene, budget, and register are already enough for me to start judging the boundary of tact. Recipient details matter only when they truly change the reading.'
-          : 'I need the destination and scene first. Without them, even a strong gift cannot be judged for tact.',
-      bullets: isZh
-        ? [
-            countryProps.selectedCountry ? `目的地：${countryProps.selectedCountry}` : '目的地待选择',
-            countryProps.sceneTemplate ? `场景：${countryProps.sceneTemplate}` : '场景待选择',
-            countryProps.budgetLabel ? `预算：${countryProps.budgetLabel}` : '预算待补充',
-          ]
-        : [
-            countryProps.selectedCountry ? `Destination: ${countryProps.selectedCountry}` : 'Destination pending',
-            countryProps.sceneTemplate ? `Scene: ${countryProps.sceneTemplate}` : 'Scene pending',
-            countryProps.budgetLabel ? `Budget: ${countryProps.budgetLabel}` : 'Budget pending',
-          ],
-    },
-    3: {
-      label: isZh ? 'AI 判断引擎' : 'AI judgment engine',
-      title: isZh ? '这里开始由 AI 接管，不再让你继续填表。' : 'From here the AI takes over, rather than asking for more form input.',
-      body: isZh
-        ? '我会把礼物对象、文化目的地、关系对象和送礼场景组织成一份礼赠终稿，包括风险、语气、包装和替代方向。'
-        : 'I will organize the object, cultural destination, recipient, and scene into a final gifting dossier covering risk, tone, packaging, and alternatives.',
-      bullets: isZh
-        ? [
-            analysisProps.canAnalyze ? '关键信息已足够，可以开始生成' : '还有关键信息未完成',
-            analysisProps.hasEnabledAnalysisEnhancement ? '已启用增强图层' : '当前为基础 AI 判断',
-            feedbackProps.error ? `当前报错：${feedbackProps.error}` : '等待你确认并启动生成',
-          ]
-        : [
-            analysisProps.canAnalyze ? 'Core inputs are sufficient to generate' : 'Some key inputs are still missing',
-            analysisProps.hasEnabledAnalysisEnhancement ? 'Deeper layers enabled' : 'Core AI judgment only',
-            feedbackProps.error ? `Current error: ${feedbackProps.error}` : 'Waiting for your go-ahead to generate',
-          ],
-    },
-  } as const
-
-  const currentAiCompanion = aiCompanion[currentStep as 1 | 2 | 3]
-  const aiAsideTheme = {
-    1: 'from-[#f7f8fd] via-[#fcfcfe] to-[#f8f5f1]',
-    2: 'from-[#f5faf6] via-[#fcfdfb] to-[#f7f5f0]',
-    3: 'from-[#f7f4ef] via-[#fcfbf8] to-[#f8f5f1]',
-  }[currentStep as 1 | 2 | 3]
+  const brandEyebrow = isZh ? 'Givia' : ''
+  const brandTitle = isZh ? '礼智极意' : 'Givia'
+  const languageToggleLabel = isZh ? 'EN Edition' : 'ZH Edition'
+  const backHomeLabel = isZh ? '返回首页' : 'Back home'
 
   if (currentStep === 5) {
     return (
@@ -221,8 +142,8 @@ export default function GiftingPage() {
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-6 py-6 sm:px-8 lg:px-12">
           <header className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{isZh ? '礼智极意' : 'Givia'}</p>
-              <p className="mt-2 text-[2.4rem] font-serif tracking-[-0.08em] text-[#191614]">{isZh ? 'Givia' : 'Final editorial dossier'}</p>
+              {brandEyebrow ? <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
+              <p className={`mt-2 text-[2.4rem] tracking-[-0.08em] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif'}`}>{brandTitle}</p>
             </div>
             <button
               type="button"
@@ -230,7 +151,7 @@ export default function GiftingPage() {
               className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
             >
               <ArrowLeft className="h-4 w-4" />
-              {isZh ? '返回首页' : 'Back home'}
+              {backHomeLabel}
             </button>
           </header>
 
@@ -269,75 +190,75 @@ export default function GiftingPage() {
         }}
       />
 
-      <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1520px] flex-col px-6 py-6 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1520px] flex-col px-6 py-5 sm:px-8 lg:px-12">
         <header className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{isZh ? '礼智极意' : 'Givia'}</p>
-            <p className="mt-2 text-[2.4rem] font-serif tracking-[-0.08em] text-[#191614]">{isZh ? 'Givia' : 'Cross-cultural gifting editorial'}</p>
+            {brandEyebrow ? <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
+            <p className={`mt-2 text-[2.4rem] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif tracking-[-0.08em]'}`}>{brandTitle}</p>
           </div>
 
           <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => router.push(`/${isZh ? 'en' : 'zh'}/gifting`)}
+              className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
+            >
+              {languageToggleLabel}
+            </button>
             <button
               type="button"
               onClick={() => router.push(`/${routeLocale}`)}
               className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
             >
               <ArrowLeft className="h-4 w-4" />
-              {isZh ? '返回首页' : 'Back home'}
+              {backHomeLabel}
             </button>
           </div>
         </header>
 
-        <div className="mt-4 grid gap-4 border-t border-[#E5E0D8]/80 pt-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,16.5rem)]">
-          <div>
+        <div className="mt-4 flex items-center gap-6 border-t border-[#E5E0D8]/80 pt-3">
+          <div className="min-w-[8.5rem]">
             <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
-            <div className="mt-2 flex flex-wrap items-center gap-3">
-              <span className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{currentContent.kicker}</span>
-              <span className="h-1 w-1 rounded-full bg-black/12" />
-              <span className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? `步骤 0${currentStep}` : `Step 0${currentStep}`}</span>
-            </div>
-            <h1 className="mt-2 text-[2.35rem] font-serif leading-[0.98] tracking-[-0.06em] text-[#1c1a17] md:text-[2.85rem]">{currentContent.title}</h1>
-            <p className="mt-2 max-w-[37rem] text-[0.96rem] leading-8 text-[#667085]">{currentContent.desc}</p>
+            <p className="mt-2 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+              {currentContent.kicker} · {isZh ? `步骤 0${currentStep}` : `Step 0${currentStep}`}
+            </p>
           </div>
 
-          <div className="flex flex-col justify-between border-l border-[#E5E0D8]/80 pl-4">
-            <p className="text-[0.96rem] font-serif leading-snug text-[#1c1a17]">{currentContent.quote}</p>
-            <div className="mt-4">
-              <div className="flex items-center gap-3">
-                {railLabels.map((label, index) => {
-                  const stepIndex = index + 1
-                  const active = stepIndex === currentStep
-                  const reached = stepIndex < currentStep
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            {railLabels.map((label, index) => {
+              const stepIndex = index + 1
+              const active = stepIndex === currentStep
+              const reached = stepIndex < currentStep
 
-                  return (
-                    <div key={label} className="flex min-w-0 flex-1 flex-col gap-2">
-                      <span
-                        className="h-[2px] rounded-full transition-all"
-                        style={{
-                          backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.34)' : 'rgba(28,26,23,0.1)',
-                        }}
-                      />
-                      <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>0{stepIndex}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+              return (
+                <div key={label} className="flex min-w-0 flex-1 flex-col gap-2">
+                  <span
+                    className="h-[2px] rounded-full transition-all"
+                    style={{
+                      backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.34)' : 'rgba(28,26,23,0.1)',
+                    }}
+                  />
+                  <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>
+                    0{stepIndex} {label}
+                  </span>
+                </div>
+              )
+            })}
           </div>
         </div>
 
-        <main className="mt-5 min-h-0 flex-1 overflow-hidden rounded-[3rem] border border-[#E5E0D8]/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,242,236,0.88))] px-5 py-5 shadow-[0_36px_88px_-58px_rgba(0,0,0,0.04)] sm:px-6 sm:py-6 xl:px-7 xl:py-7">
+        <main className="mt-4 min-h-0 flex-1 overflow-hidden">
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex flex-col h-full min-h-0 gap-6 max-w-4xl mx-auto w-full pt-10">
-                <div className="min-h-0 overflow-y-auto w-full">
-                  <StepGiftInput {...giftInputProps} />
-                  <div className="mt-8 flex justify-end w-full pb-10">
-                    <button onClick={() => setCurrentStep(2)} disabled={!canAdvanceFromStep1} className="bg-indigo-600 text-white px-10 py-5 rounded-full font-medium transition hover:-translate-y-1 hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 flex items-center gap-3">
-                      {isZh ? '下一步：配置场景' : 'Next: Configure Scene'} <ArrowRight className="w-5 h-5"/>
-                    </button>
-                  </div>
-                </div>
+              <motion.div
+                key="step1"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -18 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="h-full w-full"
+              >
+                <StepGiftInput {...giftInputProps} canContinue={canAdvanceFromStep1} onContinue={() => setCurrentStep(2)} />
               </motion.div>
             )}
 
