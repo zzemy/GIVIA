@@ -21,16 +21,18 @@ export default function RootPage() {
     <div className="relative h-screen overflow-hidden bg-[#f6f1ea] text-[#181614]">
       <HomeBackground />
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,255,255,0.22),transparent_28%),linear-gradient(180deg,rgba(246,241,234,0.22),rgba(18,16,14,0.1))]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(180deg,rgba(246,241,234,0.22),rgba(18,16,14,0.08))]" />
 
-      <div
-        className="absolute inset-y-0 right-0 hidden w-[56%] bg-cover bg-center lg:block"
-        style={{
-          backgroundImage:
-            'linear-gradient(180deg,rgba(250,247,243,0.06),rgba(15,13,12,0.42)), url(https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1800&q=80)',
-        }}
-      />
-      <div className="absolute inset-y-0 right-0 hidden w-[56%] bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.22),transparent_24%)] mix-blend-screen lg:block" />
+      <div className="absolute inset-y-0 right-0 hidden w-[56%] lg:block">
+        <div
+          className="absolute inset-[2rem_2rem_2rem_0] overflow-hidden rounded-[2.8rem] bg-cover bg-center shadow-[0_40px_90px_-50px_rgba(15,23,42,0.28)]"
+          style={{
+            backgroundImage:
+              'linear-gradient(180deg,rgba(250,247,243,0.06),rgba(15,13,12,0.42)), url(https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1800&q=80)',
+          }}
+        />
+        <div className="absolute inset-[2rem_2rem_2rem_0] rounded-[2.8rem] bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.22),transparent_24%)] mix-blend-screen" />
+      </div>
 
       <main className="relative z-10 mx-auto flex h-screen max-w-[1600px] flex-col px-6 py-6 sm:px-8 lg:px-12">
         <motion.header
@@ -62,6 +64,13 @@ export default function RootPage() {
             <p className="mt-8 max-w-[32rem] text-[1.02rem] leading-9 text-[#646c79]">
               Givia reads how a gift may be understood elsewhere — through culture, tone, relationship, and memory — before it is sent.
             </p>
+
+            <div className="mt-10 max-w-[34rem] border-t border-black/10 pt-5">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">Brand prelude</p>
+              <p className="mt-3 text-[1.12rem] font-serif leading-8 text-[#1b1714]">
+                Cross-cultural gifting should feel informed, composed, and deeply human long before it feels efficient.
+              </p>
+            </div>
 
             <div className="mt-12 space-y-4">
               <motion.button
@@ -100,7 +109,7 @@ export default function RootPage() {
             transition={{ duration: 1.05, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="hidden h-full min-h-0 items-end justify-end lg:flex"
           >
-            <div className="mb-10 mr-6 max-w-[18rem] rounded-[2rem] border border-white/18 bg-white/10 px-5 py-5 text-white/86 backdrop-blur-md">
+            <div className="mb-10 mr-6 max-w-[18rem] border-l border-white/26 pl-6 text-white/86">
               <p className="text-[11px] uppercase tracking-[0.24em] text-white/58">Gesture / Culture / Memory</p>
               <p className="mt-4 text-[1.35rem] font-serif leading-tight">
                 The same gift may read as intimate, ceremonial, excessive, or perfectly poised — depending on where it lands.
