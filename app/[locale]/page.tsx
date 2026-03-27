@@ -5,6 +5,15 @@ import { ArrowRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { HomeBackground } from '@/components/gifting/home/sections/home-background'
 
+const homepagePhotography = {
+  wrapped:
+    'https://images.pexels.com/photos/35126573/pexels-photo-35126573.jpeg?cs=srgb&dl=pexels-iris-35126573.jpg&fm=jpg',
+  letter:
+    'https://images.pexels.com/photos/10479673/pexels-photo-10479673.jpeg?cs=srgb&dl=pexels-jonathanborba-10479673.jpg&fm=jpg',
+  parcel:
+    'https://images.pexels.com/photos/6869042/pexels-photo-6869042.jpeg?cs=srgb&dl=pexels-kindelmedia-6869042.jpg&fm=jpg',
+}
+
 export default function Home() {
   const params = useParams<{ locale?: string }>()
   const router = useRouter()
@@ -12,29 +21,11 @@ export default function Home() {
   const locale = isZh ? 'zh' : 'en'
 
   return (
-    <div className={`relative h-screen overflow-hidden bg-[#f7f2eb] ${isZh ? 'font-sans-zh' : ''}`}>
+    <div className={`relative min-h-screen overflow-hidden bg-[#f7f2ea] ${isZh ? 'font-sans-zh' : ''}`}>
       <HomeBackground />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_16%,rgba(255,255,255,0.82),transparent_26%),radial-gradient(circle_at_86%_22%,rgba(202,214,242,0.22),transparent_24%),linear-gradient(180deg,rgba(247,242,234,0.82),rgba(250,247,242,0.96))]" />
 
-      <div className="absolute inset-y-0 right-0 hidden w-[56%] lg:block">
-        <div
-          className="absolute inset-[2rem_2rem_2rem_0] overflow-hidden rounded-[2.8rem] shadow-[0_42px_92px_-54px_rgba(15,23,42,0.28)]"
-          style={{
-            backgroundImage: isZh
-              ? 'linear-gradient(180deg,rgba(255,255,255,0.04),rgba(18,15,14,0.52)), url(https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80)'
-              : 'linear-gradient(180deg,rgba(255,255,255,0.04),rgba(18,15,14,0.5)), url(https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1800&q=80)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,255,255,0.22),transparent_26%)] mix-blend-screen" />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(17,15,14,0.06),rgba(17,15,14,0.22))]" />
-        </div>
-      </div>
-
-      <div className="absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,rgba(247,242,235,0.98)_0%,rgba(247,242,235,0.95)_38%,rgba(247,242,235,0.72)_58%,rgba(247,242,235,0.18)_72%,rgba(247,242,235,0)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_16%,rgba(255,255,255,0.36),transparent_24%)]" />
-
-      <main className="relative z-10 mx-auto flex h-screen max-w-[1600px] flex-col px-6 py-6 sm:px-8 lg:px-12">
+      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1580px] flex-col px-6 py-6 sm:px-8 lg:px-12">
         <motion.header
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -44,13 +35,15 @@ export default function Home() {
           <div>
             {isZh ? (
               <>
-                <p className="text-[0.78rem] tracking-[0.16em] text-[#6d7481]">礼智极意</p>
-                <p className="mt-1 text-[2.2rem] font-serif tracking-[-0.08em] text-[#1c1815]">Givia</p>
+                <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">礼智极意</p>
+                <p className="mt-2 text-[2.3rem] font-serif tracking-[-0.08em] text-[#191614]">Givia</p>
+                <p className="mt-3 text-[0.78rem] tracking-[0.16em] text-[#8a919e]">智连全球文化，礼赠每一份心意</p>
               </>
             ) : (
               <>
-                <p className="text-[0.72rem] uppercase tracking-[0.24em] text-[#7e8696]">Givia</p>
-                <p className="mt-1 text-[2.45rem] font-serif tracking-[-0.08em] text-[#1c1815]">Editorial gifting</p>
+                <p className="text-[0.72rem] uppercase tracking-[0.28em] text-[#7c8490]">Givia</p>
+                <p className="mt-2 text-[2.5rem] font-serif tracking-[-0.08em] text-[#191614]">Cross-cultural gifting editorial</p>
+                <p className="mt-3 text-[0.78rem] uppercase tracking-[0.18em] text-[#8a919e]">Human tact, cultural intelligence, considered arrival</p>
               </>
             )}
           </div>
@@ -58,53 +51,63 @@ export default function Home() {
           <button
             type="button"
             onClick={() => router.push(`/${isZh ? 'en' : 'zh'}`)}
-            className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#1c1815]"
+            className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
           >
             {isZh ? 'Switch to English' : '切换中文'}
           </button>
         </motion.header>
 
-        <div className="grid flex-1 items-end py-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:py-0">
+        <div className="grid flex-1 gap-8 py-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end lg:py-4">
           <motion.section
-            initial={{ opacity: 0, y: 26 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.92, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
-            className="relative z-10 flex max-w-[40rem] flex-col justify-end pb-6 lg:pb-12"
+            transition={{ duration: 0.95, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
+            className="flex max-w-[42rem] flex-col justify-end pb-6 lg:pb-10"
           >
-            <p className="text-[11px] uppercase tracking-[0.34em] text-[#7485d4]">{isZh ? '礼赠前言' : 'Editorial preface'}</p>
+            <p className="text-[11px] uppercase tracking-[0.34em] text-[#7182cd]">{isZh ? '礼赠叙事' : 'Editorial gifting'}</p>
             <h1
-              className={`mt-6 text-[4.15rem] leading-[0.88] tracking-[-0.1em] text-[#1c1815] sm:text-[5.05rem] xl:text-[6.15rem] ${
+              className={`mt-6 text-[4.2rem] leading-[0.88] tracking-[-0.1em] text-[#1a1715] sm:text-[5.2rem] xl:text-[6.55rem] ${
                 isZh ? 'font-display-zh font-semibold' : 'font-serif'
               }`}
             >
               {isZh ? (
                 <>
                   <span className="block">让一份心意，</span>
-                  <span className="block text-[#6577c8]">以更得体的方式</span>
+                  <span className="block text-[#5f72c8]">以更得体的方式</span>
                   <span className="block">进入另一种文化。</span>
                 </>
               ) : (
                 <>
                   <span className="block">Let a gesture</span>
-                  <span className="block text-[#6577c8]">enter another culture</span>
-                  <span className="block">with more tact.</span>
+                  <span className="block text-[#5f72c8]">enter another culture</span>
+                  <span className="block">with tact and grace.</span>
                 </>
               )}
             </h1>
 
-            <p className="mt-8 max-w-[31rem] text-[1.02rem] leading-9 text-[#636b79]">
+            <p className="mt-8 max-w-[33rem] text-[1.04rem] leading-9 text-[#626a77]">
               {isZh
-                ? '这不是一次普通的送礼填写，而是一段关于关系、文化、语气与送达方式的礼赠编辑。'
-                : 'This is not a generic gifting form, but an editorial passage through relationship, culture, tone, and delivery.'}
+                ? 'Givia 会把礼物、关系、国家与送达语气放进同一份叙事里，让跨文化送礼不再只靠直觉，而是更有人情、更有分寸。'
+                : 'Givia edits a gift through relationship, place, ritual, and delivery tone, so cross-cultural gifting feels informed, humane, and beautifully composed.'}
             </p>
 
-            <div className="mt-10 max-w-[34rem] border-t border-black/10 pt-5">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '品牌主张' : 'Brand note'}</p>
-              <p className="mt-3 text-[1.18rem] font-serif leading-8 text-[#1c1815]">
-                {isZh
-                  ? '真正决定礼物是否高级的，往往不是价格，而是它是否懂得尊重另一种生活方式。'
-                  : 'What gives a gift its poise is rarely price alone, but whether it knows how to respect another way of living.'}
-              </p>
+            <div className="mt-10 grid gap-4 border-t border-black/10 pt-5 md:grid-cols-2">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '品牌注脚' : 'Brand note'}</p>
+                <p className="mt-3 text-[1.16rem] font-serif leading-8 text-[#1a1715]">
+                  {isZh
+                    ? '真正高级的礼物，不只被看见，更会被当地的生活方式温和地理解。'
+                    : 'A refined gift is not merely seen. It is understood gently inside another way of living.'}
+                </p>
+              </div>
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '终稿输出' : 'Final output'}</p>
+                <p className="mt-3 text-[1rem] leading-8 text-[#626a77]">
+                  {isZh
+                    ? '你会获得一份关于文化风险、表达方式、包装语气与替代方向的礼赠终稿。'
+                    : 'You receive a final gifting dossier covering cultural risks, message tone, packaging direction, and better alternatives.'}
+                </p>
+              </div>
             </div>
 
             <motion.button
@@ -115,10 +118,10 @@ export default function Home() {
               className="group mt-12 flex items-center justify-between border-t border-black/10 py-5 text-left"
             >
               <div>
-                <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '进入主叙事' : 'Enter the main narrative'}</p>
-                <p className="mt-2 text-[1.7rem] font-serif text-[#1c1815]">{isZh ? '开始这次礼赠编辑' : 'Enter the editorial'}</p>
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '进入主叙事' : 'Enter the editorial'}</p>
+                <p className="mt-2 text-[1.72rem] font-serif text-[#1a1715]">{isZh ? '开始这次礼赠编辑' : 'Begin the gifting editorial'}</p>
               </div>
-              <ArrowRight className="h-5 w-5 text-[#6577c8] transition duration-500 group-hover:translate-x-1" />
+              <ArrowRight className="h-5 w-5 text-[#5f72c8] transition duration-500 group-hover:translate-x-1" />
             </motion.button>
           </motion.section>
 
@@ -126,16 +129,59 @@ export default function Home() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden items-end justify-end lg:flex"
+            className="grid min-h-[34rem] gap-4 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] lg:grid-rows-[minmax(0,1fr)_minmax(0,0.78fr)]"
           >
-            <div className="mb-10 mr-8 max-w-[22rem] border-l border-white/26 pl-6 text-white">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-white/56">{isZh ? 'Culture / Relation / Tone' : 'Culture / Relation / Tone'}</p>
-              <p className="mt-4 text-[1.45rem] font-serif leading-tight text-white/92">
-                {isZh
-                  ? '一份礼物进入陌生文化之前，先要学会如何安静而准确地被理解。'
-                  : 'Before a gift enters an unfamiliar culture, it must first learn how to be read with calm precision.'}
-              </p>
-            </div>
+            <article
+              className="relative overflow-hidden rounded-[2.75rem] shadow-[0_36px_84px_-48px_rgba(15,23,42,0.22)] lg:row-span-2"
+              style={{
+                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.02),rgba(16,13,10,0.34)),url(${homepagePhotography.wrapped})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_14%,rgba(255,255,255,0.22),transparent_26%)] mix-blend-screen" />
+              <div className="relative flex h-full flex-col justify-between p-6 text-white sm:p-8">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-white/64">{isZh ? '包装与分寸' : 'Packaging and tact'}</p>
+                <div className="max-w-[18rem] rounded-[2rem] border border-white/14 bg-white/10 p-5 backdrop-blur-md">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-white/62">{isZh ? '礼赠终稿' : 'Final dossier'}</p>
+                  <p className="mt-3 text-[1.35rem] font-serif leading-tight">
+                    {isZh
+                      ? '从礼物本身，到它最后被怎样递出去。'
+                      : 'From the object itself to the manner in which it is finally handed over.'}
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article
+              className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
+              style={{
+                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.04),rgba(22,18,16,0.28)),url(${homepagePhotography.letter})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="relative flex h-full items-end p-6">
+                <p className="max-w-[14rem] text-[1.12rem] font-serif leading-tight text-white">
+                  {isZh ? '语气、卡片与措辞，也属于礼物的一部分。' : 'Tone, card, and wording belong to the gift as much as the object does.'}
+                </p>
+              </div>
+            </article>
+
+            <article
+              className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
+              style={{
+                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.02),rgba(18,14,12,0.26)),url(${homepagePhotography.parcel})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="relative flex h-full items-end p-6">
+                <p className="max-w-[15rem] text-[1.12rem] font-serif leading-tight text-white">
+                  {isZh ? '送达方式、节奏与距离，会改变好意如何被接住。' : 'Delivery timing, distance, and ceremony change how goodwill is received.'}
+                </p>
+              </div>
+            </article>
           </motion.section>
         </div>
       </main>

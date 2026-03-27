@@ -3,7 +3,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ImagePlus, PencilLine, Sparkles, Upload, WandSparkles, X } from 'lucide-react'
+import { PencilLine, Sparkles, Upload, WandSparkles } from 'lucide-react'
 import type { Locale, RecognitionResult, RecognitionSource } from '@/components/gifting/home/types'
 
 export interface StepGiftInputProps {
@@ -40,8 +40,10 @@ export interface StepGiftInputProps {
 const fieldClassName =
   'w-full border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] placeholder:text-[#9aa1af] transition duration-500 focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
 
-const actionClassName =
-  'inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.18em] text-[#556070] transition duration-500 hover:text-[#1d1a17]'
+const stagePhotography = {
+  editorial:
+    'https://images.pexels.com/photos/4792659/pexels-photo-4792659.jpeg?cs=srgb&dl=pexels-ekaterina-bolovtsova-4792659.jpg&fm=jpg',
+}
 
 export function StepGiftInput({
   locale,
@@ -75,175 +77,174 @@ export function StepGiftInput({
 }: StepGiftInputProps) {
   const isZh = locale === 'zh'
   const hasTextDraft = Boolean(giftName.trim() || giftDescription.trim())
-  const objectPrompt = isZh ? '这份物件，第一眼应该被如何称呼？' : 'How should this object be named at first glance?'
-  const objectNotePrompt = isZh
-    ? '如果把它写进一段礼赠描述，它会呈现怎样的材质、气质与场景？'
-    : 'If it were written into a gifting note, what material, mood, and scene would it carry?'
-  const cuePrompt = isZh ? '它更接近哪一种社会气质或文化线索？' : 'What social or cultural cue does it feel closest to?'
-  const editorialPrompt = isZh
-    ? '如果把它放进跨文化语境，它会让人联想到怎样的距离、礼仪与情绪？'
-    : 'Placed in a cross-cultural setting, what distance, etiquette, and feeling might it suggest?'
+  const recognitionLabel = recognition ? (isZh ? recognition.itemZh : recognition.itemEn) : null
+
+  const chapterNotes = [
+    isZh ? '先确认它是什么，再判断它会被怎样理解。' : 'Name the object first, then judge how it may be interpreted.',
+    isZh ? '材质、边角、包装和用途，都会改变礼物的社会气质。' : 'Material, edges, packaging, and use all change the object’s social tone.',
+    isZh ? '这一章产出的不是表单，而是礼物的对象稿。' : 'What emerges here is not a form, but an authored object sheet.',
+  ]
 
   return (
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-8 overflow-hidden xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
+      className="grid flex-1 gap-8 overflow-hidden xl:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)]"
     >
-      <div className="flex min-h-0 flex-col overflow-hidden border-r border-black/6 pr-0 xl:pr-10">
+      <div className="grid min-h-0 gap-5 xl:grid-rows-[minmax(0,1fr)_auto]">
         <input ref={fileInputRef} type="file" accept="image/*" onChange={onFileSelect} className="hidden" />
 
         {!imagePreview ? (
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="group relative flex h-full min-h-[30rem] w-full flex-col justify-end overflow-hidden rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,240,234,0.92))] px-8 py-8 text-left shadow-[0_34px_80px_-56px_rgba(15,23,42,0.16)] transition duration-700 hover:-translate-y-0.5 hover:shadow-[0_42px_90px_-56px_rgba(15,23,42,0.18)]"
+            className="group relative flex min-h-[26rem] w-full flex-col justify-between overflow-hidden rounded-[2.8rem] text-left shadow-[0_36px_88px_-52px_rgba(15,23,42,0.22)]"
+            style={{
+              backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.04),rgba(14,11,10,0.42)),url(${stagePhotography.editorial})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
           >
-            <div className="absolute right-[-3rem] top-[-3rem] h-40 w-40 rounded-full bg-[#e8eefc] blur-3xl" />
-            <div className="relative z-10">
-              <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#dfe5f6] bg-white/86 text-[#5e72c2] shadow-[0_16px_34px_-24px_rgba(94,114,194,0.35)]">
-                <ImagePlus size={32} />
-              </div>
-              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Object opening' : 'Object opening'}</p>
-              <p className="mt-4 text-[2.45rem] font-serif leading-[1.02] text-[#1d1a17]">{isZh ? '上传礼物主视觉' : 'Upload the gift key visual'}</p>
-              <p className="mt-4 max-w-md text-sm leading-8 text-[#6c7380]">
-                {isZh
-                  ? '这张图会成为礼物档案的开篇。材质、边角、包装与光线，都会成为后续文化判断的第一层线索。'
-                  : 'This image opens the object dossier. Material, edges, packaging, and light become the first cues in the later cultural reading.'}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_14%,rgba(255,255,255,0.22),transparent_28%)] mix-blend-screen" />
+            <div className="relative p-7 text-white sm:p-8">
+              <p className="text-[11px] uppercase tracking-[0.26em] text-white/64">{isZh ? 'Chapter opening' : 'Chapter opening'}</p>
+              <p className="mt-4 max-w-[17rem] text-[2.55rem] font-serif leading-[1.02]">
+                {isZh ? '上传礼物主视觉。' : 'Upload the object image.'}
               </p>
+            </div>
+
+            <div className="relative space-y-4 p-7 text-white sm:p-8">
+              <p className="max-w-[24rem] text-sm leading-8 text-white/82">
+                {isZh
+                  ? '最好是一张能看清材质、包装、用途或品牌气质的照片。真正影响判断的，往往是这些细节。'
+                  : 'Use a photograph that reveals material, packaging, function, or brand mood. Those details often determine the final reading.'}
+              </p>
+              <div className="inline-flex items-center gap-2 border-b border-white/28 pb-2 text-[11px] uppercase tracking-[0.18em] text-white/82">
+                <Upload size={14} />
+                {isZh ? '选择图像并开始撰写' : 'Select image and begin writing'}
+              </div>
             </div>
           </button>
         ) : (
-          <div className="grid h-full min-h-0 gap-5 lg:grid-rows-[minmax(0,1fr)_auto]">
-            <div className="group relative min-h-0 overflow-hidden rounded-[2.6rem] border border-black/6 shadow-[0_34px_80px_-56px_rgba(15,23,42,0.18)]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.26),transparent_28%)] mix-blend-screen" />
-              <div className="relative h-full min-h-[24rem]">
-                <Image src={imagePreview} alt="Gift preview" fill unoptimized className="object-cover transition-transform duration-[1600ms] ease-out group-hover:scale-[1.03]" />
+          <div className="relative min-h-[26rem] overflow-hidden rounded-[2.8rem] shadow-[0_36px_88px_-52px_rgba(15,23,42,0.22)]">
+            <Image src={imagePreview} alt="Gift preview" fill unoptimized className="object-cover" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(13,11,10,0.44))]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_14%,rgba(255,255,255,0.22),transparent_28%)] mix-blend-screen" />
+            <div className="relative flex h-full flex-col justify-between p-7 text-white sm:p-8">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.26em] text-white/64">{isZh ? 'Object manuscript' : 'Object manuscript'}</p>
+                <p className="mt-4 max-w-[16rem] text-[2.35rem] font-serif leading-[1.02]">
+                  {isZh ? '礼物主视觉已就位。' : 'The object image is in place.'}
+                </p>
               </div>
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent px-6 pb-6 pt-20 text-white">
-                <p className="text-[11px] uppercase tracking-[0.24em] text-white/72">{isZh ? 'Object cover' : 'Object cover'}</p>
-                <p className="mt-2 truncate text-[1.08rem] font-medium">{selectedFile?.name ?? (isZh ? '已上传礼物图像' : 'Uploaded gift image')}</p>
-              </div>
-            </div>
 
-            <div className="flex flex-wrap gap-5 border-t border-black/6 pt-4">
-              <button type="button" onClick={() => fileInputRef.current?.click()} className={actionClassName}>
-                <Upload size={14} />
-                {isZh ? '替换图像' : 'Replace image'}
-              </button>
-              <button type="button" onClick={onClearSelectedImage} className={actionClassName}>
-                <X size={14} />
-                {isZh ? '移除图像' : 'Remove image'}
-              </button>
-              {recognition && (
-                <button type="button" onClick={onToggleTextEditor} className={actionClassName}>
-                  <PencilLine size={14} />
-                  {shouldHideGiftInputs ? (isZh ? '展开稿件文字' : 'Show editorial text') : isZh ? '收起稿件文字' : 'Hide editorial text'}
-                </button>
-              )}
+              <div>
+                <p className="text-[1.02rem] font-medium">{selectedFile?.name ?? (isZh ? '已上传礼物图像' : 'Uploaded gift image')}</p>
+                <p className="mt-3 max-w-[24rem] text-sm leading-8 text-white/82">
+                  {isZh
+                    ? '现在继续写下它的气质、场景与文化暗示，让这张图真正进入礼赠语境。'
+                    : 'Now add its tone, scene, and cultural suggestion so the image can enter the gifting context with precision.'}
+                </p>
+              </div>
             </div>
           </div>
         )}
+
+        <div className="grid gap-4 rounded-[2.2rem] border border-black/6 bg-white/74 p-6 shadow-[0_24px_60px_-46px_rgba(15,23,42,0.18)] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '章节提示' : 'Chapter note'}</p>
+            <div className="mt-3 space-y-2">
+              {chapterNotes.map(line => (
+                <p key={line} className="text-sm leading-7 text-[#667085]">
+                  {line}
+                </p>
+              ))}
+            </div>
+            {recognition && recognitionLabel && (
+              <div className="mt-4 border-t border-black/8 pt-4">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '已识别线索' : 'Observed signal'}</p>
+                <p className="mt-2 text-[1.1rem] font-serif text-[#1d1a17]">{recognitionLabel}</p>
+                <p className="mt-2 text-xs leading-6 text-[#7b808c]">
+                  {recognitionSource} · {isZh ? '置信度' : 'Confidence'} {(recognition.confidence * 100).toFixed(0)}%
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-4 sm:justify-end">
+            {imagePreview && (
+              <>
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17]">
+                  {isZh ? '替换图像' : 'Replace image'}
+                </button>
+                <button type="button" onClick={onClearSelectedImage} className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17]">
+                  {isZh ? '移除图像' : 'Remove image'}
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={onRecognize}
+              disabled={!canRecognize || isRecognizing}
+              className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Sparkles size={12} />
+              {isRecognizing ? (isZh ? `识别中 ${recognizingElapsedSeconds}s` : `Reading ${recognizingElapsedSeconds}s`) : isZh ? '开始细读' : 'Read the object'}
+            </button>
+            {recognition && (
+              <button type="button" onClick={onToggleTextEditor} className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.16em] text-[#556070] transition hover:text-[#1d1a17]">
+                <PencilLine size={12} />
+                {shouldHideGiftInputs ? (isZh ? '展开对象稿' : 'Show object sheet') : isZh ? '收起对象稿' : 'Hide object sheet'}
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="flex min-h-0 flex-col overflow-hidden pt-1 xl:pl-2">
+      <div className="min-h-0 overflow-auto pr-1">
         <div className="border-b border-black/8 pb-6">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Editorial object sheet' : 'Editorial object sheet'}</p>
-          <h3 className="mt-4 max-w-[32rem] text-[2.7rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
-            {isZh ? '先把礼物写成一份有质感的对象档案。' : 'Write the gift first as a refined object profile.'}
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Object dossier' : 'Object dossier'}</p>
+          <h3 className="mt-4 max-w-[32rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
+            {isZh ? '把礼物写成一份清晰、克制、带质感的对象稿。' : 'Write the gift as a clear, restrained, and textured object sheet.'}
           </h3>
-          <p className="mt-4 max-w-[42rem] text-sm leading-8 text-[#69707d]">
-            {imagePreview
-              ? isZh
-                ? '现在请补上它的气质：它像什么、适合怎样的关系、会让人想到怎样的场景与分寸。'
-                : 'Now add its tone: what it feels like, what relationship it suits, and what scene or tact it may imply.'
-              : isZh
-                ? '如果暂时没有图片，也可以先用文字搭建物件轮廓，让系统理解这份礼物会如何被第一眼阅读。'
-                : 'If no image is available yet, text can still establish the object profile and how the gift may be read at first glance.'}
+          <p className="mt-4 max-w-[34rem] text-sm leading-8 text-[#69707d]">
+            {isZh
+              ? '系统需要先理解这个物件本身，再去判断它在另一种文化里会被如何读懂。'
+              : 'The system first needs to understand the object itself before it can judge how the gift may be read in another culture.'}
           </p>
         </div>
 
-        <div className="grid min-h-0 flex-1 gap-8 overflow-hidden pt-6 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-          <div className="space-y-8 overflow-auto pr-1">
-            {!shouldHideGiftInputs && (
-              <article className="border-b border-black/8 pb-6">
-                <label htmlFor="gift-name" className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
-                  {isZh ? 'Object title / 物件题名' : 'Object title'}
-                </label>
-                <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{objectPrompt}</p>
+        <div className="space-y-8 pt-6">
+          {!shouldHideGiftInputs && (
+            <>
+              <article className="border-b border-black/8 pb-7">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Object title' : 'Object title'}</p>
+                    <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                      {isZh ? '先给它一个准确、优雅、没有歧义的称呼。' : 'Give it a name that is precise, elegant, and free of ambiguity.'}
+                    </p>
+                  </div>
+                  {hasTextDraft && <p className="pt-1 text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '对象已起稿' : 'Draft started'}</p>}
+                </div>
                 <input
                   id="gift-name"
                   type="text"
                   value={giftName}
                   onChange={event => onGiftNameChange(event.target.value)}
-                  placeholder={isZh ? '例如：丝巾、钢笔、香氛、茶器' : 'e.g. silk scarf, fountain pen, fragrance, tea ware'}
-                  className={`${fieldClassName} mt-2`}
+                  placeholder={isZh ? '例如：真丝围巾、木盒茶器、签字钢笔' : 'e.g. silk scarf, tea set in a wooden box, signing pen'}
+                  className={`${fieldClassName} mt-3`}
                 />
-                <p className="mt-3 text-sm leading-7 text-[#7b808c]">
-                  {hasTextDraft
-                    ? isZh
-                      ? '标题不必华丽，但必须准确。它会决定后续文化阅读的起点。'
-                      : 'The title need not be ornate, but it must be precise. It sets the opening frame for the later reading.'
-                    : isZh
-                      ? '先给物件一个足够清晰的名称，后面的判断才会稳。'
-                      : 'Give the object a clear enough name first so the rest of the reading can stay grounded.'}
-                </p>
               </article>
-            )}
 
-            {recognition && (
-              <article className="border-b border-black/8 pb-6">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-full border border-[#dfe5f6] bg-[#f4f6fb] p-2.5 text-[#5e72c2]">
-                    <Sparkles size={16} />
-                  </div>
+              <article className="border-b border-black/8 pb-7">
+                <div className="flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '识别线索' : 'Observed signal'}</p>
-                    <p className="mt-2 text-[1.42rem] font-serif leading-tight text-[#1d1a17]">{isZh ? recognition.itemZh : recognition.itemEn}</p>
-                    <p className="mt-3 text-sm leading-7 text-[#69707d]">
-                      {isZh ? '类别' : 'Category'} · {recognition.category} · {isZh ? '置信度' : 'Confidence'} {(recognition.confidence * 100).toFixed(0)}%
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Material and mood' : 'Material and mood'}</p>
+                    <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                      {isZh ? '写下材质、色调、包装和它给人的第一层印象。' : 'Write the material, tone, packaging, and the first impression it gives.'}
                     </p>
-                    {recognitionSource && <p className="mt-1 text-xs leading-6 text-[#98a2b3]">{recognitionSource}</p>}
                   </div>
-                </div>
-              </article>
-            )}
-
-            <article className="border-b border-black/8 pb-6">
-              <div className="flex items-center justify-between gap-3">
-                <label htmlFor="vision-label" className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
-                  {isZh ? 'Editorial cue / 编辑线索' : 'Editorial cue'}
-                </label>
-                {recognition && (
-                  <button
-                    type="button"
-                    onClick={onRecognize}
-                    disabled={!canRecognize || isRecognizing}
-                    className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    <Sparkles size={12} />
-                    {isRecognizing ? (isZh ? `识别中 ${recognizingElapsedSeconds}s` : `Reading ${recognizingElapsedSeconds}s`) : isZh ? '再次细读' : 'Read once more'}
-                  </button>
-                )}
-              </div>
-              <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{cuePrompt}</p>
-              <input
-                id="vision-label"
-                value={visionLabel}
-                onChange={event => onVisionLabelChange(event.target.value)}
-                placeholder={isZh ? '例如：低调商务、手作感、纪念性' : 'e.g. understated business, artisanal, commemorative'}
-                className={`${fieldClassName} mt-2`}
-              />
-            </article>
-          </div>
-
-          <div className="space-y-8 overflow-auto pr-1">
-            {!shouldHideGiftInputs && (
-              <article className="border-b border-black/8 pb-6">
-                <div className="flex items-center justify-between gap-3">
-                  <label htmlFor="gift-description" className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
-                    {isZh ? 'Object note / 物件描述' : 'Object note'}
-                  </label>
                   <button
                     type="button"
                     onClick={onBeautifyGiftDescription}
@@ -254,7 +255,6 @@ export function StepGiftInput({
                     {isZh ? '整理文气' : 'Refine tone'}
                   </button>
                 </div>
-                <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{objectNotePrompt}</p>
                 <textarea
                   ref={giftDescriptionRef}
                   id="gift-description"
@@ -263,60 +263,76 @@ export function StepGiftInput({
                     onGiftDescriptionChange(event.target.value)
                     autoResizeTextarea(event.target)
                   }}
-                  rows={7}
+                  rows={6}
                   placeholder={
                     isZh
-                      ? '写材质、颜色、包装、用途、风格与它会让人想到的场景。'
-                      : 'Write about material, color, packaging, purpose, styling, and the kind of scene it evokes.'
+                      ? '写材质、颜色、包装、用途、风格，以及它会让人想到的情境。'
+                      : 'Describe the material, color, packaging, purpose, styling, and the kind of situation it evokes.'
                   }
-                  className={`${fieldClassName} mt-2 min-h-[10rem] resize-none overflow-hidden`}
+                  className={`${fieldClassName} mt-3 min-h-[9rem] resize-none overflow-hidden`}
                 />
               </article>
-            )}
+            </>
+          )}
 
-            <article>
-              <div className="flex items-center justify-between gap-3">
-                <label htmlFor="vision-description" className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
-                  {isZh ? 'Editorial note / 编辑判断' : 'Editorial note'}
-                </label>
-                <button
-                  type="button"
-                  onClick={onBeautifyVisionDescription}
-                  disabled={!visionDescription.trim()}
-                  className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  <WandSparkles size={12} />
-                  {isZh ? '整理文气' : 'Refine tone'}
-                </button>
+          <article className="border-b border-black/8 pb-7">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
+            <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+              {isZh ? '概括它更接近哪一种社会气质、礼仪感或生活方式。' : 'Summarize the social mood, etiquette, or way of living it feels closest to.'}
+            </p>
+            <input
+              id="vision-label"
+              value={visionLabel}
+              onChange={event => onVisionLabelChange(event.target.value)}
+              placeholder={isZh ? '例如：低调商务、收藏感、节庆问候、轻奢家居' : 'e.g. understated business, collectible, festive greeting, refined homeware'}
+              className={`${fieldClassName} mt-3`}
+            />
+          </article>
+
+          <article>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
+                <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                  {isZh ? '把它放进跨文化语境，它会让人联想到怎样的距离、礼貌与情绪？' : 'Placed in a cross-cultural setting, what kind of distance, courtesy, and emotion might it suggest?'}
+                </p>
               </div>
-              <p className="mt-2 text-[1.08rem] font-serif leading-8 text-[#1d1a17]">{editorialPrompt}</p>
-              <textarea
-                ref={visionDescriptionRef}
-                id="vision-description"
-                value={visionDescription}
-                onChange={event => {
-                  onVisionDescriptionChange(event.target.value)
-                  autoResizeTextarea(event.target)
-                }}
-                rows={7}
-                placeholder={
-                  isZh
-                    ? '写下这份礼物会让人联想到的气氛、关系距离、礼仪感与文化印象。'
-                    : 'Describe the atmosphere, distance, etiquette, and cultural impression this gift may carry.'
-                }
-                className={`${fieldClassName} mt-2 min-h-[10rem] resize-none overflow-hidden`}
-              />
-              <p className="mt-3 text-sm leading-7 text-[#7b808c]">
-                {isTextOnlyRecognition
-                  ? isZh
-                    ? '当前识别主要依据文字输入，后续可继续补充图像以提高判断细腻度。'
-                    : 'The current reading relies mainly on text. You can still add imagery later for a finer interpretation.'
-                  : isZh
-                    ? '这一段决定系统会如何理解礼物的情绪、社会语气与文化暗示。'
-                    : 'This paragraph shapes how the system interprets the gift’s emotional tone, social register, and cultural suggestion.'}
-              </p>
-            </article>
-          </div>
+              <button
+                type="button"
+                onClick={onBeautifyVisionDescription}
+                disabled={!visionDescription.trim()}
+                className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <WandSparkles size={12} />
+                {isZh ? '整理文气' : 'Refine tone'}
+              </button>
+            </div>
+            <textarea
+              ref={visionDescriptionRef}
+              id="vision-description"
+              value={visionDescription}
+              onChange={event => {
+                onVisionDescriptionChange(event.target.value)
+                autoResizeTextarea(event.target)
+              }}
+              rows={7}
+              placeholder={
+                isZh
+                  ? '写下它可能带来的文化印象、关系距离、礼仪感和被接收时的气氛。'
+                  : 'Describe the cultural impression, relational distance, etiquette, and atmosphere it may create when received.'
+              }
+              className={`${fieldClassName} mt-3 min-h-[10rem] resize-none overflow-hidden`}
+            />
+            <p className="mt-3 text-sm leading-7 text-[#7b808c]">
+              {isTextOnlyRecognition
+                ? isZh
+                  ? '当前系统主要依据文字理解礼物，后续补图会让判断更细腻。'
+                  : 'The reading currently relies mainly on text. Adding imagery later will make the judgment more nuanced.'
+                : isZh
+                  ? '这一段决定系统会如何理解礼物的情绪、社会语气与文化暗示。'
+                  : 'This paragraph guides the system’s understanding of the gift’s emotion, social register, and cultural suggestion.'}
+            </p>
+          </article>
         </div>
       </div>
     </motion.section>

@@ -1,21 +1,18 @@
 import React from 'react'
-import { act, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import RootPage from './page'
 
-const replaceMock = jest.fn()
-
-jest.useFakeTimers()
+const pushMock = jest.fn()
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: jest.fn(),
-    replace: replaceMock,
+    push: pushMock,
   }),
 }))
 
 describe('Root editorial routing page', () => {
   beforeEach(() => {
-    replaceMock.mockClear()
+    pushMock.mockClear()
   })
 
   it('renders the editorial routing hero', () => {
@@ -26,13 +23,8 @@ describe('Root editorial routing page', () => {
     expect(screen.getByRole('button', { name: /enter in english/i })).toBeInTheDocument()
   })
 
-  it('redirects to /zh after the transition delay', () => {
+  it('keeps both language routes available without auto redirecting', () => {
     render(<RootPage />)
-
-    act(() => {
-      jest.advanceTimersByTime(2200)
-    })
-
-    expect(replaceMock).toHaveBeenCalledWith('/zh')
+    expect(pushMock).not.toHaveBeenCalled()
   })
 })
