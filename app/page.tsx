@@ -9,152 +9,105 @@ import { HomeBackground } from '@/components/gifting/home/sections/home-backgrou
 export default function RootPage() {
   const router = useRouter()
 
-  const heroPhotos = {
-    lead: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1800&q=80',
-    relation: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=80',
-    city: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=80',
-  }
-
   React.useEffect(() => {
     const timer = window.setTimeout(() => {
       router.replace('/zh')
-    }, 1800)
+    }, 2200)
 
     return () => window.clearTimeout(timer)
   }, [router])
 
   return (
-    <div className="relative h-screen overflow-hidden bg-[#f7f4ef] text-[#1b1917]">
-      <div className="pointer-events-none absolute inset-0">
-        <HomeBackground />
-      </div>
+    <div className="relative h-screen overflow-hidden bg-[#f6f1ea] text-[#181614]">
+      <HomeBackground />
 
-      <main className="relative z-10 mx-auto flex h-screen max-w-[1540px] flex-col overflow-hidden px-6 pb-8 pt-6 sm:px-8 lg:px-12">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,255,255,0.22),transparent_28%),linear-gradient(180deg,rgba(246,241,234,0.22),rgba(18,16,14,0.1))]" />
+
+      <div
+        className="absolute inset-y-0 right-0 hidden w-[56%] bg-cover bg-center lg:block"
+        style={{
+          backgroundImage:
+            'linear-gradient(180deg,rgba(250,247,243,0.06),rgba(15,13,12,0.42)), url(https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1800&q=80)',
+        }}
+      />
+      <div className="absolute inset-y-0 right-0 hidden w-[56%] bg-[radial-gradient(circle_at_22%_18%,rgba(255,255,255,0.22),transparent_24%)] mix-blend-screen lg:block" />
+
+      <main className="relative z-10 mx-auto flex h-screen max-w-[1600px] flex-col px-6 py-6 sm:px-8 lg:px-12">
         <motion.header
-          initial={{ opacity: 0, y: -18 }}
+          initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center justify-between gap-4 py-3"
+          className="flex items-start justify-between gap-4"
         >
-          <motion.div whileHover={{ y: -1 }} transition={{ duration: 0.35 }} className="flex items-center gap-4">
-            <div className="flex flex-col leading-none">
-              <span className="text-[0.75rem] font-medium tracking-[0.22em] text-[#8a90a0]">礼智极意</span>
-              <span className="mt-1 text-[2.35rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
-            </div>
-            <div className="h-10 w-px bg-black/8" />
-            <p className="max-w-[10rem] text-[10px] uppercase tracking-[0.22em] text-[#8a90a0]">Cross-cultural gifting editorial</p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 18 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.85, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-center gap-2 rounded-full border border-black/6 bg-white/64 p-1.5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.12)] backdrop-blur-xl"
-          >
-            <button
-              type="button"
-              onClick={() => router.push('/zh')}
-              className="rounded-full bg-[#181614] px-5 py-2.5 text-sm text-white transition duration-500 hover:-translate-y-0.5 hover:bg-[#25211e]"
-            >
-              中文
-            </button>
-            <button
-              type="button"
-              onClick={() => router.push('/en')}
-              className="rounded-full px-4 py-2.5 text-sm text-[#5f6672] transition duration-500 hover:-translate-y-0.5 hover:text-[#1b2230]"
-            >
-              English
-            </button>
-          </motion.div>
+          <div>
+            <p className="text-[0.72rem] uppercase tracking-[0.28em] text-[#7e8696]">Global editorial house</p>
+            <p className="mt-2 text-[2.7rem] font-serif tracking-[-0.08em] text-[#1b1714]">Givia</p>
+          </div>
+          <div className="hidden max-w-[14rem] text-right text-[10px] uppercase tracking-[0.22em] text-[#8e95a2] lg:block">
+            礼智极意 · Cross-cultural gifting editorial
+          </div>
         </motion.header>
 
-        <section className="grid h-full flex-1 items-center gap-10 overflow-hidden lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-14">
-          <motion.div
-            initial={{ opacity: 0, y: 28 }}
+        <div className="grid flex-1 items-end gap-8 py-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:py-0">
+          <motion.section
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-            className="flex max-w-[34rem] flex-col justify-center pb-6 lg:pb-0"
+            transition={{ duration: 0.95, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 flex max-w-[38rem] flex-col justify-end pb-4 lg:pb-10"
           >
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, delay: 0.16 }} className="text-[11px] uppercase tracking-[0.28em] text-[#6c78ab]">Editorial preface</motion.p>
-            <h1 className="mt-6 text-[4.1rem] font-serif leading-[0.88] tracking-[-0.09em] text-[#1e1a17] sm:text-[5.1rem] xl:text-[6.3rem]">
-              Before a gesture
-              <span className="block text-[#6678c8]">crosses a border</span>
-              it enters another life
+            <p className="text-[11px] uppercase tracking-[0.34em] text-[#7f89b4]">Editorial preface</p>
+            <h1 className="mt-6 max-w-[12ch] text-[4.25rem] font-serif leading-[0.88] tracking-[-0.1em] text-[#1b1714] sm:text-[5.15rem] xl:text-[6.35rem]">
+              Before a gesture crosses a border, it enters another life.
             </h1>
-            <p className="mt-8 max-w-[32rem] text-[1.04rem] leading-9 text-[#666d79]">
-              Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands, crosses a border, and enters another social world.
+            <p className="mt-8 max-w-[32rem] text-[1.02rem] leading-9 text-[#646c79]">
+              Givia reads how a gift may be understood elsewhere — through culture, tone, relationship, and memory — before it is sent.
             </p>
 
-            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.22 }} className="mt-10 flex items-center gap-5">
+            <div className="mt-12 space-y-4">
               <motion.button
                 type="button"
                 onClick={() => router.push('/zh')}
-                whileHover={{ y: -3, boxShadow: '0 28px 52px -24px rgba(102,120,200,0.5)' }}
+                whileHover={{ x: 4 }}
                 whileTap={{ scale: 0.985 }}
-                className="inline-flex items-center gap-3 rounded-full bg-[#6678c8] px-7 py-4 text-sm uppercase tracking-[0.12em] text-white shadow-[0_24px_44px_-26px_rgba(102,120,200,0.44)] transition hover:-translate-y-0.5 hover:bg-[#5c6eba]"
+                className="group flex w-full items-center justify-between border-t border-black/10 py-5 text-left"
               >
-                Begin the story
-                <ArrowRight className="h-4 w-4" />
-              </motion.button>
-              <p className="max-w-[13rem] text-sm leading-7 text-[#8b9099]">Choose the language in which this gesture begins its journey.</p>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.985, y: 18 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="relative h-full min-h-0"
-          >
-            <div className="grid h-full max-h-[780px] min-h-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
-              <motion.article whileHover={{ y: -4 }} transition={{ duration: 0.45 }} className="group relative min-h-0 overflow-hidden rounded-[3.2rem] shadow-[0_40px_90px_-48px_rgba(15,23,42,0.28)]">
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-[1800ms] ease-out group-hover:scale-[1.03]"
-                  style={{ backgroundImage: `url(${heroPhotos.lead})` }}
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(20,18,17,0.48))]" />
-                <div className="relative flex h-full min-h-[30rem] flex-col justify-between p-8 sm:p-10 xl:p-12">
-                  <p className="text-[11px] uppercase tracking-[0.26em] text-white/72">Gesture / Culture / Memory</p>
-                  <div className="max-w-[26rem]">
-                    <p className="text-[2.45rem] font-serif leading-[1.02] tracking-[-0.05em] text-white sm:text-[3rem]">
-                      The same object can feel intimate, ceremonial, excessive, or misplaced — depending on where, and to whom, it arrives.
-                    </p>
-                  </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">进入中文语境</p>
+                  <p className="mt-2 text-[1.55rem] font-serif text-[#1b1714]">Continue in 中文</p>
                 </div>
-              </motion.article>
+                <ArrowRight className="h-5 w-5 text-[#6478c8] transition duration-500 group-hover:translate-x-1" />
+              </motion.button>
 
-              <div className="grid min-h-0 grid-rows-[0.95fr_1.05fr] gap-5">
-                <motion.article whileHover={{ y: -3 }} transition={{ duration: 0.4 }} className="group relative overflow-hidden rounded-[2.35rem] shadow-[0_28px_60px_-34px_rgba(15,23,42,0.22)]">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-[1800ms] ease-out group-hover:scale-[1.04]"
-                    style={{ backgroundImage: `url(${heroPhotos.relation})` }}
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(22,20,18,0.42))]" />
-                  <div className="relative flex h-full min-h-[16rem] items-end p-6">
-                    <p className="max-w-[12rem] text-[1.18rem] font-serif leading-tight text-white">A gesture is first received through relationship, tone, and timing.</p>
-                  </div>
-                </motion.article>
-
-                <motion.article whileHover={{ y: -3 }} transition={{ duration: 0.4 }} className="group relative overflow-hidden rounded-[2.35rem] bg-[rgba(255,255,255,0.52)] p-5 shadow-[0_28px_60px_-34px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
-                  <div className="grid h-full gap-5 sm:grid-cols-[0.94fr_1.06fr]">
-                    <div className="relative overflow-hidden rounded-[1.9rem]">
-                      <div
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-[1800ms] ease-out group-hover:scale-[1.04]"
-                        style={{ backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.06),rgba(24,22,21,0.36)),url(${heroPhotos.city})` }}
-                      />
-                    </div>
-                    <div className="flex flex-col justify-between rounded-[1.9rem] bg-[rgba(255,255,255,0.62)] p-6">
-                      <p className="text-[11px] uppercase tracking-[0.24em] text-[#6f7480]">Cross-cultural reading</p>
-                      <p className="mt-4 text-[1.5rem] font-serif leading-tight text-[#1d1916]">
-                        A quieter reading of atmosphere, etiquette, and the form your intention may take abroad.
-                      </p>
-                    </div>
-                  </div>
-                </motion.article>
-              </div>
+              <motion.button
+                type="button"
+                onClick={() => router.push('/en')}
+                whileHover={{ x: 4 }}
+                whileTap={{ scale: 0.985 }}
+                className="group flex w-full items-center justify-between border-t border-black/10 py-5 text-left"
+              >
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">Enter the English edition</p>
+                  <p className="mt-2 text-[1.55rem] font-serif text-[#1b1714]">Enter in English</p>
+                </div>
+                <ArrowRight className="h-5 w-5 text-[#6478c8] transition duration-500 group-hover:translate-x-1" />
+              </motion.button>
             </div>
-          </motion.div>
-        </section>
+          </motion.section>
+
+          <motion.section
+            initial={{ opacity: 0, x: 22 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.05, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden h-full min-h-0 items-end justify-end lg:flex"
+          >
+            <div className="mb-10 mr-6 max-w-[18rem] rounded-[2rem] border border-white/18 bg-white/10 px-5 py-5 text-white/86 backdrop-blur-md">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-white/58">Gesture / Culture / Memory</p>
+              <p className="mt-4 text-[1.35rem] font-serif leading-tight">
+                The same gift may read as intimate, ceremonial, excessive, or perfectly poised — depending on where it lands.
+              </p>
+            </div>
+          </motion.section>
+        </div>
       </main>
     </div>
   )

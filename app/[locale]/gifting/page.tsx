@@ -167,165 +167,81 @@ export default function GiftingPage() {
   ]
 
   return (
-    <div className={`h-screen overflow-hidden bg-[#fcfaf7] text-[#1c1a17] ${isZh ? 'font-sans-zh' : ''}`}>
+    <div className={`h-screen overflow-hidden bg-[#f8f3ec] text-[#1c1a17] ${isZh ? 'font-sans-zh' : ''}`}>
       <div className={`flex h-screen overflow-hidden bg-gradient-to-br transition-colors duration-700 ${currentContent.theme}`}>
-        <aside className="relative hidden h-screen w-[46%] overflow-hidden border-r border-black/6 lg:flex lg:flex-col">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_16%,rgba(255,255,255,0.66),transparent_28%),radial-gradient(circle_at_86%_12%,rgba(255,255,255,0.34),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0.32),rgba(255,255,255,0.08))]" />
+        <aside className="relative hidden h-screen w-[43%] overflow-hidden lg:flex lg:flex-col">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.06),rgba(14,12,11,0.58)),url(${currentContent.images[0]})`,
+            }}
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,255,255,0.24),transparent_28%),linear-gradient(180deg,rgba(15,13,12,0.08),rgba(15,13,12,0.18))]" />
 
-          <div className="relative z-10 flex h-full flex-col px-10 pb-10 pt-9 xl:px-12 xl:pb-12">
-            <div className="flex items-center gap-4">
+          <div className="relative z-10 flex h-full flex-col justify-between px-10 pb-10 pt-9 xl:px-12 xl:pb-12">
+            <div className="flex items-center justify-between gap-4">
               <motion.button
                 onClick={() => router.push(`/${routeLocale}`)}
-                whileHover={{ y: -2, x: -1 }}
+                whileHover={{ x: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-black/6 bg-white/72 text-[#1c1a17] shadow-[0_12px_30px_-24px_rgba(15,23,42,0.22)] backdrop-blur-xl transition hover:bg-white"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/90 backdrop-blur-md transition hover:bg-white/16"
                 title={isZh ? '返回首页' : 'Back to home'}
               >
                 <ArrowLeft className="h-5 w-5" />
               </motion.button>
-              <div>
-                {isZh ? (
-                  <>
-                    <p className="text-[1.15rem] font-display-zh font-semibold tracking-[0.02em] text-[#1c1a17]">礼智极意</p>
-                    <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">Givia</p>
-                    <p className="mt-2 text-[10px] tracking-[0.18em] text-[#98a2b3]">跨文化礼赠编辑</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-xl font-serif font-medium tracking-tight text-[#1c1a17]">Givia</p>
-                    <p className="mt-2 text-[10px] uppercase tracking-[0.22em] text-[#98a2b3]">Cross-cultural gifting editorial</p>
-                  </>
-                )}
+              <div className="text-right">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-white/58">{currentContent.chapter}</p>
+                <p className="mt-2 text-[0.72rem] uppercase tracking-[0.2em] text-white/44">{currentContent.kicker}</p>
               </div>
             </div>
 
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
-                initial={{ opacity: 0, x: -18 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 18 }}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -18 }}
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                className="mt-10 flex flex-1 flex-col"
+                className="max-w-[29rem]"
               >
-                <div className="grid h-[44vh] gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
-                  <div className="relative overflow-hidden rounded-[3rem] border border-white/80 shadow-[0_36px_76px_-44px_rgba(15,23,42,0.28)]">
-                    <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{
-                        backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,22,20,0.54)), url(${currentContent.images[0]})`,
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.22),transparent_30%)] mix-blend-screen" />
-                    <div className="relative flex h-full flex-col justify-between p-6 xl:p-7">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="inline-flex w-fit items-center rounded-full border border-white/28 bg-white/12 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/82 backdrop-blur-md">
-                          {currentContent.chapter}
-                        </div>
-                        <div className="text-right text-[10px] uppercase tracking-[0.22em] text-white/52">
-                          {isZh ? 'Editorial sequence' : 'Editorial sequence'}
-                        </div>
-                      </div>
-                      <div className="max-w-[24rem]">
-                        <p className="text-[2.05rem] font-serif leading-[1.04] tracking-[-0.03em] text-white xl:text-[2.5rem]">
-                          {currentContent.quote}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-rows-[0.92fr_1.08fr] gap-4">
-                    <div className="rounded-[2.3rem] border border-white/76 bg-white/56 p-5 shadow-[0_24px_52px_-34px_rgba(15,23,42,0.18)] backdrop-blur-2xl">
-                      <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>{currentContent.kicker}</p>
-                      <p className="mt-4 text-[1.45rem] font-serif leading-tight text-[#1c1a17]">
-                        {currentContent.title}
-                      </p>
-                      <p className="mt-4 text-sm leading-8 text-[#5d6472]">{currentContent.desc}</p>
-                    </div>
-
-                    <div className="grid grid-cols-[0.96fr_1.04fr] gap-4">
-                      <div className="relative overflow-hidden rounded-[2rem] border border-white/78 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.24)]">
-                        <div
-                          className="absolute inset-0 bg-cover bg-center"
-                          style={{
-                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,23,22,0.32)), url(${currentContent.images[1]})`,
-                          }}
-                        />
-                        <div className="relative flex h-full min-h-[10rem] items-end p-4">
-                          <div className="rounded-full border border-white/26 bg-white/16 px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/82 backdrop-blur-md">
-                            {isZh ? 'Human scene' : 'Human scene'}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="relative overflow-hidden rounded-[2rem] border border-white/78 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.24)]">
-                        <div
-                          className="absolute inset-0 bg-cover bg-center"
-                          style={{
-                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,23,22,0.36)), url(${currentContent.images[2]})`,
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.24),transparent_28%)] mix-blend-screen" />
-                        <div className="relative flex h-full items-end p-4">
-                          <p className="max-w-[9rem] text-xs leading-6 text-white/84">
-                            {isZh ? '换一个城市，同一份心意也会进入另一套文化记忆。' : 'In another city, the same gesture enters another cultural memory.'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-10 max-w-[34rem]">
-                  <div className="mb-5 flex items-center gap-3">
-                    <span className={`h-[2px] w-11 rounded-full ${currentContent.accentBarClassName}`} />
-                    <span className={`text-sm font-semibold uppercase tracking-[0.18em] ${currentContent.accentTextClassName}`}>
-                      {isZh ? `步骤 0${currentStep}` : `Step 0${currentStep}`}
-                    </span>
-                  </div>
-                  <h2 className="text-[3.35rem] font-serif leading-[1] tracking-[-0.05em] text-[#1c1a17]">
-                    {currentContent.title}
-                  </h2>
-                  <p className="mt-5 max-w-[30rem] text-lg font-light leading-9 text-[#5d6472]">
-                    {currentContent.desc}
-                  </p>
-                  <p className="mt-5 max-w-[24rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
-                    {isZh ? '礼物、关系与文化判断，会在这里一页页展开。' : 'Gift, relationship, and cultural judgment unfold here page by page.'}
-                  </p>
-                </div>
+                <p className="text-[11px] uppercase tracking-[0.32em] text-white/56">{isZh ? 'Editorial monoscene' : 'Editorial monoscene'}</p>
+                <h2 className="mt-6 text-[3.8rem] font-serif leading-[0.94] tracking-[-0.08em] text-white">
+                  {currentContent.title}
+                </h2>
+                <p className="mt-6 max-w-[26rem] text-[1.04rem] leading-9 text-white/78">{currentContent.desc}</p>
+                <p className="mt-10 max-w-[20rem] text-[1.18rem] font-serif leading-tight text-white/92">{currentContent.quote}</p>
               </motion.div>
             </AnimatePresence>
 
-            <div className="mt-8 grid grid-cols-5 gap-2">
-              {railLabels.map((label, index) => {
-                const stepIndex = index + 1
-                const active = stepIndex === currentStep
-                const reached = stepIndex < currentStep
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                {railLabels.map((label, index) => {
+                  const stepIndex = index + 1
+                  const active = stepIndex === currentStep
+                  const reached = stepIndex < currentStep
 
-                return (
-                  <motion.div
-                    key={label}
-                    initial={false}
-                    animate={{ y: active ? -2 : 0, scale: active ? 1.015 : 1 }}
-                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    className={`rounded-[1.25rem] border px-3 py-3 text-center transition-all ${
-                      active
-                        ? 'border-black/10 bg-white/72 shadow-[0_14px_30px_-24px_rgba(15,23,42,0.2)]'
-                        : reached
-                          ? 'border-black/6 bg-white/42'
-                          : 'border-transparent bg-white/18'
-                    }`}
-                  >
-                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#98a2b3]">0{stepIndex}</p>
-                    <p className={`mt-1 truncate text-xs ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>{label}</p>
-                  </motion.div>
-                )
-              })}
+                  return (
+                    <div key={label} className="flex min-w-0 flex-1 flex-col gap-2">
+                      <span
+                        className={`h-[2px] rounded-full transition-all ${
+                          active ? 'bg-white' : reached ? 'bg-white/56' : 'bg-white/22'
+                        }`}
+                      />
+                      <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-white/92' : 'text-white/46'}`}>
+                        0{stepIndex}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="max-w-[18rem] text-[11px] uppercase tracking-[0.24em] text-white/54">
+                {isZh ? '这里不是步骤面板，而是一页页展开的礼赠章节。' : 'This is not a step console, but a sequence of editorial chapters.'}
+              </p>
             </div>
           </div>
         </aside>
 
-        <div className="relative flex h-screen w-full flex-col overflow-hidden bg-[rgba(255,255,255,0.82)] shadow-[-18px_0_50px_rgba(15,23,42,0.04)] lg:w-[54%]">
+        <div className="relative flex h-screen w-full flex-col overflow-hidden bg-[linear-gradient(180deg,rgba(251,248,243,0.94),rgba(247,242,236,0.92))] shadow-[-18px_0_50px_rgba(15,23,42,0.04)] lg:w-[57%]">
           <header className="sticky top-0 z-30 border-b border-black/6 bg-white/78 px-6 py-5 backdrop-blur-2xl lg:hidden">
             <div className="flex items-center justify-between gap-4">
               <button

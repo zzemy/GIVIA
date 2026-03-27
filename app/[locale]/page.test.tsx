@@ -18,10 +18,10 @@ describe('Localized homepage', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /智连全球文化[\s\S]*礼赠每一份心意/i,
+        name: /让一份心意[\s\S]*以更得体的方式[\s\S]*进入另一种文化/i,
       }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /进入礼赠编辑/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /switch to english/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /开始这次礼赠编辑/i })).toBeInTheDocument()
     expect(screen.getAllByText(/礼智极意/i).length).toBeGreaterThan(0)
   })
@@ -29,7 +29,7 @@ describe('Localized homepage', () => {
   it('renders language switch button', () => {
     render(<Home />)
 
-    expect(screen.getByRole('button', { name: 'EN' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /switch to english/i })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Français' })).not.toBeInTheDocument()
   })
 })
