@@ -83,235 +83,282 @@ export function ResultsSection({
 
   const resultPhotos = {
     lead: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1600&q=80',
-    detail: 'https://images.unsplash.com/photo-1519741491041-6750297b4d0d?auto=format&fit=crop&w=1200&q=80',
+    portrait: 'https://images.unsplash.com/photo-1519741491041-6750297b4d0d?auto=format&fit=crop&w=1200&q=80',
+    detail: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80',
   }
 
+  const memoLines = riskReasons.length > 0 ? riskReasons : [
+    isZh
+      ? '暂时未见明显文化风险，但包装与表达细节依然会改变对方最终如何理解这份好意。'
+      : 'No major cultural risk appears immediately, though packaging and wording still shape how the gesture will finally be understood.',
+  ]
+
+  const adviceLines = mustSendAdvice.length > 0 ? mustSendAdvice : [
+    isZh
+      ? '当前没有额外补救建议，但依旧建议同步收紧表达语气与包装细节。'
+      : 'No additional mitigation is required for now, though the wording and packaging should still be refined together.',
+  ]
+
+  const openingRecommendation =
+    topRecommendation
+      ? isZh
+        ? topRecommendation.nameZh
+        : topRecommendation.nameEn
+      : analysis.rescueItem || (isZh ? '继续细化当前礼物' : 'Refine the current gift further')
+
+  const openingRecommendationReason =
+    topRecommendation ? (isZh ? topRecommendation.reasonZh : topRecommendation.reasonEn) : analysis.rescueReason
+
   return (
-    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex flex-1 flex-col gap-6 overflow-hidden">
+    <motion.section
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="flex flex-1 min-h-0 flex-col gap-5 overflow-hidden"
+    >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-[56rem]">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">Editorial dossier</p>
-          <h2 className="mt-3 text-[3rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1c1a17] md:text-[3.35rem]">
-            {isZh ? '这里呈现的是一份关于心意如何被理解、修订与送达的编辑稿。' : 'What you see here is an editorial dossier on how the gesture is understood, revised, and delivered.'}
+        <div className="max-w-[58rem]">
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#9aa3b2]">Editorial dossier</p>
+          <h2 className="mt-3 text-[3rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17] md:text-[3.4rem]">
+            {isZh
+              ? '这里呈现的，不是判断面板，而是一份关于这份心意该如何被重新写作的终稿。'
+              : 'What appears here is not a judgment panel, but a final authored dossier on how the gesture should be rewritten.'}
           </h2>
           <p className="mt-4 text-base leading-8 text-[#69707d]">
             {countryLabel} · {selectedAudienceLabel} · {sceneLabel}
           </p>
-          <p className="mt-4 max-w-[34rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
-            {isZh ? '终稿版 · 关于这份心意将如何被理解、修订与送达。' : 'Final draft · A composed reading of how the gesture may be understood, revised, and delivered.'}
+          <p className="mt-4 max-w-[38rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+            {isZh
+              ? '终稿版 · 从关系修辞、文化分寸到最后送达方式，统一写进同一页。'
+              : 'Final draft · Relationship rhetoric, cultural tact, and final delivery are composed onto one page.'}
           </p>
         </div>
 
         <Button
           onClick={onReset}
-          className="rounded-full border border-black/8 bg-white/76 px-5 py-3 text-[#495161] shadow-[0_16px_32px_-24px_rgba(15,23,42,0.16)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_22px_40px_-24px_rgba(15,23,42,0.2)]"
+          className="rounded-full border border-black/8 bg-white/82 px-5 py-3 text-[#495161] shadow-[0_16px_32px_-24px_rgba(15,23,42,0.14)] transition duration-500 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_24px_44px_-26px_rgba(15,23,42,0.18)]"
         >
           <RotateCcw size={16} />
           {isZh ? '开启下一份终稿' : 'Open a new dossier'}
         </Button>
       </div>
 
-      <div className="grid min-h-0 flex-1 gap-6 xl:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)]">
-        <div className="grid min-h-0 gap-6 grid-rows-[minmax(0,0.96fr)_minmax(0,1.04fr)]">
-          <motion.article whileHover={{ y: -3 }} transition={{ duration: 0.45 }} className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(246,242,236,0.94))] shadow-[0_38px_88px_-52px_rgba(15,23,42,0.18)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
-            <div className="flex min-h-0 flex-col justify-between p-7 lg:p-8">
-              <div>
-                <div className="flex flex-wrap gap-2">
-                  <span className="rounded-full border border-black/6 bg-white/80 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
-                    {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI 与文化线索共读' : 'AI-assisted cultural reading') : isZh ? '本地文化判断' : 'Local cultural reading'}
-                  </span>
-                  <span className="rounded-full border border-black/6 bg-white/80 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
-                    {isZh ? `契合度 ${analysis.fitScore}` : `Fit ${analysis.fitScore}`}
-                  </span>
+      <motion.article
+        whileHover={{ y: -2 }}
+        transition={{ duration: 0.45 }}
+        className="relative min-h-0 flex-1 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(247,243,237,0.96))] shadow-[0_40px_90px_-56px_rgba(15,23,42,0.16)]"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.9),transparent_28%),radial-gradient(circle_at_100%_0%,rgba(218,205,194,0.16),transparent_22%),linear-gradient(180deg,transparent,rgba(117,98,82,0.04))]" />
+
+        <div className="relative grid h-full min-h-0 xl:grid-cols-[minmax(0,1.18fr)_minmax(22rem,0.82fr)]">
+          <div className="grid min-h-0 border-b border-black/6 xl:border-b-0 xl:border-r xl:grid-rows-[minmax(0,1.05fr)_auto]">
+            <div className="grid min-h-0 lg:grid-cols-[minmax(0,1.04fr)_minmax(18rem,0.96fr)]">
+              <div className="flex min-h-0 flex-col justify-between p-7 lg:p-8 xl:p-9">
+                <div>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="rounded-full border border-black/6 bg-white/84 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
+                      {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI 与文化线索共读' : 'AI-assisted cultural reading') : isZh ? '本地文化判断' : 'Local cultural reading'}
+                    </span>
+                    <span className="rounded-full border border-black/6 bg-white/84 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f7480]">
+                      {isZh ? `契合度 ${analysis.fitScore}` : `Fit ${analysis.fitScore}`}
+                    </span>
+                  </div>
+
+                  <h3 className="mt-6 max-w-[42rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1c1a17] md:text-[3.15rem]">
+                    {summaryTitle}
+                  </h3>
+                  <p className="mt-5 max-w-[38rem] text-[1.03rem] leading-8 text-[#5e6571]">{summaryBody}</p>
+                  <p className="mt-6 max-w-[34rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+                    {isZh
+                      ? '这份终稿首先关心关系修辞、文化分寸与送达语气。'
+                      : 'This final reading is guided first by relational language, cultural tact, and delivery tone.'}
+                  </p>
                 </div>
-                <h3 className="mt-6 text-[2.6rem] font-serif leading-[1.03] tracking-[-0.05em] text-[#1c1a17]">{summaryTitle}</h3>
-                <p className="mt-4 max-w-[39rem] text-base leading-8 text-[#5f6672]">{summaryBody}</p>
-                <p className="mt-5 max-w-[34rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '这份终稿首先关心关系修辞、文化分寸与送达语气。' : 'This final reading is guided first by relational language, cultural tact, and delivery tone.'}</p>
+
+                <div className="mt-8 grid gap-5 border-t border-black/7 pt-5 sm:grid-cols-3">
+                  {[
+                    { label: isZh ? '当前结论' : 'Current conclusion', value: analysis.riskLevel },
+                    { label: isZh ? '包装方向' : 'Packaging direction', value: analysis.packaging.style },
+                    { label: isZh ? '表达语气' : 'Message tone', value: analysis.greetingCard.tone },
+                  ].map(item => (
+                    <div key={item.label} className="space-y-2">
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{item.label}</p>
+                      <p className="text-[1.05rem] font-medium text-[#1c1a17]">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                {[
-                  { label: isZh ? '当前结论' : 'Current conclusion', value: analysis.riskLevel },
-                  { label: isZh ? '包装方向' : 'Packaging direction', value: analysis.packaging.style },
-                  { label: isZh ? '表达语气' : 'Message tone', value: analysis.greetingCard.tone },
-                ].map(item => (
-                  <div key={item.label} className="border-t border-black/8 pt-4">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{item.label}</p>
-                    <p className="mt-2 text-lg font-medium text-[#1c1a17]">{item.value}</p>
+              <div className="grid min-h-[24rem] grid-rows-[1.28fr_0.92fr] gap-3 border-t border-black/6 p-3 lg:min-h-0 lg:border-l lg:border-t-0 lg:p-4 xl:p-5">
+                <div
+                  className="relative overflow-hidden rounded-[2.4rem]"
+                  style={{
+                    backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.06),rgba(18,16,15,0.54)),url(${resultPhotos.lead})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,255,255,0.28),transparent_30%)] mix-blend-screen" />
+                  <div className="relative flex h-full items-end p-5 xl:p-6">
+                    <div className="max-w-[18rem]">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-white/68">Human trace</p>
+                      <p className="mt-2 text-[1.32rem] font-serif leading-tight text-white">
+                        {isZh
+                          ? '礼物最终留下来的，不是物本身，而是它被怎样理解、怎样抵达。'
+                          : 'What stays is rarely the object alone, but how it is understood and how it arrives.'}
+                      </p>
+                    </div>
                   </div>
-                ))}
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
+                  <div
+                    className="relative overflow-hidden rounded-[2rem]"
+                    style={{
+                      backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.1),rgba(22,18,18,0.3)),url(${resultPhotos.portrait})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
+                  <div
+                    className="relative overflow-hidden rounded-[2rem]"
+                    style={{
+                      backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(26,21,19,0.42)),url(${resultPhotos.detail})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  >
+                    <div className="relative flex h-full items-end p-4">
+                      <div className="max-w-[16rem] rounded-[1.5rem] border border-white/16 bg-white/12 px-4 py-4 backdrop-blur-md">
+                        <p className="text-[11px] uppercase tracking-[0.2em] text-white/68">{isZh ? 'Edited direction' : 'Edited direction'}</p>
+                        <p className="mt-2 text-[1.1rem] font-serif leading-tight text-white">{openingRecommendation}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="grid min-h-[18rem] gap-4 p-4 lg:grid-rows-[1fr_0.94fr] lg:p-5">
-              <div
-                className="relative overflow-hidden rounded-[2.1rem]"
-                style={{
-                  backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(21,19,18,0.48)),url(${resultPhotos.lead})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_16%,rgba(255,255,255,0.24),transparent_28%)] mix-blend-screen" />
-                <div className="relative flex h-full items-end p-5">
+            <div className="grid border-t border-black/6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              <div className="p-7 lg:border-r lg:p-8 xl:p-9">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '语境纪要' : 'Context memorandum'}</p>
+                <p className="mt-4 text-[1.62rem] font-serif leading-tight text-[#1c1a17]">
+                  {isZh
+                    ? '支撑这次终稿的背景，需要被完整写进阅读现场。'
+                    : 'The background supporting this reading deserves to remain visible inside the final dossier.'}
+                </p>
+                <p className="mt-4 text-sm leading-8 text-[#69707d]">
+                  {contextParagraph ||
+                    (isZh
+                      ? '这一次没有补充更多背景，因此系统将主要依据礼物本身与基本关系语境做出判断。'
+                      : 'No further background was provided, so the reading leans mainly on the object itself and the basic relationship context.')}
+                </p>
+              </div>
+
+              <div className="p-7 lg:p-8 xl:p-9">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '改写提案' : 'Edited proposal'}</p>
+                <p className="mt-4 text-[1.78rem] font-serif leading-tight text-[#1c1a17]">{openingRecommendation}</p>
+                <p className="mt-4 text-sm leading-8 text-[#69707d]">{openingRecommendationReason}</p>
+                <div className="mt-5 grid gap-4 border-t border-black/7 pt-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-white/72">{isZh ? 'Human trace' : 'Human trace'}</p>
-                    <p className="mt-2 max-w-[18rem] text-[1.2rem] font-serif leading-tight text-white">
-                      {isZh ? '礼物最后落到对方心里的，往往是它被理解的方式。' : 'What often stays in the other person’s heart is the way the gesture is understood.'}
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '包装呈现' : 'Packaging direction'}</p>
+                    <p className="mt-2 text-sm leading-7 text-[#5f6672]">
+                      {topRecommendation ? (isZh ? topRecommendation.packagingTipZh : topRecommendation.packagingTipEn) : analysis.packaging.colors.join(', ')}
                     </p>
                   </div>
-                </div>
-              </div>
-
-              <div
-                className="relative overflow-hidden rounded-[2.1rem]"
-                style={{
-                  backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(21,19,18,0.38)),url(${resultPhotos.detail})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              >
-                <div className="relative flex h-full items-end p-5">
-                  <div className="max-w-[18rem] rounded-[1.6rem] border border-white/18 bg-white/12 px-4 py-4 backdrop-blur-md">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-white/72">{isZh ? 'Edited direction' : 'Edited direction'}</p>
-                    <p className="mt-2 text-[1.2rem] font-serif leading-tight text-white">
-                      {topRecommendation
-                        ? isZh
-                          ? topRecommendation.nameZh
-                          : topRecommendation.nameEn
-                        : analysis.rescueItem || (isZh ? '继续细化当前礼物' : 'Refine the current gift further')}
+                  <div>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '送达提醒' : 'Delivery note'}</p>
+                    <p className="mt-2 text-sm leading-7 text-[#5f6672]">
+                      {topRecommendation ? (isZh ? topRecommendation.shippingNoteZh : topRecommendation.shippingNoteEn) : summaryBody}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-          </motion.article>
-
-          <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.4 }} className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(250,247,242,0.9))] shadow-[0_30px_72px_-46px_rgba(15,23,42,0.14)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
-            <div className="border-b border-black/6 p-7 lg:border-b-0 lg:border-r lg:p-8">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '语境纪要' : 'Context memorandum'}</p>
-              <p className="mt-4 text-[1.55rem] font-serif leading-tight text-[#1c1a17]">
-                {isZh ? '支撑这次终稿的背景，需要被完整地写进阅读现场。' : 'The background supporting this reading deserves to remain visible inside the final dossier.'}
-              </p>
-              <p className="mt-4 text-sm leading-8 text-[#69707d]">
-                {contextParagraph || (isZh ? '这一次没有补充更多背景，因此系统将主要依据礼物本身与基本关系语境做出判断。' : 'No further background was provided, so the reading leans mainly on the object itself and the basic relationship context.')}
-              </p>
-            </div>
-
-            <div className="p-7 lg:p-8">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '改写提案' : 'Edited proposal'}</p>
-              <p className="mt-4 text-[1.7rem] font-serif leading-tight text-[#1c1a17]">
-                {topRecommendation
-                  ? isZh
-                    ? topRecommendation.nameZh
-                    : topRecommendation.nameEn
-                  : analysis.rescueItem || (isZh ? '继续细化当前礼物' : 'Refine the current gift further')}
-              </p>
-              <p className="mt-4 text-sm leading-8 text-[#69707d]">
-                {topRecommendation ? (isZh ? topRecommendation.reasonZh : topRecommendation.reasonEn) : analysis.rescueReason}
-              </p>
-              <p className="mt-4 text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">
-                {isZh ? '这里提供的是更适合这段关系与文化语境的改写方向。' : 'This offers a rewritten direction that better fits the relationship and cultural context.'}
-              </p>
-            </div>
-          </motion.article>
-        </div>
-
-        <div className="grid min-h-0 gap-6 grid-rows-[minmax(0,1.04fr)_minmax(0,0.96fr)]">
-          <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.4 }} className="min-h-0 overflow-auto rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(248,245,240,0.93))] p-7 shadow-[0_30px_70px_-46px_rgba(15,23,42,0.14)] lg:p-8">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '改写方向' : 'Edited directions'}</p>
-            <h3 className="mt-3 text-[2rem] font-serif leading-tight text-[#1c1a17]">
-              {isZh ? '如果要把这份心意改写得更克制、更高级、更妥帖。' : 'If the gesture were to be rewritten with greater restraint, tact, and elegance.'}
-            </h3>
-            <p className="mt-4 max-w-[34rem] text-sm leading-8 text-[#69707d]">
-              {isZh ? '下面这些送达方案，会让这份心意更适合写进这段关系。' : 'The delivery directions below help the gesture fit more gracefully into this relationship.'}
-            </p>
-
-            <div className="mt-6 space-y-5">
-              {analysis.recommendations.map((item, index) => {
-                const saved = favoriteRecommendationIds.includes(item.id)
-                return (
-                  <article key={item.id} className="border-t border-black/8 pt-5 first:border-t-0 first:pt-0">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">0{index + 1} · {item.category}</p>
-                        <h4 className="mt-2 text-[1.4rem] font-serif leading-tight text-[#1c1a17]">{isZh ? item.nameZh : item.nameEn}</h4>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => onToggleFavoriteRecommendation(item.id)}
-                        className={`rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.14em] transition duration-500 hover:-translate-y-0.5 ${
-                          saved ? 'border-[#6c78ab]/18 bg-[#eef2ff] text-[#5b67aa]' : 'border-black/8 bg-white/84 text-[#5f6672] hover:bg-white'
-                        }`}
-                      >
-                        {saved ? (isZh ? '已归档' : 'Archived') : isZh ? '归档' : 'Archive'}
-                      </button>
-                    </div>
-
-                    <p className="mt-4 text-sm leading-8 text-[#69707d]">{isZh ? item.reasonZh : item.reasonEn}</p>
-
-                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                      <div className="border-t border-black/8 pt-4">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '包装呈现' : 'Packaging direction'}</p>
-                        <p className="mt-2 text-sm leading-7 text-[#5f6672]">{isZh ? item.packagingTipZh : item.packagingTipEn}</p>
-                      </div>
-                      <div className="border-t border-black/8 pt-4">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '送达提醒' : 'Delivery note'}</p>
-                        <p className="mt-2 text-sm leading-7 text-[#5f6672]">{isZh ? item.shippingNoteZh : item.shippingNoteEn}</p>
-                      </div>
-                    </div>
-                  </article>
-                )
-              })}
-            </div>
-          </motion.article>
-
-          <div className="grid min-h-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.35 }} className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '文化边注' : 'Cultural margins'}</p>
-              <div className="mt-4 space-y-3">
-                {riskReasons.length > 0 ? (
-                  riskReasons.map(reason => (
-                    <p key={reason} className="border-t border-black/8 pt-3 text-sm leading-7 text-[#6d625e] first:border-t-0 first:pt-0">
-                      {reason}
-                    </p>
-                  ))
-                ) : (
-                  <p className="text-sm leading-7 text-[#5f6672]">
-                    {isZh ? '暂时未见明显文化风险，但包装与表达细节依然会改变对方最终如何理解这份好意。' : 'No major cultural risk appears immediately, though packaging and wording still shape how the gesture will finally be understood.'}
-                  </p>
-                )}
-              </div>
-            </motion.article>
-
-            <motion.article whileHover={{ y: -2 }} transition={{ duration: 0.35 }} className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '终稿边注' : 'Final editorial notes'}</p>
-              <div className="mt-4 space-y-3">
-                {mustSendAdvice.length > 0 ? (
-                  mustSendAdvice.map(item => (
-                    <p key={item} className="border-t border-black/8 pt-3 text-sm leading-7 text-[#5f6672] first:border-t-0 first:pt-0">
-                      {item}
-                    </p>
-                  ))
-                ) : (
-                  <p className="text-sm leading-7 text-[#5f6672]">
-                    {isZh ? '当前没有额外补救建议，但依旧建议同步收紧表达语气与包装细节。' : 'No additional mitigation is required for now, though the wording and packaging should still be refined together.'}
-                  </p>
-                )}
-              </div>
-
-              {hasAnalysisEnhancementResults && analysisEnhancements && (
-                <div className="mt-5 border-t border-black/8 pt-4">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '附加图层' : 'Additional layers'}</p>
-                  <p className="mt-2 text-sm leading-7 text-[#69707d]">
-                    {isZh ? '这份终稿还吸收了更深层的识别、重排或物流估算结果。' : 'This dossier also drew on deeper recognition, reranking, or logistics estimation layers.'}
-                  </p>
-                </div>
-              )}
-            </motion.article>
           </div>
+
+          <aside className="grid min-h-0 grid-rows-[minmax(0,1fr)_auto]">
+            <div className="min-h-0 overflow-auto p-7 xl:p-8">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '改写方向' : 'Edited directions'}</p>
+              <h3 className="mt-3 text-[2.15rem] font-serif leading-[1.03] tracking-[-0.04em] text-[#1c1a17]">
+                {isZh ? '如果要把这份心意改写得更克制、更高级、更妥帖。' : 'If the gesture were to be rewritten with greater restraint, tact, and elegance.'}
+              </h3>
+              <p className="mt-4 max-w-[24rem] text-sm leading-8 text-[#69707d]">
+                {isZh
+                  ? '下面这些方向不是备选商品列表，而是几种更适合被写进这段关系的送达方式。'
+                  : 'These are not merely alternate products, but authored ways for the gesture to belong more gracefully to the relationship.'}
+              </p>
+
+              <div className="mt-7 space-y-6">
+                {analysis.recommendations.map((item, index) => {
+                  const saved = favoriteRecommendationIds.includes(item.id)
+                  return (
+                    <article key={item.id} className="border-t border-black/8 pt-5 first:border-t-0 first:pt-0">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">
+                            0{index + 1} · {item.category}
+                          </p>
+                          <h4 className="mt-2 text-[1.45rem] font-serif leading-tight text-[#1c1a17]">{isZh ? item.nameZh : item.nameEn}</h4>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => onToggleFavoriteRecommendation(item.id)}
+                          className={`rounded-full border px-4 py-2 text-[11px] uppercase tracking-[0.14em] transition duration-500 hover:-translate-y-0.5 ${
+                            saved ? 'border-[#6c78ab]/16 bg-[#eef1fb] text-[#5b67aa]' : 'border-black/8 bg-white/70 text-[#5f6672] hover:bg-white'
+                          }`}
+                        >
+                          {saved ? (isZh ? '已归档' : 'Archived') : isZh ? '归档' : 'Archive'}
+                        </button>
+                      </div>
+
+                      <p className="mt-4 text-sm leading-8 text-[#69707d]">{isZh ? item.reasonZh : item.reasonEn}</p>
+                      <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">
+                        {isZh ? item.pitchZh : item.pitchEn}
+                      </p>
+                    </article>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className="grid border-t border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.38),rgba(255,255,255,0.14))] lg:grid-cols-2">
+              <div className="p-6 xl:p-7 lg:border-r border-black/6">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '文化边注' : 'Cultural margins'}</p>
+                <div className="mt-4 space-y-3">
+                  {memoLines.map(line => (
+                    <p key={line} className="border-t border-black/8 pt-3 text-sm leading-7 text-[#6c625d] first:border-t-0 first:pt-0">
+                      {line}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-6 xl:p-7">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '终稿边注' : 'Final editorial notes'}</p>
+                <div className="mt-4 space-y-3">
+                  {adviceLines.map(line => (
+                    <p key={line} className="border-t border-black/8 pt-3 text-sm leading-7 text-[#5f6672] first:border-t-0 first:pt-0">
+                      {line}
+                    </p>
+                  ))}
+                </div>
+
+                {hasAnalysisEnhancementResults && analysisEnhancements && (
+                  <div className="mt-5 border-t border-black/8 pt-4">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '附加图层' : 'Additional layers'}</p>
+                    <p className="mt-2 text-sm leading-7 text-[#69707d]">
+                      {isZh
+                        ? '这份终稿还吸收了更深层的识别、重排或物流估算结果。'
+                        : 'This dossier also drew on deeper recognition, reranking, or logistics estimation layers.'}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </aside>
         </div>
-      </div>
+      </motion.article>
     </motion.section>
   )
 }
