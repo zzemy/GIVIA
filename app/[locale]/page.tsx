@@ -87,8 +87,8 @@ export default function Home() {
 
             <p className="mt-8 max-w-[33rem] text-[1.04rem] leading-9 text-[#626a77]">
               {isZh
-                ? 'Givia 会把礼物、关系、国家与送达语气放进同一份叙事里，让跨文化送礼不再只靠直觉，而是更有人情、更有分寸。'
-                : 'Givia edits a gift through relationship, place, ritual, and delivery tone, so cross-cultural gifting feels informed, humane, and beautifully composed.'}
+                ? 'Givia 是一位 AI 礼赠编辑，会把礼物、关系、国家与送达语气放进同一份叙事里，让跨文化送礼不再只靠直觉。'
+                : 'Givia is an AI gifting editor that reads a gesture through relationship, place, ritual, and delivery tone before it is sent.'}
             </p>
 
             <div className="mt-10 grid gap-4 border-t border-black/10 pt-5 md:grid-cols-2">
@@ -96,16 +96,16 @@ export default function Home() {
                 <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '品牌注脚' : 'Brand note'}</p>
                 <p className="mt-3 text-[1.16rem] font-serif leading-8 text-[#1a1715]">
                   {isZh
-                    ? '真正高级的礼物，不只被看见，更会被当地的生活方式温和地理解。'
-                    : 'A refined gift is not merely seen. It is understood gently inside another way of living.'}
+                    ? '真正高级的礼物，不只被看见，更要经过 AI 对文化分寸与人情语气的温和校准。'
+                    : 'A refined gift is not merely seen. It is gently calibrated by AI against cultural tact and human tone.'}
                 </p>
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '终稿输出' : 'Final output'}</p>
                 <p className="mt-3 text-[1rem] leading-8 text-[#626a77]">
                   {isZh
-                    ? '你会获得一份关于文化风险、表达方式、包装语气与替代方向的礼赠终稿。'
-                    : 'You receive a final gifting dossier covering cultural risks, message tone, packaging direction, and better alternatives.'}
+                    ? '你会获得一份由 AI 生成的礼赠终稿，包含文化风险、表达方式、包装语气与替代方向。'
+                    : 'You receive an AI-authored gifting dossier covering cultural risk, message tone, packaging direction, and better alternatives.'}
                 </p>
               </div>
             </div>

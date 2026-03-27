@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { motion } from 'framer-motion'
 import { CountrySelector } from '@/components/gifting/country-selector'
 import { getCountryName } from '@/lib/countries'
@@ -98,6 +99,7 @@ export function StepCountry({
   onFormalityChange,
 }: StepCountryProps) {
   const isZh = locale === 'zh'
+  const [showProfileDetails, setShowProfileDetails] = React.useState(false)
   const destinationLabel = selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '尚未选择目的地' : 'Destination not selected'
   const activeSceneLabel = activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : isZh ? '尚未设定场景' : 'Scene not set'
 
@@ -170,12 +172,12 @@ export function StepCountry({
         <div className="border-b border-black/8 pb-6">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Human context sheet' : 'Human context sheet'}</p>
           <h3 className="mt-4 max-w-[34rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
-            {isZh ? '把接收者、场合与关系写得更具体。' : 'Write the recipient, occasion, and relationship with more precision.'}
+            {isZh ? '先给 AI 必要线索，再决定要不要补更多人物细节。' : 'Give the AI the essential signals first, then decide whether more recipient detail is needed.'}
           </h3>
           <p className="mt-4 max-w-[36rem] text-sm leading-8 text-[#69707d]">
             {isZh
-              ? '越具体，系统越能判断同一份礼物在不同文化里会显得亲切、正式、冒犯还是过度。'
-              : 'The more specific this chapter becomes, the better the system can tell whether the same gift will feel warm, formal, excessive, or tone-deaf.'}
+              ? '默认只保留 AI 生成判断所需的核心信息。人物侧写与更细的人设补充，可以在下方按需展开。'
+              : 'By default, this chapter keeps only the signals the AI actually needs for judgment. Recipient portrait details can be expanded only when useful.'}
           </p>
         </div>
 
@@ -193,6 +195,32 @@ export function StepCountry({
               ))}
             </select>
             {activeSceneTemplate && <p className="mt-3 text-sm leading-7 text-[#7b808c]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
+          </article>
+
+          <article className="border-b border-black/8 pb-7">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Budget and register' : 'Budget and register'}</p>
+            <div className="mt-3 grid gap-5 md:grid-cols-2">
+              <div>
+                <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '预算范围' : 'Budget'}</p>
+                <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={`${controlClassName} mt-2`}>
+                  {budgetOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '正式程度' : 'Formality'}</p>
+                <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={`${controlClassName} mt-2`}>
+                  {formalityOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </article>
 
           <article className="border-b border-black/8 pb-7">
@@ -226,66 +254,57 @@ export function StepCountry({
             />
           </article>
 
-          <article className="border-b border-black/8 pb-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Profile selectors' : 'Profile selectors'}</p>
-            <div className="mt-3 grid gap-5 md:grid-cols-3">
-              {profileSelectors.map(selector => (
-                <div key={selector.label}>
-                  <p className="text-sm font-medium text-[#1d1a17]">{selector.label}</p>
-                  <select value={selector.value} onChange={event => selector.onChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                    {selector.options.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ))}
-            </div>
-          </article>
-
-          <article className="border-b border-black/8 pb-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Budget and register' : 'Budget and register'}</p>
-            <div className="mt-3 grid gap-5 md:grid-cols-2">
-              <div>
-                <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '预算范围' : 'Budget'}</p>
-                <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                  {budgetOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '正式程度' : 'Formality'}</p>
-                <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                  {formalityOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </article>
-
           <article>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Human profile note' : 'Human profile note'}</p>
-            <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
-              {isZh ? '如果要为对方写一段人物侧写，你会补充什么背景？' : 'If you were writing a brief profile of the recipient, what would you add?'}
-            </p>
-            <textarea
-              value={targetProfile}
-              onChange={event => onTargetProfileChange(event.target.value)}
-              placeholder={isZh ? '补充兴趣、生活方式、职业语气、文化背景和你们之间的距离。' : 'Add interests, lifestyle, professional tone, cultural background, and the distance between you.'}
-              rows={6}
-              className={`${controlClassName} mt-3 min-h-[10rem] resize-none`}
-            />
-            <p className="mt-3 text-sm leading-7 text-[#7b808c]">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Optional recipient portrait' : 'Optional recipient portrait'}</p>
+                <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                  {isZh ? '如果这份礼物很讲究对象差异，再补人物侧写。' : 'If the gift depends strongly on who the person is, add a deeper recipient portrait.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowProfileDetails(current => !current)}
+                className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] transition hover:text-[#1d1a17]"
+              >
+                {showProfileDetails ? (isZh ? '收起细节' : 'Hide details') : isZh ? '补充细节' : 'Add details'}
+              </button>
+            </div>
+
+            {showProfileDetails && (
+              <div className="mt-5 space-y-6 rounded-[2rem] border border-black/6 bg-white/60 p-5">
+                <div className="grid gap-5 md:grid-cols-3">
+                  {profileSelectors.map(selector => (
+                    <div key={selector.label}>
+                      <p className="text-sm font-medium text-[#1d1a17]">{selector.label}</p>
+                      <select value={selector.value} onChange={event => selector.onChange(event.target.value)} className={`${controlClassName} mt-2`}>
+                        {selector.options.map(option => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
+                </div>
+
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Human profile note' : 'Human profile note'}</p>
+                  <textarea
+                    value={targetProfile}
+                    onChange={event => onTargetProfileChange(event.target.value)}
+                    placeholder={isZh ? '补充兴趣、生活方式、职业语气、文化背景和你们之间的距离。' : 'Add interests, lifestyle, professional tone, cultural background, and the distance between you.'}
+                    rows={5}
+                    className={`${controlClassName} mt-3 min-h-[9rem] resize-none`}
+                  />
+                </div>
+              </div>
+            )}
+
+            <p className="mt-4 text-sm leading-7 text-[#7b808c]">
               {isZh
-                ? '真正高级的跨文化礼赠，首先来自对人的理解，而不是对商品的堆砌。'
-                : 'Refined cross-cultural gifting begins with understanding the person, not with piling up products.'}
+                ? '真正高级的跨文化礼赠，首先来自对人的理解；但不是每一次都需要把人物信息写得过满。'
+                : 'Refined cross-cultural gifting begins with understanding the person, but not every case requires an over-written profile.'}
             </p>
           </article>
         </div>

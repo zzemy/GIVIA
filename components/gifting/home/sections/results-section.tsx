@@ -176,7 +176,7 @@ export function ResultsSection({
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-[60rem]">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#9aa3b2]">Editorial dossier</p>
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#9aa3b2]">{isZh ? 'AI 礼赠终稿' : 'AI gifting dossier'}</p>
           <h2 className="mt-3 text-[3rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17] md:text-[3.4rem]">
             {isZh
               ? '这里呈现的不是判断面板，而是一份关于这份心意该如何被重新写作的终稿。'
@@ -210,7 +210,7 @@ export function ResultsSection({
             <div className="max-w-[48rem]">
               <div className="flex flex-wrap gap-2">
                 <span className="rounded-full border border-white/18 bg-white/10 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-white/82">
-                  {analysisSource === 'hybrid-ai-rules' ? (isZh ? '文化线索共读' : 'Cultural reading') : isZh ? '在地文化判断' : 'Local cultural reading'}
+                  {analysisSource === 'hybrid-ai-rules' ? (isZh ? 'AI 文化共读' : 'AI cultural reading') : isZh ? 'AI 在地判断' : 'AI local reading'}
                 </span>
                 {riskActionMeta && (
                   <span className="rounded-full border border-white/18 bg-white/10 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-white/82">

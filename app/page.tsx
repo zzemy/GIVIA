@@ -51,20 +51,20 @@ export default function RootPage() {
               Before a gesture crosses a border, it enters another life.
             </h1>
             <p className="mt-8 max-w-[32rem] text-[1.04rem] leading-9 text-[#646c79]">
-              Choose a language edition and enter a brighter editorial workflow built around culture, tact, relationship, and arrival.
+              Choose a language edition and enter an AI editorial workflow built around culture, tact, relationship, and arrival.
             </p>
 
             <div className="mt-10 grid gap-4 border-t border-black/10 pt-5 md:grid-cols-2">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">What this is</p>
                 <p className="mt-3 text-[1.12rem] font-serif leading-8 text-[#1b1714]">
-                  A narrative gifting system that reads what a present means before it is sent.
+                  An AI gifting editor that reads what a present means before it is sent.
                 </p>
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">What you receive</p>
                 <p className="mt-3 text-[1rem] leading-8 text-[#646c79]">
-                  A report on cultural fit, wording, packaging, alternatives, and the right way for a gesture to land.
+                  An AI-authored report on cultural fit, wording, packaging, alternatives, and the right way for a gesture to land.
                 </p>
               </div>
             </div>

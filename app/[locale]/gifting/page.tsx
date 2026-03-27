@@ -69,10 +69,10 @@ export default function GiftingPage() {
       accentTextClassName: 'text-[#2d8a69]',
       chapter: 'Chapter 02',
       kicker: 'Context writing',
-      title: isZh ? '把人物、场合与目的地放进去。' : 'Bring the person, occasion, and destination into frame.',
+      title: isZh ? '先写目的地与送礼场景。' : 'Set the destination and gifting scene first.',
       desc: isZh
-        ? '礼物的得体与否，取决于它会进入怎样的关系、礼貌和社会情境。'
-        : 'The tact of a gift depends on the relationship, courtesy, and social setting it enters.',
+        ? '这一章默认只保留 AI 最需要的国家、场景、预算和语气，不再堆满人物细节。'
+        : 'This chapter keeps only the destination, scene, budget, and register the AI truly needs first, without overloading the page.',
       quote: isZh ? '同一份礼物，换一个语境，意义就会完全不同。' : 'The same gift changes meaning as soon as the context changes.',
     },
     3: {
@@ -81,12 +81,12 @@ export default function GiftingPage() {
       buttonClassName: 'bg-[#736357] text-white shadow-[0_18px_38px_-24px_rgba(115,99,87,0.34)] hover:bg-[#65574c]',
       accentTextClassName: 'text-[#736357]',
       chapter: 'Chapter 03',
-      kicker: 'Editorial judgment',
-      title: isZh ? '把这些线索整理成一份判断稿。' : 'Shape those signals into an authored judgment.',
+      kicker: 'AI judgment',
+      title: isZh ? '再把线索交给 AI 生成判断。' : 'Then hand the signals to the AI for judgment.',
       desc: isZh
-        ? '这一章会决定文化风险、表达语气与更合适的送达方式。'
-        : 'This chapter decides cultural risk, message tone, and the most fitting way for the gesture to arrive.',
-      quote: isZh ? '真正重要的不是推荐本身，而是推荐背后的分寸。' : 'What matters is not the recommendation alone, but the tact behind it.',
+        ? '这里不再继续填写大量内容，而是让 AI 整理文化风险、语气分寸与更合适的送达方式。'
+        : 'This chapter stops asking for more input and lets the AI organize cultural risk, tone, and the best way for the gesture to arrive.',
+      quote: isZh ? '真正重要的不是堆更多字段，而是让 AI 做出有分寸的判断。' : 'What matters is not adding more fields, but letting the AI make a tactful judgment.',
     },
     4: {
       accent: '#7b58b9',

@@ -76,6 +76,7 @@ export function StepGiftInput({
   autoResizeTextarea,
 }: StepGiftInputProps) {
   const isZh = locale === 'zh'
+  const [showAiNotes, setShowAiNotes] = React.useState(false)
   const hasTextDraft = Boolean(giftName.trim() || giftDescription.trim())
   const recognitionLabel = recognition ? (isZh ? recognition.itemZh : recognition.itemEn) : null
 
@@ -205,12 +206,12 @@ export function StepGiftInput({
         <div className="border-b border-black/8 pb-6">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Object dossier' : 'Object dossier'}</p>
           <h3 className="mt-4 max-w-[32rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
-            {isZh ? '把礼物写成一份清晰、克制、带质感的对象稿。' : 'Write the gift as a clear, restrained, and textured object sheet.'}
+            {isZh ? '先只写礼物最核心的对象信息。' : 'Begin with only the object information that matters most.'}
           </h3>
           <p className="mt-4 max-w-[34rem] text-sm leading-8 text-[#69707d]">
             {isZh
-              ? '系统需要先理解这个物件本身，再去判断它在另一种文化里会被如何读懂。'
-              : 'The system first needs to understand the object itself before it can judge how the gift may be read in another culture.'}
+              ? '默认只保留 AI 判断最需要的两层：它是什么，以及它呈现出怎样的材质和气质。更细的文化联想可以按需补充。'
+              : 'By default, this chapter keeps only the two layers the AI needs most: what the object is, and what material or mood it carries. Deeper cultural cues can be added only when useful.'}
           </p>
         </div>
 
@@ -275,62 +276,75 @@ export function StepGiftInput({
             </>
           )}
 
-          <article className="border-b border-black/8 pb-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
-            <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
-              {isZh ? '概括它更接近哪一种社会气质、礼仪感或生活方式。' : 'Summarize the social mood, etiquette, or way of living it feels closest to.'}
-            </p>
-            <input
-              id="vision-label"
-              value={visionLabel}
-              onChange={event => onVisionLabelChange(event.target.value)}
-              placeholder={isZh ? '例如：低调商务、收藏感、节庆问候、轻奢家居' : 'e.g. understated business, collectible, festive greeting, refined homeware'}
-              className={`${fieldClassName} mt-3`}
-            />
-          </article>
-
           <article>
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
+                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Optional AI notes' : 'Optional AI notes'}</p>
                 <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
-                  {isZh ? '把它放进跨文化语境，它会让人联想到怎样的距离、礼貌与情绪？' : 'Placed in a cross-cultural setting, what kind of distance, courtesy, and emotion might it suggest?'}
+                  {isZh ? '如果这份礼物有很强的文化暗示，再补给 AI 更细的线索。' : 'If the object carries strong cultural signals, add a finer note for the AI.'}
                 </p>
               </div>
               <button
                 type="button"
-                onClick={onBeautifyVisionDescription}
-                disabled={!visionDescription.trim()}
-                className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
+                onClick={() => setShowAiNotes(current => !current)}
+                className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] transition hover:text-[#1d1a17]"
               >
-                <WandSparkles size={12} />
-                {isZh ? '整理文气' : 'Refine tone'}
+                {showAiNotes ? (isZh ? '收起补充' : 'Hide notes') : isZh ? '补充线索' : 'Add notes'}
               </button>
             </div>
-            <textarea
-              ref={visionDescriptionRef}
-              id="vision-description"
-              value={visionDescription}
-              onChange={event => {
-                onVisionDescriptionChange(event.target.value)
-                autoResizeTextarea(event.target)
-              }}
-              rows={7}
-              placeholder={
-                isZh
-                  ? '写下它可能带来的文化印象、关系距离、礼仪感和被接收时的气氛。'
-                  : 'Describe the cultural impression, relational distance, etiquette, and atmosphere it may create when received.'
-              }
-              className={`${fieldClassName} mt-3 min-h-[10rem] resize-none overflow-hidden`}
-            />
-            <p className="mt-3 text-sm leading-7 text-[#7b808c]">
+            {showAiNotes && (
+              <div className="mt-5 space-y-6 rounded-[2rem] border border-black/6 bg-white/60 p-5">
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
+                  <input
+                    id="vision-label"
+                    value={visionLabel}
+                    onChange={event => onVisionLabelChange(event.target.value)}
+                    placeholder={isZh ? '例如：低调商务、收藏感、节庆问候、轻奢家居' : 'e.g. understated business, collectible, festive greeting, refined homeware'}
+                    className={`${fieldClassName} mt-3`}
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
+                    <button
+                      type="button"
+                      onClick={onBeautifyVisionDescription}
+                      disabled={!visionDescription.trim()}
+                      className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.14em] text-[#556070] disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <WandSparkles size={12} />
+                      {isZh ? '整理文气' : 'Refine tone'}
+                    </button>
+                  </div>
+                  <textarea
+                    ref={visionDescriptionRef}
+                    id="vision-description"
+                    value={visionDescription}
+                    onChange={event => {
+                      onVisionDescriptionChange(event.target.value)
+                      autoResizeTextarea(event.target)
+                    }}
+                    rows={6}
+                    placeholder={
+                      isZh
+                        ? '写下它可能带来的文化印象、关系距离、礼仪感和被接收时的气氛。'
+                        : 'Describe the cultural impression, relational distance, etiquette, and atmosphere it may create when received.'
+                    }
+                    className={`${fieldClassName} mt-3 min-h-[9rem] resize-none overflow-hidden`}
+                  />
+                </div>
+              </div>
+            )}
+            <p className="mt-4 text-sm leading-7 text-[#7b808c]">
               {isTextOnlyRecognition
                 ? isZh
                   ? '当前系统主要依据文字理解礼物，后续补图会让判断更细腻。'
                   : 'The reading currently relies mainly on text. Adding imagery later will make the judgment more nuanced.'
                 : isZh
-                  ? '这一段决定系统会如何理解礼物的情绪、社会语气与文化暗示。'
-                  : 'This paragraph guides the system’s understanding of the gift’s emotion, social register, and cultural suggestion.'}
+                  ? '不是每一份礼物都需要补满文化联想，必要时再给 AI 更多语境。'
+                  : 'Not every gift needs a full cultural note. Add more context for the AI only when it will change the judgment.'}
             </p>
           </article>
         </div>

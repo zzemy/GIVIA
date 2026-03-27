@@ -128,23 +128,37 @@ export function StepAnalysis({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-8 overflow-hidden xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
+      className="grid flex-1 gap-8 overflow-hidden"
     >
-      <div className="grid min-h-0 gap-5 xl:grid-rows-[auto_minmax(0,1fr)_auto]">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Readiness review' : 'Readiness review'}</p>
-          <h3 className="mt-4 max-w-[29rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
-            {isZh ? '先确认，这份心意已经具备被判断的条件。' : 'First confirm the gesture is ready to be judged.'}
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'AI handoff' : 'AI handoff'}</p>
+          <h3 className="mt-4 max-w-[31rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
+            {isZh ? '现在把这份心意交给 AI 礼赠编辑。' : 'Now hand the gesture to the AI gifting editor.'}
           </h3>
-          <p className="mt-4 max-w-[31rem] text-sm leading-8 text-[#69707d]">
+          <p className="mt-4 max-w-[33rem] text-sm leading-8 text-[#69707d]">
             {isZh
-              ? '真正高级的判断，不靠堆选项，而靠礼物、对象、场景与目的地是否已经足够清楚。'
-              : 'A refined judgment depends less on piled-up options and more on whether the gift, recipient, scene, and destination are already clear enough.'}
+              ? '这里不再继续填写大量字段，而是让 AI 综合礼物对象、目的地、关系和场景，生成一份真正可执行的礼赠终稿。'
+              : 'This chapter stops asking for more input and lets the AI combine object, destination, relationship, and occasion into a dossier that can actually be acted on.'}
           </p>
         </div>
 
         <div className="rounded-[2.8rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,240,234,0.9))] p-6 shadow-[0_34px_82px_-56px_rgba(15,23,42,0.16)] sm:p-8">
-          <div className="space-y-5">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? 'AI 将生成' : 'AI will generate'}</p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {reportItems.map(item => (
+              <div key={item} className="rounded-[1.6rem] border border-black/6 bg-white/74 px-4 py-4 text-sm leading-7 text-[#5f6672]">
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="grid min-h-0 gap-8 xl:grid-cols-[minmax(0,0.84fr)_minmax(0,1.16fr)]">
+        <div className="rounded-[2.8rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,240,234,0.9))] p-6 shadow-[0_34px_82px_-56px_rgba(15,23,42,0.16)] sm:p-8">
+          <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? 'Readiness snapshot' : 'Readiness snapshot'}</p>
+          <div className="mt-4 space-y-5">
             {readinessChecklist.map(item => (
               <div key={item.label} className="flex items-start justify-between gap-4 border-t border-black/8 pt-5 first:border-t-0 first:pt-0">
                 <div className="flex items-start gap-3">
@@ -162,130 +176,121 @@ export function StepAnalysis({
               </div>
             ))}
           </div>
+          <p className="mt-6 text-sm leading-7 text-[#7b808c]">
+            {isZh
+              ? '只要这些关键线索已经成立，AI 就能开始生成判断，不需要继续堆更多输入。'
+              : 'Once these core signals are in place, the AI can begin the judgment without asking for more unnecessary input.'}
+          </p>
         </div>
 
-        <div className="border-t border-black/8 pt-4">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '终稿将包含' : 'The dossier will include'}</p>
-          <div className="mt-3 grid gap-3 md:grid-cols-2">
-            {reportItems.map(item => (
-              <p key={item} className="text-sm leading-7 text-[#667085]">
-                {item}
-              </p>
-            ))}
-          </div>
-        </div>
-      </div>
+        <div className="min-h-0 overflow-auto pr-1">
+          <div className="rounded-[2.4rem] border border-black/6 bg-white/70 p-6 shadow-[0_22px_52px_-44px_rgba(15,23,42,0.14)]">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="max-w-[36rem]">
+                <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Judgment layers' : 'Judgment layers'}</p>
+                <h3 className="mt-4 text-[2.45rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
+                  {isZh ? '基础判断默认开启，增强图层只在必要时介入。' : 'Core judgment stays on by default. Deeper layers join only when necessary.'}
+                </h3>
+                <p className="mt-4 text-sm leading-8 text-[#69707d]">
+                  {isZh
+                    ? '把这一步理解为 AI 的“加深阅读”按钮，而不是技术设置面板。'
+                    : 'Think of this as the AI’s deeper-reading switch, not as a technical settings console.'}
+                </p>
+              </div>
 
-      <div className="min-h-0 overflow-auto pr-1">
-        <div className="border-b border-black/8 pb-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="max-w-[36rem]">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Judgment layers' : 'Judgment layers'}</p>
-              <h3 className="mt-4 text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
-                {isZh ? '基础判断先完成，增强图层只在必要时打开。' : 'Complete the core judgment first. Open deeper layers only when needed.'}
-              </h3>
-              <p className="mt-4 text-sm leading-8 text-[#69707d]">
-                {isZh
-                  ? '这一步不是技术配置，而是在决定这份报告是否需要更深的视觉、物流或替代方向信息。'
-                  : 'This step is not a technical console, but a decision about whether the dossier needs deeper visual, logistics, or alternative-direction information.'}
-              </p>
+              <button
+                type="button"
+                onClick={() => setShowAdvanced(current => !current)}
+                className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-xs uppercase tracking-[0.14em] text-[#556070] transition duration-500 hover:text-[#1d1a17]"
+              >
+                <SlidersHorizontal size={14} />
+                {showAdvanced ? (isZh ? '收起增强图层' : 'Hide deeper layers') : isZh ? '展开增强图层' : 'Open deeper layers'}
+              </button>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setShowAdvanced(current => !current)}
-              className="inline-flex items-center gap-2 border-b border-black/10 pb-2 text-xs uppercase tracking-[0.14em] text-[#556070] transition duration-500 hover:text-[#1d1a17]"
-            >
-              <SlidersHorizontal size={14} />
-              {showAdvanced ? (isZh ? '收起增强图层' : 'Hide deeper layers') : isZh ? '展开增强图层' : 'Open deeper layers'}
-            </button>
-          </div>
-        </div>
+            <article className="mt-8 border-t border-black/8 pt-7">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'AI dossier' : 'AI dossier'}</p>
+              <p className="mt-4 max-w-[30rem] text-[1.45rem] font-serif leading-tight text-[#1d1a17]">
+                {isZh ? 'AI 会把文化风险、关系语气、包装建议与替代方向整理成终稿。' : 'The AI will compose cultural risk, relational tone, packaging guidance, and alternative directions into one authored dossier.'}
+              </p>
+              <Button
+                onClick={onAnalyze}
+                disabled={!canAnalyze || isAnalyzing}
+                className="mt-8 w-full rounded-full bg-[#5569bc] py-4 text-sm uppercase tracking-[0.14em] text-white shadow-[0_22px_44px_-26px_rgba(85,105,188,0.44)] transition hover:-translate-y-0.5 hover:bg-[#4b5fae] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Sparkles size={16} className="mr-2 inline" />
+                {isAnalyzing
+                  ? isZh
+                    ? `判断生成中 ${analyzingElapsedSeconds}s`
+                    : `Composing ${analyzingElapsedSeconds}s`
+                  : hasAnalysis
+                    ? isZh
+                      ? '重新编排这份终稿'
+                      : 'Compose the dossier again'
+                    : isZh
+                      ? '生成礼赠终稿'
+                      : 'Compose the gifting dossier'}
+              </Button>
 
-        <div className="space-y-8 pt-6">
-          <article className="border-b border-black/8 pb-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '当前报告范围' : 'Current report scope'}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {activeEnhancements.map(item => (
-                <span key={item.labelEn} className="rounded-full border border-black/8 bg-white/78 px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-[#6a7280]">
-                  {isZh ? item.labelZh : item.labelEn}
-                </span>
-              ))}
-              {!hasEnabledAnalysisEnhancement && (
-                <span className="rounded-full border border-black/8 bg-white/78 px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-[#6a7280]">
-                  {isZh ? '仅基础判断' : 'Editorial core only'}
-                </span>
-              )}
-            </div>
-          </article>
+              <p className="mt-4 text-center text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">
+                {isZh ? '这里开始由 AI 接手，不再增加不必要的填写负担。' : 'From here, the AI takes over without adding more input burden.'}
+              </p>
+            </article>
 
-          {showAdvanced && (
-            <article className="rounded-[2.4rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(247,242,236,0.9))] p-6 shadow-[0_24px_60px_-48px_rgba(15,23,42,0.14)]">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '增强图层' : 'Deeper layers'}</p>
-              <div className="mt-4 space-y-5">
-                {(Object.keys(analysisEnhancementSettings) as Array<keyof EnhancementSettings>).map(key => {
-                  const item = enhancementMeta[key]
-                  return (
-                    <label key={key} className="flex items-start justify-between gap-4 border-t border-black/8 pt-5 first:border-t-0 first:pt-0">
-                      <div className="max-w-[28rem]">
-                        <p className="text-sm font-medium text-[#1d1a17]">{isZh ? item.labelZh : item.labelEn}</p>
-                        <p className="mt-2 text-sm leading-7 text-[#69707d]">{isZh ? item.descZh : item.descEn}</p>
-                      </div>
-                      <input
-                        type="checkbox"
-                        checked={analysisEnhancementSettings[key]}
-                        onChange={event => onEnhancementSettingChange(key, event.target.checked)}
-                        className="mt-1 h-4 w-4 shrink-0 accent-[#6175ca]"
-                      />
-                    </label>
-                  )
-                })}
-
-                {analysisEnhancementSettings.logistics && (
-                  <div className="border-t border-black/8 pt-5">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '送达出发地' : 'Shipping origin'}</p>
-                    <select value={enhancementOriginCountry} onChange={event => onEnhancementOriginCountryChange(event.target.value)} className={`${inputClassName} mt-2 appearance-none`}>
-                      {enhancementOriginOptions.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+            <article className="mt-8 border-t border-black/8 pt-7">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '当前报告范围' : 'Current report scope'}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {activeEnhancements.map(item => (
+                  <span key={item.labelEn} className="rounded-full border border-black/8 bg-white/78 px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-[#6a7280]">
+                    {isZh ? item.labelZh : item.labelEn}
+                  </span>
+                ))}
+                {!hasEnabledAnalysisEnhancement && (
+                  <span className="rounded-full border border-black/8 bg-white/78 px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-[#6a7280]">
+                    {isZh ? '仅基础判断' : 'Editorial core only'}
+                  </span>
                 )}
               </div>
             </article>
-          )}
 
-          <article className="border-t border-black/8 pt-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Generate dossier' : 'Generate dossier'}</p>
-            <p className="mt-4 max-w-[30rem] text-[1.4rem] font-serif leading-tight text-[#1d1a17]">
-              {isZh ? '系统会把文化风险、关系语气、包装建议与替代方向整理成终稿。' : 'The system will compose cultural risk, relational tone, packaging guidance, and alternative directions into one authored dossier.'}
-            </p>
+            {showAdvanced && (
+              <article className="mt-8 rounded-[2.2rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(247,242,236,0.9))] p-5">
+                <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '增强图层' : 'Deeper layers'}</p>
+                <div className="mt-4 space-y-5">
+                  {(Object.keys(analysisEnhancementSettings) as Array<keyof EnhancementSettings>).map(key => {
+                    const item = enhancementMeta[key]
+                    return (
+                      <label key={key} className="flex items-start justify-between gap-4 border-t border-black/8 pt-5 first:border-t-0 first:pt-0">
+                        <div className="max-w-[28rem]">
+                          <p className="text-sm font-medium text-[#1d1a17]">{isZh ? item.labelZh : item.labelEn}</p>
+                          <p className="mt-2 text-sm leading-7 text-[#69707d]">{isZh ? item.descZh : item.descEn}</p>
+                        </div>
+                        <input
+                          type="checkbox"
+                          checked={analysisEnhancementSettings[key]}
+                          onChange={event => onEnhancementSettingChange(key, event.target.checked)}
+                          className="mt-1 h-4 w-4 shrink-0 accent-[#6175ca]"
+                        />
+                      </label>
+                    )
+                  })}
 
-            <Button
-              onClick={onAnalyze}
-              disabled={!canAnalyze || isAnalyzing}
-              className="mt-8 w-full rounded-full bg-[#5569bc] py-4 text-sm uppercase tracking-[0.14em] text-white shadow-[0_22px_44px_-26px_rgba(85,105,188,0.44)] transition hover:-translate-y-0.5 hover:bg-[#4b5fae] disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <Sparkles size={16} className="mr-2 inline" />
-              {isAnalyzing
-                ? isZh
-                  ? `判断生成中 ${analyzingElapsedSeconds}s`
-                  : `Composing ${analyzingElapsedSeconds}s`
-                : hasAnalysis
-                  ? isZh
-                    ? '重新编排这份终稿'
-                    : 'Compose the dossier again'
-                  : isZh
-                    ? '生成礼赠终稿'
-                    : 'Compose the gifting dossier'}
-            </Button>
-
-            <p className="mt-4 text-center text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">
-              {isZh ? '文化、关系、场景与措辞将在这里汇合。' : 'Culture, relationship, scene, and wording converge here.'}
-            </p>
-          </article>
+                  {analysisEnhancementSettings.logistics && (
+                    <div className="border-t border-black/8 pt-5">
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '送达出发地' : 'Shipping origin'}</p>
+                      <select value={enhancementOriginCountry} onChange={event => onEnhancementOriginCountryChange(event.target.value)} className={`${inputClassName} mt-2 appearance-none`}>
+                        {enhancementOriginOptions.map(option => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+              </article>
+            )}
+          </div>
         </div>
       </div>
     </motion.section>
