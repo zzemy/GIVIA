@@ -30,12 +30,13 @@ export default function RootPage() {
 
       <main className="relative z-10 mx-auto flex h-screen max-w-[1540px] flex-col overflow-hidden px-6 pb-8 pt-6 sm:px-8 lg:px-12">
         <header className="flex items-center justify-between gap-4 py-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="flex flex-col leading-none">
-              <span className="text-[0.78rem] font-medium tracking-[0.18em] text-[#7f8696]">礼智极意</span>
-              <span className="mt-1 text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
+              <span className="text-[0.75rem] font-medium tracking-[0.22em] text-[#8a90a0]">礼智极意</span>
+              <span className="mt-1 text-[2.35rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
             </div>
-            <span className="h-1.5 w-1.5 rounded-full bg-[#6678c8]" />
+            <div className="h-10 w-px bg-black/8" />
+            <p className="max-w-[10rem] text-[10px] uppercase tracking-[0.22em] text-[#8a90a0]">Cross-cultural gifting editorial</p>
           </div>
 
           <div className="flex items-center gap-2 rounded-full border border-black/6 bg-white/64 p-1.5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.12)] backdrop-blur-xl">
@@ -58,14 +59,14 @@ export default function RootPage() {
 
         <section className="grid h-full flex-1 items-center gap-10 overflow-hidden lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-14">
           <div className="flex max-w-[34rem] flex-col justify-center pb-6 lg:pb-0">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-[#6c78ab]">An editorial preface</p>
+            <p className="text-[11px] uppercase tracking-[0.28em] text-[#6c78ab]">Editorial preface</p>
             <h1 className="mt-6 text-[4.1rem] font-serif leading-[0.88] tracking-[-0.09em] text-[#1e1a17] sm:text-[5.1rem] xl:text-[6.3rem]">
               Before a gesture
               <span className="block text-[#6678c8]">crosses a border</span>
               it enters another life
             </h1>
-            <p className="mt-8 max-w-[31rem] text-[1.04rem] leading-9 text-[#666d79]">
-              Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands.
+            <p className="mt-8 max-w-[32rem] text-[1.04rem] leading-9 text-[#666d79]">
+              Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands, crosses a border, and enters another social world.
             </p>
 
             <div className="mt-10 flex items-center gap-5">
@@ -74,10 +75,10 @@ export default function RootPage() {
                 onClick={() => router.push('/zh')}
                 className="inline-flex items-center gap-3 rounded-full bg-[#6678c8] px-7 py-4 text-sm uppercase tracking-[0.12em] text-white shadow-[0_24px_44px_-26px_rgba(102,120,200,0.44)] transition hover:-translate-y-0.5 hover:bg-[#5c6eba]"
               >
-                Enter / 进入
+                Enter the house
                 <ArrowRight className="h-4 w-4" />
               </button>
-              <p className="max-w-[12rem] text-sm leading-7 text-[#8b9099]">A quieter entry in Chinese or English. Redirecting in a moment.</p>
+              <p className="max-w-[13rem] text-sm leading-7 text-[#8b9099]">Chinese and English editions live inside the same editorial brand world.</p>
             </div>
           </div>
 

@@ -25,16 +25,23 @@ export default function Home() {
 
       <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1540px] flex-col overflow-hidden px-6 pb-8 pt-6 sm:px-8 lg:px-12">
         <header className="flex items-center justify-between gap-4 py-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             {isZh ? (
-              <div className="flex flex-col leading-none">
-                <span className="text-[1.2rem] font-display-zh font-semibold tracking-[0.02em] text-[#211d18]">礼智极意</span>
-                <span className="mt-1 text-[0.72rem] uppercase tracking-[0.22em] text-[#7f8696]">Givia</span>
-              </div>
+              <>
+                <div className="flex flex-col leading-none">
+                  <span className="text-[1.2rem] font-display-zh font-semibold tracking-[0.02em] text-[#211d18]">礼智极意</span>
+                  <span className="mt-1 text-[0.72rem] uppercase tracking-[0.22em] text-[#7f8696]">Givia</span>
+                </div>
+                <div className="h-10 w-px bg-black/8" />
+                <p className="max-w-[8rem] text-[10px] tracking-[0.18em] text-[#8a90a0]">跨文化礼赠编辑</p>
+              </>
             ) : (
-              <span className="text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
+              <>
+                <span className="text-[2.3rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
+                <div className="h-10 w-px bg-black/8" />
+                <p className="max-w-[10rem] text-[10px] uppercase tracking-[0.22em] text-[#8a90a0]">Cross-cultural gifting editorial</p>
+              </>
             )}
-            <span className="h-1.5 w-1.5 rounded-full bg-[#6678c8]" />
           </div>
 
           <div className="flex items-center gap-2 rounded-full border border-black/6 bg-white/64 p-1.5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.12)] backdrop-blur-xl">
@@ -88,7 +95,7 @@ export default function Home() {
             <p className="mt-8 max-w-[31rem] text-[1.04rem] leading-9 text-[#666d79]">
               {isZh
                 ? '礼智极意会先陪你看清关系、场景与文化语气，再把这份好意整理成更得体、更国际化的送达方式。'
-                : 'Givia reads relationship, setting, and cultural tone first, then shapes the gesture into a more tactful way to arrive.'}
+                : 'Givia reads relationship, setting, and cultural tone first, then shapes the gesture into a more tactful way to arrive across cultures.'}
             </p>
 
             <div className="mt-10 flex items-center gap-5">
@@ -101,7 +108,7 @@ export default function Home() {
                 <ArrowRight className="h-4 w-4" />
               </button>
               <p className="max-w-[11rem] text-sm leading-7 text-[#8b9099]">
-                {isZh ? '从物件到关系，再到文化判断，整段送达会被慢慢写清。' : 'From object to relationship to cultural reading, the full gesture is written with care.'}
+                {isZh ? '从物件到关系，再到文化判断，整段送达会被慢慢写清。' : 'From object to relationship to cultural reading, the full gesture is edited with care.'}
               </p>
             </div>
           </motion.section>
