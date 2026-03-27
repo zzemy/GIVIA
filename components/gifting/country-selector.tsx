@@ -10,12 +10,14 @@ interface CountrySelectorProps {
   onChange: (countryCode: string) => void
   locale?: 'en' | 'zh'
   regionLabels?: Record<string, string>
+  compact?: boolean
 }
 
 export function CountrySelector({
   value,
   onChange,
   locale = 'en',
+  compact = false,
   regionLabels = {
     asia: 'Asia',
     europe: 'Europe',
@@ -83,11 +85,11 @@ export function CountrySelector({
       <button
         type="button"
         onClick={() => setIsOpen(open => !open)}
-        className="flex w-full items-center justify-between gap-4 border-b border-[#E5E0D8]/80 pb-4 text-left"
+        className={`flex w-full items-center justify-between gap-4 text-left ${compact ? 'border border-[rgba(74,63,51,0.1)] rounded-[1.05rem] bg-white/74 px-4 py-3' : 'border-b border-[#E5E0D8]/80 pb-4'}`}
       >
         <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-[0.22em] text-[#98a2b3]">{locale === 'en' ? 'Destination' : '目的地'}</p>
-          <p className={`mt-2 truncate text-[1.18rem] font-serif ${selectedCountry ? 'text-[#1b1714]' : 'text-[#69707d]'}`}>
+          <p className={`mt-2 truncate ${compact ? 'text-[1rem]' : 'text-[1.18rem] font-serif'} ${selectedCountry ? 'text-[#1b1714]' : 'text-[#69707d]'}`}>
             {selectedCountry
               ? locale === 'en'
                 ? selectedCountry.nameEn
@@ -102,10 +104,10 @@ export function CountrySelector({
 
       {isOpen && (
         <>
-          <div className="absolute left-0 top-[calc(100%+1rem)] z-[190] w-full overflow-hidden rounded-[2.5rem] border border-[#E5E0D8]/80 bg-white/95 shadow-[0_36px_90px_-46px_rgba(0,0,0,0.06)] backdrop-blur-2xl">
-            <div className="border-b border-[#E5E0D8]/80 px-5 py-5">
+          <div className={`absolute left-0 top-[calc(100%+0.85rem)] z-[190] w-full overflow-hidden border border-[#E5E0D8]/80 bg-white/95 shadow-[0_36px_90px_-46px_rgba(0,0,0,0.06)] backdrop-blur-2xl ${compact ? 'rounded-[1.6rem]' : 'rounded-[2.5rem]'}`}>
+            <div className={`border-b border-[#E5E0D8]/80 ${compact ? 'px-4 py-4' : 'px-5 py-5'}`}>
               <p className="text-[10px] uppercase tracking-[0.24em] text-[#98a2b3]">{locale === 'en' ? 'Cultural destination' : '文化目的地'}</p>
-              <p className="mt-3 max-w-[28rem] text-[1.4rem] font-serif leading-tight text-[#1b1714]">
+              <p className={`mt-3 max-w-[28rem] leading-tight text-[#1b1714] ${compact ? 'text-[1.08rem]' : 'text-[1.4rem] font-serif'}`}>
                 {locale === 'en' ? 'Choose where this gesture will be interpreted.' : '选择这份心意将被怎样的文化语境所理解。'}
               </p>
 
@@ -122,7 +124,7 @@ export function CountrySelector({
               </div>
             </div>
 
-            <div className="country-selector-scroll max-h-[31rem] overflow-y-auto px-5 pb-5 pt-4">
+            <div className={`country-selector-scroll overflow-y-auto ${compact ? 'max-h-[18rem] px-4 pb-4 pt-3' : 'max-h-[31rem] px-5 pb-5 pt-4'}`}>
               {filteredCountries ? (
                 filteredCountries.length > 0 ? (
                   <section>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { StepAnalysis } from '@/components/gifting/home/sections/step-analysis'
 import { StepCountry } from '@/components/gifting/home/sections/step-country'
@@ -70,12 +70,12 @@ export default function GiftingPage() {
       buttonClassName: 'bg-[#2d8a69] text-white shadow-[0_18px_38px_-24px_rgba(45,138,105,0.5)] hover:bg-[#247357]',
       accentTextClassName: 'text-[#2d8a69]',
       chapter: 'Chapter 02',
-      kicker: 'Context writing',
-      title: isZh ? '先写目的地与送礼场景。' : 'Set the destination and gifting scene first.',
+      kicker: 'Recipient writing',
+      title: isZh ? '先把收礼人写清楚。' : 'Write the recipient clearly first.',
       desc: isZh
-        ? '这一章默认只保留 AI 最需要的国家、场景、预算和语气，不再堆满人物细节。'
-        : 'This chapter keeps only the destination, scene, budget, and register the AI truly needs first, without overloading the page.',
-      quote: isZh ? '同一份礼物，换一个语境，意义就会完全不同。' : 'The same gift changes meaning as soon as the context changes.',
+        ? '这一章由 AI 先写出一页人物来信，你只需要轻轻校正关系、身份与分寸。'
+        : 'This chapter begins with an AI-written recipient letter that you only need to revise lightly for relationship, profile, and tact.',
+      quote: isZh ? '礼物先抵达一个人，随后才抵达场景。' : 'A gift reaches a person before it reaches a scene.',
     },
     3: {
       accent: '#736357',
@@ -120,7 +120,7 @@ export default function GiftingPage() {
 
   const currentContent = editorialContent[currentStep] ?? editorialContent[1]
   const canAdvanceFromStep1 = Boolean(giftInputProps.giftName.trim() || giftInputProps.giftDescription.trim())
-  const canAdvanceFromStep2 = Boolean(countryProps.selectedCountry)
+  const canAdvanceFromStep2 = Boolean(countryProps.selectedCountry && (countryProps.targetGroup !== 'other' || countryProps.customAudienceGroup.trim()))
 
   const railLabels = [
     isZh ? '礼物对象' : 'Object',
@@ -265,15 +265,7 @@ export default function GiftingPage() {
             {currentStep === 2 && (
               <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col gap-6 pt-4">
                 <div className="min-h-0 w-full overflow-hidden">
-                  <StepCountry {...countryProps} />
-                  <div className="mt-4 flex w-full justify-between pb-4">
-                    <button onClick={() => setCurrentStep(1)} className="inline-flex items-center gap-3 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/78 px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-[#5C5A55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]">
-                      <ArrowLeft className="w-5 h-5"/> {isZh ? '返回上一步' : 'Back'}
-                    </button>
-                    <button onClick={() => setCurrentStep(3)} disabled={!canAdvanceFromStep2} className="inline-flex items-center gap-3 rounded-full bg-[#2d8a69] px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-28px_rgba(45,138,105,0.34)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0">
-                      {isZh ? '下一步：送达编排' : 'Next: Arrival composition'} <ArrowRight className="w-5 h-5"/>
-                    </button>
-                  </div>
+                  <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => setCurrentStep(1)} onContinue={() => setCurrentStep(3)} />
                 </div>
               </motion.div>
             )}
