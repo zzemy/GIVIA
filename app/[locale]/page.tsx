@@ -24,8 +24,13 @@ export default function Home() {
       </div>
 
       <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1540px] flex-col overflow-hidden px-6 pb-8 pt-6 sm:px-8 lg:px-12">
-        <header className="flex items-center justify-between gap-4 py-3">
-          <div className="flex items-center gap-4">
+        <motion.header
+          initial={{ opacity: 0, y: -18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.82, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-between gap-4 py-3"
+        >
+          <motion.div whileHover={{ y: -1 }} transition={{ duration: 0.35 }} className="flex items-center gap-4">
             {isZh ? (
               <>
                 <div className="flex flex-col leading-none">
@@ -42,25 +47,30 @@ export default function Home() {
                 <p className="max-w-[10rem] text-[10px] uppercase tracking-[0.22em] text-[#8a90a0]">Cross-cultural gifting editorial</p>
               </>
             )}
-          </div>
+          </motion.div>
 
-          <div className="flex items-center gap-2 rounded-full border border-black/6 bg-white/64 p-1.5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.12)] backdrop-blur-xl">
+          <motion.div
+            initial={{ opacity: 0, x: 18 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.86, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-2 rounded-full border border-black/6 bg-white/64 p-1.5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.12)] backdrop-blur-xl"
+          >
             <button
               type="button"
               onClick={() => router.push(`/${isZh ? 'en' : 'zh'}`)}
-              className="rounded-full px-4 py-2.5 text-sm uppercase tracking-[0.18em] text-[#626977] transition hover:text-[#1a2233]"
+              className="rounded-full px-4 py-2.5 text-sm uppercase tracking-[0.18em] text-[#626977] transition duration-500 hover:-translate-y-0.5 hover:text-[#1a2233]"
             >
               {isZh ? 'EN' : '中文'}
             </button>
             <button
               type="button"
               onClick={() => router.push(`/${locale}/gifting`)}
-              className="rounded-full bg-[#171513] px-5 py-2.5 text-sm text-white transition hover:bg-[#23201d]"
+              className="rounded-full bg-[#171513] px-5 py-2.5 text-sm text-white transition duration-500 hover:-translate-y-0.5 hover:bg-[#23201d]"
             >
               {isZh ? '进入礼赠编辑' : 'Enter the editorial'}
             </button>
-          </div>
-        </header>
+          </motion.div>
+        </motion.header>
 
         <main className="grid h-full flex-1 items-center gap-10 overflow-hidden py-6 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-14">
           <motion.section
@@ -98,19 +108,21 @@ export default function Home() {
                 : 'Givia reads relationship, setting, and cultural tone first, then shapes the gesture into a more tactful way to arrive across cultures.'}
             </p>
 
-            <div className="mt-10 flex items-center gap-5">
-              <button
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="mt-10 flex items-center gap-5">
+              <motion.button
                 type="button"
                 onClick={() => router.push(`/${locale}/gifting`)}
+                whileHover={{ y: -3, boxShadow: '0 28px 52px -24px rgba(102,120,200,0.5)' }}
+                whileTap={{ scale: 0.985 }}
                 className="inline-flex items-center gap-3 rounded-full bg-[#6678c8] px-7 py-4 text-sm uppercase tracking-[0.12em] text-white shadow-[0_24px_44px_-26px_rgba(102,120,200,0.44)] transition hover:-translate-y-0.5 hover:bg-[#5c6eba]"
               >
                 {isZh ? '开始这次礼赠编辑' : 'Begin the gifting editorial'}
                 <ArrowRight className="h-4 w-4" />
-              </button>
+              </motion.button>
               <p className="max-w-[11rem] text-sm leading-7 text-[#8b9099]">
                 {isZh ? '从物件到关系，再到文化判断，整段送达会被慢慢写清。' : 'From object to relationship to cultural reading, the full gesture is edited with care.'}
               </p>
-            </div>
+            </motion.div>
           </motion.section>
 
           <motion.section

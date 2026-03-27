@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { HomeBackground } from '@/components/gifting/home/sections/home-background'
@@ -29,37 +30,52 @@ export default function RootPage() {
       </div>
 
       <main className="relative z-10 mx-auto flex h-screen max-w-[1540px] flex-col overflow-hidden px-6 pb-8 pt-6 sm:px-8 lg:px-12">
-        <header className="flex items-center justify-between gap-4 py-3">
-          <div className="flex items-center gap-4">
+        <motion.header
+          initial={{ opacity: 0, y: -18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center justify-between gap-4 py-3"
+        >
+          <motion.div whileHover={{ y: -1 }} transition={{ duration: 0.35 }} className="flex items-center gap-4">
             <div className="flex flex-col leading-none">
               <span className="text-[0.75rem] font-medium tracking-[0.22em] text-[#8a90a0]">礼智极意</span>
               <span className="mt-1 text-[2.35rem] font-serif tracking-[-0.08em] text-[#211d18]">Givia</span>
             </div>
             <div className="h-10 w-px bg-black/8" />
             <p className="max-w-[10rem] text-[10px] uppercase tracking-[0.22em] text-[#8a90a0]">Cross-cultural gifting editorial</p>
-          </div>
+          </motion.div>
 
-          <div className="flex items-center gap-2 rounded-full border border-black/6 bg-white/64 p-1.5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.12)] backdrop-blur-xl">
+          <motion.div
+            initial={{ opacity: 0, x: 18 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.85, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="flex items-center gap-2 rounded-full border border-black/6 bg-white/64 p-1.5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.12)] backdrop-blur-xl"
+          >
             <button
               type="button"
               onClick={() => router.push('/zh')}
-              className="rounded-full bg-[#181614] px-5 py-2.5 text-sm text-white transition hover:bg-[#25211e]"
+              className="rounded-full bg-[#181614] px-5 py-2.5 text-sm text-white transition duration-500 hover:-translate-y-0.5 hover:bg-[#25211e]"
             >
               中文
             </button>
             <button
               type="button"
               onClick={() => router.push('/en')}
-              className="rounded-full px-4 py-2.5 text-sm text-[#5f6672] transition hover:text-[#1b2230]"
+              className="rounded-full px-4 py-2.5 text-sm text-[#5f6672] transition duration-500 hover:-translate-y-0.5 hover:text-[#1b2230]"
             >
               English
             </button>
-          </div>
-        </header>
+          </motion.div>
+        </motion.header>
 
         <section className="grid h-full flex-1 items-center gap-10 overflow-hidden lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-14">
-          <div className="flex max-w-[34rem] flex-col justify-center pb-6 lg:pb-0">
-            <p className="text-[11px] uppercase tracking-[0.28em] text-[#6c78ab]">Editorial preface</p>
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+            className="flex max-w-[34rem] flex-col justify-center pb-6 lg:pb-0"
+          >
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, delay: 0.16 }} className="text-[11px] uppercase tracking-[0.28em] text-[#6c78ab]">Editorial preface</motion.p>
             <h1 className="mt-6 text-[4.1rem] font-serif leading-[0.88] tracking-[-0.09em] text-[#1e1a17] sm:text-[5.1rem] xl:text-[6.3rem]">
               Before a gesture
               <span className="block text-[#6678c8]">crosses a border</span>
@@ -69,22 +85,29 @@ export default function RootPage() {
               Givia helps you read how a gesture may be felt, interpreted, and remembered elsewhere — before it leaves your hands, crosses a border, and enters another social world.
             </p>
 
-            <div className="mt-10 flex items-center gap-5">
-              <button
+            <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.22 }} className="mt-10 flex items-center gap-5">
+              <motion.button
                 type="button"
                 onClick={() => router.push('/zh')}
+                whileHover={{ y: -3, boxShadow: '0 28px 52px -24px rgba(102,120,200,0.5)' }}
+                whileTap={{ scale: 0.985 }}
                 className="inline-flex items-center gap-3 rounded-full bg-[#6678c8] px-7 py-4 text-sm uppercase tracking-[0.12em] text-white shadow-[0_24px_44px_-26px_rgba(102,120,200,0.44)] transition hover:-translate-y-0.5 hover:bg-[#5c6eba]"
               >
                 Enter the house
                 <ArrowRight className="h-4 w-4" />
-              </button>
+              </motion.button>
               <p className="max-w-[13rem] text-sm leading-7 text-[#8b9099]">Chinese and English editions live inside the same editorial brand world.</p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          <div className="relative h-full min-h-0">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.985, y: 18 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="relative h-full min-h-0"
+          >
             <div className="grid h-full max-h-[780px] min-h-0 gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
-              <article className="group relative min-h-0 overflow-hidden rounded-[3.2rem] shadow-[0_40px_90px_-48px_rgba(15,23,42,0.28)]">
+              <motion.article whileHover={{ y: -4 }} transition={{ duration: 0.45 }} className="group relative min-h-0 overflow-hidden rounded-[3.2rem] shadow-[0_40px_90px_-48px_rgba(15,23,42,0.28)]">
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-[1800ms] ease-out group-hover:scale-[1.03]"
                   style={{ backgroundImage: `url(${heroPhotos.lead})` }}
@@ -98,10 +121,10 @@ export default function RootPage() {
                     </p>
                   </div>
                 </div>
-              </article>
+              </motion.article>
 
               <div className="grid min-h-0 grid-rows-[0.95fr_1.05fr] gap-5">
-                <article className="group relative overflow-hidden rounded-[2.35rem] shadow-[0_28px_60px_-34px_rgba(15,23,42,0.22)]">
+                <motion.article whileHover={{ y: -3 }} transition={{ duration: 0.4 }} className="group relative overflow-hidden rounded-[2.35rem] shadow-[0_28px_60px_-34px_rgba(15,23,42,0.22)]">
                   <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-[1800ms] ease-out group-hover:scale-[1.04]"
                     style={{ backgroundImage: `url(${heroPhotos.relation})` }}
@@ -110,9 +133,9 @@ export default function RootPage() {
                   <div className="relative flex h-full min-h-[16rem] items-end p-6">
                     <p className="max-w-[12rem] text-[1.18rem] font-serif leading-tight text-white">A gesture is first received through relationship, tone, and timing.</p>
                   </div>
-                </article>
+                </motion.article>
 
-                <article className="group relative overflow-hidden rounded-[2.35rem] bg-[rgba(255,255,255,0.52)] p-5 shadow-[0_28px_60px_-34px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
+                <motion.article whileHover={{ y: -3 }} transition={{ duration: 0.4 }} className="group relative overflow-hidden rounded-[2.35rem] bg-[rgba(255,255,255,0.52)] p-5 shadow-[0_28px_60px_-34px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
                   <div className="grid h-full gap-5 sm:grid-cols-[0.94fr_1.06fr]">
                     <div className="relative overflow-hidden rounded-[1.9rem]">
                       <div
@@ -127,10 +150,10 @@ export default function RootPage() {
                       </p>
                     </div>
                   </div>
-                </article>
+                </motion.article>
               </div>
             </div>
-          </div>
+          </motion.div>
         </section>
       </main>
     </div>

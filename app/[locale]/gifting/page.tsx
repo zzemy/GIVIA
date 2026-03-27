@@ -174,13 +174,15 @@ export default function GiftingPage() {
 
           <div className="relative z-10 flex h-full flex-col px-10 pb-10 pt-9 xl:px-12 xl:pb-12">
             <div className="flex items-center gap-4">
-              <button
+              <motion.button
                 onClick={() => router.push(`/${routeLocale}`)}
+                whileHover={{ y: -2, x: -1 }}
+                whileTap={{ scale: 0.98 }}
                 className="flex h-11 w-11 items-center justify-center rounded-full border border-black/6 bg-white/72 text-[#1c1a17] shadow-[0_12px_30px_-24px_rgba(15,23,42,0.22)] backdrop-blur-xl transition hover:bg-white"
                 title={isZh ? '返回首页' : 'Back to home'}
               >
                 <ArrowLeft className="h-5 w-5" />
-              </button>
+              </motion.button>
               <div>
                 {isZh ? (
                   <>
@@ -301,8 +303,11 @@ export default function GiftingPage() {
                 const reached = stepIndex < currentStep
 
                 return (
-                  <div
+                  <motion.div
                     key={label}
+                    initial={false}
+                    animate={{ y: active ? -2 : 0, scale: active ? 1.015 : 1 }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                     className={`rounded-[1.25rem] border px-3 py-3 text-center transition-all ${
                       active
                         ? 'border-black/10 bg-white/72 shadow-[0_14px_30px_-24px_rgba(15,23,42,0.2)]'
@@ -313,7 +318,7 @@ export default function GiftingPage() {
                   >
                     <p className="text-[10px] uppercase tracking-[0.18em] text-[#98a2b3]">0{stepIndex}</p>
                     <p className={`mt-1 truncate text-xs ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>{label}</p>
-                  </div>
+                  </motion.div>
                 )
               })}
             </div>
