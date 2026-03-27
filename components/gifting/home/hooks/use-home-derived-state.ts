@@ -66,20 +66,20 @@ export function useHomeDerivedState({
     () =>
       isZh
         ? [
-            { value: 'peer' as const, label: '同学 / 同事' },
-            { value: 'client' as const, label: '客户 / 合作方' },
-            { value: 'leader' as const, label: '上级 / 导师' },
-            { value: 'family' as const, label: '家人 / 伴侣' },
-            { value: 'elder' as const, label: '长辈' },
-            { value: 'other' as const, label: '其他（自定义）' },
+            { value: 'peer' as const, label: '平辈关系 · 同学 / 同事' },
+            { value: 'client' as const, label: '合作关系 · 客户 / 合作方' },
+            { value: 'leader' as const, label: '尊敬关系 · 上级 / 导师' },
+            { value: 'family' as const, label: '亲密关系 · 家人 / 伴侣' },
+            { value: 'elder' as const, label: '敬重关系 · 长辈' },
+            { value: 'other' as const, label: '其他关系（自定义）' },
           ]
         : [
-            { value: 'peer' as const, label: 'Peer / Colleague' },
-            { value: 'client' as const, label: 'Client / Partner' },
-            { value: 'leader' as const, label: 'Leader / Mentor' },
-            { value: 'family' as const, label: 'Family / Partner' },
-            { value: 'elder' as const, label: 'Elder' },
-            { value: 'other' as const, label: 'Other (custom)' },
+            { value: 'peer' as const, label: 'Peer relation · Colleague / Friend' },
+            { value: 'client' as const, label: 'Professional relation · Client / Partner' },
+            { value: 'leader' as const, label: 'Respectful relation · Leader / Mentor' },
+            { value: 'family' as const, label: 'Close relation · Family / Partner' },
+            { value: 'elder' as const, label: 'Elder relation' },
+            { value: 'other' as const, label: 'Other relation (custom)' },
           ],
     [isZh],
   )
@@ -119,11 +119,19 @@ export function useHomeDerivedState({
     [isZh],
   )
   const budgetOptions = useMemo(
-    () => BUDGET_RANGE_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    () =>
+      BUDGET_RANGE_OPTIONS.map(option => ({
+        value: option.value,
+        label: isZh ? `预算语气 · ${option.labelZh}` : `Budget tone · ${option.labelEn}`,
+      })),
     [isZh],
   )
   const formalityOptions = useMemo(
-    () => FORMALITY_OPTIONS.map(option => ({ value: option.value, label: isZh ? option.labelZh : option.labelEn })),
+    () =>
+      FORMALITY_OPTIONS.map(option => ({
+        value: option.value,
+        label: isZh ? `关系分寸 · ${option.labelZh}` : `Relational tone · ${option.labelEn}`,
+      })),
     [isZh],
   )
 

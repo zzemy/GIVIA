@@ -29,12 +29,12 @@ describe('Localized homepage', () => {
     expect(
       screen.getByRole('heading', {
         level: 1,
-        name: /不是送出[\s\S]*一件礼物[\s\S]*而是送达[\s\S]*一种分寸/i,
+        name: /智连全球文化[\s\S]*礼赠每一份心意/i,
       }),
     ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /进入体验/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /开始礼赠编辑/i })).toBeInTheDocument()
-    expect(screen.getByText(/高端品牌感，不应该来自装饰/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Enter Givia|开始这次礼赠编辑/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /开始这次礼赠编辑/i })).toBeInTheDocument()
+    expect(screen.getByText(/礼智极意/i)).toBeInTheDocument()
   })
 
   it('renders language switch button', () => {

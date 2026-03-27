@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import { StepAnalysis } from '@/components/gifting/home/sections/step-analysis'
 import { StepCountry } from '@/components/gifting/home/sections/step-country'
@@ -78,7 +78,7 @@ export default function GiftingPage() {
 
   const editorialContent: Record<number, StepTheme> = {
     1: {
-      theme: 'from-[#eef3ff] via-[#f6f8fc] to-[#fffdf9]',
+      theme: 'from-[#f3f6fb] via-[#f7f8fa] to-[#fcfaf7]',
       buttonClassName:
         'bg-[#5368b5] text-white shadow-[0_18px_38px_-24px_rgba(83,104,181,0.55)] hover:bg-[#465aa1]',
       accentBarClassName: 'bg-[#5368b5]',
@@ -93,7 +93,7 @@ export default function GiftingPage() {
       images: photoSets[1],
     },
     2: {
-      theme: 'from-[#eef8f3] via-[#f8fbfa] to-[#fffdf9]',
+      theme: 'from-[#f2f5f2] via-[#f7f8f5] to-[#fcfaf7]',
       buttonClassName:
         'bg-[#2d8a69] text-white shadow-[0_18px_38px_-24px_rgba(45,138,105,0.5)] hover:bg-[#247357]',
       accentBarClassName: 'bg-[#2d8a69]',
@@ -102,28 +102,28 @@ export default function GiftingPage() {
       kicker: isZh ? 'Context framing' : 'Context framing',
       title: isZh ? '再把人物、地点与场合写进同一页。' : 'Then place the person, place, and occasion on the same page.',
       desc: isZh
-        ? '礼物不是寄往一个地址，而是进入一段具体关系、一个具体场合，以及一套正在等待它的文化阅读。'
-        : 'A gift is never sent to an address alone. It enters a relationship, an occasion, and a cultural reading already waiting for it.',
+        ? '礼物会进入一段具体关系、一个具体场合，以及一套正在等待它的文化阅读。'
+        : 'A gift enters a specific relationship, a specific occasion, and a cultural reading already waiting for it.',
       quote: isZh ? 'Context changes how the same object is felt.' : 'Context changes how the same object is felt.',
       images: photoSets[2],
     },
     3: {
-      theme: 'from-[#fff4e7] via-[#fffaf4] to-[#fffdf9]',
+      theme: 'from-[#f6f3ee] via-[#faf8f4] to-[#fcfaf7]',
       buttonClassName:
-        'bg-[#c67a1f] text-white shadow-[0_18px_38px_-24px_rgba(198,122,31,0.5)] hover:bg-[#ab681a]',
-      accentBarClassName: 'bg-[#c67a1f]',
-      accentTextClassName: 'text-[#c67a1f]',
+        'bg-[#736357] text-white shadow-[0_18px_38px_-24px_rgba(115,99,87,0.34)] hover:bg-[#65574c]',
+      accentBarClassName: 'bg-[#736357]',
+      accentTextClassName: 'text-[#736357]',
       chapter: isZh ? 'Chapter 03' : 'Chapter 03',
       kicker: isZh ? 'Editorial judgment' : 'Editorial judgment',
       title: isZh ? '然后判断，这份心意会被怎样接住。' : 'Then decide how this gesture is likely to be received.',
       desc: isZh
-        ? '这里不再增加新素材，而是把礼物线索、文化分寸与关系角色收束成一个更成熟的判断。'
-        : 'No new material is added here. Gift signals, cultural tact, and relationship roles are tightened into a more mature judgment.',
+        ? '礼物线索、文化分寸与关系角色会在这里收束成一个更成熟的判断。'
+        : 'Gift signals, cultural tact, and relationship roles come together here as a more mature judgment.',
       quote: isZh ? 'Precision matters most at the moment of judgment.' : 'Precision matters most at the moment of judgment.',
       images: photoSets[3],
     },
     4: {
-      theme: 'from-[#f6f0ff] via-[#fbf8ff] to-[#fffdf9]',
+      theme: 'from-[#f4f3f8] via-[#faf8fb] to-[#fcfaf7]',
       buttonClassName:
         'bg-[#7b58b9] text-white shadow-[0_18px_38px_-24px_rgba(123,88,185,0.5)] hover:bg-[#6945a8]',
       accentBarClassName: 'bg-[#7b58b9]',
@@ -138,17 +138,17 @@ export default function GiftingPage() {
       images: photoSets[4],
     },
     5: {
-      theme: 'from-[#fff1f4] via-[#fff8f8] to-[#fffdf9]',
+      theme: 'from-[#f7f1f2] via-[#fbf8f8] to-[#fcfaf7]',
       buttonClassName:
-        'bg-[#d84b74] text-white shadow-[0_18px_38px_-24px_rgba(216,75,116,0.52)] hover:bg-[#c13d66]',
-      accentBarClassName: 'bg-[#d84b74]',
-      accentTextClassName: 'text-[#d84b74]',
+        'bg-[#8a5d67] text-white shadow-[0_18px_38px_-24px_rgba(138,93,103,0.32)] hover:bg-[#774f58]',
+      accentBarClassName: 'bg-[#8a5d67]',
+      accentTextClassName: 'text-[#8a5d67]',
       chapter: isZh ? 'Chapter 05' : 'Chapter 05',
       kicker: isZh ? 'Final proposal' : 'Final proposal',
       title: isZh ? '最后，让心意以更好的方式抵达。' : 'At last, let the feeling arrive in a better way.',
       desc: isZh
-        ? '结果页不是冷冰冰的评分终点，而是一份兼顾文化分寸、表达方式与替代方向的礼赠编辑稿。'
-        : 'The result is not a cold scorecard. It is an editorial gifting brief balancing tact, expression, and alternatives.',
+        ? '最后呈现的是一份兼顾文化分寸、表达方式与替代方向的礼赠编辑稿。'
+        : 'What follows is an editorial gifting brief balancing tact, expression, and alternatives.',
       quote: isZh ? 'A gift lands through feeling, not through raw utility.' : 'A gift lands through feeling, not through raw utility.',
       images: photoSets[5],
     },
@@ -167,8 +167,8 @@ export default function GiftingPage() {
   ]
 
   return (
-    <div className={`min-h-screen bg-[#fcfaf7] text-[#1c1a17] ${isZh ? 'font-sans-zh' : ''}`}>
-      <div className={`flex min-h-screen bg-gradient-to-br transition-colors duration-700 ${currentContent.theme}`}>
+    <div className={`h-screen overflow-hidden bg-[#fcfaf7] text-[#1c1a17] ${isZh ? 'font-sans-zh' : ''}`}>
+      <div className={`flex h-screen overflow-hidden bg-gradient-to-br transition-colors duration-700 ${currentContent.theme}`}>
         <aside className="relative hidden h-screen w-[46%] overflow-hidden border-r border-black/6 lg:flex lg:flex-col">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_16%,rgba(255,255,255,0.66),transparent_28%),radial-gradient(circle_at_86%_12%,rgba(255,255,255,0.34),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0.32),rgba(255,255,255,0.08))]" />
 
@@ -198,82 +198,90 @@ export default function GiftingPage() {
                 transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-10 flex flex-1 flex-col"
               >
-                <div className="grid h-[43vh] gap-4 xl:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)]">
-                  <div className="relative overflow-hidden rounded-[2.9rem] border border-white/80 shadow-[0_32px_72px_-42px_rgba(15,23,42,0.28)]">
+                <div className="grid h-[44vh] gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+                  <div className="relative overflow-hidden rounded-[3rem] border border-white/80 shadow-[0_36px_76px_-44px_rgba(15,23,42,0.28)]">
                     <div
                       className="absolute inset-0 bg-cover bg-center"
                       style={{
-                        backgroundImage: `linear-gradient(180deg, rgba(248,244,238,0.08), rgba(26,25,23,0.48)), url(${currentContent.images[0]})`,
+                        backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,22,20,0.54)), url(${currentContent.images[0]})`,
                       }}
                     />
-                    <div className="relative flex h-full flex-col justify-between p-6">
-                      <div className="inline-flex w-fit items-center rounded-full border border-white/28 bg-white/14 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/84 backdrop-blur-md">
-                        {currentContent.chapter}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.22),transparent_30%)] mix-blend-screen" />
+                    <div className="relative flex h-full flex-col justify-between p-6 xl:p-7">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="inline-flex w-fit items-center rounded-full border border-white/28 bg-white/12 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/82 backdrop-blur-md">
+                          {currentContent.chapter}
+                        </div>
+                        <div className="text-right text-[10px] uppercase tracking-[0.22em] text-white/52">
+                          {isZh ? 'Editorial sequence' : 'Editorial sequence'}
+                        </div>
                       </div>
-                      <div className="max-w-md">
-                        <p className="text-[2rem] font-serif leading-tight text-white xl:text-[2.35rem]">
+                      <div className="max-w-[24rem]">
+                        <p className="text-[2.05rem] font-serif leading-[1.04] tracking-[-0.03em] text-white xl:text-[2.5rem]">
                           {currentContent.quote}
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-rows-[1.08fr_0.92fr] gap-4">
-                    <div className="relative overflow-hidden rounded-[2.2rem] border border-white/80 shadow-[0_24px_52px_-34px_rgba(15,23,42,0.24)]">
-                      <div
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{
-                          backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.06), rgba(24,23,22,0.34)), url(${currentContent.images[1]})`,
-                        }}
-                      />
-                      <div className="relative flex h-full min-h-[12rem] items-end p-5">
-                        <div className="rounded-full border border-white/26 bg-white/18 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-white/86 backdrop-blur-md">
-                          {isZh ? 'Human scene' : 'Human scene'}
-                        </div>
-                      </div>
+                  <div className="grid grid-rows-[0.92fr_1.08fr] gap-4">
+                    <div className="rounded-[2.3rem] border border-white/76 bg-white/56 p-5 shadow-[0_24px_52px_-34px_rgba(15,23,42,0.18)] backdrop-blur-2xl">
+                      <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>{currentContent.kicker}</p>
+                      <p className="mt-4 text-[1.45rem] font-serif leading-tight text-[#1c1a17]">
+                        {currentContent.title}
+                      </p>
+                      <p className="mt-4 text-sm leading-8 text-[#5d6472]">{currentContent.desc}</p>
                     </div>
 
-                    <div className="grid grid-cols-[0.88fr_1.12fr] gap-4">
+                    <div className="grid grid-cols-[0.96fr_1.04fr] gap-4">
                       <div className="relative overflow-hidden rounded-[2rem] border border-white/78 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.24)]">
                         <div
                           className="absolute inset-0 bg-cover bg-center"
                           style={{
-                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,23,22,0.28)), url(${currentContent.images[2]})`,
+                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,23,22,0.32)), url(${currentContent.images[1]})`,
                           }}
                         />
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.28),transparent_28%)] mix-blend-screen" />
+                        <div className="relative flex h-full min-h-[10rem] items-end p-4">
+                          <div className="rounded-full border border-white/26 bg-white/16 px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/82 backdrop-blur-md">
+                            {isZh ? 'Human scene' : 'Human scene'}
+                          </div>
+                        </div>
                       </div>
 
-                      <div className="rounded-[2.15rem] border border-white/70 bg-white/58 p-5 shadow-[0_24px_48px_-38px_rgba(15,23,42,0.24)] backdrop-blur-2xl">
-                        <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>{currentContent.kicker}</p>
-                        <p className="mt-3 text-base leading-8 text-[#5d6472]">{currentContent.desc}</p>
+                      <div className="relative overflow-hidden rounded-[2rem] border border-white/78 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.24)]">
+                        <div
+                          className="absolute inset-0 bg-cover bg-center"
+                          style={{
+                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.04), rgba(24,23,22,0.36)), url(${currentContent.images[2]})`,
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.24),transparent_28%)] mix-blend-screen" />
+                        <div className="relative flex h-full items-end p-4">
+                          <p className="max-w-[9rem] text-xs leading-6 text-white/84">
+                            {isZh ? '换一个城市，同一份心意也会进入另一套文化记忆。' : 'In another city, the same gesture enters another cultural memory.'}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-10 max-w-[33rem]">
+                <div className="mt-10 max-w-[34rem]">
                   <div className="mb-5 flex items-center gap-3">
                     <span className={`h-[2px] w-11 rounded-full ${currentContent.accentBarClassName}`} />
                     <span className={`text-sm font-semibold uppercase tracking-[0.18em] ${currentContent.accentTextClassName}`}>
                       {isZh ? `步骤 0${currentStep}` : `Step 0${currentStep}`}
                     </span>
                   </div>
-                  <h2 className="text-[3.2rem] font-serif leading-[1.02] tracking-[-0.04em] text-[#1c1a17]">
+                  <h2 className="text-[3.35rem] font-serif leading-[1] tracking-[-0.05em] text-[#1c1a17]">
                     {currentContent.title}
                   </h2>
-                  <p className="mt-5 max-w-[29rem] text-lg font-light leading-9 text-[#5d6472]">
+                  <p className="mt-5 max-w-[30rem] text-lg font-light leading-9 text-[#5d6472]">
                     {currentContent.desc}
                   </p>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {[isZh ? 'Story pacing' : 'Story pacing', isZh ? 'Human mood' : 'Human mood', isZh ? 'Soft luxury' : 'Soft luxury'].map(
-                      item => (
-                        <span key={item} className="rounded-full border border-black/8 bg-white/56 px-4 py-2 text-xs uppercase tracking-[0.16em] text-[#7f8696]">
-                          {item}
-                        </span>
-                      ),
-                    )}
-                  </div>
+                  <p className="mt-5 max-w-[24rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+                    {isZh ? '礼物、关系与文化判断，会在这里一页页展开。' : 'Gift, relationship, and cultural judgment unfold here page by page.'}
+                  </p>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -304,7 +312,7 @@ export default function GiftingPage() {
           </div>
         </aside>
 
-        <div className="relative flex min-h-screen w-full flex-col bg-[rgba(255,255,255,0.82)] shadow-[-18px_0_50px_rgba(15,23,42,0.04)] lg:w-[54%]">
+        <div className="relative flex h-screen w-full flex-col overflow-hidden bg-[rgba(255,255,255,0.82)] shadow-[-18px_0_50px_rgba(15,23,42,0.04)] lg:w-[54%]">
           <header className="sticky top-0 z-30 border-b border-black/6 bg-white/78 px-6 py-5 backdrop-blur-2xl lg:hidden">
             <div className="flex items-center justify-between gap-4">
               <button
@@ -323,7 +331,7 @@ export default function GiftingPage() {
             </div>
           </header>
 
-          <main className="mx-auto flex w-full max-w-[980px] flex-1 flex-col px-6 py-10 md:px-10 md:py-14 xl:px-14">
+          <main className="mx-auto flex h-full w-full max-w-[980px] flex-1 flex-col overflow-hidden px-6 py-8 md:px-10 md:py-10 xl:px-14">
             <AnimatePresence mode="wait">
               {currentStep === 1 && (
                 <motion.div
@@ -334,7 +342,7 @@ export default function GiftingPage() {
                   transition={{ duration: 0.45, ease: 'easeOut' }}
                   className="flex flex-1 flex-col"
                 >
-                  <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
+                  <div className="mb-8 max-w-3xl border-b border-black/8 pb-6">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
                       {isZh ? 'Step 01 / Opening object' : 'Step 01 / Opening object'}
                     </p>
@@ -373,7 +381,7 @@ export default function GiftingPage() {
                   transition={{ duration: 0.45, ease: 'easeOut' }}
                   className="flex flex-1 flex-col"
                 >
-                  <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
+                  <div className="mb-8 max-w-3xl border-b border-black/8 pb-6">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
                       {isZh ? 'Step 02 / People and place' : 'Step 02 / People and place'}
                     </p>
@@ -419,17 +427,20 @@ export default function GiftingPage() {
                   transition={{ duration: 0.45, ease: 'easeOut' }}
                   className="flex flex-1 flex-col"
                 >
-                  <div className="mb-10 max-w-3xl rounded-[2.25rem] border border-black/6 bg-white/52 px-6 py-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.16)] backdrop-blur-2xl">
+                  <div className="mb-8 max-w-3xl border-b border-black/8 pb-6">
                     <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
                       {isZh ? 'Step 03 / Moment of judgment' : 'Step 03 / Moment of judgment'}
                     </p>
                     <h1 className="mt-4 text-[3rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
-                      {isZh ? '现在判断，这份心意会被如何理解。' : 'Now decide how the gesture is likely to be understood.'}
+                      {isZh ? '现在判断，这份心意最终会被怎样接住。' : 'Now decide how the gesture will finally be received.'}
                     </h1>
                     <p className="mt-4 max-w-2xl text-lg leading-9 text-[#667085]">
                       {isZh
-                        ? '这一章决定的，不只是送与不送，而是这份心意应该怎样落地，才不会让好意偏离原本的方向。'
-                        : 'This chapter decides not only whether to send, but how the gesture should land so that goodwill does not drift away from its intention.'}
+                        ? '这一章会判断它应以怎样的语气、包装与距离落地，才让好意沿着原本的方向抵达。'
+                        : 'This chapter decides the tone, packaging, and distance the gesture needs so the goodwill can arrive as intended.'}
+                    </p>
+                    <p className="mt-4 max-w-[24rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+                      {isZh ? '这是整段叙事里最需要分寸感的一页。' : 'This is the chapter where tact matters most.'}
                     </p>
                   </div>
 
@@ -462,28 +473,31 @@ export default function GiftingPage() {
                   transition={{ duration: 0.55, ease: 'easeInOut' }}
                   className="flex flex-1 items-center justify-center py-16"
                 >
-                  <div className="w-full max-w-[52rem] rounded-[2.8rem] border border-black/6 bg-[linear-gradient(160deg,rgba(255,255,255,0.92),rgba(248,243,236,0.9))] p-8 shadow-[0_36px_86px_-52px_rgba(15,23,42,0.3)] sm:p-10">
-                    <div className="grid gap-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-center">
-                      <div className="relative flex h-44 items-center justify-center">
-                        <div className="absolute inset-0 rounded-full bg-purple-100 blur-3xl" />
-                        <div className="absolute h-36 w-36 rounded-full border border-purple-200/80" />
-                        <div className="absolute h-28 w-28 rounded-full border-[3px] border-purple-500 border-t-transparent animate-spin" />
-                        <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-white text-purple-600 shadow-[0_20px_40px_-24px_rgba(123,88,185,0.45)]">
-                          <Sparkles className="h-7 w-7 animate-pulse" />
+                  <div className="w-full max-w-[56rem] overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(160deg,rgba(255,255,255,0.94),rgba(247,242,236,0.9))] shadow-[0_36px_86px_-52px_rgba(15,23,42,0.22)]">
+                    <div className="grid gap-0 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)]">
+                      <div className="relative min-h-[21rem] overflow-hidden bg-[linear-gradient(180deg,rgba(108,120,171,0.08),rgba(40,38,34,0.52)),url(https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1400&q=80)] bg-cover bg-center">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.24),transparent_30%)] mix-blend-screen" />
+                        <div className="relative flex h-full flex-col justify-between p-7">
+                          <p className="text-[11px] uppercase tracking-[0.22em] text-white/68">
+                            {isZh ? 'Editorial composition' : 'Editorial composition'}
+                          </p>
+                          <p className="max-w-[14rem] text-[1.45rem] font-serif leading-tight text-white">
+                            {isZh ? '系统正在把礼物、关系与文化分寸编排成一份可被送达的判断稿。' : 'The system is composing object, relationship, and tact into a deliverable editorial judgment.'}
+                          </p>
                         </div>
                       </div>
 
-                      <div>
+                      <div className="p-8 sm:p-10">
                         <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>
-                          {isZh ? 'Composing the final reading' : 'Composing the final reading'}
+                          {isZh ? '稿件生成中' : 'Editorial draft in progress'}
                         </p>
                         <h2 className="mt-4 text-[2.7rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
-                          {isZh ? '系统正在把整段判断写成最终提案。' : 'The system is writing the full reading into a final proposal.'}
+                          {isZh ? '系统正在把整段判断整理成最终礼赠编辑稿。' : 'The system is shaping the full reading into an editorial gifting draft.'}
                         </h2>
                         <p className="mt-4 max-w-xl text-lg leading-9 text-[#667085]">
                           {isZh
-                            ? '正在同步比对礼物语义、国家礼仪、关系角色与文化规则，准备输出更稳妥的送达方式。'
-                            : 'Gift semantics, country etiquette, relationship roles, and cultural rules are being cross-checked to produce a more tactful way for the gesture to land.'}
+                            ? '礼物语义、国家礼仪、关系角色与包装语气正在被交叉校准，准备输出更稳妥、更得体的送达方案。'
+                            : 'Gift semantics, etiquette, relationship roles, and packaging tone are being cross-calibrated to produce a more tactful and fitting way for the gesture to land.'}
                         </p>
                         <div className="mt-6 grid gap-3 sm:grid-cols-3">
                           {[
@@ -491,11 +505,14 @@ export default function GiftingPage() {
                             isZh ? '文化分寸' : 'Cultural tact',
                             isZh ? '关系语境' : 'Relationship context',
                           ].map(item => (
-                            <div key={item} className="rounded-[1.4rem] border border-black/6 bg-white/72 px-4 py-4 text-sm text-[#475467]">
+                            <div key={item} className="border-t border-black/8 pt-4 text-sm text-[#475467]">
                               {item}
                             </div>
                           ))}
                         </div>
+                        <p className="mt-6 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+                          {isZh ? '系统正把这些线索整理成一份真正可交付的判断稿。' : 'The system is shaping these signals into a deliverable judgment draft.'}
+                        </p>
                       </div>
                     </div>
                   </div>

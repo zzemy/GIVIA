@@ -471,7 +471,7 @@ export function buildMustSendAdvice(analysis: AnalysisResult, locale: Locale): s
     tips.push(
       locale === 'zh'
         ? '重点优化包装质感和送礼时机，不需要大幅改动原礼物。'
-        : 'Focus on packaging quality and timing rather than replacing the gift.',
+        : 'Focus on packaging quality and timing before changing the gift itself.',
     )
   } else if (analysis.riskLevel === 'Medium') {
     if (analysis.packaging.avoid.length > 0) {

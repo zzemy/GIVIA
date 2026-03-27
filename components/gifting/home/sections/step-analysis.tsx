@@ -33,7 +33,7 @@ export interface StepAnalysisProps {
 }
 
 const inputClassName =
-  'w-full rounded-[1.5rem] border border-black/7 bg-white/72 px-5 py-4 text-[15px] leading-7 text-[#1d1a17] placeholder:text-[#9aa1af] transition focus:border-[#5b72d1]/45 focus:bg-white focus:outline-none focus:shadow-[0_0_0_4px_rgba(91,114,209,0.08)]'
+  'w-full border-0 border-b border-black/10 bg-transparent px-0 py-3 text-[15px] leading-7 text-[#1d1a17] transition focus:border-[#6175ca]/45 focus:outline-none focus:ring-0'
 
 export function StepAnalysis({
   locale,
@@ -62,22 +62,22 @@ export function StepAnalysis({
 
   const checklist = [
     {
-      label: isZh ? '礼物语义' : 'Gift signal',
+      label: isZh ? '礼物线索' : 'Gift signal',
       done: Boolean(recognition || hasGiftInput || selectedFile),
       value: recognition ? (isZh ? recognition.itemZh : recognition.itemEn) : giftName || (isZh ? '已准备' : 'Ready'),
     },
     {
-      label: isZh ? '目标国家' : 'Target country',
+      label: isZh ? '目的地' : 'Destination',
       done: Boolean(selectedCountry),
-      value: selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '待选择' : 'Pending',
+      value: selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '待补充' : 'Pending',
     },
     {
-      label: isZh ? '目标对象' : 'Audience',
+      label: isZh ? '对象关系' : 'Recipient',
       done: isAudienceReady,
       value: selectedAudienceLabel,
     },
     {
-      label: isZh ? '社会场景' : 'Scene',
+      label: isZh ? '场景脚本' : 'Scene',
       done: Boolean(activeSceneTemplate),
       value: activeSceneTemplate ? (isZh ? activeSceneTemplate.nameZh : activeSceneTemplate.nameEn) : isZh ? '未设置' : 'Unset',
     },
@@ -87,97 +87,107 @@ export function StepAnalysis({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-[2.6rem] border border-black/6 bg-[linear-gradient(155deg,rgba(255,255,255,0.96),rgba(249,245,239,0.94))] p-6 shadow-[0_36px_84px_-48px_rgba(15,23,42,0.24)] backdrop-blur-2xl sm:p-8"
+      className="grid flex-1 gap-6 overflow-hidden rounded-[2.9rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(248,244,238,0.9))] p-5 shadow-[0_36px_88px_-52px_rgba(15,23,42,0.18)] xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:p-6"
     >
-      <div className="rounded-[2rem] border border-black/6 bg-white/66 p-5 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.16)]">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? 'Editorial judgment room' : 'Editorial judgment room'}</p>
-        <p className="mt-3 text-[1.95rem] font-serif leading-tight text-[#1d1a17]">
-          {isZh ? '现在进入最后的文化判断与提案编排。' : 'Now the final cultural judgment and proposal composition begins.'}
-        </p>
-        <p className="mt-3 max-w-3xl text-sm leading-8 text-[#69707d]">
+      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.35rem] bg-[linear-gradient(180deg,#faf7f2,#f2ebe1)] p-6">
+        <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Editorial readiness' : 'Editorial readiness'}</p>
+        <h3 className="mt-3 text-[2.15rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
+          {isZh ? '判断之前，先确认这份心意是否已具备被阅读的条件。' : 'Before judgment, confirm the gesture is ready to be read.'}
+        </h3>
+        <p className="mt-4 text-sm leading-8 text-[#69707d]">
           {isZh
-            ? '这一章不再收集素材，而是确认信息是否成熟，再决定是否启用更深层增强模块。'
-            : 'This chapter no longer collects raw material. It confirms readiness and decides whether deeper enhancement modules are truly needed.'}
+            ? '这一章会确认对象、关系、国家与场景是否已经成立，再把它们写进最终判断。'
+            : 'This chapter confirms whether the object, relationship, destination, and scene are ready to be composed into the final reading.'}
+        </p>
+
+        <div className="mt-6 grid min-h-0 flex-1 gap-3 overflow-auto pr-1">
+          {checklist.map(item => (
+            <div key={item.label} className="flex items-start justify-between gap-4 rounded-[1.8rem] border border-black/6 bg-white/82 px-5 py-4 shadow-[0_18px_32px_-28px_rgba(15,23,42,0.1)]">
+              <div className="flex items-start gap-3">
+                <div className={`mt-0.5 rounded-full p-1.5 ${item.done ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
+                  <CheckCircle2 size={15} />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-[#1d1a17]">{item.label}</p>
+                  <p className="mt-1 text-xs leading-6 text-[#98a2b3]">{item.value}</p>
+                </div>
+              </div>
+              <span className={`rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.16em] ${item.done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
+                {item.done ? 'ready' : 'pending'}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-5 max-w-[22rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+          {isZh ? '真正高级的判断，不靠堆选项，而靠信息是否已经足够成熟。' : 'A refined judgment depends less on toggles than on the maturity of the information.'}
         </p>
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
-        <div className="rounded-[2.15rem] border border-black/6 bg-[linear-gradient(180deg,#fcfaf7,#f7f0e8)] p-5">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Readiness grid' : 'Readiness grid'}</p>
-          <div className="mt-4 space-y-3">
-            {checklist.map(item => (
-              <div key={item.label} className="flex items-center justify-between gap-3 rounded-[1.35rem] border border-black/6 bg-white/84 px-4 py-4">
-                <div className="flex items-center gap-3">
-                  <div className={`rounded-full p-1.5 ${item.done ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
-                    <CheckCircle2 size={16} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[#1d1a17]">{item.label}</p>
-                    <p className="text-xs text-[#98a2b3]">{item.value}</p>
-                  </div>
-                </div>
-                <div className={`rounded-full px-3 py-1 text-[11px] uppercase tracking-[0.14em] ${item.done ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                  {item.done ? (isZh ? 'ready' : 'ready') : isZh ? 'pending' : 'pending'}
-                </div>
-              </div>
-            ))}
+      <div className="flex min-h-0 flex-col overflow-hidden rounded-[2.35rem] bg-white/62 p-6 backdrop-blur-2xl xl:p-8">
+        <div className="border-b border-black/8 pb-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="max-w-[36rem]">
+              <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Judgment modules' : 'Judgment modules'}</p>
+              <h3 className="mt-3 text-[2.2rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1d1a17]">
+                {isZh ? '基础判断通常已经足够，增强模块只在必要时打开。' : 'Core judgment is usually enough. Enhancement modules open only when necessary.'}
+              </h3>
+              <p className="mt-4 text-sm leading-8 text-[#69707d]">
+                {isZh
+                  ? '如果你确实需要更深层识别、物流估算或替代方案重排，再谨慎开启这些模块，让判断保持得体而清晰。'
+                  : 'If deeper recognition, logistics estimation, or reranking is genuinely needed, open these modules with restraint so the judgment stays tactful and clear.'}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowAdvanced(current => !current)}
+              className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/74 px-4 py-2.5 text-xs uppercase tracking-[0.14em] text-[#495161] shadow-[0_12px_24px_-22px_rgba(15,23,42,0.18)] transition hover:bg-white"
+            >
+              <SlidersHorizontal size={14} />
+              {showAdvanced ? (isZh ? '收起增强模块' : 'Hide modules') : isZh ? '展开增强模块' : 'Show modules'}
+            </button>
           </div>
         </div>
 
-        <div className="space-y-5">
-          <div className="rounded-[2rem] border border-black/6 bg-white/74 p-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div className="max-w-[34rem]">
-                <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Enhancement curation' : 'Enhancement curation'}</p>
-                <p className="mt-2 text-sm leading-8 text-[#69707d]">
-                  {isZh
-                    ? '基础分析通常已经足够。只有当你需要更深层识别、物流估算或重排时，才值得开启增强。'
-                    : 'Core analysis is usually enough. Turn on deeper modules only when richer recognition, logistics, or reranking is genuinely required.'}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowAdvanced(current => !current)}
-                className="inline-flex items-center gap-2 rounded-full border border-black/8 bg-white/70 px-4 py-2.5 text-sm text-[#495161] shadow-[0_12px_28px_-24px_rgba(15,23,42,0.2)] transition hover:bg-white"
-              >
-                <SlidersHorizontal size={14} />
-                {showAdvanced ? (isZh ? '收起增强' : 'Hide modules') : isZh ? '展开增强' : 'Show modules'}
-              </button>
-            </div>
-
-            <div className="mt-4 flex flex-wrap gap-2">
-              {(Object.entries(analysisEnhancementSettings) as Array<[keyof EnhancementSettings, boolean]>).map(([key, enabled]) =>
-                enabled ? (
-                  <span key={key} className="rounded-full border border-[#efe3ce] bg-[#fff8ef] px-4 py-2 text-xs uppercase tracking-[0.14em] text-[#9b6b20]">
-                    {key}
+        <div className="grid min-h-0 flex-1 gap-6 overflow-hidden pt-6 xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]">
+          <div className="space-y-5 overflow-auto pr-1">
+            <div className="rounded-[2rem] bg-[linear-gradient(180deg,rgba(248,245,240,0.9),rgba(255,255,255,0.82))] p-5">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Current strategy' : 'Current strategy'}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {(Object.entries(analysisEnhancementSettings) as Array<[keyof EnhancementSettings, boolean]>).map(([key, enabled]) =>
+                  enabled ? (
+                    <span key={key} className="rounded-full border border-[#e8dcce] bg-white/84 px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-[#7a6856]">
+                      {key}
+                    </span>
+                  ) : null,
+                )}
+                {!hasEnabledAnalysisEnhancement && (
+                  <span className="rounded-full border border-black/8 bg-white/84 px-4 py-2 text-[11px] uppercase tracking-[0.14em] text-[#667085]">
+                    {isZh ? '仅基础判断' : 'Core judgment only'}
                   </span>
-                ) : null,
-              )}
-              {!hasEnabledAnalysisEnhancement && (
-                <span className="rounded-full border border-black/8 bg-[#f8f6f2] px-4 py-2 text-xs uppercase tracking-[0.14em] text-[#667085]">
-                  {isZh ? '仅基础分析' : 'Core analysis only'}
-                </span>
-              )}
+                )}
+              </div>
             </div>
 
             {showAdvanced && (
-              <div className="mt-5 space-y-3">
+              <div className="space-y-3">
                 {(Object.keys(analysisEnhancementSettings) as Array<keyof EnhancementSettings>).map(key => (
-                  <label key={key} className="flex items-center justify-between gap-3 rounded-[1.3rem] border border-black/6 bg-[#fcfaf7] px-4 py-4 text-sm text-[#1d1a17]">
+                  <label key={key} className="flex items-center justify-between gap-3 border-b border-black/8 pb-4 text-sm text-[#1d1a17]">
                     <span className="font-medium">{key}</span>
                     <input
                       type="checkbox"
                       checked={analysisEnhancementSettings[key]}
                       onChange={event => onEnhancementSettingChange(key, event.target.checked)}
-                      className="h-4 w-4 accent-[#b8812d]"
+                      className="h-4 w-4 accent-[#6175ca]"
                     />
                   </label>
                 ))}
 
                 {analysisEnhancementSettings.logistics && (
-                  <div className="rounded-[1.35rem] border border-black/6 bg-[#fcfaf7] p-4">
-                    <p className="text-[11px] uppercase tracking-[0.16em] text-[#98a2b3]">{isZh ? '物流出发地' : 'Shipping origin'}</p>
-                    <select value={enhancementOriginCountry} onChange={event => onEnhancementOriginCountryChange(event.target.value)} className={`${inputClassName} mt-3 appearance-none`}>
+                  <div className="border-b border-black/8 pb-4">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '物流出发地' : 'Shipping origin'}</p>
+                    <select value={enhancementOriginCountry} onChange={event => onEnhancementOriginCountryChange(event.target.value)} className={`${inputClassName} mt-2 appearance-none`}>
                       {enhancementOriginOptions.map(option => (
                         <option key={option.value} value={option.value}>
                           {option.label}
@@ -190,32 +200,43 @@ export function StepAnalysis({
             )}
           </div>
 
-          <div className="rounded-[2.15rem] border border-[#e8decd] bg-[linear-gradient(180deg,#fffdf8,#fff5e7)] p-5 shadow-[0_24px_50px_-36px_rgba(184,129,45,0.2)]">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#9b6b20]">{isZh ? 'Editorial decision' : 'Editorial decision'}</p>
-            <p className="mt-3 text-base leading-8 text-[#5f4b2c]">
-              {isZh
-                ? '系统将编排文化风险、包装方向、问候语语气，以及更稳妥的替代礼物提案。'
-                : 'The system will compose cultural risk, packaging direction, greeting tone, and safer alternative proposals.'}
-            </p>
+          <div className="flex min-h-0 flex-col justify-between rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,243,237,0.9))] p-6 shadow-[0_22px_42px_-34px_rgba(15,23,42,0.14)]">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Editorial decision' : 'Editorial decision'}</p>
+              <p className="mt-4 text-[1.55rem] font-serif leading-tight text-[#1d1a17]">
+                {isZh ? '系统将把文化风险、表达语气、包装方向与替代提案写成同一份结论。' : 'The system will compose cultural risk, wording, packaging direction, and alternatives into one coherent conclusion.'}
+              </p>
+              <p className="mt-4 text-sm leading-8 text-[#69707d]">
+                {isZh
+                  ? '这里会生成一份更适合真正送达场景的礼赠判断。'
+                  : 'This section generates a gifting judgment shaped for an actual moment of arrival.'}
+              </p>
+            </div>
 
-            <Button
-              onClick={onAnalyze}
-              disabled={!canAnalyze || isAnalyzing}
-              className="mt-5 w-full rounded-full bg-gradient-to-r from-[#5b72d1] via-[#4f65bd] to-[#4355a9] py-4 text-sm font-semibold text-white shadow-[0_20px_42px_-24px_rgba(91,114,209,0.48)] transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <Sparkles size={16} className="mr-2 inline" />
-              {isAnalyzing
-                ? isZh
-                  ? `分析中... ${analyzingElapsedSeconds}s`
-                  : `Analyzing... ${analyzingElapsedSeconds}s`
-                : hasAnalysis
+            <div className="mt-8">
+              <Button
+                onClick={onAnalyze}
+                disabled={!canAnalyze || isAnalyzing}
+                className="w-full rounded-full bg-[#5569bc] py-4 text-sm uppercase tracking-[0.14em] text-white shadow-[0_22px_44px_-26px_rgba(85,105,188,0.44)] transition hover:-translate-y-0.5 hover:bg-[#4b5fae] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                <Sparkles size={16} className="mr-2 inline" />
+                {isAnalyzing
                   ? isZh
-                    ? '重新编排提案'
-                    : 'Compose again'
-                  : isZh
-                    ? '生成文化提案'
-                    : 'Generate the proposal'}
-            </Button>
+                    ? `判断生成中 ${analyzingElapsedSeconds}s`
+                    : `Composing ${analyzingElapsedSeconds}s`
+                  : hasAnalysis
+                    ? isZh
+                      ? '重新编排这份结论'
+                      : 'Compose the judgment again'
+                    : isZh
+                      ? '生成礼赠判断'
+                      : 'Compose the gifting judgment'}
+              </Button>
+
+              <p className="mt-4 text-center text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">
+                {isZh ? '文化、关系、场景与措辞将在这里汇合。' : 'Culture, relationship, scene, and wording converge here.'}
+              </p>
+            </div>
           </div>
         </div>
       </div>
