@@ -22,8 +22,9 @@ describe('Root editorial routing page', () => {
     render(<RootPage />)
 
     expect(screen.getByRole('heading', { level: 1, name: /before a gesture[\s\S]*crosses a border[\s\S]*it enters another life/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /中文进入/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /enter in english/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '中文' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'English' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /begin the story/i })).toBeInTheDocument()
   })
 
   it('redirects to /zh after the transition delay', () => {

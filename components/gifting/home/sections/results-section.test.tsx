@@ -94,15 +94,14 @@ describe('ResultsSection', () => {
       />,
     )
 
-    expect(screen.getByRole('button', { name: /重新开始/i })).toBeInTheDocument()
-    expect(screen.getByText(/高风险处理建议/i)).toBeInTheDocument()
-
-    const summaryHeading = screen.getByRole('heading', { name: /赠礼顾问结论|advisor summary/i })
-    const recommendationsHeading = screen.getByRole('heading', { name: /更稳妥的替代推荐|safer alternatives/i })
-    const supportingAnalysisLabel = screen.getByText(/支持分析|supporting analysis/i)
+    expect(screen.getByRole('button', { name: /开启下一份终稿/i })).toBeInTheDocument()
+    const summaryHeading = screen.getByRole('heading', { name: /这份心意此刻不宜按原样送出/i })
+    const recommendationsHeading = screen.getByRole('heading', { name: /如果要把这份心意改写得更克制、更高级、更妥帖/i })
+    const supportingAnalysisLabel = screen.getByText(/语境纪要|context memorandum/i)
 
     expect(summaryHeading.compareDocumentPosition(recommendationsHeading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(recommendationsHeading.compareDocumentPosition(supportingAnalysisLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(screen.getByText(/风险等级 高风险/i)).toBeInTheDocument()
+    expect(summaryHeading.compareDocumentPosition(supportingAnalysisLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(screen.getByText(/当前结论/i)).toBeInTheDocument()
+    expect(screen.getByText(/High/i)).toBeInTheDocument()
   })
 })

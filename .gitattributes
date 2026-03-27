@@ -1,0 +1,11 @@
+# GitHub Linguist hints: ignore generated or auxiliary files in language stats
+.next/** linguist-generated=true
+out/** linguist-generated=true
+coverage/** linguist-generated=true
+__mocks__/** linguist-generated=true
+pnpm-lock.yaml linguist-generated=true
+package-lock.json linguist-generated=true
+yarn.lock linguist-generated=true
+*.snap linguist-generated=true
+*.min.js linguist-generated=true
+*.min.css linguist-generated=true

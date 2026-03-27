@@ -1,7 +1,7 @@
-# GIVIA
+# Givia
 
 <p align="center">
-  <strong>Culture-aware gifting intelligence, built for modern teams.</strong>
+  <strong>An editorial system for cross-cultural gifting, shaped for globally fluent teams and brands.</strong>
 </p>
 
 <p align="center">
@@ -12,135 +12,138 @@
   <a href="https://github.com/zzemy/GIVIA/actions/workflows/ci.yml">
     <img src="https://github.com/zzemy/GIVIA/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
   </a>
+  <a href="https://github.com/zzemy/GIVIA/actions/workflows/deploy-pages.yml">
+    <img src="https://github.com/zzemy/GIVIA/actions/workflows/deploy-pages.yml/badge.svg" alt="Pages Status" />
+  </a>
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white" alt="React 19" />
-  <img src="https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white" alt="TypeScript 5" />
   <img src="https://img.shields.io/badge/License-AGPL--3.0-0b5fff" alt="AGPL-3.0" />
 </p>
 
-<p align="center">
-  <a href="https://github.com/zzemy/GIVIA/actions">View GitHub Actions</a>
-</p>
+## What Givia is
 
-## Why GIVIA
+Givia is a cross-cultural gifting editorial engine.
 
-GIVIA helps users make better gifting decisions across cultures by combining AI recognition, semantic risk analysis, and practical delivery guidance.
+Instead of treating gifting as a generic product picker, it frames each decision through context: recipient identity, market etiquette, symbolic sensitivity, tone of expression, and the final story the gift tells.
 
-Instead of guessing whether a gift is culturally safe, users can quickly validate the choice and get actionable alternatives.
+The current web experience is designed as a bright editorial journey rather than a dashboard. Users move from narrative entry, to gift framing, to cultural reading, and finally into a polished dossier-style recommendation.
 
-## Product Flow
+## Experience structure
 
-1. Recognize a gift from image or text input.
-2. Select target country and recipient profile.
-3. Generate cultural risk analysis, packaging suggestions, and card copy.
+The product currently centers on three surfaces:
 
-Main experience page: [app/[locale]/page.tsx](app/[locale]/page.tsx)
+1. **Root entry** — a brand-forward landing surface at `/`
+2. **Localized editorial home** — the bilingual experience at `/zh` and `/en`
+3. **Gifting workflow** — the guided gifting story at `/[locale]/gifting`
 
-## Highlights
+The result is not a catalog. It is a composed recommendation flow for cross-border gift decisions.
 
-| Module | Value |
+## Core capabilities
+
+| Capability | What it does |
 | --- | --- |
-| Gift Recognition | Understands items from image upload or direct text input |
-| Cultural Risk Engine | Scores potential taboo and semantic risk by market context |
-| Audience-aware Advice | Adapts suggestions by recipient type and relationship context |
-| Practical Output | Produces packaging direction and greeting-card wording |
-| Bilingual UX | Supports Chinese and English routes |
+| Gift recognition | Reads a gift candidate from image or text input |
+| Cultural reading | Evaluates symbolic, etiquette, and market-sensitive risk |
+| Recipient framing | Adapts recommendations to relationship and audience context |
+| Editorial rewriting | Produces refined gifting direction and message suggestions |
+| Bilingual presentation | Supports both Chinese and English routes with brand-aware copy |
 
-## Tech Stack
+## Tech stack
 
-- Next.js 16 (App Router)
+- Next.js 16 App Router
 - React 19 + TypeScript
-- Tailwind CSS v4 + shadcn/ui + Radix UI
+- Tailwind CSS v4
 - Framer Motion
 - Jest + Testing Library
+- GitHub Actions for CI and Pages deployment
+- Optional Tauri wrapper in `src-tauri/`
 
-## Quick Start
+## Local development
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Open http://localhost:3000 (auto redirects to /zh).
+Open `http://localhost:3000`.
 
-## Deploy to GitHub Pages
+## Validation
 
-This repository includes a Pages workflow at `.github/workflows/deploy-pages.yml`.
+```bash
+pnpm lint
+pnpm test -- --runInBand
+pnpm build
+pnpm exec tsc --noEmit
+```
 
-1. Push to `main` or `master`.
-2. In GitHub repo settings, open Pages and set Source to `GitHub Actions`.
-3. Wait for the `Deploy GitHub Pages` workflow to finish.
-4. Visit `https://<your-user-or-org>.github.io/<repo-name>/`.
+## Environment variables
 
-Important limits on GitHub Pages:
-
-- GitHub Pages serves static files only.
-- API routes under `/api/*` are not available in Pages deployments.
-- Features depending on server-side AI routes require a backend deployment target (for example Vercel or your own server).
-
-## Environment Variables
-
-Create a .env.local file in project root.
+Create `.env.local` in the project root.
 
 | Variable | Required | Default |
 | --- | --- | --- |
-| ALIYUN_DASHSCOPE_API_KEY | Yes | - |
-| ALIYUN_DASHSCOPE_BASE_URL | No | https://dashscope.aliyuncs.com/compatible-mode/v1 |
-| ALIYUN_DASHSCOPE_VISION_MODEL | No | qwen-vl-plus-latest |
-| ALIYUN_DASHSCOPE_TEXT_MODEL | No | qwen-plus-latest |
+| `ALIYUN_DASHSCOPE_API_KEY` | Yes for AI routes | - |
+| `ALIYUN_DASHSCOPE_BASE_URL` | No | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
+| `ALIYUN_DASHSCOPE_VISION_MODEL` | No | `qwen-vl-plus-latest` |
+| `ALIYUN_DASHSCOPE_TEXT_MODEL` | No | `qwen-plus-latest` |
 
-Behavior note:
+If the API key is absent, server-side AI routes will fail by design.
 
-- If key is missing, AI routes return error.
-- Local fallback generation is disabled by design.
-
-## API Snapshot
+## API surfaces
 
 | Method | Route | Purpose |
 | --- | --- | --- |
-| POST | /api/vision-recognize | Recognize gift from image or text |
-| POST | /api/cultural-generate | Generate cultural analysis and recommendations |
+| `POST` | `/api/analysis/run` | Runs the full gifting analysis pipeline |
+| `POST` | `/api/vision-recognize` | Recognizes a gift candidate from image or text |
+| `POST` | `/api/cultural-generate` | Produces cultural guidance and editorial suggestions |
+| `POST` | `/api/logistics-assistant` | Returns delivery and logistics guidance |
 
-Route files:
-
-- [app/api/vision-recognize/route.ts](app/api/vision-recognize/route.ts)
-- [app/api/cultural-generate/route.ts](app/api/cultural-generate/route.ts)
-
-## Scripts
-
-| Command | Description |
-| --- | --- |
-| pnpm dev | Start local development server |
-| pnpm build | Build static export to out |
-| pnpm start | Start production server |
-| pnpm lint | Run ESLint |
-| pnpm test | Run unit tests |
-| pnpm test:watch | Run tests in watch mode |
-| pnpm test:coverage | Run tests with coverage |
-
-## Project Layout
+## Project layout
 
 ```text
 .
 ├── app/
 │   ├── page.tsx
 │   ├── [locale]/page.tsx
-│   ├── api/vision-recognize/route.ts
-│   ├── api/cultural-generate/route.ts
+│   ├── [locale]/gifting/page.tsx
+│   └── api/
 ├── components/
 ├── lib/
-├── messages/
-└── public/
+├── public/
+└── src-tauri/
 ```
 
-## Quality
+## CI
 
-```bash
-pnpm lint
-pnpm exec tsc --noEmit
-pnpm test
-pnpm test:coverage
-```
+GitHub Actions CI runs on pushes and pull requests to `main` and `master`.
+
+The verification workflow checks:
+
+- ESLint
+- TypeScript type-checking
+- Jest tests
+- Next.js production build
+
+Workflow file: `.github/workflows/ci.yml`
+
+## GitHub Pages
+
+This repository also includes a Pages workflow: `.github/workflows/deploy-pages.yml`.
+
+Pages uses the static export generated by Next.js (`output: "export"`) and publishes the `out/` directory.
+
+Important boundary:
+
+- GitHub Pages can host the static experience shell
+- GitHub Pages cannot execute Next.js server routes
+- API endpoints under `/api/*` require a server-capable deployment target
+
+That means Pages is suitable for the static editorial surface, but not for live AI-backed analysis.
+
+## Language statistics note
+
+This is a TypeScript-first repository. A small `.gitattributes` file is included to help GitHub Linguist ignore generated or auxiliary files when calculating language percentages. GitHub may take some time to refresh the repository language bar after changes are pushed.
 
 ## License
 

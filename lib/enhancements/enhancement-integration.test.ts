@@ -135,24 +135,23 @@ describe('P1: Multi-language Support', () => {
     const locales = getSupportedLocales()
     expect(locales).toContain('en')
     expect(locales).toContain('zh')
-    expect(locales).toContain('ja')
-    expect(locales).toContain('fr')
+    expect(locales).toHaveLength(2)
   })
 
   it('should validate supported locales', () => {
     expect(isSupportedLocale('en')).toBe(true)
-    expect(isSupportedLocale('ja')).toBe(true)
+    expect(isSupportedLocale('zh')).toBe(true)
     expect(isSupportedLocale('de')).toBe(false) // Not supported
   })
 
   it('should format numbers by locale', () => {
     const num = 1000
     const enFormatted = formatNumber(num, 'en')
-    const jaFormatted = formatNumber(num, 'ja')
+    const zhFormatted = formatNumber(num, 'zh')
 
     // Just verify they format differently
     expect(enFormatted).toBeDefined()
-    expect(jaFormatted).toBeDefined()
+    expect(zhFormatted).toBeDefined()
   })
 
   it('should format currency by locale', () => {

@@ -6,6 +6,8 @@
 import '@testing-library/jest-dom';
 import React from 'react';
 
+const mockReact = React;
+
 class ResizeObserverMock {
   observe() {}
   unobserve() {}
@@ -45,10 +47,55 @@ jest.mock('next/navigation', () => ({
   },
 }));
 
+jest.mock('framer-motion', () => {
+  const stripMotionProps = (props: Record<string, unknown>) => {
+    const {
+      animate,
+      exit,
+      initial,
+      layout,
+      transition,
+      variants,
+      viewport,
+      whileFocus,
+      whileHover,
+      whileInView,
+      whileTap,
+      ...rest
+    } = props;
+
+    void animate;
+    void exit;
+    void initial;
+    void layout;
+    void transition;
+    void variants;
+    void viewport;
+    void whileFocus;
+    void whileHover;
+    void whileInView;
+    void whileTap;
+
+    return rest;
+  };
+
+  return {
+    __esModule: true,
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,
+    motion: new Proxy(
+      {},
+      {
+        get: (_, tag: string) =>
+          ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) =>
+            mockReact.createElement(tag, stripMotionProps(props), children),
+      },
+    ),
+  };
+});
+
 // Suppress console errors in tests (optional)
 // global.console = {
 //   ...console,
 //   error: jest.fn(),
 //   warn: jest.fn(),
 // };
-
