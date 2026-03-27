@@ -115,24 +115,24 @@ export function StepCountry({
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      className="grid flex-1 gap-8 overflow-hidden xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+      className="grid flex-1 gap-6 overflow-hidden xl:grid-cols-[minmax(0,0.94fr)_minmax(0,1.06fr)]"
     >
-      <div className="grid min-h-0 gap-5 xl:grid-rows-[auto_minmax(0,1fr)_auto]">
+      <div className="grid min-h-0 gap-4 xl:grid-rows-[auto_minmax(0,1fr)_auto]">
         <div>
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Destination chapter' : 'Destination chapter'}</p>
-          <h3 className="mt-4 max-w-[28rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
-            {isZh ? '让人物、国家与场景站进同一页。' : 'Place person, country, and occasion on the same page.'}
+          <h3 className="mt-4 max-w-[26rem] text-[2.15rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
+            {isZh ? '先确定礼物要进入哪一种文化现场。' : 'First decide which cultural setting the gift is entering.'}
           </h3>
-          <p className="mt-4 max-w-[32rem] text-sm leading-8 text-[#69707d]">
+          <p className="mt-3 max-w-[30rem] text-sm leading-8 text-[#69707d]">
             {isZh
-              ? '国家只是背景。真正决定分寸的，是谁会接住这份礼物、在什么时刻接住它，以及关系里存在怎样的边界。'
-              : 'Country is only the backdrop. Tact is really shaped by who receives the gift, at what moment, and within what kind of boundary.'}
+              ? '先把目的地、场景和预算语气写清，AI 才能开始判断“得体”的边界。'
+              : 'Clarify the destination, scene, and spending register first so the AI can begin judging the boundary of tact.'}
           </p>
         </div>
 
-        <div className="rounded-[2.8rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,240,234,0.9))] p-6 shadow-[0_34px_82px_-56px_rgba(15,23,42,0.16)] sm:p-8">
+        <div className="rounded-[2.8rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(245,240,234,0.9))] p-6 shadow-[0_34px_82px_-56px_rgba(15,23,42,0.16)] sm:p-7">
           <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '文化落点' : 'Cultural destination'}</p>
-          <p className="mt-4 text-[2.35rem] font-serif leading-tight text-[#1d1a17]">{destinationLabel}</p>
+          <p className="mt-4 text-[2rem] font-serif leading-tight text-[#1d1a17]">{destinationLabel}</p>
           {selectedCountry && <p className="mt-2 text-[10px] uppercase tracking-[0.24em] text-[#6c78ab]">{selectedCountry}</p>}
 
           <div className="mt-8">
@@ -169,89 +169,95 @@ export function StepCountry({
       </div>
 
       <div className="min-h-0 overflow-auto pr-1">
-        <div className="border-b border-black/8 pb-6">
+        <div className="border-b border-black/8 pb-5">
           <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? 'Human context sheet' : 'Human context sheet'}</p>
-          <h3 className="mt-4 max-w-[34rem] text-[2.8rem] font-serif leading-[1.01] tracking-[-0.055em] text-[#1d1a17]">
-            {isZh ? '先给 AI 必要线索，再决定要不要补更多人物细节。' : 'Give the AI the essential signals first, then decide whether more recipient detail is needed.'}
+          <h3 className="mt-4 max-w-[34rem] text-[2.12rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1d1a17]">
+            {isZh ? '再写送礼时刻与接收对象。' : 'Then write the gifting moment and the receiving person.'}
           </h3>
-          <p className="mt-4 max-w-[36rem] text-sm leading-8 text-[#69707d]">
+          <p className="mt-3 max-w-[34rem] text-sm leading-8 text-[#69707d]">
             {isZh
-              ? '默认只保留 AI 生成判断所需的核心信息。人物侧写与更细的人设补充，可以在下方按需展开。'
-              : 'By default, this chapter keeps only the signals the AI actually needs for judgment. Recipient portrait details can be expanded only when useful.'}
+              ? '这一页只先保留最会改变判断的关系和场景信息。更细的人设补充，可以在下方按需展开。'
+              : 'This page keeps only the relationship and scene details most likely to change the judgment. Deeper portrait detail stays optional below.'}
           </p>
         </div>
 
-        <div className="space-y-8 pt-6">
-          <article className="border-b border-black/8 pb-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Scene script' : 'Scene script'}</p>
-            <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
-              {isZh ? '它更像会出现在哪一种时刻与社会脚本里？' : 'What kind of moment or social script is this gesture entering?'}
-            </p>
-            <select value={sceneTemplate} onChange={event => onSceneTemplateChange(event.target.value)} className={`${controlClassName} mt-3`}>
-              {sceneTemplateOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            {activeSceneTemplate && <p className="mt-3 text-sm leading-7 text-[#7b808c]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
-          </article>
+        <div className="space-y-7 pt-6">
+          <div className="grid gap-6 border-b border-black/8 pb-7 md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
+            <article>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Scene script' : 'Scene script'}</p>
+              <p className="mt-2 max-w-[25rem] text-[1.18rem] font-serif leading-8 text-[#1d1a17]">
+                {isZh ? '它更像会出现在哪一种时刻与社会脚本里？' : 'What kind of moment or social script is this gesture entering?'}
+              </p>
+              <select value={sceneTemplate} onChange={event => onSceneTemplateChange(event.target.value)} className={`${controlClassName} mt-4`}>
+                {sceneTemplateOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {activeSceneTemplate && <p className="mt-4 max-w-[30rem] text-sm leading-8 text-[#7b808c]">{isZh ? activeSceneTemplate.promptZh : activeSceneTemplate.promptEn}</p>}
+            </article>
 
-          <article className="border-b border-black/8 pb-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Budget and register' : 'Budget and register'}</p>
-            <div className="mt-3 grid gap-5 md:grid-cols-2">
-              <div>
-                <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '预算范围' : 'Budget'}</p>
-                <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                  {budgetOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+            <article className="border-t border-black/8 pt-1 md:border-l md:border-t-0 md:pl-6">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Budget and register' : 'Budget and register'}</p>
+              <div className="mt-4 grid gap-5">
+                <div>
+                  <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '预算范围' : 'Budget'}</p>
+                  <select value={budgetRange} onChange={event => onBudgetRangeChange(event.target.value)} className={`${controlClassName} mt-2`}>
+                    {budgetOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '正式程度' : 'Formality'}</p>
+                  <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={`${controlClassName} mt-2`}>
+                    {formalityOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium text-[#1d1a17]">{isZh ? '正式程度' : 'Formality'}</p>
-                <select value={formality} onChange={event => onFormalityChange(event.target.value)} className={`${controlClassName} mt-2`}>
-                  {formalityOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            </article>
+          </div>
+
+          <article className="grid gap-6 border-b border-black/8 pb-7 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+            <div>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Recipient' : 'Recipient'}</p>
+              <p className="mt-2 max-w-[20rem] text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
+                {isZh ? '谁会接住它？这段关系更接近怎样的边界与礼貌？' : 'Who receives it, and what kind of boundary or courtesy defines the relationship?'}
+              </p>
             </div>
-          </article>
 
-          <article className="border-b border-black/8 pb-7">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Recipient' : 'Recipient'}</p>
-            <p className="mt-2 text-[1.16rem] font-serif leading-8 text-[#1d1a17]">
-              {isZh ? '谁会接住它？这段关系更接近怎样的边界与礼貌？' : 'Who receives it, and what kind of boundary or courtesy defines the relationship?'}
-            </p>
+            <div className="grid gap-4">
+              <select value={targetGroup} onChange={event => onTargetGroupChange(event.target.value as AudienceGroup)} className={controlClassName}>
+                {audienceOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
 
-            <select value={targetGroup} onChange={event => onTargetGroupChange(event.target.value as AudienceGroup)} className={`${controlClassName} mt-3`}>
-              {audienceOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              {targetGroup === 'other' && (
+                <input
+                  value={customAudienceGroup}
+                  onChange={event => onCustomAudienceGroupChange(event.target.value)}
+                  placeholder={isZh ? '补充对象描述' : 'Add a finer note on the recipient'}
+                  className={controlClassName}
+                />
+              )}
 
-            {targetGroup === 'other' && (
               <input
-                value={customAudienceGroup}
-                onChange={event => onCustomAudienceGroupChange(event.target.value)}
-                placeholder={isZh ? '补充对象描述' : 'Add a finer note on the recipient'}
-                className={`${controlClassName} mt-3`}
+                value={occasion}
+                onChange={event => onOccasionChange(event.target.value)}
+                placeholder={isZh ? '例如：到访、生日、合作初见、节庆问候' : 'e.g. first visit, birthday, opening meeting, festive greeting'}
+                className={controlClassName}
               />
-            )}
-
-            <input
-              value={occasion}
-              onChange={event => onOccasionChange(event.target.value)}
-              placeholder={isZh ? '例如：到访、生日、合作初见、节庆问候' : 'e.g. first visit, birthday, opening meeting, festive greeting'}
-              className={`${controlClassName} mt-3`}
-            />
+            </div>
           </article>
 
           <article>

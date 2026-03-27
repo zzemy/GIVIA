@@ -22,6 +22,70 @@ type StepTheme = {
   quote: string
 }
 
+type AiCompanionEntry = {
+  label: string
+  title: string
+  body: string
+  bullets: string[]
+}
+
+function EditorialAiAside({
+  entry,
+  accentTextClassName,
+  aiAsideTheme,
+  glow,
+  isZh,
+  primaryAction,
+  secondaryAction,
+  footer,
+}: {
+  entry: AiCompanionEntry
+  accentTextClassName: string
+  aiAsideTheme: string
+  glow: string
+  isZh: boolean
+  primaryAction?: React.ReactNode
+  secondaryAction?: React.ReactNode
+  footer?: React.ReactNode
+}) {
+  return (
+    <aside className="relative min-h-0 overflow-hidden rounded-[2.6rem] border border-black/6 bg-white/55 px-5 py-6 shadow-[0_28px_64px_-52px_rgba(15,23,42,0.16)] backdrop-blur-[2px]">
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-b opacity-90 ${aiAsideTheme}`} />
+      <div className="pointer-events-none absolute inset-y-5 left-5 w-px bg-black/7" />
+      <div className="pointer-events-none absolute right-[-4.5rem] top-[-3.5rem] h-28 w-28 rounded-full blur-3xl" style={{ backgroundColor: glow }} />
+
+      <div className="relative flex h-full flex-col">
+        <div>
+          <p className={`pl-5 text-[10px] uppercase tracking-[0.3em] ${accentTextClassName}`}>{entry.label}</p>
+          <div className="mt-5 pl-5">
+            <p className="text-[0.72rem] uppercase tracking-[0.24em] text-[#98a2b3]">{isZh ? '编辑页边批注' : 'Editorial marginalia'}</p>
+            <h3 className="mt-3 max-w-[15rem] text-[1.42rem] font-serif leading-[1.08] text-[#1c1a17]">{entry.title}</h3>
+            <p className="mt-4 max-w-[15.5rem] text-[0.94rem] leading-8 text-[#667085]">{entry.body}</p>
+          </div>
+        </div>
+
+        <div className="relative mt-8 space-y-4 pl-5">
+          {entry.bullets.map((item, index) => (
+            <div key={item} className="flex gap-3">
+              <span className={`pt-0.5 text-[10px] uppercase tracking-[0.22em] ${accentTextClassName}`}>0{index + 1}</span>
+              <p className="text-[0.92rem] leading-7 text-[#5f6672]">{item}</p>
+            </div>
+          ))}
+        </div>
+
+        {footer ? <div className="mt-6 pl-5">{footer}</div> : null}
+
+        {(secondaryAction || primaryAction) && (
+          <div className="mt-auto flex flex-wrap gap-3 pl-5 pt-7">
+            {secondaryAction}
+            {primaryAction}
+          </div>
+        )}
+      </div>
+    </aside>
+  )
+}
+
 export default function GiftingPage() {
   const params = useParams<{ locale?: string }>()
   const router = useRouter()
@@ -128,6 +192,90 @@ export default function GiftingPage() {
     isZh ? '终稿报告' : 'Dossier',
   ]
 
+  const aiCompanion = {
+    1: {
+      label: isZh ? 'AI 对象识别' : 'AI object reading',
+      title: isZh
+        ? giftInputProps.recognition
+          ? `我先把它理解成「${giftInputProps.recognition.itemZh}」`
+          : '先给我一张图，或一句准确描述。'
+        : giftInputProps.recognition
+          ? `I am currently reading this as “${giftInputProps.recognition.itemEn}”`
+          : 'Give me an image, or one precise object description first.',
+      body: isZh
+        ? giftInputProps.recognition
+          ? '接下来我会继续抓取材质、包装和社会气质，帮你判断这份礼物在别的文化里会被怎样第一眼阅读。'
+          : '我会先识别礼物类型，再帮你提炼材质、气质与文化暗示。你不需要一开始就写很多。'
+        : giftInputProps.recognition
+          ? 'Next I will keep extracting material, packaging, and social mood to judge how the object may be read elsewhere.'
+          : 'I will identify the object first, then help you refine its material, mood, and cultural suggestion. You do not need to write everything at once.',
+      bullets: isZh
+        ? [
+            giftInputProps.selectedFile ? '已收到礼物主图' : '还没有主图',
+            giftInputProps.giftName.trim() ? `名称：${giftInputProps.giftName.trim()}` : '还没有名称',
+            giftInputProps.giftDescription.trim() ? '已补充对象描述' : '建议先写一句材质与用途',
+          ]
+        : [
+            giftInputProps.selectedFile ? 'Gift image received' : 'No key image yet',
+            giftInputProps.giftName.trim() ? `Name: ${giftInputProps.giftName.trim()}` : 'No title yet',
+            giftInputProps.giftDescription.trim() ? 'Object description added' : 'Start with one sentence on material and use',
+          ],
+    },
+    2: {
+      label: isZh ? 'AI 语境建模' : 'AI context reading',
+      title: isZh
+        ? countryProps.selectedCountry
+          ? `我正在把礼物放进「${countryProps.selectedCountry}」对应的文化语境`
+          : '先告诉我礼物要进入哪里。'
+        : countryProps.selectedCountry
+          ? `I am placing the gift inside the cultural context of “${countryProps.selectedCountry}”`
+          : 'Tell me where the gift is going first.',
+      body: isZh
+        ? countryProps.selectedCountry
+          ? '国家、场景、预算和语气已经足够让我开始判断“得体”的边界。人物细节只有在真正影响判断时才需要补。'
+          : '我需要先知道国家和场景。没有这些信息，再好的礼物也无法判断是否得体。'
+        : countryProps.selectedCountry
+          ? 'Country, scene, budget, and register are already enough for me to start judging the boundary of tact. Recipient details matter only when they truly change the reading.'
+          : 'I need the destination and scene first. Without them, even a strong gift cannot be judged for tact.',
+      bullets: isZh
+        ? [
+            countryProps.selectedCountry ? `目的地：${countryProps.selectedCountry}` : '目的地待选择',
+            countryProps.sceneTemplate ? `场景：${countryProps.sceneTemplate}` : '场景待选择',
+            countryProps.budgetLabel ? `预算：${countryProps.budgetLabel}` : '预算待补充',
+          ]
+        : [
+            countryProps.selectedCountry ? `Destination: ${countryProps.selectedCountry}` : 'Destination pending',
+            countryProps.sceneTemplate ? `Scene: ${countryProps.sceneTemplate}` : 'Scene pending',
+            countryProps.budgetLabel ? `Budget: ${countryProps.budgetLabel}` : 'Budget pending',
+          ],
+    },
+    3: {
+      label: isZh ? 'AI 判断引擎' : 'AI judgment engine',
+      title: isZh ? '这里开始由 AI 接管，不再让你继续填表。' : 'From here the AI takes over, rather than asking for more form input.',
+      body: isZh
+        ? '我会把礼物对象、文化目的地、关系对象和送礼场景组织成一份礼赠终稿，包括风险、语气、包装和替代方向。'
+        : 'I will organize the object, cultural destination, recipient, and scene into a final gifting dossier covering risk, tone, packaging, and alternatives.',
+      bullets: isZh
+        ? [
+            analysisProps.canAnalyze ? '关键信息已足够，可以开始生成' : '还有关键信息未完成',
+            analysisProps.hasEnabledAnalysisEnhancement ? '已启用增强图层' : '当前为基础 AI 判断',
+            feedbackProps.error ? `当前报错：${feedbackProps.error}` : '等待你确认并启动生成',
+          ]
+        : [
+            analysisProps.canAnalyze ? 'Core inputs are sufficient to generate' : 'Some key inputs are still missing',
+            analysisProps.hasEnabledAnalysisEnhancement ? 'Deeper layers enabled' : 'Core AI judgment only',
+            feedbackProps.error ? `Current error: ${feedbackProps.error}` : 'Waiting for your go-ahead to generate',
+          ],
+    },
+  } as const
+
+  const currentAiCompanion = aiCompanion[currentStep as 1 | 2 | 3]
+  const aiAsideTheme = {
+    1: 'from-[#f7f8fd] via-[#fcfcfe] to-[#f8f5f1]',
+    2: 'from-[#f5faf6] via-[#fcfdfb] to-[#f7f5f0]',
+    3: 'from-[#f7f4ef] via-[#fcfbf8] to-[#f8f5f1]',
+  }[currentStep as 1 | 2 | 3]
+
   if (currentStep === 5) {
     return (
       <div className={`relative min-h-screen overflow-hidden bg-[#f8f3ec] text-[#1c1a17] ${isZh ? 'font-sans-zh' : ''}`}>
@@ -202,21 +350,21 @@ export default function GiftingPage() {
           </div>
         </header>
 
-        <div className="mt-7 grid gap-6 border-t border-black/8 pt-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)]">
+        <div className="mt-4 grid gap-4 border-t border-black/8 pt-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,16.5rem)]">
           <div>
             <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
-            <div className="mt-4 flex flex-wrap items-center gap-3">
+            <div className="mt-2 flex flex-wrap items-center gap-3">
               <span className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{currentContent.kicker}</span>
               <span className="h-1 w-1 rounded-full bg-black/12" />
               <span className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? `步骤 0${currentStep}` : `Step 0${currentStep}`}</span>
             </div>
-            <h1 className="mt-4 text-[3.2rem] font-serif leading-[0.96] tracking-[-0.06em] text-[#1c1a17] md:text-[3.9rem]">{currentContent.title}</h1>
-            <p className="mt-4 max-w-[42rem] text-base leading-8 text-[#667085]">{currentContent.desc}</p>
+            <h1 className="mt-2 text-[2.35rem] font-serif leading-[0.98] tracking-[-0.06em] text-[#1c1a17] md:text-[2.85rem]">{currentContent.title}</h1>
+            <p className="mt-2 max-w-[37rem] text-[0.96rem] leading-8 text-[#667085]">{currentContent.desc}</p>
           </div>
 
-          <div className="flex flex-col justify-between border-l border-black/8 pl-6">
-            <p className="text-[1.18rem] font-serif leading-tight text-[#1c1a17]">{currentContent.quote}</p>
-            <div className="mt-6">
+          <div className="flex flex-col justify-between border-l border-black/8 pl-4">
+            <p className="text-[0.96rem] font-serif leading-snug text-[#1c1a17]">{currentContent.quote}</p>
+            <div className="mt-4">
               <div className="flex items-center gap-3">
                 {railLabels.map((label, index) => {
                   const stepIndex = index + 1
@@ -240,48 +388,92 @@ export default function GiftingPage() {
           </div>
         </div>
 
-        <main className="mt-8 min-h-0 flex-1 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(247,242,236,0.86))] px-5 py-5 shadow-[0_36px_88px_-58px_rgba(15,23,42,0.14)] sm:px-7 sm:py-7 xl:px-8 xl:py-8">
+        <main className="mt-5 min-h-0 flex-1 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,242,236,0.88))] px-5 py-5 shadow-[0_36px_88px_-58px_rgba(15,23,42,0.14)] sm:px-6 sm:py-6 xl:px-7 xl:py-7">
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full flex-col">
-                <StepGiftInput {...giftInputProps} />
-
-                <div className="mt-8 flex justify-end">
-                  <button type="button" onClick={() => setCurrentStep(2)} disabled={!canAdvanceFromStep1} className={`inline-flex items-center gap-2 rounded-full px-10 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}>
-                    {isZh ? '进入下一章' : 'Continue to the next chapter'}
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
+              <motion.div key="step1" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="grid h-full min-h-0 gap-6 xl:grid-cols-[minmax(0,1.16fr)_18.5rem]">
+                <div className="min-h-0 overflow-hidden">
+                  <StepGiftInput {...giftInputProps} />
                 </div>
+
+                {currentAiCompanion ? (
+                  <EditorialAiAside
+                    entry={currentAiCompanion}
+                    accentTextClassName={currentContent.accentTextClassName}
+                    aiAsideTheme={aiAsideTheme ?? ''}
+                    glow={currentContent.glow}
+                    isZh={isZh}
+                    primaryAction={
+                      <button type="button" onClick={() => setCurrentStep(2)} disabled={!canAdvanceFromStep1} className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-7 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}>
+                        {isZh ? '进入下一章' : 'Continue'}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    }
+                  />
+                ) : null}
               </motion.div>
             )}
 
             {currentStep === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full flex-col">
-                <StepCountry {...countryProps} />
-
-                <div className="mt-8 flex justify-between">
-                  <button type="button" onClick={() => setCurrentStep(1)} className="rounded-full border border-black/8 bg-white/84 px-8 py-4 text-[#475467] transition hover:bg-white">
-                    {isZh ? '返回上一章' : 'Back'}
-                  </button>
-                  <button type="button" onClick={() => setCurrentStep(3)} disabled={!canAdvanceFromStep2} className={`inline-flex items-center gap-2 rounded-full px-10 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}>
-                    {isZh ? '进入判断章节' : 'Enter the judgment chapter'}
-                    <ArrowRight className="h-4 w-4" />
-                  </button>
+              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="grid h-full min-h-0 gap-5 xl:grid-cols-[minmax(0,1.14fr)_18.5rem]">
+                <div className="min-h-0 overflow-hidden">
+                  <StepCountry {...countryProps} />
                 </div>
+
+                {currentAiCompanion ? (
+                  <EditorialAiAside
+                    entry={currentAiCompanion}
+                    accentTextClassName={currentContent.accentTextClassName}
+                    aiAsideTheme={aiAsideTheme ?? ''}
+                    glow={currentContent.glow}
+                    isZh={isZh}
+                    secondaryAction={
+                      <button type="button" onClick={() => setCurrentStep(1)} className="rounded-full border border-black/8 bg-white/84 px-5 py-4 text-[#475467] transition hover:bg-white">
+                        {isZh ? '返回' : 'Back'}
+                      </button>
+                    }
+                    primaryAction={
+                      <button type="button" onClick={() => setCurrentStep(3)} disabled={!canAdvanceFromStep2} className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-7 py-4 transition disabled:cursor-not-allowed disabled:opacity-40 ${currentContent.buttonClassName}`}>
+                        {isZh ? '交给 AI' : 'Hand off'}
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    }
+                  />
+                ) : null}
               </motion.div>
             )}
 
             {currentStep === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full flex-col">
-                {feedbackProps.error && <div className="mb-6 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-4 text-sm text-rose-700">{feedbackProps.error}</div>}
-
-                <StepAnalysis {...analysisProps} />
-
-                <div className="mt-8 flex justify-start">
-                  <button type="button" onClick={() => setCurrentStep(2)} className="rounded-full border border-black/8 bg-white/84 px-8 py-4 text-[#475467] transition hover:bg-white">
-                    {isZh ? '返回上一章' : 'Back'}
-                  </button>
+              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="grid h-full min-h-0 gap-5 xl:grid-cols-[minmax(0,1.14fr)_18.5rem]">
+                <div className="min-h-0 overflow-hidden">
+                  {feedbackProps.error && <div className="mb-6 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-4 text-sm text-rose-700">{feedbackProps.error}</div>}
+                  <StepAnalysis {...analysisProps} />
                 </div>
+
+                {currentAiCompanion ? (
+                  <EditorialAiAside
+                    entry={currentAiCompanion}
+                    accentTextClassName={currentContent.accentTextClassName}
+                    aiAsideTheme={aiAsideTheme ?? ''}
+                    glow={currentContent.glow}
+                    isZh={isZh}
+                    footer={
+                      <div className="rounded-[1.8rem] border border-black/6 bg-[rgba(248,244,238,0.66)] p-4">
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'AI 稿件范围' : 'AI output range'}</p>
+                        <p className="mt-3 text-sm leading-7 text-[#5f6672]">
+                          {isZh
+                            ? '文化风险、关系语气、包装建议、替代方向'
+                            : 'Cultural risk, relationship tone, packaging guidance, alternative directions'}
+                        </p>
+                      </div>
+                    }
+                    secondaryAction={
+                      <button type="button" onClick={() => setCurrentStep(2)} className="rounded-full border border-black/8 bg-white/84 px-6 py-4 text-[#475467] transition hover:bg-white">
+                        {isZh ? '返回上一章' : 'Back'}
+                      </button>
+                    }
+                  />
+                ) : null}
               </motion.div>
             )}
 
