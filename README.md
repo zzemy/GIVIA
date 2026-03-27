@@ -127,7 +127,6 @@ Route files:
 │   ├── [locale]/page.tsx
 │   ├── api/vision-recognize/route.ts
 │   ├── api/cultural-generate/route.ts
-│   └── lab/page.tsx
 ├── components/
 ├── lib/
 ├── messages/
