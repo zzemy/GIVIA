@@ -90,7 +90,7 @@ export function ResultsSection({
     <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex flex-1 flex-col gap-6 overflow-hidden">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-[56rem]">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">Editorial report</p>
+          <p className="text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">Editorial dossier</p>
           <h2 className="mt-3 text-[3rem] font-serif leading-[1.02] tracking-[-0.05em] text-[#1c1a17] md:text-[3.35rem]">
             {isZh ? '这里呈现的是一份关于心意如何被理解、修订与送达的编辑稿。' : 'What you see here is an editorial dossier on how the gesture is understood, revised, and delivered.'}
           </h2>
@@ -98,7 +98,7 @@ export function ResultsSection({
             {countryLabel} · {selectedAudienceLabel} · {sceneLabel}
           </p>
           <p className="mt-4 max-w-[34rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
-            {isZh ? '终稿版 · 用于判断一份心意是否能在另一种文化中被妥帖接住。' : 'Final draft · For judging whether a gesture can be received with tact in another culture.'}
+            {isZh ? '终稿版 · 关于这份心意将如何被理解、修订与送达。' : 'Final draft · A composed reading of how the gesture may be understood, revised, and delivered.'}
           </p>
         </div>
 
@@ -113,7 +113,7 @@ export function ResultsSection({
 
       <div className="grid min-h-0 flex-1 gap-6 xl:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)]">
         <div className="grid min-h-0 gap-6 grid-rows-[minmax(0,0.96fr)_minmax(0,1.04fr)]">
-          <article className="grid min-h-0 overflow-hidden rounded-[2.9rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(246,242,236,0.92))] shadow-[0_30px_72px_-46px_rgba(15,23,42,0.16)] lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)]">
+          <article className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(246,242,236,0.94))] shadow-[0_38px_88px_-52px_rgba(15,23,42,0.18)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
             <div className="flex min-h-0 flex-col justify-between p-7 lg:p-8">
               <div>
                 <div className="flex flex-wrap gap-2">
@@ -126,7 +126,7 @@ export function ResultsSection({
                 </div>
                 <h3 className="mt-6 text-[2.6rem] font-serif leading-[1.03] tracking-[-0.05em] text-[#1c1a17]">{summaryTitle}</h3>
                 <p className="mt-4 max-w-[39rem] text-base leading-8 text-[#5f6672]">{summaryBody}</p>
-                <p className="mt-5 max-w-[34rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '它首先是一份关系修辞与文化分寸的编辑判断。' : 'It is first an editorial judgment on relational language and cultural tact.'}</p>
+                <p className="mt-5 max-w-[34rem] text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '这份终稿首先关心关系修辞、文化分寸与送达语气。' : 'This final reading is guided first by relational language, cultural tact, and delivery tone.'}</p>
               </div>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -187,11 +187,11 @@ export function ResultsSection({
             </div>
           </article>
 
-          <article className="grid min-h-0 overflow-hidden rounded-[2.9rem] border border-black/6 bg-white/86 shadow-[0_28px_64px_-44px_rgba(15,23,42,0.12)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
+          <article className="grid min-h-0 overflow-hidden rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(250,247,242,0.9))] shadow-[0_30px_72px_-46px_rgba(15,23,42,0.14)] lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
             <div className="border-b border-black/6 p-7 lg:border-b-0 lg:border-r lg:p-8">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? 'Context memorandum' : 'Context memorandum'}</p>
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '语境纪要' : 'Context memorandum'}</p>
               <p className="mt-4 text-[1.55rem] font-serif leading-tight text-[#1c1a17]">
-                {isZh ? '这次判断所依赖的背景，不该被藏在技术字段里。' : 'The background behind this reading should not be hidden in technical fields.'}
+                {isZh ? '支撑这次终稿的背景，需要被完整地写进阅读现场。' : 'The background supporting this reading deserves to remain visible inside the final dossier.'}
               </p>
               <p className="mt-4 text-sm leading-8 text-[#69707d]">
                 {contextParagraph || (isZh ? '这一次没有补充更多背景，因此系统将主要依据礼物本身与基本关系语境做出判断。' : 'No further background was provided, so the reading leans mainly on the object itself and the basic relationship context.')}
@@ -199,7 +199,7 @@ export function ResultsSection({
             </div>
 
             <div className="p-7 lg:p-8">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? 'Edited proposal' : 'Edited proposal'}</p>
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '改写提案' : 'Edited proposal'}</p>
               <p className="mt-4 text-[1.7rem] font-serif leading-tight text-[#1c1a17]">
                 {topRecommendation
                   ? isZh
@@ -218,8 +218,8 @@ export function ResultsSection({
         </div>
 
         <div className="grid min-h-0 gap-6 grid-rows-[minmax(0,1.04fr)_minmax(0,0.96fr)]">
-          <article className="min-h-0 overflow-auto rounded-[2.9rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(248,245,240,0.92))] p-7 shadow-[0_28px_64px_-44px_rgba(15,23,42,0.12)] lg:p-8">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? 'Editorial alternatives' : 'Editorial alternatives'}</p>
+          <article className="min-h-0 overflow-auto rounded-[3rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(248,245,240,0.93))] p-7 shadow-[0_30px_70px_-46px_rgba(15,23,42,0.14)] lg:p-8">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{isZh ? '改写方向' : 'Edited directions'}</p>
             <h3 className="mt-3 text-[2rem] font-serif leading-tight text-[#1c1a17]">
               {isZh ? '如果要把这份心意改写得更克制、更高级、更妥帖。' : 'If the gesture were to be rewritten with greater restraint, tact, and elegance.'}
             </h3>
@@ -267,8 +267,8 @@ export function ResultsSection({
           </article>
 
           <div className="grid min-h-0 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-            <article className="min-h-0 overflow-auto rounded-[2.5rem] border border-black/6 bg-white/88 p-6 shadow-[0_24px_54px_-36px_rgba(15,23,42,0.16)]">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Cultural margins' : 'Cultural margins'}</p>
+            <article className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '文化边注' : 'Cultural margins'}</p>
               <div className="mt-4 space-y-3">
                 {riskReasons.length > 0 ? (
                   riskReasons.map(reason => (
@@ -284,8 +284,8 @@ export function ResultsSection({
               </div>
             </article>
 
-            <article className="min-h-0 overflow-auto rounded-[2.5rem] border border-black/6 bg-white/88 p-6 shadow-[0_24px_54px_-36px_rgba(15,23,42,0.16)]">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? 'Final editorial notes' : 'Final editorial notes'}</p>
+            <article className="min-h-0 overflow-auto rounded-[2.6rem] border border-black/6 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,246,241,0.9))] p-6 shadow-[0_26px_60px_-40px_rgba(15,23,42,0.16)]">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '终稿边注' : 'Final editorial notes'}</p>
               <div className="mt-4 space-y-3">
                 {mustSendAdvice.length > 0 ? (
                   mustSendAdvice.map(item => (
@@ -302,9 +302,9 @@ export function ResultsSection({
 
               {hasAnalysisEnhancementResults && analysisEnhancements && (
                 <div className="mt-5 border-t border-black/8 pt-4">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? 'Additional layers' : 'Additional layers'}</p>
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#98a2b3]">{isZh ? '附加图层' : 'Additional layers'}</p>
                   <p className="mt-2 text-sm leading-7 text-[#69707d]">
-                    {isZh ? '这份结论还结合了更深层的识别、重排或物流估算模块。' : 'This reading also drew on deeper recognition, reranking, or logistics estimation modules.'}
+                    {isZh ? '这份终稿还吸收了更深层的识别、重排或物流估算结果。' : 'This dossier also drew on deeper recognition, reranking, or logistics estimation layers.'}
                   </p>
                 </div>
               )}
