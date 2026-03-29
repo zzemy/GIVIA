@@ -92,7 +92,7 @@ describe('vision-recognize route adapter integration', () => {
     expect(response.status).toBe(200)
     expect(body.source).toBe('aliyun-dashscope-text')
     expect(body.detectedLabel).toBe('ceramic mug')
-    expect(body.recognition.itemEn).toBe('ceramic mug')
+    expect(body.recognition.itemEn).toBe('Ceramic Mug')
     expect(body.recognition.confidence).toBeCloseTo(0.82)
     expect(body.rawLabels).toContain('ceramic mug')
   })

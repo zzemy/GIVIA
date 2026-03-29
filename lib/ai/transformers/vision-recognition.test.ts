@@ -14,7 +14,7 @@ describe('vision recognition transformer', () => {
     })
 
     expect(response?.source).toBe('aliyun-dashscope-text')
-    expect(response?.recognition.itemEn).toBe('ceramic mug')
+    expect(response?.recognition.itemEn).toBe('Ceramic Mug')
     expect(response?.rawLabels).toContain('coffee cup')
   })
 

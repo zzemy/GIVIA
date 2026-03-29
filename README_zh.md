@@ -31,17 +31,12 @@
 </p>
 
 <p align="center">
-  <img src="./docs/readme/home-zh.png" alt="中文首页" width="49%" />
-  <img src="./docs/readme/home-en.png" alt="英文首页" width="49%" />
-</p>
-
-<p align="center">
   <img src="./docs/readme/gifting-zh.png" alt="中文礼赠流程" width="49%" />
   <img src="./docs/readme/composing-zh.png" alt="终稿生成页面" width="49%" />
 </p>
 
 <p align="center">
-  <em>首页、流程与终稿生成界面，共同构成这套双语叙事型礼赠体验。</em>
+  <em>中文首页、礼赠流程与终稿生成界面。</em>
 </p>
 
 ---

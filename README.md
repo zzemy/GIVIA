@@ -31,17 +31,12 @@
 </p>
 
 <p align="center">
-  <img src="./docs/readme/home-zh.png" alt="Chinese landing page" width="49%" />
   <img src="./docs/readme/gifting-en.png" alt="English gifting workflow" width="49%" />
-</p>
-
-<p align="center">
-  <img src="./docs/readme/gifting-zh.png" alt="Chinese gifting workflow" width="49%" />
   <img src="./docs/readme/composing-en.png" alt="Composing dossier view" width="49%" />
 </p>
 
 <p align="center">
-  <em>Landing, workflow, and dossier-like composition across Chinese and English product surfaces.</em>
+  <em>English landing, workflow, and dossier-like composition.</em>
 </p>
 
 ---
