@@ -1,167 +1,17 @@
-'use client'
+const fs = require('fs');
 
-import { motion } from 'framer-motion'
-import { RotateCcw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { getCountryName } from '@/lib/countries'
-import type { AnalysisResult, EnhancedAnalysisState, Locale } from '@/components/gifting/home/types'
+const file = 'components/gifting/home/sections/results-section.tsx';
+const content = fs.readFileSync(file, 'utf8');
 
-interface RiskActionMeta {
-  title: string
-  tooltip: string
-  panelClassName: string
-  textClassName: string
+const returnIndex = content.indexOf('  return (\n    <motion.section');
+if (returnIndex === -1) {
+  console.error("Could not find return statement");
+  process.exit(1);
 }
 
-interface ResultsSectionProps {
-  analysis: AnalysisResult
-  analysisEnhancements: EnhancedAnalysisState | null
-  analysisSource: string
-  locale: Locale
-  t: (path: string) => string
-  selectedCountry: string
-  selectedAudienceLabel: string
-  sceneLabel: string
-  visionDescription: string
-  giftDescription: string
-  targetProfile: string
-  hasAnalysisEnhancementResults: boolean
-  favoriteRecommendationIds: string[]
-  riskReasons: string[]
-  mustSendAdvice: string[]
-  riskActionMeta: RiskActionMeta | null
-  formatCurrencyAmount: (value: number, currency: string, locale: Locale) => string
-  onReset: () => void
-  onToggleFavoriteRecommendation: (id: string) => void
-}
+const headerVars = content.substring(0, returnIndex);
 
-const reportPhotography = {
-  lead:
-    '/editorial/hero-family.jpg?v=2',
-  note:
-    '/editorial/result1.jpg?v=2',
-  arrival:
-    '/editorial/result2.jpg?v=2',
-}
-
-export function ResultsSection({
-  analysis,
-  analysisEnhancements,
-  analysisSource,
-  locale,
-  selectedCountry,
-  selectedAudienceLabel,
-  sceneLabel,
-  visionDescription,
-  giftDescription,
-  targetProfile,
-  hasAnalysisEnhancementResults,
-  favoriteRecommendationIds,
-  riskReasons,
-  mustSendAdvice,
-  riskActionMeta,
-  formatCurrencyAmount,
-  onReset,
-  onToggleFavoriteRecommendation,
-}: ResultsSectionProps) {
-  const isZh = locale === 'zh'
-  const topRecommendation = analysis.recommendations[0]
-  const countryLabel = selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '未选择国家' : 'No country'
-  const contextParagraph = [visionDescription.trim() || giftDescription.trim(), targetProfile.trim()].filter(Boolean).join(' ')
-  const logisticsEstimate = analysisEnhancements?.p1?.logisticsEstimate
-  const multimodalResults = analysisEnhancements?.p1?.multimodalResults
-  const collaborativeResults = analysisEnhancements?.p1?.collaborativeResults ?? analysisEnhancements?.p2?.wideDeepResults ?? []
-
-  const summaryTitle =
-    analysis.riskLevel === 'Low'
-      ? isZh
-        ? '这份心意的整体方向是稳的。'
-        : 'The overall direction of the gesture is steady.'
-      : analysis.riskLevel === 'Medium'
-        ? isZh
-          ? '这份心意还需要再被编辑一次。'
-          : 'This gesture needs one more editorial pass.'
-        : isZh
-          ? '这份心意此刻不宜按原样送出。'
-          : 'This gesture should not be sent as it stands.'
-
-  const summaryBody =
-    analysis.warning ||
-    (analysis.riskLevel === 'Low'
-      ? isZh
-        ? '真正还需要拿捏的，是包装语气、卡片措辞，以及它会以怎样的方式落到对方手里。'
-        : 'What still matters is the packaging register, the wording on the card, and the way the gesture finally lands in the other person’s hands.'
-      : isZh
-        ? '更合适的做法，是先整理表达方式，再考虑替代方向，让这份心意重新回到人与文化之间。'
-        : 'A better route is to revise the expression first, then consider alternatives, so the centre of the gesture returns to people and culture.')
-
-  const openingRecommendation = analysis.rescueItem || (topRecommendation ? (isZh ? topRecommendation.nameZh : topRecommendation.nameEn) : (isZh ? '继续细化当前礼物' : 'Refine the current gift further'))
-
-  const openingRecommendationReason = analysis.rescueReason || (topRecommendation ? (isZh ? topRecommendation.reasonZh : topRecommendation.reasonEn) : undefined)
-
-  const memoLines =
-    riskReasons.length > 0
-      ? riskReasons
-      : analysis.matchedRules.length > 0
-        ? analysis.matchedRules.map(rule => rule.explanation)
-        : [
-            isZh
-              ? '暂时未见明显文化风险，但包装与表达细节依然会改变对方最终如何理解这份好意。'
-              : 'No major cultural risk appears immediately, though packaging and wording still shape how the gesture will finally be understood.',
-          ]
-
-  const adviceLines =
-    mustSendAdvice.length > 0
-      ? mustSendAdvice
-      : analysis.matchedRules.length > 0
-        ? analysis.matchedRules.map(rule => rule.suggestion)
-        : [
-            isZh
-              ? '当前没有额外补救建议，但依旧建议同步收紧表达语气与包装细节。'
-              : 'No additional mitigation is required for now, though wording and packaging should still be refined together.',
-          ]
-
-  const conclusionCards = [
-    { label: isZh ? '当前结论' : 'Current conclusion', value: analysis.riskLevel },
-    { label: isZh ? '契合度' : 'Fit score', value: `${analysis.fitScore}` },
-    { label: isZh ? '包装方向' : 'Packaging direction', value: analysis.packaging.style },
-    { label: isZh ? '表达语气' : 'Message tone', value: analysis.greetingCard.tone },
-  ]
-
-  const semanticLines = [
-    analysis.semanticSignals.tags.length > 0 ? analysis.semanticSignals.tags.join(', ') : null,
-    analysis.semanticSignals.flowers.length > 0 ? analysis.semanticSignals.flowers.join(', ') : null,
-    analysis.semanticSignals.numbers.length > 0 ? analysis.semanticSignals.numbers.join(', ') : null,
-  ].filter(Boolean)
-
-  const additionalLayers = [
-    multimodalResults
-      ? {
-          title: isZh ? '视觉细读补充' : 'Visual verification',
-          body: isZh
-            ? `补充识别来源为 ${multimodalResults.enrichmentSource}，置信度约 ${(multimodalResults.confidenceScore * 100).toFixed(0)}%。`
-            : `Additional reading sourced from ${multimodalResults.enrichmentSource} with roughly ${(multimodalResults.confidenceScore * 100).toFixed(0)}% confidence.`,
-        }
-      : null,
-    logisticsEstimate
-      ? {
-          title: isZh ? '送达预演' : 'Delivery rehearsal',
-          body: isZh
-            ? `${logisticsEstimate.recommendedCarrier} 预计 ${logisticsEstimate.deliveryTimeRange}，总成本约 ${formatCurrencyAmount(logisticsEstimate.totalEstimatedCost, logisticsEstimate.destinationCurrency as never, locale)}。`
-            : `${logisticsEstimate.recommendedCarrier} is estimated at ${logisticsEstimate.deliveryTimeRange}, with a total cost around ${formatCurrencyAmount(logisticsEstimate.totalEstimatedCost, logisticsEstimate.destinationCurrency as never, locale)}.`,
-        }
-      : null,
-    collaborativeResults.length > 0
-      ? {
-          title: isZh ? '替代方向校准' : 'Alternative reranking',
-          body: isZh
-            ? '结果还吸收了更深层的替代方向重排，用来修正推荐的先后顺序。'
-            : 'The dossier also incorporates deeper reranking to refine the order of alternative directions.',
-        }
-      : null,
-  ].filter(Boolean) as Array<{ title: string; body: string }>
-
-  return (
+const newRender = `  return (
     <motion.section
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
@@ -202,7 +52,7 @@ export function ResultsSection({
            )}
            <div>
              <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-1">{isZh ? '综合风险评级' : 'RISK LEVEL'}</p>
-             <p className={`text-sm font-bold font-mono uppercase ${analysis.riskLevel === 'High' ? 'text-red-500' : analysis.riskLevel === 'Medium' ? 'text-amber-500' : 'text-emerald-600'}`}>
+             <p className={\`text-sm font-bold font-mono uppercase \${analysis.riskLevel === 'High' ? 'text-red-500' : analysis.riskLevel === 'Medium' ? 'text-amber-500' : 'text-emerald-600'}\`}>
                {analysis.riskLevel}
              </p>
            </div>
@@ -254,7 +104,7 @@ export function ResultsSection({
               ) : (
                 <div className="p-5 rounded-xl border border-[#e2ddd5] bg-[#faf9f7] flex items-center gap-4">
                   <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <p className="text-sm text-[#4a505a]">{isZh ? '此物未显式触发不可逾越的地方法规或硬性禁忌。当前风险分数主要来源于该对象、关系与场景下的得体度与心理预期落差，核心需通过包装与文案来提升仪式感。' : 'No hard local rules broken. Risk score primarily reflects etiquette alignment based on the relationship and occasion. Focus is on reframing through packaging and tone.'}</p>
+                  <p className="text-sm text-[#4a505a]">{isZh ? '此物未显式触发本地禁止条规，核心在于表达形式。' : 'No hard local rules broken. Focus is on expression.'}</p>
                 </div>
               )}
             </div>
@@ -352,3 +202,7 @@ export function ResultsSection({
     </motion.section>
   )
 }
+`;
+
+fs.writeFileSync(file, headerVars + newRender, 'utf8');
+console.log('Done rewrititng to fix AI trust and dynamic data rendering.');

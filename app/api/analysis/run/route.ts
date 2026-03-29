@@ -1,3 +1,4 @@
+import { getCountryName } from '@/lib/countries'
 import { NextResponse } from 'next/server'
 import { buildUnknownRecognition } from '@/lib/analysis/cultural-analyzer'
 import {
@@ -169,7 +170,8 @@ export async function POST(request: Request) {
     const body = (await request.json()) as RequestPayload
     const locale = body.locale === 'zh' ? 'zh' : 'en'
     const country = sanitizeTextValue(body.country, { maxLength: 64 })
-    const countryCode = sanitizeTextValue(body.countryCode, { maxLength: 16 })
+    const countryCode = sanitizeTextValue(body.countryCode, { maxLength: 16 });
+    const resolvedCountryName = getCountryName(countryCode || '', 'en') !== (countryCode || '') ? getCountryName(countryCode || '', 'en') : country;
     const giftContext: GiftContextInput = {
       name: sanitizeTextValue(body.giftContext?.name, { maxLength: 80 }),
       description: sanitizeTextValue(body.giftContext?.description, { maxLength: 240 }),
@@ -280,7 +282,7 @@ export async function POST(request: Request) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          country: country || countryCode || 'Unknown',
+          country: resolvedCountryName || country || countryCode || 'Unknown',
           recognition,
           giftContext,
           audience,
@@ -302,9 +304,14 @@ export async function POST(request: Request) {
             ...validatedOverlay,
           }
           source = aiPayload.source === 'aliyun-dashscope' ? 'hybrid-ai-rules' : source
+        } else {
+          console.error("[Analysis Run] AI Overlay validatiion failed");
         }
+      } else {
+        console.error("[Analysis Run] AI Overlay fetch NOT OK:", aiResponse.status, await aiResponse.text());
       }
-    } catch {
+    } catch (e) {
+      console.error("[Analysis Run] AI Enhancement try-catch hit:", e);
       // Local rules remain as the guaranteed fallback when AI generation is unavailable.
     }
 

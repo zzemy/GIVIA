@@ -43,7 +43,7 @@ function buildRecognitionSystemPrompt(args: {
         : 'description 必须是单句且不超过 30 个汉字。',
       isEnglish
         ? 'label must be a common English noun. synonyms max 3 items.'
-        : 'label 使用英文通用名词，synonyms 最多 3 项。',
+        : 'label 请使用最贴切的中文名称，synonyms 最多 3 项。',
     ],
   })
 }
@@ -59,7 +59,7 @@ export function buildTextRecognitionMessages(text: string, language: 'zh' | 'en'
       content:
         language === 'en'
           ? `Identify the gift object from this text and provide one brief English description sentence. label must be a precise common English noun, avoid preset terms. Gift text: ${text}`
-          : `根据这段礼物信息识别礼物对象，并补充一句简短的物品描述。label 请使用最贴切的英文通用名词，避免套用固定预设词。礼物信息：${text}`,
+          : `根据这段礼物信息识别礼物对象，并补充一句简短的物品描述。label 请给出具体的中文名称（而非大类名称），避免套用固定预设词。礼物信息：${text}`,
     },
   ]
 }
@@ -76,6 +76,6 @@ export function buildImageRecognitionMessages(language: 'zh' | 'en'): {
     userText:
       language === 'en'
         ? 'Identify the gift object in this image and provide one brief English description sentence. label must be a precise common English noun, avoid preset terms.'
-        : '识别这张图片中的礼物对象，并补充一句礼物描述。label 请使用最贴切的英文通用名词，避免套用固定预设词。',
+        : '识别这张图片中的礼物对象，并补充一句礼物描述。label 请给出具体的中文名称（而非大类名称），避免套用固定预设词。',
   }
 }

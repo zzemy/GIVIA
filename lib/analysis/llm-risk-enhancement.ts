@@ -289,9 +289,12 @@ export function mergeLLMEnhancement(
     rescueReason:
       llmEnhancement.alternativeFraming ||
       ruleResult.rescueReason,
-    semanticSignals: [
+    semanticSignals: {
       ...ruleResult.semanticSignals,
-      llmEnhancement.culturalContext,
-    ].filter(Boolean),
+      tags: [
+        ...(ruleResult.semanticSignals?.tags || []),
+        llmEnhancement.culturalContext // we put the rich cultural psychological context here so it displays nicely
+      ].filter(Boolean),
+    },
   }
 }

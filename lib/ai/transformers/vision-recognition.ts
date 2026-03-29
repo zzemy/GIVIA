@@ -224,7 +224,7 @@ function localizeRecognitionLabel(label: string): { itemZh: string; itemEn: stri
   const categoryLabel = CATEGORY_LABELS[profile.category] ?? CATEGORY_LABELS.general
 
   return {
-    itemZh: containsChinese(compact) ? compact : categoryLabel.zh,
+    itemZh: containsChinese(compact) ? compact : (categoryLabel.zh === '礼物对象' ? compact : categoryLabel.zh),
     itemEn: containsChinese(compact) ? categoryLabel.en : titleCaseLabel(compact),
     itemKey: categoryLabel.itemKey,
     category: categoryLabel.category,
