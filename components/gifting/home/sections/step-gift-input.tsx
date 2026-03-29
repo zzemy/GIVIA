@@ -50,7 +50,7 @@ const fieldClassName =
 
 const stagePhotography = {
   editorial: {
-    src: 'https://images.pexels.com/photos/29395413/pexels-photo-29395413.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    src: '/editorial/gift2.jpg?v=2',
     position: 'center 34%',
   },
 }
@@ -159,16 +159,16 @@ export function StepGiftInput({
               : 'This step only defines the object itself, not the country, relationship, or risk judgment yet.'
 
   return (
-    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="h-full w-full">
+    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-0 w-full flex-1 flex-col">
       <input ref={fileInputRef} type="file" accept="image/*" onChange={onFileSelect} className="hidden" />
 
-      <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)]">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(165,181,214,0.18),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(214,185,155,0.22),transparent_26%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.58),transparent)]" />
 
         <div className="relative grid min-h-0 flex-1 xl:grid-cols-[minmax(21rem,0.84fr)_minmax(0,1.16fr)]">
           <div className="relative flex min-h-[15rem] flex-col justify-between overflow-hidden border-b border-[rgba(74,63,51,0.1)] px-5 py-5 sm:px-6 sm:py-6 xl:min-h-0 xl:border-r xl:border-b-0 xl:px-7 xl:py-7">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f877b]">{isZh ? 'Object stage' : 'Object stage'}</p>
                 <p className={`mt-3 max-w-[22rem] text-[1.55rem] leading-[1.04] tracking-[-0.04em] text-[#201915] sm:text-[1.9rem] ${displayClassName}`}>
@@ -181,7 +181,7 @@ export function StepGiftInput({
               </div>
             </div>
 
-            <div className="relative mt-5 flex-1 overflow-hidden rounded-[2rem] border border-[rgba(74,63,51,0.12)] bg-[rgba(92,72,54,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.38)]">
+            <div className="relative mt-3 flex-1 overflow-hidden rounded-[2rem] border border-[rgba(74,63,51,0.12)] bg-[rgba(92,72,54,0.12)] shadow-[inset_0_1px_0_rgba(255,255,255,0.38)]">
               {!imagePreview ? (
                 <button
                   type="button"
@@ -208,7 +208,7 @@ export function StepGiftInput({
                         ? '一张能看清材质、包装与用途的图，会比一串空泛形容词更快把对象说清楚。'
                         : 'A photograph that reveals material, packaging, and use will clarify the object faster than vague adjectives.'}
                     </p>
-                    <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/22 bg-white/8 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-white/88 transition group-hover:bg-white/14">
+                    <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/22 bg-white/8 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-white/88 transition group-hover:bg-white/14">
                       <Upload size={13} />
                       {isZh ? '选择图像' : 'Select image'}
                     </div>
@@ -247,7 +247,7 @@ export function StepGiftInput({
               )}
             </div>
 
-            <div className="mt-4 flex items-end justify-between gap-4 border-t border-[rgba(74,63,51,0.1)] pt-4">
+            <div className="mt-4 flex items-end justify-between gap-2 border-t border-[rgba(74,63,51,0.1)] pt-4">
               <div className="space-y-2">
                 {chapterNotes.map(line => (
                   <p key={line} className="text-sm leading-7 text-[#70685f]">
@@ -273,9 +273,9 @@ export function StepGiftInput({
               )}
             </div>
 
-            <div className={`grid min-h-0 gap-4 ${isRecognizedState ? 'mt-4' : 'mt-6'}`}>
+            <div className={`grid min-h-0 gap-2 ${isRecognizedState ? 'mt-4' : 'mt-6'}`}>
               <article>
-                <div className="flex items-end justify-between gap-4">
+                <div className="flex items-end justify-between gap-2">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.2em] text-[#978f84]">{isZh ? 'Gift naming' : 'Gift naming'}</p>
                     <p className={`mt-1.5 text-[1.06rem] leading-tight text-[#231d18] ${displayClassName}`}>
@@ -313,7 +313,7 @@ export function StepGiftInput({
               </article>
 
               <article>
-                <div className="flex items-end justify-between gap-4">
+                <div className="flex items-end justify-between gap-2">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.2em] text-[#978f84]">{isZh ? 'Object description' : 'Object description'}</p>
                     <p className={`mt-1.5 text-[1.06rem] leading-tight text-[#231d18] ${displayClassName}`}>
@@ -369,7 +369,7 @@ export function StepGiftInput({
                 )}
               </article>
 
-              <div className="flex items-center justify-between gap-4 border-t border-[rgba(74,63,51,0.08)] pt-3">
+              <div className="flex items-center justify-between gap-2 border-t border-[rgba(74,63,51,0.08)] pt-3">
                 <button
                   type="button"
                   onClick={() => setShowAiNotes(current => !current)}
@@ -397,7 +397,7 @@ export function StepGiftInput({
               </div>
 
               {showAiNotes && (
-                <div className="grid gap-4 rounded-[1.25rem] border border-[rgba(74,63,51,0.08)] bg-[rgba(255,255,255,0.52)] px-4 py-4">
+                <div className="grid gap-2 rounded-[1.25rem] border border-[rgba(74,63,51,0.08)] bg-[rgba(255,255,255,0.52)] px-4 py-4">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.2em] text-[#978f84]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
                     <input
@@ -443,7 +443,7 @@ export function StepGiftInput({
         </div>
 
         <div className="relative border-t border-[rgba(74,63,51,0.1)] bg-[linear-gradient(90deg,rgba(245,248,252,0.88),rgba(250,245,238,0.88))] px-5 py-3.5 sm:px-7 sm:py-4">
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+          <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
             <div className="max-w-[48rem]">
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#7d8797]">{isZh ? 'AI checkpoint' : 'AI checkpoint'}</p>
               <p className={`mt-2 text-[1.14rem] leading-tight text-[#201a16] ${displayClassName}`}>{checkpointTitle}</p>

@@ -7,11 +7,11 @@ import { HomeBackground } from '@/components/gifting/home/sections/home-backgrou
 
 const routePhotography = {
   wrapped:
-    'https://images.pexels.com/photos/35126573/pexels-photo-35126573.jpeg?cs=srgb&dl=pexels-iris-35126573.jpg&fm=jpg',
+    '/editorial/hero-family.jpg?v=2',
   tea:
-    'https://images.pexels.com/photos/5976086/pexels-photo-5976086.jpeg?cs=srgb&dl=pexels-roman-odintsov-5976086.jpg&fm=jpg',
+    '/editorial/hero-festival.jpg?v=2',
   meeting:
-    'https://images.unsplash.com/photo-1608755728617-aefab37d2edd?q=80&w=2000&auto=format&fit=crop',
+    '/editorial/hero.jpg?v=2',
 }
 
 export default function Home() {

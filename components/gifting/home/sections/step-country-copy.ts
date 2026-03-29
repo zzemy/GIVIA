@@ -13,24 +13,24 @@ export const relationDefaults: Record<AudienceGroup, string> = {
 
 export const stagePhotography: Record<SceneKey, { src: string; position: string }> = {
   destination: {
-    src: 'https://images.pexels.com/photos/5950153/pexels-photo-5950153.jpeg?cs=srgb&dl=pexels-dmitry-zvolskiy-5950153.jpg&fm=jpg',
-    position: 'center 46%',
+    src: '/editorial/destination.jpg?v=2',
+    position: 'center center',
   },
   relation: {
-    src: 'https://images.pexels.com/photos/7937690/pexels-photo-7937690.jpeg?cs=srgb&dl=pexels-pavel-danilyuk-7937690.jpg&fm=jpg',
-    position: 'center 30%',
+    src: '/editorial/relation.jpg?v=2',
+    position: 'center center',
   },
   profile: {
-    src: 'https://images.pexels.com/photos/7937690/pexels-photo-7937690.jpeg?cs=srgb&dl=pexels-pavel-danilyuk-7937690.jpg&fm=jpg',
-    position: 'center 38%',
+    src: '/editorial/profile.jpg?v=2',
+    position: 'center center',
   },
   tact: {
-    src: 'https://images.pexels.com/photos/5950153/pexels-photo-5950153.jpeg?cs=srgb&dl=pexels-dmitry-zvolskiy-5950153.jpg&fm=jpg',
-    position: 'center 42%',
+    src: '/editorial/tact.jpg?v=2',
+    position: 'center center',
   },
   summary: {
-    src: 'https://images.pexels.com/photos/7937690/pexels-photo-7937690.jpeg?cs=srgb&dl=pexels-pavel-danilyuk-7937690.jpg&fm=jpg',
-    position: 'center 32%',
+    src: '/editorial/summary.jpg?v=2',
+    position: 'center center',
   },
 }
 

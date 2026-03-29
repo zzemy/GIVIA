@@ -37,11 +37,11 @@ interface ResultsSectionProps {
 
 const reportPhotography = {
   lead:
-    'https://images.pexels.com/photos/35126573/pexels-photo-35126573.jpeg?cs=srgb&dl=pexels-iris-35126573.jpg&fm=jpg',
+    '/editorial/hero-family.jpg?v=2',
   note:
-    'https://images.pexels.com/photos/20691302/pexels-photo-20691302.jpeg?cs=srgb&dl=pexels-dziana-hasanbekava-20691302.jpg&fm=jpg',
+    '/editorial/result1.jpg?v=2',
   arrival:
-    'https://images.pexels.com/photos/6869042/pexels-photo-6869042.jpeg?cs=srgb&dl=pexels-kindelmedia-6869042.jpg&fm=jpg',
+    '/editorial/result2.jpg?v=2',
 }
 
 export function ResultsSection({
@@ -200,7 +200,7 @@ export function ResultsSection({
         <section
           className="relative overflow-hidden border-b border-black/6"
           style={{
-            backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.02),rgba(18,15,13,0.36)),url(${reportPhotography.lead})`,
+            backgroundImage: `linear-gradient(180deg,rgba(18,15,13,0.4),rgba(18,15,13,0.85)),url(${reportPhotography.lead})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

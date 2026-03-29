@@ -287,7 +287,7 @@ export function StepCountry({
               : 'I will read the gift through the country where it lands, because the same object changes meaning under a different etiquette.'}
           </p>
 
-          <div className="mt-6 border-t border-[rgba(74,63,51,0.08)] pt-5">
+          <div className="mt-4 border-t border-[rgba(74,63,51,0.08)] pt-4">
             <p className="text-[10px] uppercase tracking-[0.22em] text-[#978f84]">{isZh ? '文化落点' : 'Cultural frame'}</p>
             <p className="mt-1 text-[13px] leading-6 text-[#5f584f]">
               {countryName
@@ -313,7 +313,7 @@ export function StepCountry({
               : 'Do not reduce this person to a recipient. I need to know the distance that stands between you.'}
           </p>
 
-          <div className="mt-6 border-t border-[rgba(74,63,51,0.08)] pt-5">
+          <div className="mt-4 border-t border-[rgba(74,63,51,0.08)] pt-4">
             <p className="text-[10px] uppercase tracking-[0.22em] text-[#978f84]">{isZh ? '关系距离' : 'Relationship distance'}</p>
             <ChoicePills
               options={relationOptions}
@@ -359,7 +359,7 @@ export function StepCountry({
               : 'I only need a silhouette. Enough for the person to stand up, not enough to become a biography.'}
           </p>
 
-          <div className="mt-6 grid gap-5 border-t border-[rgba(74,63,51,0.08)] pt-5 sm:grid-cols-2">
+          <div className="mt-6 grid gap-3 border-t border-[rgba(74,63,51,0.08)] pt-3 sm:grid-cols-2">
             <div>
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#978f84]">{isZh ? '年龄感' : 'Age sense'}</p>
               <ChoicePills options={conciseAgeOptions} value={ageBand} onChange={onAgeBandChange} columns="grid-cols-2" />
@@ -371,7 +371,7 @@ export function StepCountry({
             </div>
           </div>
 
-          <p className="mt-5 border-t border-[rgba(74,63,51,0.08)] pt-4 text-[13px] leading-6 text-[#6a6258]">
+          <p className="mt-4 border-t border-[rgba(74,63,51,0.08)] pt-4 text-[13px] leading-6 text-[#6a6258]">
             {isZh
               ? `按现在这版，我会先把他写成更接近 ${ageBandLabel}、${occupationLabel} 的人。`
               : `At the moment, I would write this person closer to ${ageBandLabel} and ${occupationLabel}.`}
@@ -389,7 +389,7 @@ export function StepCountry({
               : 'The same gift can read very differently depending on force. Tell me only whether it should feel lighter, steadier, or more solemn.'}
           </p>
 
-          <div className="mt-6 border-t border-[rgba(74,63,51,0.08)] pt-5">
+          <div className="mt-4 border-t border-[rgba(74,63,51,0.08)] pt-4">
             <p className="text-[10px] uppercase tracking-[0.22em] text-[#978f84]">{isZh ? '礼物进入关系的力道' : 'Gesture intensity'}</p>
             <ChoicePills
               options={proportionOptions}
@@ -414,7 +414,7 @@ export function StepCountry({
             />
           </div>
 
-          <div className="mt-5 border-t border-[rgba(74,63,51,0.08)] pt-5">
+          <div className="mt-4 border-t border-[rgba(74,63,51,0.08)] pt-4">
             <p className="text-[10px] uppercase tracking-[0.22em] text-[#978f84]">{isZh ? '只有你知道的一句' : 'One private line'}</p>
             <textarea
               value={targetProfile}
@@ -443,7 +443,7 @@ export function StepCountry({
           ))}
         </div>
 
-        <div className="mt-5 border-t border-[rgba(74,63,51,0.08)] pt-5">
+        <div className="mt-4 border-t border-[rgba(74,63,51,0.08)] pt-4">
           <p className="text-[10px] uppercase tracking-[0.22em] text-[#978f84]">{isZh ? '进入 Step 3 时，AI 会带走这些判断' : 'The AI carries these judgments into Step 3'}</p>
           <p className="mt-2 text-[13px] leading-6 text-[#6a6258]">
             {isZh
@@ -456,44 +456,44 @@ export function StepCountry({
   }
 
   return (
-    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="h-full w-full">
-      <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)]">
+    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-0 w-full flex-1 flex-col">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(120,152,139,0.15),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(214,185,155,0.18),transparent_28%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.58),transparent)]" />
 
         <div className="relative grid min-h-0 flex-1 xl:grid-cols-[minmax(20rem,0.9fr)_minmax(0,1.1fr)]">
-          <div className="relative min-h-[15rem] overflow-hidden border-b border-[rgba(74,63,51,0.1)] xl:min-h-0 xl:border-r xl:border-b-0">
+          <div className="relative hidden xl:block min-h-[15rem] overflow-hidden border-b border-[rgba(74,63,51,0.1)] xl:min-h-0 xl:border-r xl:border-b-0">
             <Image src={currentPhoto.src} alt="" fill unoptimized className="object-cover" style={{ objectPosition: currentPhoto.position }} />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,252,247,0.05),rgba(39,28,21,0.32)_36%,rgba(16,11,8,0.7))]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.24),transparent_28%),radial-gradient(circle_at_80%_18%,rgba(255,235,214,0.18),transparent_26%)] mix-blend-screen" />
 
-            <div className="relative flex h-full flex-col justify-between px-5 py-5 text-white sm:px-6 sm:py-6 xl:px-7 xl:py-7">
-              <div className="flex items-start justify-between gap-4">
+            <div className="relative flex h-full flex-col justify-between px-5 py-4 sm:px-6 sm:py-5 xl:px-7 xl:py-6">
+              <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-[11px] uppercase tracking-[0.28em] text-white/68">{isZh ? 'Recipient stage' : 'Recipient stage'}</p>
-                  <p className={`mt-3 max-w-[16rem] text-[1.72rem] leading-[1.02] tracking-[-0.04em] text-white sm:text-[2rem] ${displayClassName}`}>
+                  <p className={`mt-2 max-w-[16rem] text-[1.5rem] leading-[1.05] tracking-[-0.04em] text-white sm:text-[1.7rem] ${displayClassName}`}>
                     {currentScene.stageLead}
                   </p>
                 </div>
                 <div className="text-right text-[10px] uppercase tracking-[0.22em] text-white/66">
                   <p>{String(sceneIndex + 1).padStart(2, '0')}</p>
-                  <p className="mt-2">{currentScene.railLabel}</p>
+                  <p className="mt-1">{currentScene.railLabel}</p>
                 </div>
               </div>
 
               <div className="max-w-[24rem]">
-                <p className="text-sm leading-7 text-white/84">{currentScene.intro}</p>
+                <p className="text-[13px] leading-6 text-white/84">{currentScene.intro}</p>
               </div>
 
-              <div className="max-w-[25rem] rounded-[1.55rem] border border-white/14 bg-[rgba(18,13,10,0.24)] px-5 py-4 backdrop-blur-sm">
-                <p className="text-[10px] uppercase tracking-[0.22em] text-white/62">{isZh ? 'AI 当前旁白' : 'Current AI aside'}</p>
-                <p className="mt-3 text-[15px] leading-7 text-white/92">{stageSnapshot}</p>
+              <div className="max-w-[25rem] rounded-[1.25rem] border border-white/14 bg-[rgba(18,13,10,0.24)] px-4 py-3 backdrop-blur-sm">
+                <p className="text-[9px] uppercase tracking-[0.22em] text-white/62">{isZh ? 'AI 当前旁白' : 'Current AI aside'}</p>
+                <p className="mt-2 text-[13px] leading-6 text-white/92">{stageSnapshot}</p>
               </div>
             </div>
           </div>
 
-          <div className="relative flex min-h-0 flex-col px-5 py-5 sm:px-6 sm:py-6 xl:px-7 xl:py-7">
-            <div className="flex flex-wrap items-center gap-2">
+          <div className="relative flex min-h-0 flex-col px-5 py-4 sm:px-6 sm:py-5 xl:px-7 xl:py-5">
+            <div className="flex flex-wrap items-center gap-1.5">
               {scenes.map((scene, index) => {
                 const active = index === sceneIndex
                 const available = devPreview || index <= unlockedSceneIndex
@@ -508,7 +508,7 @@ export function StepCountry({
                       }
                     }}
                     disabled={!available}
-                    className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition ${
+                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] transition ${
                       active
                         ? 'border-transparent bg-[#201915] text-white'
                         : available
@@ -529,15 +529,15 @@ export function StepCountry({
               ) : null}
             </div>
 
-            <div className="mt-5">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f877b]">{currentScene.stepLabel}</p>
-              <h2 className={`mt-3 max-w-[38rem] text-[1.82rem] leading-[0.98] tracking-[-0.05em] text-[#221c17] sm:text-[2.16rem] ${displayClassName}`}>
+            <div className="mt-4">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-[#8f877b]">{currentScene.stepLabel}</p>
+              <h2 className={`mt-2 max-w-[38rem] text-[1.6rem] leading-[1.05] tracking-[-0.05em] text-[#221c17] sm:text-[1.8rem] ${displayClassName}`}>
                 {currentScene.title}
               </h2>
-              <p className="mt-3 max-w-[40rem] text-[0.94rem] leading-7 text-[#70675f]">{currentScene.intro}</p>
+              <p className="mt-2 text-[0.9rem] leading-6 text-[#70675f]">{currentScene.intro}</p>
             </div>
 
-            <div className="mt-5 min-h-0 flex-1 overflow-y-auto pr-1">
+            <div className="mt-4 min-h-0 flex-1 overflow-y-auto pr-1">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentScene.key}
@@ -552,15 +552,15 @@ export function StepCountry({
               </AnimatePresence>
             </div>
 
-            <div className="mt-4 flex items-center gap-3 border-t border-[rgba(74,63,51,0.08)] pt-4 text-[12px] leading-6 text-[#675f56]">
-              <Sparkles className="h-4 w-4 shrink-0 text-[#2d8a69]" />
+            <div className="mt-3 flex items-center gap-2 border-t border-[rgba(74,63,51,0.08)] pt-3 text-[11px] leading-5 text-[#675f56]">
+              <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#2d8a69]" />
               <p>{isZh ? '你只校正当前这一幕，AI 负责把整页人物写完整。' : 'You only revise the current scene while the AI keeps the whole recipient page coherent.'}</p>
             </div>
           </div>
         </div>
 
-        <div className="relative border-t border-[rgba(74,63,51,0.1)] bg-[rgba(255,252,247,0.72)] px-5 py-4 sm:px-6 xl:px-7">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="relative border-t border-[rgba(74,63,51,0.1)] bg-[rgba(255,252,247,0.72)] px-5 py-3 sm:px-6 xl:px-6">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#8f877b]">{isZh ? 'AI checkpoint' : 'AI checkpoint'}</p>
               <p className="mt-2 text-[15px] leading-7 text-[#1f1915]">{checkpoint.title}</p>
@@ -574,7 +574,7 @@ export function StepCountry({
               <button
                 type="button"
                 onClick={handleSceneBack}
-                className="inline-flex items-center gap-3 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/82 px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-[#5c5a55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]"
+                className="inline-flex items-center gap-2 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/82 px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] text-[#5c5a55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]"
               >
                 <ArrowLeft className="h-4 w-4" />
                 {sceneIndex === 0 ? (isZh ? '返回上一步' : 'Back') : isZh ? '回到上一幕' : 'Previous scene'}
@@ -584,7 +584,7 @@ export function StepCountry({
                 type="button"
                 onClick={handleSceneContinue}
                 disabled={!currentScene.canProceed}
-                className={`inline-flex items-center gap-3 rounded-full px-6 py-3 text-[11px] uppercase tracking-[0.18em] transition ${
+                className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] transition ${
                   currentScene.canProceed
                     ? 'bg-[#2d8a69] text-white shadow-[0_20px_44px_-28px_rgba(45,138,105,0.54)] hover:-translate-y-0.5 hover:bg-[#247357]'
                     : 'cursor-not-allowed bg-[#d7d1c8] text-white/82'

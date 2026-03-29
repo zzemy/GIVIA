@@ -2,12 +2,13 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { AlertCircle, CheckCircle2, Network, Plane, Sparkles, Wand2 } from 'lucide-react'
+import { AlertCircle, ArrowLeft, CheckCircle2, Network, Plane, Sparkles, Wand2 } from 'lucide-react'
 import { getCountryName } from '@/lib/countries'
 import type { SceneTemplate } from '@/lib/types/gifting-types'
 import type { EnhancementSettings, Locale, RecognitionResult, SceneTemplateOption, SelectOption } from '@/components/gifting/home/types'
 
 export interface StepAnalysisProps {
+  onBack?: () => void
   locale: Locale
   t: (path: string) => string
   selectedCountry: string
@@ -249,6 +250,7 @@ function SelectField({
 
 export function StepAnalysis(props: StepAnalysisProps) {
   const {
+    onBack,
     locale,
     selectedCountry,
     selectedAudienceLabel,
@@ -332,17 +334,17 @@ export function StepAnalysis(props: StepAnalysisProps) {
   ]
 
   return (
-    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="h-full w-full">
-      <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.94),rgba(247,241,236,0.9))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.16)]">
+    <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-0 w-full flex-1 flex-col">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.94),rgba(247,241,236,0.9))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.16)]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,152,166,0.18),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(205,179,151,0.18),transparent_26%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.56),transparent)]" />
 
-        <div className="relative grid min-h-0 flex-1 xl:grid-cols-[minmax(0,1.04fr)_minmax(24rem,0.96fr)]">
-          <div className="relative flex min-h-[18rem] flex-col border-b border-[rgba(74,63,51,0.1)] px-5 py-5 sm:px-6 sm:py-6 xl:border-r xl:border-b-0 xl:px-7 xl:py-7">
-            <div className="flex items-start justify-between gap-4">
+        <div className="relative flex flex-col xl:flex-row min-h-0 flex-1">
+          <div className="relative flex flex-1 xl:flex-[1.04] min-w-0 min-h-[18rem] flex-col border-b border-[rgba(74,63,51,0.1)] px-5 py-4 sm:px-6 sm:py-4 xl:border-r xl:border-b-0 xl:px-7 xl:py-5">
+            <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.28em] text-[#8a6a72]">{isZh ? 'Arrival composition' : 'Arrival composition'}</p>
-                <p className="mt-3 max-w-[30rem] text-[1.62rem] leading-[1.04] tracking-[-0.04em] text-[#201915] sm:text-[1.95rem]">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[#8a6a72]">{isZh ? 'Arrival composition' : 'Arrival composition'}</p>
+                <p className="mt-2 max-w-[30rem] text-[1.55rem] leading-[1.04] tracking-[-0.04em] text-[#201915] sm:text-[1.85rem]">
                   {isZh ? '把人物侧写放进真实场景里，判断这份礼物该怎样抵达。' : 'Place the recipient sketch into a real scene and decide how the gesture should arrive.'}
                 </p>
               </div>
@@ -353,9 +355,9 @@ export function StepAnalysis(props: StepAnalysisProps) {
               </div>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-2">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Scene index' : 'Scene index'}</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
+              <div className="grid mt-3 gap-2 md:grid-cols-3">
                 {sceneTemplateOptions.map(option => {
                   const active = option.value === sceneTemplate
 
@@ -364,34 +366,34 @@ export function StepAnalysis(props: StepAnalysisProps) {
                       key={option.value}
                       type="button"
                       onClick={() => onSceneTemplateChange(option.value)}
-                      className={`rounded-[1.35rem] border px-4 py-4 text-left transition ${active ? 'border-transparent bg-[#f4ecef] shadow-[0_16px_30px_-22px_rgba(138,93,103,0.34)]' : 'border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.62)] hover:border-[rgba(74,63,51,0.18)]'}`}
+                      className={`rounded-[1rem] border px-3 py-1.5 text-left transition ${active ? 'border-transparent bg-[#f4ecef] shadow-[0_16px_30px_-22px_rgba(138,93,103,0.34)]' : 'border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.62)] hover:border-[rgba(74,63,51,0.18)]'}`}
                     >
-                      <p className={`text-sm leading-6 ${active ? 'text-[#6d4650]' : 'text-[#201915]'}`}>{option.label}</p>
-                      <p className={`mt-1 text-xs leading-6 ${active ? 'text-[#8a5d67]' : 'text-[#877d74]'}`}>{option.hint}</p>
+                      <p className={`text-[13px] leading-tight ${active ? 'text-[#6d4650]' : 'text-[#201915]'}`}>{option.label}</p>
+                      <p className={`mt-1 text-[12px] leading-[1.3] ${active ? 'text-[#8a5d67]' : 'text-[#877d74]'}`}>{option.hint}</p>
                     </button>
                   )
                 })}
               </div>
             </div>
 
-            <label className="mt-5 block">
-              <span className="text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Occasion note' : 'Occasion note'}</span>
+            <label className="mt-2 flex flex-1 flex-col">
+              <span className="mb-2 text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Occasion note' : 'Occasion note'}</span>
               <textarea
                 value={occasion}
                 onChange={event => onOccasionChange(event.target.value)}
-                rows={4}
+                rows={2}
                 placeholder={
                   isZh
                     ? '写清楚这份礼物出现的时刻：是首次拜访、项目收尾、节庆问候、私下感谢，还是一次需要拿捏分寸的修复性表达？'
                     : 'Describe the precise moment of gifting: a first visit, project close, holiday courtesy, private thanks, or a tactful attempt to repair atmosphere.'
                 }
-                className={`${fieldClassName} min-h-[7.6rem] resize-none overflow-hidden`}
+                className={`${fieldClassName} flex-1 min-h-[3.2rem] mt-1 resize-none overflow-y-auto`}
               />
             </label>
 
-            <div className="mt-5">
+            <div className="mt-2">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Visibility of arrival' : 'Visibility of arrival'}</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-3">
+              <div className="mt-1.5 grid gap-2 md:grid-cols-3">
                 {deliverySettingOptions.map(option => {
                   const active = option.value === deliverySetting
 
@@ -400,41 +402,41 @@ export function StepAnalysis(props: StepAnalysisProps) {
                       key={option.value}
                       type="button"
                       onClick={() => onDeliverySettingChange(option.value)}
-                      className={`rounded-[1.35rem] border px-4 py-4 text-left transition ${active ? 'border-transparent bg-[#f4ecef] shadow-[0_16px_30px_-22px_rgba(138,93,103,0.34)]' : 'border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.62)] hover:border-[rgba(74,63,51,0.18)]'}`}
+                      className={`rounded-[1rem] border px-3 py-1.5 text-left transition ${active ? 'border-transparent bg-[#f4ecef] shadow-[0_16px_30px_-22px_rgba(138,93,103,0.34)]' : 'border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.62)] hover:border-[rgba(74,63,51,0.18)]'}`}
                     >
-                      <p className={`text-sm leading-6 ${active ? 'text-[#6d4650]' : 'text-[#201915]'}`}>{option.label}</p>
-                      <p className={`mt-1 text-xs leading-6 ${active ? 'text-[#8a5d67]' : 'text-[#877d74]'}`}>{option.hint}</p>
+                      <p className={`text-[13px] leading-tight ${active ? 'text-[#6d4650]' : 'text-[#201915]'}`}>{option.label}</p>
+                      <p className={`mt-1 text-[12px] leading-[1.3] ${active ? 'text-[#8a5d67]' : 'text-[#877d74]'}`}>{option.hint}</p>
                     </button>
                   )
                 })}
               </div>
             </div>
 
-            <label className="mt-5 block">
+            <label className="mt-3 flex flex-1 flex-col">
               <span className="text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Arrival note' : 'Arrival note'}</span>
               <textarea
                 value={deliveryNarrative}
                 onChange={event => onDeliveryNarrativeChange(event.target.value)}
-                rows={4}
+                rows={2}
                 placeholder={
                   isZh
                     ? '写一句你希望它怎样被打开、被看到、被接住。比如更体面、更温和、更低调，或更像一次正式致意。'
                     : 'Write one line about how you want it to be opened, seen, and received: more gracious, softer, quieter, or more ceremonially formal.'
                 }
-                className={`${fieldClassName} min-h-[7.6rem] resize-none overflow-hidden`}
+                className={`${fieldClassName} flex-1 min-h-[3.2rem] mt-1 resize-none overflow-y-auto`}
               />
             </label>
           </div>
 
-          <div className="relative flex min-h-0 flex-col px-5 py-5 sm:px-6 sm:py-6 xl:px-7 xl:py-7">
+          <div className="relative flex flex-1 xl:flex-[0.96] min-w-0 xl:min-w-[24rem] min-h-0 flex-col px-5 py-4 sm:px-6 sm:py-4 xl:px-7 xl:py-5">
             <div className="max-w-[42rem]">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f877b]">{isZh ? 'Scene notes' : 'Scene notes'}</p>
-              <h2 className="mt-3 max-w-[28rem] text-[1.86rem] leading-[1.02] tracking-[-0.05em] text-[#221c17] sm:text-[2.08rem]">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-[#8f877b]">{isZh ? 'Scene notes' : 'Scene notes'}</p>
+              <h2 className="mt-2 max-w-[28rem] text-[1.55rem] leading-[1.02] tracking-[-0.05em] text-[#221c17] sm:text-[1.65rem]">
                 {isZh ? '让 AI 把人物、场景和分寸写成一段真正可推演的送达稿。' : 'Let the AI turn person, setting, and tact into an arrival draft that can actually be judged.'}
               </h2>
             </div>
 
-            <div className="mt-5 grid gap-4 md:grid-cols-2">
+            <div className="mt-1.5 grid gap-1.5 md:grid-cols-2">
               <SelectField label={isZh ? 'Budget register' : 'Budget register'} value={budgetRange} onChange={onBudgetRangeChange} options={[
                 { value: 'low', label: isZh ? '预算语气 · 低预算' : 'Budget tone · Low Budget' },
                 { value: 'medium', label: isZh ? '预算语气 · 中预算' : 'Budget tone · Mid Budget' },
@@ -447,26 +449,26 @@ export function StepAnalysis(props: StepAnalysisProps) {
               ]} />
             </div>
 
-            <div className="mt-5 rounded-[1.5rem] border border-[rgba(74,63,51,0.08)] bg-[rgba(255,255,255,0.54)] p-4">
+            <div className="mt-4 flex flex-1 flex-col rounded-[1rem] border border-[rgba(74,63,51,0.08)] bg-[rgba(255,255,255,0.54)] p-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-[#8a5d67]" />
                 <p className="text-[11px] uppercase tracking-[0.18em] text-[#8a6a72]">{isZh ? 'AI arrival draft' : 'AI arrival draft'}</p>
               </div>
-              <p className="mt-3 text-sm leading-7 text-[#4f473f]">{arrivalDraft}</p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <p className="mt-2 flex-1 text-[13px] leading-relaxed text-[#4f473f] overflow-y-auto">{arrivalDraft}</p>
+              <div className="mt-2 flex flex-wrap gap-2">
                 {[countryName || (isZh ? '目的地待定' : 'Destination pending'), selectedAudienceLabel, sceneLabel, deliverySettingLabel, budgetLabel, formalityLabel].map(item => (
-                  <span key={item} className="rounded-full border border-[rgba(74,63,51,0.08)] bg-white/74 px-3 py-1.5 text-[11px] uppercase tracking-[0.14em] text-[#6b645b]">
+                  <span key={item} className="rounded-full border border-[rgba(74,63,51,0.08)] bg-white/74 px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-[#6b645b]">
                     {item}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="mt-5 rounded-[1.5rem] border border-[rgba(74,63,51,0.08)] bg-[rgba(255,255,255,0.54)] p-4">
-              <div className="flex items-center justify-between gap-3">
+            <div className="mt-4 rounded-[1rem] border border-[rgba(74,63,51,0.08)] bg-[rgba(255,255,255,0.54)] p-3">
+              <div className="flex items-center justify-between gap-2">
                 <div>
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Reading lenses' : 'Reading lenses'}</p>
-                  <p className="mt-1 text-sm leading-6 text-[#5f584f]">
+                  <p className="hidden">
                     {isZh ? '这些不是参数面板，而是 AI 在推演时优先查看的分析角度。' : 'These are not raw settings panels, but the reading lenses the AI will prioritize during analysis.'}
                   </p>
                 </div>
@@ -475,7 +477,7 @@ export function StepAnalysis(props: StepAnalysisProps) {
                 </span>
               </div>
 
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <div className="mt-4 grid gap-1.5 md:grid-cols-2">
                 {[
                   { key: 'multimodal', label: isZh ? '物象细读' : 'Object close reading', icon: Sparkles },
                   { key: 'collaborativeFiltering', label: isZh ? '关系参照' : 'Relational matching', icon: Network },
@@ -489,9 +491,9 @@ export function StepAnalysis(props: StepAnalysisProps) {
                       key={lens.key}
                       type="button"
                       onClick={() => onEnhancementSettingChange(lens.key as keyof EnhancementSettings, !active)}
-                      className={`flex items-start gap-3 rounded-[1.2rem] border px-4 py-4 text-left transition ${active ? 'border-transparent bg-[#f4ecef]' : 'border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.7)]'}`}
+                      className={`flex items-start gap-2 rounded-[1.2rem] border px-3 py-1.5 text-left transition ${active ? 'border-transparent bg-[#f4ecef]' : 'border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.7)]'}`}
                     >
-                      <div className={`mt-0.5 flex h-8 w-8 items-center justify-center rounded-full ${active ? 'bg-white text-[#8a5d67]' : 'bg-[#f3efe8] text-[#8f877b]'}`}>
+                      <div className={`mt-0.5 flex h-6 w-6 items-center justify-center rounded-full ${active ? 'bg-white text-[#8a5d67]' : 'bg-[#f3efe8] text-[#8f877b]'}`}>
                         <lens.icon className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
@@ -505,19 +507,19 @@ export function StepAnalysis(props: StepAnalysisProps) {
           </div>
         </div>
 
-        <div className="relative border-t border-[rgba(74,63,51,0.1)] bg-[linear-gradient(90deg,rgba(245,237,239,0.88),rgba(250,245,238,0.88))] px-5 py-4 sm:px-7">
-          <div className="grid gap-5 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)]">
+        <div className="relative border-t border-[rgba(74,63,51,0.1)] bg-[linear-gradient(90deg,rgba(245,237,239,0.88),rgba(250,245,238,0.88))] px-5 py-3 sm:px-7 sm:py-4">
+          <div className="grid gap-2 xl:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)]">
             <div>
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#7d8797]">{isZh ? 'AI checkpoint' : 'AI checkpoint'}</p>
-              <div className="mt-3 space-y-2">
+              <div className="mt-2 space-y-0">
                 {proportionCheck.map(item => (
-                  <div key={item} className="flex items-start gap-2 text-sm leading-6 text-[#5a544b]">
+                  <div key={item} className="flex items-start gap-2 text-[13px] leading-tight text-[#5a544b] text-[#5a544b]">
                     <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#8a5d67]" />
                     <span>{item}</span>
                   </div>
                 ))}
                 {riskWatch.map(item => (
-                  <div key={item} className="flex items-start gap-2 text-sm leading-6 text-[#5a544b]">
+                  <div key={item} className="flex items-start gap-2 text-[13px] leading-tight text-[#5a544b] text-[#5a544b]">
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#8a5d67]" />
                     <span>{item}</span>
                   </div>
@@ -527,21 +529,28 @@ export function StepAnalysis(props: StepAnalysisProps) {
 
             <div className="border-l border-[rgba(74,63,51,0.08)] pl-0 xl:pl-5">
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#7d8797]">{isZh ? "Editor's handoff" : "Editor's handoff"}</p>
-              <p className="mt-2 text-sm leading-7 text-[#5f584f]">
-                {isZh
-                  ? '当人物和场景都写清后，下一步不再是补字段，而是让系统正式开始做文化判断、表达推演和替代方向整理。'
-                  : 'Once both person and scene are legible, the next move is no longer adding fields but letting the system perform cultural judgment and scenario refinement.'}
-              </p>
-              <button
-                type="button"
-                onClick={onAnalyze}
-                disabled={!canAnalyze || isAnalyzing}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#24201b] px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-[#17130f] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
-              >
-                <Wand2 className="h-4 w-4" />
-                {isAnalyzing ? (isZh ? `开始推演 ${analyzingElapsedSeconds}s` : `Composing ${analyzingElapsedSeconds}s`) : isZh ? '开始文化推演' : 'Begin cultural judgment'}
-              </button>
-            </div>
+              
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {onBack && (
+                    <button
+                      type="button"
+                      onClick={onBack}
+                      className="inline-flex items-center gap-2 rounded-full border border-[rgba(36,32,27,0.12)] bg-transparent px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-[#24201b] transition hover:-translate-y-0.5 hover:bg-[rgba(36,32,27,0.04)]"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      {isZh ? '返回上一步' : 'Back'}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={onAnalyze}
+                    disabled={!canAnalyze || isAnalyzing}
+                    className="inline-flex items-center gap-2 rounded-full bg-[#24201b] px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-[#17130f] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
+                  >
+                    <Wand2 className="h-4 w-4" />
+                    {isAnalyzing ? (isZh ? `开始推演 ${analyzingElapsedSeconds}s` : `Composing ${analyzingElapsedSeconds}s`) : isZh ? '开始文化推演' : 'Begin cultural judgment'}
+                  </button>
+                </div>            </div>
           </div>
         </div>
       </div>

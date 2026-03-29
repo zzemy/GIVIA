@@ -256,18 +256,18 @@ export default function GiftingPage() {
         }}
       />
 
-      <div className="relative z-10 mx-auto flex h-screen w-full max-w-[1520px] flex-col px-6 py-5 sm:px-8 lg:px-12">
+      <div className="relative z-10 mx-auto flex h-[100dvh] w-full max-w-[1520px] flex-col px-6 py-4 sm:px-8 lg:px-12">
         <header className="flex items-start justify-between gap-4">
           <div>
             {brandEyebrow ? <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
-            <p className={`mt-2 text-[2.4rem] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif tracking-[-0.08em]'}`}>{brandTitle}</p>
+            <p className={`mt-1.5 text-[2rem] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif tracking-[-0.08em]'}`}>{brandTitle}</p>
           </div>
 
           <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={() => router.push(isDevPreview ? `/${routeLocale}/gifting` : `/${routeLocale}/gifting?dev=1&step=${currentStep}`)}
-              className={`inline-flex items-center rounded-full border px-3 py-2 text-[10px] uppercase tracking-[0.18em] transition ${
+              className={`inline-flex items-center rounded-full border px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] transition ${
                 isDevPreview
                   ? 'border-[rgba(45,138,105,0.12)] bg-[#eef6f1] text-[#2d6d55]'
                   : 'border-[#E5E0D8]/90 bg-white/72 text-[#7d8593] hover:text-[#191614]'
@@ -293,7 +293,7 @@ export default function GiftingPage() {
           </div>
         </header>
 
-        <div className="mt-4 flex items-center gap-6 border-t border-[#E5E0D8]/80 pt-3">
+        <div className="mt-6 flex items-center gap-6 border-t border-[#E5E0D8]/80 pt-4">
           <div className="min-w-[8.5rem]">
             <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
             <p className="mt-2 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
@@ -334,7 +334,7 @@ export default function GiftingPage() {
           </div>
         </div>
 
-        <main className="mt-4 min-h-0 flex-1 overflow-hidden">
+        <main className="mt-6 min-h-0 flex-1 overflow-hidden pb-4 lg:pb-6">
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
               <motion.div
@@ -343,30 +343,25 @@ export default function GiftingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -18 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="h-full w-full"
+                className="flex min-h-0 w-full flex-1 flex-col"
               >
                 <StepGiftInput {...giftInputProps} canContinue={canAdvanceFromStep1} onContinue={() => updateStep(2)} />
               </motion.div>
             )}
 
             {currentStep === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col gap-6 pt-4">
-                <div className="min-h-0 w-full overflow-hidden">
+              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col pt-2">
+                <div className="min-h-0 flex w-full flex-1 flex-col overflow-hidden">
                   <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => updateStep(1)} onContinue={() => updateStep(3)} devPreview={isDevPreview} />
                 </div>
               </motion.div>
             )}
 
             {currentStep === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col gap-6 pt-4">
-                <div className="min-h-0 overflow-y-auto w-full">
-                  {feedbackProps.error && <div className="mb-6 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-4 text-sm text-rose-700">{feedbackProps.error}</div>}
-                  <StepAnalysis {...analysisProps} />
-                  <div className="mt-6 flex w-full justify-between pb-8">
-                    <button onClick={() => updateStep(2)} className="inline-flex items-center gap-3 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/78 px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-[#5C5A55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]">
-                      <ArrowLeft className="w-5 h-5"/> {isZh ? '返回上一步' : 'Back'}
-                    </button>
-                  </div>
+              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col pt-2">
+                <div className="min-h-0 flex w-full flex-1 flex-col overflow-hidden">
+                  {feedbackProps.error && <div className="mb-4 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-3 text-sm text-rose-700">{feedbackProps.error}</div>}
+                  <StepAnalysis {...analysisProps} onBack={() => updateStep(2)} />
                 </div>
               </motion.div>
             )}
@@ -385,12 +380,27 @@ export default function GiftingPage() {
                       </div>
                     </div>
 
-                    <div className="p-8 sm:p-10">
-                      <p className={`text-[11px] uppercase tracking-[0.2em] ${currentContent.accentTextClassName}`}>{isZh ? '稿件生成中' : 'Dossier in progress'}</p>
-                      <h2 className="mt-4 text-[2.7rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]">
+                    <div className="flex h-full flex-col justify-center p-8 sm:p-10">
+                      <div className="flex items-center gap-3">
+                        <motion.div 
+                          animate={{ rotate: 360 }} 
+                          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                          className={`h-4 w-4 rounded-full border-[1.5px] border-transparent border-t-current ${currentContent.accentTextClassName}`}
+                        />
+                        <p className={`text-[11px] uppercase tracking-[0.2em] font-medium ${currentContent.accentTextClassName}`}>
+                          {isZh ? '稿件生成中...' : 'Dossier in progress...'}
+                        </p>
+                      </div>
+                      
+                      <motion.h2 
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        className="mt-6 text-[2.7rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]"
+                      >
                         {isZh ? '系统正在整理文化风险、表达方式与替代方向。' : 'The system is assembling risk, expression, and better alternatives.'}
-                      </h2>
-                      <p className="mt-4 max-w-xl text-lg leading-9 text-[#667085]">
+                      </motion.h2>
+
+                      <p className="mt-6 max-w-xl text-lg leading-9 text-[#667085]">
                         {isZh
                           ? '礼物语义、国家礼仪、关系角色与包装语气正在被交叉校准，准备输出更稳妥、更得体的送达方案。'
                           : 'Gift semantics, etiquette, relationship roles, and packaging tone are being cross-calibrated to produce a more tactful and fitting route for the gesture.'}
@@ -400,13 +410,33 @@ export default function GiftingPage() {
                           isZh ? '礼物语义' : 'Gift semantics',
                           isZh ? '文化分寸' : 'Cultural tact',
                           isZh ? '关系语境' : 'Relationship context',
-                        ].map(item => (
-                          <div key={item} className="border-t border-[#E5E0D8]/80 pt-4 text-sm text-[#475467]">
-                            {item}
-                          </div>
+                        ].map((item, i) => (
+                          <motion.div 
+                            key={item} 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 + i * 0.15, duration: 0.6 }}
+                            className="border-t border-[#E5E0D8]/80 pt-4 text-sm text-[#475467]"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="relative flex h-2 w-2">
+                                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${currentContent.accentTextClassName.replace('text-', 'bg-')}`}></span>
+                                <span className={`relative inline-flex rounded-full h-2 w-2 ${currentContent.accentTextClassName.replace('text-', 'bg-')}`}></span>
+                              </span>
+                              {item}
+                            </div>
+                          </motion.div>
                         ))}
                       </div>
-                      <p className="mt-6 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
+                      <div className="relative mt-10 h-[2px] w-full overflow-hidden rounded-full bg-[#E5E0D8]/40">
+                        <motion.div 
+                          initial={{ x: '-100%' }}
+                          animate={{ x: '100%' }}
+                          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                          className={`absolute inset-y-0 w-1/2 rounded-full ${currentContent.accentTextClassName.replace('text-', 'bg-')}`}
+                        />
+                      </div>
+                      <p className="mt-4 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
                         {isZh ? '终稿不是只给结论，而是给出真正可执行的改写方式。' : 'The dossier will not stop at a verdict. It will explain how to rewrite the gesture.'}
                       </p>
                     </div>
