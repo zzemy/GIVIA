@@ -21,9 +21,6 @@ type StepTheme = {
   desc: string
   quote: string
 }
-
-
-
 export default function GiftingPage() {
   const params = useParams<{ locale?: string }>()
   const router = useRouter()
@@ -34,6 +31,53 @@ export default function GiftingPage() {
   const { giftInputProps, countryProps, analysisProps } = workflowPanelsProps
 
   const [currentStep, setCurrentStep] = useState(1)
+  const [devPreviewState, setDevPreviewState] = React.useState({ enabled: false, step: 1 })
+  const isDevPreview = devPreviewState.enabled
+
+  React.useEffect(() => {
+    const syncFromLocation = () => {
+      const nextParams = new URLSearchParams(window.location.search)
+      const enabled = nextParams.get('dev') === '1'
+      const rawStep = Number(nextParams.get('step') ?? 1)
+      const step = Number.isFinite(rawStep) && rawStep >= 1 && rawStep <= 5 ? rawStep : 1
+
+      setDevPreviewState(previous => {
+        if (previous.enabled === enabled && previous.step === step) {
+          return previous
+        }
+
+        return { enabled, step }
+      })
+    }
+
+    syncFromLocation()
+    window.addEventListener('popstate', syncFromLocation)
+
+    return () => window.removeEventListener('popstate', syncFromLocation)
+  }, [])
+
+  const buildGiftingHref = (locale: 'zh' | 'en', step?: number) => {
+    return devPreviewState.enabled ? `/${locale}/gifting?dev=1&step=${step ?? currentStep}` : `/${locale}/gifting`
+  }
+
+  const updateStep = (nextStep: number) => {
+    setCurrentStep(nextStep)
+    setDevPreviewState(previous => (previous.enabled ? { ...previous, step: nextStep } : previous))
+  }
+
+  React.useEffect(() => {
+    if (!isDevPreview) {
+      return
+    }
+
+    if (analysisProps.isAnalyzing || resultsProps) {
+      return
+    }
+
+    if (currentStep !== devPreviewState.step) {
+      setCurrentStep(devPreviewState.step)
+    }
+  }, [analysisProps.isAnalyzing, currentStep, devPreviewState.step, isDevPreview, resultsProps])
 
   React.useEffect(() => {
     if (analysisProps.isAnalyzing && currentStep !== 4) {
@@ -49,6 +93,18 @@ export default function GiftingPage() {
       }
     }
   }, [analysisProps.isAnalyzing, currentStep, feedbackProps.error, resultsProps])
+
+  React.useEffect(() => {
+    if (!isDevPreview) {
+      return
+    }
+
+    const nextHref = `/${routeLocale}/gifting?dev=1&step=${currentStep}`
+
+    if (`${window.location.pathname}${window.location.search}` !== nextHref) {
+      router.replace(nextHref, { scroll: false })
+    }
+  }, [currentStep, isDevPreview, routeLocale, router])
 
   const editorialContent: Record<number, StepTheme> = {
     1: {
@@ -119,8 +175,8 @@ export default function GiftingPage() {
   }
 
   const currentContent = editorialContent[currentStep] ?? editorialContent[1]
-  const canAdvanceFromStep1 = Boolean(giftInputProps.giftName.trim() || giftInputProps.giftDescription.trim())
-  const canAdvanceFromStep2 = Boolean(countryProps.selectedCountry && (countryProps.targetGroup !== 'other' || countryProps.customAudienceGroup.trim()))
+  const canAdvanceFromStep1 = isDevPreview || Boolean(giftInputProps.giftName.trim() || giftInputProps.giftDescription.trim())
+  const canAdvanceFromStep2 = isDevPreview || Boolean(countryProps.selectedCountry && (countryProps.targetGroup !== 'other' || countryProps.customAudienceGroup.trim()))
 
   const railLabels = [
     isZh ? '礼物对象' : 'Object',
@@ -134,6 +190,7 @@ export default function GiftingPage() {
   const brandTitle = isZh ? '礼智极意' : 'Givia'
   const languageToggleLabel = isZh ? 'EN Edition' : 'ZH Edition'
   const backHomeLabel = isZh ? '返回首页' : 'Back home'
+  const devToggleLabel = isDevPreview ? (isZh ? '退出开发预览' : 'Exit preview') : isZh ? '开发预览' : 'Preview mode'
 
   if (currentStep === 5) {
     return (
@@ -145,14 +202,23 @@ export default function GiftingPage() {
               {brandEyebrow ? <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
               <p className={`mt-2 text-[2.4rem] tracking-[-0.08em] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif'}`}>{brandTitle}</p>
             </div>
-            <button
-              type="button"
-              onClick={() => router.push(`/${routeLocale}`)}
-              className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              {backHomeLabel}
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => router.push(isDevPreview ? `/${routeLocale}/gifting` : `/${routeLocale}/gifting?dev=1&step=${currentStep}`)}
+                className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
+              >
+                {devToggleLabel}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push(`/${routeLocale}`)}
+                className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                {backHomeLabel}
+              </button>
+            </div>
           </header>
 
           <div className="mt-8 grid gap-6 border-t border-[#E5E0D8]/80 pt-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,18rem)]">
@@ -200,7 +266,18 @@ export default function GiftingPage() {
           <div className="flex items-center gap-4">
             <button
               type="button"
-              onClick={() => router.push(`/${isZh ? 'en' : 'zh'}/gifting`)}
+              onClick={() => router.push(isDevPreview ? `/${routeLocale}/gifting` : `/${routeLocale}/gifting?dev=1&step=${currentStep}`)}
+              className={`inline-flex items-center rounded-full border px-3 py-2 text-[10px] uppercase tracking-[0.18em] transition ${
+                isDevPreview
+                  ? 'border-[rgba(45,138,105,0.12)] bg-[#eef6f1] text-[#2d6d55]'
+                  : 'border-[#E5E0D8]/90 bg-white/72 text-[#7d8593] hover:text-[#191614]'
+              }`}
+            >
+              {isDevPreview ? 'DEV PREVIEW' : devToggleLabel}
+            </button>
+            <button
+              type="button"
+              onClick={() => router.push(buildGiftingHref(isZh ? 'en' : 'zh', currentStep))}
               className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
             >
               {languageToggleLabel}
@@ -231,7 +308,17 @@ export default function GiftingPage() {
               const reached = stepIndex < currentStep
 
               return (
-                <div key={label} className="flex min-w-0 flex-1 flex-col gap-2">
+                <button
+                  key={label}
+                  type="button"
+                  disabled={!isDevPreview}
+                  onClick={() => {
+                    if (isDevPreview) {
+                      updateStep(stepIndex)
+                    }
+                  }}
+                  className="flex min-w-0 flex-1 flex-col gap-2 text-left"
+                >
                   <span
                     className="h-[2px] rounded-full transition-all"
                     style={{
@@ -241,7 +328,7 @@ export default function GiftingPage() {
                   <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>
                     0{stepIndex} {label}
                   </span>
-                </div>
+                </button>
               )
             })}
           </div>
@@ -258,14 +345,14 @@ export default function GiftingPage() {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="h-full w-full"
               >
-                <StepGiftInput {...giftInputProps} canContinue={canAdvanceFromStep1} onContinue={() => setCurrentStep(2)} />
+                <StepGiftInput {...giftInputProps} canContinue={canAdvanceFromStep1} onContinue={() => updateStep(2)} />
               </motion.div>
             )}
 
             {currentStep === 2 && (
               <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col gap-6 pt-4">
                 <div className="min-h-0 w-full overflow-hidden">
-                  <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => setCurrentStep(1)} onContinue={() => setCurrentStep(3)} />
+                  <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => updateStep(1)} onContinue={() => updateStep(3)} devPreview={isDevPreview} />
                 </div>
               </motion.div>
             )}
@@ -276,7 +363,7 @@ export default function GiftingPage() {
                   {feedbackProps.error && <div className="mb-6 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-4 text-sm text-rose-700">{feedbackProps.error}</div>}
                   <StepAnalysis {...analysisProps} />
                   <div className="mt-6 flex w-full justify-between pb-8">
-                    <button onClick={() => setCurrentStep(2)} className="inline-flex items-center gap-3 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/78 px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-[#5C5A55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]">
+                    <button onClick={() => updateStep(2)} className="inline-flex items-center gap-3 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/78 px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-[#5C5A55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]">
                       <ArrowLeft className="w-5 h-5"/> {isZh ? '返回上一步' : 'Back'}
                     </button>
                   </div>

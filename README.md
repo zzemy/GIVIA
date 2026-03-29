@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  Givia is a premium cross-cultural gifting system that turns taste, etiquette, symbolism, and delivery tone into a composed editorial workflow.
+  Givia is a bilingual cross-cultural gifting experience that helps a gesture arrive with more tact, more clarity, and more social intelligence.
 </p>
 
 <p align="center">
@@ -26,80 +26,157 @@
   <img src="https://img.shields.io/badge/License-AGPL--3.0-0b5fff" alt="AGPL-3.0" />
 </p>
 
+<p align="center">
+  <img src="./docs/readme/home-en.png" alt="Givia hero" width="100%" />
+</p>
+
+<p align="center">
+  <img src="./docs/readme/home-zh.png" alt="Chinese landing page" width="49%" />
+  <img src="./docs/readme/gifting-en.png" alt="English gifting workflow" width="49%" />
+</p>
+
+<p align="center">
+  <img src="./docs/readme/gifting-zh.png" alt="Chinese gifting workflow" width="49%" />
+  <img src="./docs/readme/composing-en.png" alt="Composing dossier view" width="49%" />
+</p>
+
+<p align="center">
+  <em>Landing, workflow, and dossier-like composition across Chinese and English product surfaces.</em>
+</p>
+
 ---
 
-## Why Givia exists
+## Before a gift is accepted, it is interpreted
 
 A gift rarely arrives as an object alone.
 
-It arrives with implication, etiquette, memory, hierarchy, timing, and tone already attached. What feels thoughtful in one place can feel excessive, intimate, ceremonial, awkward, or even inappropriate in another.
+It arrives with implication, etiquette, hierarchy, distance, timing, and tone already attached. What feels thoughtful in one place may feel excessive, awkward, too intimate, too public, or simply out of tune in another.
 
-**Givia** exists to read that difference before the gesture is sent.
+**Givia exists to read that difference before the gesture is sent.**
 
-Instead of behaving like a generic recommendation engine, it treats cross-cultural gifting as an editorial problem: something to be framed, interpreted, revised, and delivered with tact.
+It does not treat gifting as a generic recommendation task. It treats it as an **editorial judgment problem** — something that must be framed, interpreted, revised, and delivered with tact.
 
-## What makes it distinct
+## Why this product matters
 
-- **Editorial, not dashboard-driven** — the experience is built as a narrative flow rather than a SaaS control panel.
-- **Cross-cultural by design** — gift reading is grounded in recipient context, market etiquette, symbolic risk, and delivery tone.
-- **Recommendation with judgment** — the system does not only score; it rewrites, reframes, and proposes more suitable directions.
-- **Bilingual brand system** — Chinese and English routes are treated as first-class product surfaces, not afterthought translations.
-- **Premium product language** — the interface, copy, and result framing are built to feel composed, calm, and internationally credible.
+Most gifting tools are built around one narrow question:
+
+> what should I buy?
+
+But cross-cultural gifting is rarely just a buying problem.
+
+It is a problem of:
+
+- social distance,
+- cultural reading,
+- symbolic risk,
+- expression style,
+- and delivery posture.
+
+The same object can signal warmth, pressure, ceremony, overfamiliarity, or poor judgment depending on who receives it, where it is received, and how it is presented.
+
+Givia is built for that layer.
+
+## What makes Givia different
+
+- **Not marketplace-first**  
+  It is not designed as a catalog or shopping interface.
+
+- **Not just a taboo checker**  
+  It does more than list cultural risks or symbolic warnings.
+
+- **Not generic AI recommendation**  
+  It does not simply output a ranked list of gift ideas.
+
+- **Editorial by design**  
+  It rewrites the gifting decision as a composed narrative: object, recipient, context, tact, and final arrival.
+
+- **Bilingual as a product surface**  
+  Chinese and English are both treated as first-class brand experiences.
+
+- **Premium in tone and presentation**  
+  The interface, copy, and final report are designed to feel calm, deliberate, and internationally credible.
+
+## What the user gets
+
+The output is not just an answer.
+
+It is a **dossier-like gifting document** that can include:
+
+- gift recognition from image or text,
+- recipient and relationship framing,
+- cultural risk reading,
+- tone and tact judgment,
+- alternative gifting directions,
+- packaging and delivery guidance,
+- and rewritten wording that feels more suitable for the situation.
+
+In other words: Givia helps transform a gift from an object into a better-arriving gesture.
 
 ## Experience surfaces
 
-Givia currently ships as a multi-surface editorial web experience:
-
 | Surface | Route | Role |
 | --- | --- | --- |
-| Brand entry | `/` | Global entry into the product world |
+| Brand entry | `/` | Shared entry into the product world |
 | Localized home | `/zh`, `/en` | Language-specific landing surfaces |
-| Editorial workflow | `/[locale]/gifting` | Guided gifting composition and analysis |
-| Final dossier | in workflow | Report-like recommendation and rewrite output |
+| Editorial gifting flow | `/[locale]/gifting` | Main multi-step workflow |
+| Final dossier | Inside the gifting flow | Structured recommendation and rewrite output |
 
-The product is not a gift marketplace and not a simple rule checker. It is a composed decision surface for gestures moving between cultures.
+## Current workflow
+
+The product is currently organized into five visible chapters:
+
+1. **Object opening**  
+   Understand the gift itself from image or text.
+
+2. **Recipient writing**  
+   Write the recipient clearly — relationship distance, profile, and tact.
+
+3. **AI judgment**  
+   Organize the cultural reading, delivery logic, and expression direction.
+
+4. **Composing**  
+   Generate the final report-like output.
+
+5. **Final dossier**  
+   Present the recommendation as a composed gifting document rather than a flat result list.
 
 ## Core capabilities
 
 | Capability | Description |
 | --- | --- |
-| Gift recognition | Reads a gift candidate from image or text input |
-| Cultural reading | Evaluates symbolism, etiquette, and market-sensitive risk |
-| Recipient framing | Interprets relationship, scene, and audience context |
-| Editorial rewrite | Produces more tactful gifting directions and message suggestions |
-| Delivery guidance | Extends recommendations into packaging and logistics considerations |
-| Bilingual presentation | Preserves brand clarity across Chinese and English routes |
+| Gift recognition | Read a gift candidate from image or text |
+| Cultural interpretation | Evaluate etiquette, symbolism, and cross-market sensitivity |
+| Recipient framing | Model the recipient, relationship, and contextual distance |
+| Editorial rewriting | Suggest more tactful alternatives and better wording |
+| Delivery guidance | Extend recommendations into packaging and logistics |
+| Bilingual presentation | Preserve a coherent Chinese and English product voice |
 
-## System snapshot
-
-### Application stack
+## Tech stack
 
 - Next.js 16 App Router
-- React 19 + TypeScript
+- React 19
+- TypeScript
 - Tailwind CSS v4
 - Framer Motion
 - Jest + Testing Library
-- GitHub Actions for CI and GitHub Pages deployment
+- GitHub Actions
 - Optional Tauri wrapper in `src-tauri/`
 
-### API surfaces
-
-| Method | Route | Purpose |
-| --- | --- | --- |
-| `POST` | `/api/analysis/run` | Runs the end-to-end gifting analysis pipeline |
-| `POST` | `/api/vision-recognize` | Recognizes a gift candidate from image or text |
-| `POST` | `/api/cultural-generate` | Generates cultural guidance and editorial suggestions |
-| `POST` | `/api/logistics-assistant` | Returns delivery and logistics guidance |
-
-### Project layout
+## Project structure
 
 ```text
 .
 ├── app/
-│   ├── page.tsx
-│   ├── [locale]/page.tsx
-│   ├── [locale]/gifting/page.tsx
-│   └── api/
+│   ├── [locale]/
+│   │   ├── page.tsx
+│   │   └── gifting/page.tsx
+│   ├── api/
+│   │   ├── analysis/run/route.ts
+│   │   ├── cultural-generate/route.ts
+│   │   ├── logistics-assistant/route.ts
+│   │   ├── text-refine/route.ts
+│   │   └── vision-recognize/route.ts
+│   └── page.tsx
 ├── components/
 ├── lib/
 ├── public/
@@ -115,14 +192,27 @@ pnpm dev
 
 Open `http://localhost:3000`.
 
-### Verification
+## Available scripts
 
 ```bash
-pnpm lint
-pnpm test --runInBand
+pnpm dev
 pnpm build
-pnpm exec tsc --noEmit
+pnpm start
+pnpm lint
+pnpm test
+pnpm test:watch
+pnpm test:coverage
 ```
+
+## API routes
+
+| Method | Route | Purpose |
+| --- | --- | --- |
+| `POST` | `/api/analysis/run` | Run the end-to-end gifting analysis pipeline |
+| `POST` | `/api/vision-recognize` | Read a gift candidate from image or text |
+| `POST` | `/api/cultural-generate` | Generate cultural guidance and editorial suggestions |
+| `POST` | `/api/logistics-assistant` | Return logistics and delivery guidance |
+| `POST` | `/api/text-refine` | Refine drafted workflow text |
 
 ## Environment variables
 
@@ -130,49 +220,28 @@ Create `.env.local` in the project root.
 
 | Variable | Required | Default |
 | --- | --- | --- |
-| `ALIYUN_DASHSCOPE_API_KEY` | Yes for AI-backed routes | - |
+| `ALIYUN_DASHSCOPE_API_KEY` | Required for AI-backed routes | - |
 | `ALIYUN_DASHSCOPE_BASE_URL` | No | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
 | `ALIYUN_DASHSCOPE_VISION_MODEL` | No | `qwen-vl-plus-latest` |
 | `ALIYUN_DASHSCOPE_TEXT_MODEL` | No | `qwen-plus-latest` |
 
-If the API key is missing, AI-backed server routes fail by design.
+Without the API key, AI-backed server routes will fail by design.
 
-## CI and deployment boundary
+## Deployment note
 
-### CI
+The project currently uses static export for the shell (`output: "export"`), which means:
 
-The repository CI workflow runs on pushes and pull requests to `main` and `master`.
+- GitHub Pages can host the static product surface
+- GitHub Pages cannot execute Next.js server route handlers
+- `/api/*` features require a server-capable deployment target
 
-It verifies:
-- ESLint
-- TypeScript type checking
-- Jest test suite
-- Next.js production build
+So Pages is suitable for the static brand and workflow shell, but not for the full live AI-backed behavior.
 
-Workflow file: `.github/workflows/ci.yml`
+## Brand
 
-### GitHub Pages
+**Givia** is the global-facing brand.
 
-The repository also ships a Pages workflow at `.github/workflows/deploy-pages.yml`.
-
-Pages publishes the static export produced by Next.js (`output: "export"`) from the `out/` directory.
-
-Important boundary:
-- GitHub Pages can host the static editorial shell
-- GitHub Pages cannot execute Next.js server-side route handlers
-- `/api/*` capabilities require a server-capable deployment target
-
-In other words: Pages is a valid surface for the static brand experience, but not for live AI-backed analysis.
-
-## Brand note
-
-**Givia** is the global-facing brand name of the system.
-
-In Chinese contexts, the product also appears as **礼智极意** — a localized brand expression that carries the same editorial, premium, and cross-cultural positioning.
-
-## Language statistics note
-
-This is a TypeScript-first repository. `.gitattributes` is included to help GitHub Linguist ignore generated or auxiliary artifacts when calculating language percentages. GitHub may take some time to refresh language statistics after a push.
+In Chinese contexts, the product also appears as **礼智极意** — a localized expression of the same editorial and cross-cultural positioning.
 
 ## License
 
