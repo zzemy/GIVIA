@@ -419,9 +419,7 @@ export function formatCurrencyAmount(amount: number, currency: string, locale: L
 export function buildRiskReasons(analysis: AnalysisResult, locale: Locale): string[] {
   const reasons: string[] = []
 
-  if (analysis.warning) {
-    reasons.push(analysis.warning)
-  }
+  // Warning is already displayed in summaryBody directly in UI
 
   analysis.matchedRules.forEach(rule => {
     if (rule.explanation) {
@@ -510,13 +508,7 @@ export function buildMustSendAdvice(analysis: AnalysisResult, locale: Locale): s
         : 'De-emphasize the original symbolism and frame it around formal appreciation or gratitude.',
     )
 
-    if (analysis.rescueReason) {
-      tips.push(
-        locale === 'zh'
-          ? `如无法更换，请主动解释选择理由：${analysis.rescueReason}`
-          : `If replacement is impossible, proactively explain the intent: ${analysis.rescueReason}`,
-      )
-    }
+    // rescueReason is rendered in openingRecommendationReason directly
   }
 
   analysis.matchedRules.forEach(rule => {

@@ -214,9 +214,11 @@ export function ResultsSection({
               <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
                 {isZh ? '01. 情境推算与拦截' : '01. CULTURAL INTERCEPTION'}
               </p>
-              <p className="text-[1.05rem] leading-[1.8] text-[#1c1a17] font-medium">
-                {summaryBody}
-              </p>
+              {summaryBody.split('\n').filter(Boolean).map((paragraph, idx) => (
+                      <p key={idx} className="text-[1.05rem] leading-[1.8] text-[#1c1a17] font-medium mb-4 last:mb-0">
+                        {paragraph}
+                      </p>
+                    ))}
               
               {/* Highlight AI Dynamic Warnings deeply */}
               {memoLines.map(line => (

@@ -1,6 +1,5 @@
 import type { AnalysisEngineResult, AudienceProfileInput, P0Locale } from '@/lib/types/gifting-types'
 import type { GiftProfile } from '@/lib/analysis/gift-profile'
-import type { ModelMessage, NormalizedModelCompletionResult } from '@/lib/ai/adapters/types'
 import { sanitizeStringArray, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
 import { validateRiskEnhancementOutput } from '@/lib/ai/guards/output-validator'
 import {
@@ -9,6 +8,7 @@ import {
 } from '@/lib/ai/guards/prompt-injection'
 import { extractSafeJsonObject } from '@/lib/ai/guards/safe-json'
 import { buildRiskEnhancementPrompt } from '@/lib/ai/prompts/analysis'
+import { requestDashScopeCompletion } from '@/lib/ai/adapters/dashscope'
 
 /**
  * LLM-enhanced risk assessment: Add semantic explanations and personalized mitigation suggestions
@@ -149,20 +149,26 @@ async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Prom
   try {
     void locale
 
-    // Try to use Claude API if available
-    const apiKey = process.env.ANTHROPIC_API_KEY
+    const apiKey = process.env.ALIYUN_DASHSCOPE_API_KEY
     if (!apiKey) {
+      console.warn('[LLM] ALIYUN_DASHSCOPE_API_KEY is missing')
       return null
     }
 
-    const completion = await requestAnthropicCompletion({
+    const completion = await requestDashScopeCompletion({
       apiKey,
+      baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+      model: 'qwen-max',
       messages: [
         {
           role: 'user',
           content: prompt,
         },
       ],
+      networkErrorPrefix: '[network error]',
+      providerErrorPrefix: '[provider error]',
+      temperature: 0.7,
+      responseFormat: { type: 'json_object' }
     })
 
     if (!completion.ok) {
@@ -174,63 +180,6 @@ async function callLLMForRiskEnhancement(prompt: string, locale: P0Locale): Prom
   } catch (error) {
     console.warn('[LLM] Request failed:', error)
     return null
-  }
-}
-
-async function requestAnthropicCompletion(input: {
-  apiKey: string
-  messages: ModelMessage[]
-}): Promise<NormalizedModelCompletionResult> {
-  const { apiKey, messages } = input
-  let response: Response
-
-  try {
-    response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1024,
-        messages,
-      }),
-    })
-  } catch (error) {
-    return {
-      ok: false,
-      error:
-        error instanceof Error && error.message
-          ? `anthropic request failed: ${error.message}`
-          : 'anthropic request failed',
-    }
-  }
-
-  if (!response.ok) {
-    const error = await response.text()
-    return {
-      ok: false,
-      error: `anthropic api error ${response.status}: ${error}`,
-    }
-  }
-
-  const data = (await response.json()) as {
-    content?: Array<{ type?: string; text?: string }>
-  }
-  const textContent = data.content?.find(c => c.type === 'text')?.text?.trim()
-
-  if (!textContent) {
-    return {
-      ok: false,
-      error: 'anthropic empty model output',
-    }
-  }
-
-  return {
-    ok: true,
-    content: textContent,
   }
 }
 
@@ -273,7 +222,7 @@ export function mergeLLMEnhancement(
 ): AnalysisEngineResult {
   void locale
 
-  if (!llmEnhancement || llmEnhancement.confidence < 0.5) {
+  if (!llmEnhancement) {
     return ruleResult // Keep original if LLM confidence is low
   }
 
@@ -281,17 +230,15 @@ export function mergeLLMEnhancement(
   return {
     ...ruleResult,
     warning:
-      llmEnhancement.semanticExplanation ||
-      ruleResult.warning,
+      (llmEnhancement.culturalContext && llmEnhancement.semanticExplanation)
+        ? `${llmEnhancement.culturalContext}\n\n${llmEnhancement.semanticExplanation}`
+        : (llmEnhancement.semanticExplanation || ruleResult.warning),
     rescueItem:
       llmEnhancement.personalizedMitigation ||
       ruleResult.rescueItem,
     rescueReason:
       llmEnhancement.alternativeFraming ||
       ruleResult.rescueReason,
-    semanticSignals: [
-      ...(ruleResult.semanticSignals || []),
-      llmEnhancement.culturalContext
-    ].filter(Boolean) as string[],
+    semanticSignals: [...(ruleResult.semanticSignals || [])].filter(Boolean) as string[],
   }
 }
