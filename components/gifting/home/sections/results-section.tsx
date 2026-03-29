@@ -73,26 +73,8 @@ export function ResultsSection({
   const collaborativeResults = analysisEnhancements?.p1?.collaborativeResults ?? analysisEnhancements?.p2?.wideDeepResults ?? []
 
   
-  void analysisSource
-  void hasAnalysisEnhancementResults
-  void favoriteRecommendationIds
-  void riskActionMeta
-  void onToggleFavoriteRecommendation
-  void reportPhotography
-  void contextParagraph
-  void adviceLines
-  void conclusionCards
 
   
-  void analysisSource
-  void hasAnalysisEnhancementResults
-  void favoriteRecommendationIds
-  void riskActionMeta
-  void onToggleFavoriteRecommendation
-  void reportPhotography
-  void contextParagraph
-  void adviceLines
-  void conclusionCards
 
   const summaryTitle =
     analysis.riskLevel === 'Low'
