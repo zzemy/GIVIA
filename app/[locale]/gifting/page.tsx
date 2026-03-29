@@ -95,6 +95,18 @@ export default function GiftingPage() {
   }, [analysisProps.isAnalyzing, currentStep, feedbackProps.error, resultsProps])
 
   React.useEffect(() => {
+    if (!isDevPreview && currentStep === 5 && !resultsProps) {
+      setCurrentStep(1)
+    }
+  }, [isDevPreview, currentStep, resultsProps])
+
+  React.useEffect(() => {
+    if (!isDevPreview && currentStep === 5 && !resultsProps) {
+      setCurrentStep(1)
+    }
+  }, [isDevPreview, currentStep, resultsProps])
+
+  React.useEffect(() => {
     if (!isDevPreview) {
       return
     }
@@ -236,7 +248,13 @@ export default function GiftingPage() {
 
           <main className="mt-8 flex-1">
             {resultsProps ? (
-              <ResultsSection {...resultsProps} />
+              <ResultsSection {...resultsProps} onReset={() => {
+                  setCurrentStep(1)
+                  if (!isDevPreview) {
+                    router.push(`/${routeLocale}/gifting`)
+                  }
+                  resultsProps.onReset()
+                }} />
             ) : (
               <div className="rounded-[2rem] border border-[#E5E0D8]/80 bg-white/72 p-16 text-center text-[#98a2b3]">{isZh ? '报告生成失败，请重试。' : 'Failed to generate the report. Please try again.'}</div>
             )}

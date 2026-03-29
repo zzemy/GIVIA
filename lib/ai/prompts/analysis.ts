@@ -29,7 +29,7 @@ export function buildCulturalAnalysisMessages(input: {
 
   return buildPromptMessages({
     sections: {
-      roleMission: ['你是跨文化礼赠顾问。'],
+      roleMission: ['你是顶尖的跨文化礼赠顾问、心理学家与社交专家。你需要提供极其专业、富有洞察力、充满人情味并且详尽入微的分析报告。'],
       safetyRules: [
         '国家上下文必须严格使用输入中的 country，不允许自行改写国家。',
         '必须结合 audience（目标群体）完整字段调整风险判断与建议语气，包括群体、场景、关系、预算、正式度、备注。',
@@ -45,15 +45,18 @@ export function buildCulturalAnalysisMessages(input: {
         'riskLevel 只能是 Low、Medium、High。',
         'packaging 必须有 style/colors/materials/avoid。',
         'card 必须有 tone/opener/body/closing。',
-        getOutputLanguageConstraint(language, country.nameZh),
+        getOutputLanguageConstraint(language, String(country)),
         '如果 riskLevel 为 Low，rescueItem 和 rescueReason 应为空字符串。',
         '如果 riskLevel 为 High，应给出更稳妥的替代礼物和原因。',
-        'warning 必须明确说明风险触发点或为何整体安全，不能空泛。',
+        'warning 必须详细说明风险触发点或为何整体安全，结合具体的社会心理学、当地文化潜规则与收礼人的身份背景，字数尽量丰富详实，拒绝空泛和套话。',
+        'rescueReason 和 rescueItem 必须极具个性化，结合受众的年龄、职业、身份和具体场景给出极度贴心的替代方案和充满人情味的推荐理由，字数要充足。',
+        'packaging 建议必须包含非常具体的材质、色号、风格描述，甚至提到系带、内衬等细节。',
+        'card 内容必须充分展现情感厚度，根据收礼人的身份关系和场合，写出真挚、不落俗套、充满巧思的外语（收礼人母语）贺词，篇幅要长，像一封真实的微型信件。',
         '不得省略任何字段，不得输出 null。',
       ],
     },
     userPayload: {
-      task: '请输出跨文化礼赠风险分析与建议',
+      task: '请输出极其详尽、深度个性化、充满人文和社会心理学洞察的跨文化礼赠风险分析与建议报告（字数要充足、细节要拉满）',
       country,
       recognition,
       giftContext,
@@ -84,7 +87,7 @@ export function buildRiskEnhancementPrompt(input: {
   return renderPromptSections({
     roleMission: [
       isZh
-        ? '你是跨文化礼物选择专家，需要提供语义级别的风险解释和个性化缓解建议。最重要的是：如果没有生硬的文化禁忌，请从收礼人的身份关系、日常体面度和实用性出发进行“得体心理学”分析，绝不要无中生有地生搬硬套鬼神禁忌。'
+        ? '你是世界顶级的社会心理学家与跨文化礼赠顾问。你需要提供极其专业、富有洞察力、充满人情味并且详尽入微的“得体心理学”分析，深入收礼人内心。不要简短，要详细阐述、极具说服力。'
         : 'You are a cross-cultural gifting expert. If there are no severe cultural taboos, do not invent or force pseudo-taboos. Instead, analyze the psychological appropriateness, etiquette, relationship depth, and utility of the gift.',
     ],
     safetyRules: [
@@ -113,16 +116,16 @@ export function buildRiskEnhancementPrompt(input: {
         ? '返回 JSON 字段：semanticExplanation, personalizedMitigation, alternativeFraming, culturalContext, confidence。'
         : 'Return JSON with fields: semanticExplanation, personalizedMitigation, alternativeFraming, culturalContext, confidence.',
       isZh
-        ? 'semanticExplanation：从文化心理学或身份得体角度解释目前的综合评分由来（不要硬扯禁忌，关注人际关系的恰当性），2-3 句。'
+        ? 'semanticExplanation：从文化心理学或身份得体角度极其详尽地解释评分由来，深度剖析人际关系与社会潜规则，字数必须充足丰富。'
         : 'semanticExplanation: explain the risk from a cultural/psychological angle in 2-3 sentences.',
       isZh
-        ? 'personalizedMitigation：给出针对该收礼人和场景的具体缓解建议。'
+        ? 'personalizedMitigation：提供极度细节的具体降级、缓解与补救策略（包含包装、动作、时机等极具体的微操），必须充满人情味。'
         : 'personalizedMitigation: give specific mitigation for this recipient and scenario.',
       isZh
-        ? 'alternativeFraming：说明如何通过语言或包装重新诠释礼物。'
+        ? 'alternativeFraming：说明如何通过极为高情商的叙事语言或极具巧思的包装设计重新赋予礼物正面的意义，并提供一套完整的话术模板。'
         : 'alternativeFraming: explain how to reframe the gift through language or packaging.',
       isZh
-        ? 'culturalContext：简要说明当地文化中的历史或社会背景。'
+        ? 'culturalContext：深度补充当地社会文化、阶层审美或人际交往的隐含规则背景，字数要详实丰富。'
         : 'culturalContext: briefly explain the local historical or social context.',
       'confidence: 0-1 number.',
     ],

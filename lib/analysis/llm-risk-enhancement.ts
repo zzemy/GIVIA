@@ -289,12 +289,9 @@ export function mergeLLMEnhancement(
     rescueReason:
       llmEnhancement.alternativeFraming ||
       ruleResult.rescueReason,
-    semanticSignals: {
-      ...ruleResult.semanticSignals,
-      tags: [
-        ...(ruleResult.semanticSignals?.tags || []),
-        llmEnhancement.culturalContext // we put the rich cultural psychological context here so it displays nicely
-      ].filter(Boolean),
-    },
+    semanticSignals: [
+      ...(ruleResult.semanticSignals || []),
+      llmEnhancement.culturalContext
+    ].filter(Boolean) as string[],
   }
 }
