@@ -5,9 +5,10 @@ import {
   runAnalysisWithLLMEnhancement,
   type AnalysisRunnerOutput,
 } from '@/lib/analysis/analysis-runner'
-import { sanitizeStringArray, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
+import { sanitizeStringArray, sanitizeText, sanitizeTextValue } from '@/lib/ai/guards/input-sanitizer'
 import type { AudienceProfileInput, GiftContextInput, P0Locale } from '@/lib/types/gifting-types'
 import { runEnhancedAnalysis } from '@/lib/enhancements/enhancement-integration'
+import { buildAffiliatePurchaseUrl } from '@/lib/commerce/affiliate-links'
 
 export const runtime = 'nodejs'
 
@@ -110,21 +111,35 @@ function buildValidatedAIOverlay(
     return null
   }
 
-  const warning = sanitizeTextValue(overlay.warning, { maxLength: 320 })
+  const sanitizeNarrativeField = (value: unknown, maxLength: number): string => {
+    const result = sanitizeText(value, { maxLength })
+
+    if (!result.value) {
+      return ''
+    }
+
+    if (!result.truncated) {
+      return result.value
+    }
+
+    return `${result.value.replace(/[\s,，;；:：-]+$/, '')}…`
+  }
+
+  const warning = sanitizeNarrativeField(overlay.warning, 1200)
   const rescueItem = sanitizeTextValue(overlay.rescueItem, { maxLength: 120 })
-  const rescueReason = sanitizeTextValue(overlay.rescueReason, { maxLength: 320 })
+  const rescueReason = sanitizeNarrativeField(overlay.rescueReason, 1400)
   const semanticSignals = sanitizeStringArray(overlay.semanticSignals, {
     itemMaxLength: 80,
     maxItems: 8,
   })
-  const packagingStyle = sanitizeTextValue(overlay.packaging?.style, { maxLength: 120 })
+  const packagingStyle = sanitizeTextValue(overlay.packaging?.style, { maxLength: 200 })
   const packagingColors = normalizeArrayField(overlay.packaging?.colors, base.packaging.colors)
-  const packagingMaterials = sanitizeTextValue(overlay.packaging?.materials, { maxLength: 120 })
+  const packagingMaterials = sanitizeTextValue(overlay.packaging?.materials, { maxLength: 200 })
   const packagingAvoid = normalizeArrayField(overlay.packaging?.avoid, base.packaging.avoid)
-  const cardTone = sanitizeTextValue(overlay.card?.tone, { maxLength: 120 })
-  const cardOpener = sanitizeTextValue(overlay.card?.opener, { maxLength: 160 })
-  const cardBody = sanitizeTextValue(overlay.card?.body, { maxLength: 320 })
-  const cardClosing = sanitizeTextValue(overlay.card?.closing, { maxLength: 160 })
+  const cardTone = sanitizeTextValue(overlay.card?.tone, { maxLength: 200 })
+  const cardOpener = sanitizeTextValue(overlay.card?.opener, { maxLength: 260 })
+  const cardBody = sanitizeNarrativeField(overlay.card?.body, 900)
+  const cardClosing = sanitizeTextValue(overlay.card?.closing, { maxLength: 200 })
 
   if (
     !warning ||
@@ -313,6 +328,29 @@ export async function POST(request: Request) {
     } catch (e) {
       console.error("[Analysis Run] AI Enhancement try-catch hit:", e);
       // Local rules remain as the guaranteed fallback when AI generation is unavailable.
+    }
+
+    const mergedRecord = mergedAnalysis as Record<string, unknown>
+    const mergedGiftProfile =
+      typeof mergedRecord.giftProfile === 'object' && mergedRecord.giftProfile !== null
+        ? (mergedRecord.giftProfile as Record<string, unknown>)
+        : {}
+    const rescueItemForLink = sanitizeTextValue(mergedRecord.rescueItem, { maxLength: 120 })
+    const categoryForLink = sanitizeTextValue(mergedGiftProfile.category, { maxLength: 48 })
+    const rescueAffiliate = rescueItemForLink
+      ? buildAffiliatePurchaseUrl({
+          countryCode: countryCode || country || 'US',
+          locale,
+          keywords: [rescueItemForLink, categoryForLink].filter(Boolean),
+        })
+      : null
+
+    if (rescueAffiliate) {
+      mergedAnalysis = {
+        ...mergedAnalysis,
+        rescuePurchaseUrl: rescueAffiliate.purchaseUrl,
+        rescuePurchaseChannel: rescueAffiliate.purchaseChannel,
+      }
     }
 
     return NextResponse.json({

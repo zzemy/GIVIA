@@ -49,6 +49,8 @@ const analysis: AnalysisResult = {
       shippingNoteEn: 'Avoid last-minute holiday shipping.',
       pitchZh: '这是一份兼顾得体与高级感的礼物。',
       pitchEn: 'This keeps the gift polished and appropriate.',
+      purchaseUrl: 'https://www.amazon.co.jp/s?k=notebook&tag=demo-22',
+      purchaseChannel: 'amazon-search',
     },
   ],
   giftProfile: {
@@ -94,14 +96,16 @@ describe('ResultsSection', () => {
       />,
     )
 
-    expect(screen.getByRole('button', { name: /开启下一份终稿/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /新的一局/i })).toBeInTheDocument()
     const summaryHeading = screen.getByRole('heading', { name: /这份心意此刻不宜按原样送出/i })
-    const recommendationsHeading = screen.getByRole('heading', { name: /如果要把这份心意改写得更克制、更高级、更妥帖/i })
-    const supportingAnalysisLabel = screen.getByText(/语境纪要|context memorandum/i)
+    const recommendationsHeading = screen.getByRole('heading', { name: /推荐转向/i })
+    const supportingAnalysisLabel = screen.getByText(/推演逻辑|reasoning/i)
+    const purchaseLink = screen.getByRole('link', { name: /去看同类好物|shop similar gifts/i })
 
     expect(summaryHeading.compareDocumentPosition(recommendationsHeading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     expect(summaryHeading.compareDocumentPosition(supportingAnalysisLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(screen.getByText(/当前结论/i)).toBeInTheDocument()
-    expect(screen.getByText(/High/i)).toBeInTheDocument()
+    expect(purchaseLink).toHaveAttribute('href', 'https://www.amazon.co.jp/s?k=notebook&tag=demo-22')
+    expect(screen.getByText(/综合风险评级/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/High/i).length).toBeGreaterThan(0)
   })
 })

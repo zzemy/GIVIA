@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { RotateCcw } from 'lucide-react'
+import { CheckCircle2, ExternalLink, Heart, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getCountryName } from '@/lib/countries'
 import type { AnalysisResult, EnhancedAnalysisState, Locale } from '@/components/gifting/home/types'
@@ -35,15 +35,6 @@ interface ResultsSectionProps {
   onToggleFavoriteRecommendation: (id: string) => void
 }
 
-const reportPhotography = {
-  lead:
-    '/editorial/hero-family.jpg?v=2',
-  note:
-    '/editorial/result1.jpg?v=2',
-  arrival:
-    '/editorial/result2.jpg?v=2',
-}
-
 export function ResultsSection({
   analysis,
   analysisEnhancements,
@@ -66,6 +57,9 @@ export function ResultsSection({
 }: ResultsSectionProps) {
   const isZh = locale === 'zh'
   const topRecommendation = analysis.recommendations[0]
+  const isAIOverlaySource = analysisSource === 'hybrid-ai-rules'
+  const pivotPurchaseUrl = analysis.rescuePurchaseUrl || topRecommendation?.purchaseUrl
+  const pivotPurchaseChannel = analysis.rescuePurchaseChannel || topRecommendation?.purchaseChannel
   const countryLabel = selectedCountry ? getCountryName(selectedCountry, locale) : isZh ? '未选择国家' : 'No country'
   const contextParagraph = [visionDescription.trim() || giftDescription.trim(), targetProfile.trim()].filter(Boolean).join(' ')
   const logisticsEstimate = analysisEnhancements?.p1?.logisticsEstimate
@@ -138,6 +132,47 @@ export function ResultsSection({
     analysis.semanticSignals.numbers.length > 0 ? analysis.semanticSignals.numbers.join(', ') : null,
   ].filter(Boolean)
 
+  const confidenceLabel =
+    analysis.riskScore >= 75
+      ? isZh
+        ? '高风险，建议先改写后送出'
+        : 'High risk, revise before delivery'
+      : analysis.riskScore >= 45
+        ? isZh
+          ? '中风险，建议调整表达与包装'
+          : 'Moderate risk, refine expression and packaging'
+        : isZh
+          ? '低风险，可在细节上继续优化'
+          : 'Low risk, proceed with minor refinements'
+
+  const scoreBreakdown = [
+    { label: isZh ? '谐音语义' : 'Phonetic', value: analysis.scoreBreakdown.phonetic },
+    { label: isZh ? '象征语义' : 'Symbolic', value: analysis.scoreBreakdown.symbol },
+    { label: isZh ? '色彩语义' : 'Color', value: analysis.scoreBreakdown.color },
+  ]
+
+  const sourceBadgeLabel =
+    analysisSource === 'hybrid-ai-rules'
+      ? isZh
+        ? '混合推理（规则 + AI）'
+        : 'Hybrid inference (Rules + AI)'
+      : isZh
+        ? '规则引擎（本地）'
+        : 'Rules engine (local)'
+  const marketplaceQuery = (analysis.rescueItem || (topRecommendation ? (isZh ? topRecommendation.nameZh : topRecommendation.nameEn) : '')).trim()
+  const encodedMarketplaceQuery = encodeURIComponent(marketplaceQuery || (isZh ? '商务礼物' : 'business gift'))
+  const marketplaceOptions = isZh
+    ? [
+        { label: '京东', href: `https://search.jd.com/Search?keyword=${encodedMarketplaceQuery}` },
+        { label: '淘宝', href: `https://s.taobao.com/search?q=${encodedMarketplaceQuery}` },
+        { label: '拼多多', href: `https://mobile.yangkeduo.com/search_result.html?search_key=${encodedMarketplaceQuery}` },
+      ]
+    : [
+        { label: 'Amazon', href: `https://www.amazon.com/s?k=${encodedMarketplaceQuery}` },
+        { label: 'Etsy', href: `https://www.etsy.com/search?q=${encodedMarketplaceQuery}` },
+        { label: 'eBay', href: `https://www.ebay.com/sch/i.html?_nkw=${encodedMarketplaceQuery}` },
+      ]
+
   const additionalLayers = [
     multimodalResults
       ? {
@@ -201,7 +236,7 @@ export function ResultsSection({
            {giftDescription && (
              <div>
                <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-1">{isZh ? '当前识别礼物' : 'DETECTED OBJECT'}</p>
-               <p className="text-sm text-[#1c1a17] font-medium max-w-[200px] truncate" title={giftDescription}>{giftDescription}</p>
+               <p className="text-sm text-[#1c1a17] font-medium max-w-[22rem] break-words" title={giftDescription}>{giftDescription}</p>
              </div>
            )}
            <div>
@@ -209,6 +244,10 @@ export function ResultsSection({
              <p className={`text-sm font-bold font-mono uppercase ${analysis.riskLevel === 'High' ? 'text-red-500' : analysis.riskLevel === 'Medium' ? 'text-amber-500' : 'text-emerald-600'}`}>
                {analysis.riskLevel}
              </p>
+           </div>
+           <div>
+             <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-1">{isZh ? '推理来源' : 'INFERENCE SOURCE'}</p>
+             <p className="text-sm text-[#1c1a17] font-medium">{sourceBadgeLabel}</p>
            </div>
         </div>
 
@@ -228,6 +267,13 @@ export function ResultsSection({
               {memoLines.map(line => (
                   <p key={line} className="mt-4 text-[0.95rem] leading-8 text-[#5f6672]">{line}</p>
               ))}
+
+              {contextParagraph ? (
+                <div className="mt-5 rounded-xl border border-[#e2ddd5] bg-[#faf9f7] p-4">
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-2">{isZh ? '输入语境回放' : 'INPUT CONTEXT SNAPSHOT'}</p>
+                  <p className="text-sm leading-7 text-[#4a505a]">{contextParagraph}</p>
+                </div>
+              ) : null}
 
               {semanticLines.length > 0 && (
                 <div className="mt-6 p-4 bg-[#f4f3f0] rounded-lg border border-[#e8e5df] inline-block">
@@ -267,12 +313,54 @@ export function ResultsSection({
           </div>
         </div>
 
+        <div className="px-6 py-8 sm:px-10 lg:py-12 border-b border-[#e2ddd5] bg-[#fcfbf8]">
+          <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
+            {isZh ? '02. 评分拆解与可信度' : '02. SCORE BREAKDOWN & CONFIDENCE'}
+          </p>
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
+            <div className="rounded-2xl border border-[#e2ddd5] bg-white p-6">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-4">{isZh ? '三维评分构成' : 'THREE-DIMENSION SCORE'}</p>
+              <div className="space-y-4">
+                {scoreBreakdown.map(item => (
+                  <div key={item.label}>
+                    <div className="mb-1 flex items-center justify-between text-sm text-[#1c1a17]">
+                      <span>{item.label}</span>
+                      <span className="font-mono">{item.value}</span>
+                    </div>
+                    <div className="h-2 overflow-hidden rounded-full bg-[#efece6]">
+                      <div className="h-full rounded-full bg-[#736357]" style={{ width: `${Math.max(0, Math.min(100, item.value))}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl border border-[#e2ddd5] bg-white p-6">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-4">{isZh ? '判定摘要' : 'ASSESSMENT SUMMARY'}</p>
+              <div className="grid grid-cols-2 gap-3">
+                {conclusionCards.map(card => (
+                  <div key={card.label} className="rounded-xl border border-[#ece8e0] bg-[#faf9f7] p-3">
+                    <p className="text-[10px] uppercase tracking-wider text-[#98a2b3]">{card.label}</p>
+                    <p className="mt-1 text-sm font-medium text-[#1c1a17]">{card.value}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-sm leading-7 text-[#4a505a]">{confidenceLabel}</p>
+              {riskActionMeta ? (
+                <div className={`mt-4 rounded-xl border px-4 py-3 ${riskActionMeta.panelClassName}`}>
+                  <p className="text-sm font-semibold text-[#9a3412]">{riskActionMeta.title}</p>
+                  <p className="mt-1 text-xs text-[#9a3412]">{riskActionMeta.tooltip}</p>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </div>
+
         {/* ========================================================================= */}
         {/* NEW AI ALGORITHM PIVOT SECTION (Replaces the fake generic products) */}
         {/* ========================================================================= */}
         <div className="px-6 py-8 sm:px-10 lg:py-14 border-b border-[#e2ddd5] bg-[linear-gradient(170deg,#fcfcfb,#f4f3eb)]">
           <p className="font-mono text-[11px] uppercase tracking-widest text-indigo-700 border-b border-indigo-700 pb-2 inline-block mb-8">
-             {isZh ? '02. 智能解围与降级策略' : '02. AI PIVOT & MITIGATION STRATEGY'}
+             {isZh ? '03. 智能解围与降级策略' : '03. AI PIVOT & MITIGATION STRATEGY'}
           </p>
           
           <div className="grid lg:grid-cols-2 gap-10">
@@ -281,7 +369,7 @@ export function ResultsSection({
              <div className="bg-white p-8 rounded-2xl border border-indigo-500/20 shadow-[0_12px_40px_-20px_rgba(79,70,229,0.15)] relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4">
                   <span className="bg-indigo-50 text-indigo-600 text-[9px] uppercase font-mono tracking-widest px-3 py-1 rounded-full border border-indigo-100">
-                    {isZh ? 'AI 动态生成' : 'AI GENERATED'}
+                    {isAIOverlaySource ? (isZh ? 'AI 动态生成' : 'AI GENERATED') : (isZh ? '规则引擎生成' : 'RULES GENERATED')}
                   </span>
                 </div>
                 <h4 className="font-serif text-[1.4rem] text-[#1c1a17] pr-20">{isZh ? '推荐转向：' : 'Pivot to: '}{openingRecommendation}</h4>
@@ -289,6 +377,38 @@ export function ResultsSection({
                    <p className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest mb-3">{isZh ? '推演逻辑' : 'REASONING'}</p>
                    <p className="text-[0.95rem] leading-[1.8] text-[#4a505a]">
                      {openingRecommendationReason || (isZh ? '基于目前关系与场景，这是更为稳妥且符合心理预期的改写方向。' : 'Based on the specified relationship and scenario, this is a safer and more appropriate pivot.')}
+                   </p>
+                   {pivotPurchaseUrl ? (
+                     <a
+                       href={pivotPurchaseUrl}
+                       target="_blank"
+                       rel="noreferrer noopener"
+                       className="mt-5 inline-flex items-center gap-2 rounded-full border border-indigo-300 bg-indigo-50 px-4 py-2 text-xs font-semibold tracking-wide text-indigo-700 transition hover:bg-indigo-100"
+                     >
+                       <ExternalLink size={13} />
+                       {isZh ? '去看同类好物' : 'Shop Similar Gifts'}
+                     </a>
+                   ) : null}
+                   <div className="mt-4 flex flex-wrap gap-2">
+                     {marketplaceOptions.map(option => (
+                       <a
+                         key={option.label}
+                         href={option.href}
+                         target="_blank"
+                         rel="noreferrer noopener"
+                         className="inline-flex items-center gap-1 rounded-full border border-[#d9d3ca] bg-white px-3 py-1.5 text-[11px] text-[#5f6672] hover:bg-[#f7f4ef]"
+                       >
+                         <ExternalLink size={12} />
+                         {option.label}
+                       </a>
+                     ))}
+                   </div>
+                   <p className="mt-3 text-[11px] text-[#98a2b3]">
+                     {analysis.rescuePurchaseUrl
+                       ? (isZh ? '链接依据：AI 推荐转向词检索' : 'Link source: AI pivot phrase search')
+                       : pivotPurchaseChannel
+                         ? (isZh ? '链接依据：规则引擎候选检索' : 'Link source: rules candidate search')
+                         : ''}
                    </p>
                 </div>
              </div>
@@ -320,6 +440,85 @@ export function ResultsSection({
                  </div>
              </div>
 
+          </div>
+        </div>
+
+        <div className="px-6 py-8 sm:px-10 lg:py-12 border-b border-[#e2ddd5] bg-white">
+          <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
+            {isZh ? '04. 备选方案与执行清单' : '04. ALTERNATIVES & ACTION CHECKLIST'}
+          </p>
+
+          <div className="grid gap-6 lg:grid-cols-[1.35fr_1fr]">
+            <div className="space-y-4">
+              {analysis.recommendations.length > 0 ? analysis.recommendations.map((item, idx) => {
+                const itemName = isZh ? item.nameZh : item.nameEn
+                const itemReason = isZh ? item.reasonZh : item.reasonEn
+                const itemPackaging = isZh ? item.packagingTipZh : item.packagingTipEn
+                const itemShipping = isZh ? item.shippingNoteZh : item.shippingNoteEn
+                const isFavorite = favoriteRecommendationIds.includes(item.id)
+
+                return (
+                  <div key={item.id} className="rounded-2xl border border-[#e2ddd5] bg-[#fcfbf8] p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h5 className="text-base font-semibold text-[#1c1a17]">
+                        {idx + 1}. {itemName || (isZh ? '未命名备选' : 'Unnamed option')}
+                      </h5>
+                      <div className="flex items-center gap-2">
+                        <span className="rounded-full border border-[#d9d3ca] bg-white px-2.5 py-1 text-[11px] font-mono text-[#5f6672]">
+                          Score {item.score}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onToggleFavoriteRecommendation(item.id)}
+                          className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] transition ${
+                            isFavorite
+                              ? 'border-rose-300 bg-rose-50 text-rose-700'
+                              : 'border-[#d9d3ca] bg-white text-[#5f6672] hover:bg-[#f6f4ef]'
+                          }`}
+                        >
+                          <Heart size={12} className={isFavorite ? 'fill-current' : ''} />
+                          {isZh ? '收藏' : 'Save'}
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="mt-3 text-sm leading-7 text-[#4a505a]">{itemReason}</p>
+
+                    <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                      <p className="rounded-lg border border-[#ece8e0] bg-white px-3 py-2 text-xs leading-6 text-[#5f6672]">
+                        {isZh ? '包装建议：' : 'Packaging: '}
+                        <span className="text-[#1c1a17]">{itemPackaging || (isZh ? '待补充' : 'TBD')}</span>
+                      </p>
+                      <p className="rounded-lg border border-[#ece8e0] bg-white px-3 py-2 text-xs leading-6 text-[#5f6672]">
+                        {isZh ? '送达提示：' : 'Shipping: '}
+                        <span className="text-[#1c1a17]">{itemShipping || (isZh ? '待补充' : 'TBD')}</span>
+                      </p>
+                    </div>
+                  </div>
+                )
+              }) : (
+                <div className="rounded-2xl border border-[#e2ddd5] bg-[#faf9f7] p-5 text-sm text-[#667085]">
+                  {isZh ? '当前暂无可展示的备选方案。' : 'No alternatives are available at the moment.'}
+                </div>
+              )}
+            </div>
+
+            <div className="rounded-2xl border border-[#e2ddd5] bg-[#faf9f7] p-5">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-4">{isZh ? '执行清单（按优先级）' : 'ACTION CHECKLIST (PRIORITY)'}</p>
+              <div className="space-y-3">
+                {adviceLines.map(line => (
+                  <div key={line} className="flex items-start gap-2 rounded-xl border border-[#ece8e0] bg-white px-3 py-2.5">
+                    <CheckCircle2 size={14} className="mt-0.5 text-[#2d8a69]" />
+                    <p className="text-xs leading-6 text-[#4a505a]">{line}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 rounded-xl border border-[#e7e2d9] bg-white px-3 py-2.5 text-xs leading-6 text-[#5f6672]">
+                {hasAnalysisEnhancementResults
+                  ? (isZh ? '本次结果已包含增强模块输出（如物流、重排或视觉补充）。' : 'This result includes enhancement modules (e.g., logistics, reranking, or visual enrichment).')
+                  : (isZh ? '本次结果未开启增强模块，建议在关键场景开启以提升完整度。' : 'Enhancement modules are off for this run. Enable them for higher report completeness in critical scenarios.')}
+              </div>
+            </div>
           </div>
         </div>
 

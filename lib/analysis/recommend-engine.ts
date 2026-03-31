@@ -1,4 +1,5 @@
 import { GIFT_CATALOG, getSceneTemplate } from '@/lib/config/gifting-config'
+import { buildAffiliatePurchaseUrl } from '@/lib/commerce/affiliate-links'
 import type { AudienceProfileInput, P0Locale, RecommendationItem } from '@/lib/types/gifting-types'
 import type { GiftProfile } from '@/lib/analysis/gift-profile'
 
@@ -81,6 +82,16 @@ export function buildRecommendations(input: {
 
       score += scoreBudget(input.audience.budgetRange, item.priceMin, item.priceMax)
 
+      const affiliate = buildAffiliatePurchaseUrl({
+        countryCode: input.countryCode,
+        locale: input.locale,
+        keywords: [
+          input.locale === 'zh' ? item.nameZh : item.nameEn,
+          item.category,
+          ...item.keywordTags.slice(0, 3),
+        ],
+      })
+
       return {
         id: item.id,
         category: item.category,
@@ -95,6 +106,8 @@ export function buildRecommendations(input: {
         shippingNoteEn: item.shippingNoteEn,
         pitchZh: item.pitchZh,
         pitchEn: item.pitchEn,
+        purchaseUrl: affiliate?.purchaseUrl,
+        purchaseChannel: affiliate?.purchaseChannel,
       }
     })
     .sort((left, right) => right.score - left.score)

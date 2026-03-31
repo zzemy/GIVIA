@@ -469,6 +469,9 @@ export function useHomePageController(routeLocale: Locale) {
     setIsAnalyzing(true)
     setError('')
     setAnalysisEnhancements(null)
+    // Soft waiting is handled in UI hints; this is only a long safety timeout.
+    const analysisTimeoutMs = 180000
+    let analysisTimeoutId: number | null = null
 
     try {
       let recognitionForAnalysis = recognition
@@ -512,9 +515,13 @@ export function useHomePageController(routeLocale: Locale) {
         setVisionDescription(polishedVisionDescription)
       }
 
+      const abortController = new AbortController()
+      analysisTimeoutId = window.setTimeout(() => abortController.abort(), analysisTimeoutMs)
+
       const response = await fetch('/api/analysis/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal,
         body: JSON.stringify({
           countryCode: normalizeEnhancementCountryCode(selectedCountry),
           recognition: recognitionForAnalysis,
@@ -558,6 +565,11 @@ export function useHomePageController(routeLocale: Locale) {
         }),
       })
 
+      if (analysisTimeoutId !== null) {
+        window.clearTimeout(analysisTimeoutId)
+        analysisTimeoutId = null
+      }
+
       const data = await response.json().catch(() => ({ error: t('errors.analysisFailed') }))
       if (!response.ok) {
         throw new Error(typeof data.error === 'string' ? data.error : t('errors.analysisFailed'))
@@ -590,6 +602,19 @@ export function useHomePageController(routeLocale: Locale) {
       saveAnalysisRecord(record)
       setHistoryRecords(loadAnalysisHistory())
     } catch (err) {
+      if (analysisTimeoutId !== null) {
+        window.clearTimeout(analysisTimeoutId)
+      }
+
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError(
+          isZh
+            ? '分析请求超过 180 秒仍未返回。系统可能繁忙或网络波动，请重试；如仍较慢，可先关闭增强功能再生成。'
+            : 'Analysis exceeded 180 seconds without a response. The system may be busy or network unstable. Please retry; if it remains slow, disable enhancements and try again.',
+        )
+        return
+      }
+
       setError((err as Error).message || t('errors.analysisFailed'))
     } finally {
       setIsAnalyzing(false)

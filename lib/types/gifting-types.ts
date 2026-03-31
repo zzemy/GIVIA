@@ -95,6 +95,8 @@ export interface RecommendationItem {
   shippingNoteEn: string
   pitchZh: string
   pitchEn: string
+  purchaseUrl?: string
+  purchaseChannel?: string
 }
 
 export interface AnalysisEngineResult {
@@ -112,6 +114,8 @@ export interface AnalysisEngineResult {
   warning: string
   rescueItem: string
   rescueReason: string
+  rescuePurchaseUrl?: string
+  rescuePurchaseChannel?: string
   semanticSignals: string[]
   packaging: {
     style: string

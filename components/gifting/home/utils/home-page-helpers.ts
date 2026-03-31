@@ -126,6 +126,8 @@ export function normalizeAnalysisResult(raw: unknown): AnalysisResult {
             shippingNoteEn: toText(rec.shippingNoteEn),
             pitchZh: toText(rec.pitchZh),
             pitchEn: toText(rec.pitchEn),
+            purchaseUrl: toText(rec.purchaseUrl),
+            purchaseChannel: toText(rec.purchaseChannel),
           }
         })
         .filter(item => item.nameZh || item.nameEn)
@@ -146,6 +148,8 @@ export function normalizeAnalysisResult(raw: unknown): AnalysisResult {
     warning: toText(source.warning) || toText(source.riskReason),
     rescueItem: toText(source.rescueItem),
     rescueReason: toText(source.rescueReason),
+    rescuePurchaseUrl: toText(source.rescuePurchaseUrl),
+    rescuePurchaseChannel: toText(source.rescuePurchaseChannel),
     packaging: {
       style: toText(packaging.style),
       colors: toStringArray(packaging.colors),

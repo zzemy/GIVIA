@@ -41,6 +41,8 @@ export interface AnalysisResult {
   warning: string
   rescueItem: string
   rescueReason: string
+  rescuePurchaseUrl?: string
+  rescuePurchaseChannel?: string
   packaging: {
     style: string
     colors: string[]
@@ -79,6 +81,8 @@ export interface AnalysisResult {
     shippingNoteEn: string
     pitchZh: string
     pitchEn: string
+    purchaseUrl?: string
+    purchaseChannel?: string
   }>
   giftProfile: {
     displayName: string

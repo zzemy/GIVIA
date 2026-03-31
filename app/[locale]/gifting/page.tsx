@@ -198,6 +198,31 @@ export default function GiftingPage() {
     isZh ? '终稿报告' : 'Dossier',
   ]
 
+  const analyzingElapsedSeconds = analysisProps.analyzingElapsedSeconds
+  const expectedMinSeconds = 8
+  const expectedMaxSeconds = 20
+  const loadingStageText =
+    analyzingElapsedSeconds < expectedMinSeconds
+      ? isZh
+        ? '正在建立分析上下文'
+        : 'Building analysis context'
+      : analyzingElapsedSeconds < expectedMaxSeconds
+        ? isZh
+          ? '正在交叉校准风险与表达'
+          : 'Cross-calibrating risk and expression'
+        : isZh
+          ? '处理时间偏长，正在等待模型返回'
+          : 'Taking longer than usual, waiting for model response'
+  const loadingHintText =
+    analyzingElapsedSeconds < expectedMaxSeconds
+      ? isZh
+        ? `常见耗时 ${expectedMinSeconds}-${expectedMaxSeconds} 秒，请稍候。`
+        : `Typical runtime is ${expectedMinSeconds}-${expectedMaxSeconds} seconds, please wait.`
+      : isZh
+        ? '超过 55 秒通常只是系统繁忙，仍会继续处理；仅超过 180 秒才会触发超时提示。'
+        : 'Beyond 55 seconds usually means system load and processing continues; only after 180 seconds will a timeout be triggered.'
+  const loadingProgress = Math.min(95, Math.max(8, Math.round((analyzingElapsedSeconds / expectedMaxSeconds) * 100)))
+
   const brandEyebrow = isZh ? 'Givia' : ''
   const brandTitle = isZh ? '礼智极意' : 'Givia'
   const languageToggleLabel = isZh ? 'EN Edition' : 'ZH Edition'
@@ -409,6 +434,12 @@ export default function GiftingPage() {
                           {isZh ? '稿件生成中...' : 'Dossier in progress...'}
                         </p>
                       </div>
+
+                      <div className="mt-4 inline-flex w-fit items-center gap-2 rounded-full border border-[#E5E0D8]/80 bg-white/75 px-3 py-1.5 text-xs text-[#475467]">
+                        <span>{isZh ? `已等待 ${analyzingElapsedSeconds} 秒` : `Waiting ${analyzingElapsedSeconds}s`}</span>
+                        <span className="text-[#98a2b3]">·</span>
+                        <span>{loadingStageText}</span>
+                      </div>
                       
                       <motion.h2 
                         animate={{ opacity: [0.5, 1, 0.5] }}
@@ -447,6 +478,10 @@ export default function GiftingPage() {
                         ))}
                       </div>
                       <div className="relative mt-10 h-[2px] w-full overflow-hidden rounded-full bg-[#E5E0D8]/40">
+                        <div
+                          className={`absolute inset-y-0 left-0 rounded-full ${currentContent.accentTextClassName.replace('text-', 'bg-')}`}
+                          style={{ width: `${loadingProgress}%`, opacity: 0.24 }}
+                        />
                         <motion.div 
                           initial={{ x: '-100%' }}
                           animate={{ x: '100%' }}
@@ -455,7 +490,7 @@ export default function GiftingPage() {
                         />
                       </div>
                       <p className="mt-4 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
-                        {isZh ? '终稿不是只给结论，而是给出真正可执行的改写方式。' : 'The dossier will not stop at a verdict. It will explain how to rewrite the gesture.'}
+                        {loadingHintText}
                       </p>
                     </div>
                   </div>
