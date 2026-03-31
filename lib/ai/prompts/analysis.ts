@@ -1,6 +1,7 @@
 import type { RecognitionResult, SupportedCountry } from '@/lib/analysis/cultural-analyzer'
 import type { GiftProfile } from '@/lib/analysis/gift-profile'
 import type { ModelMessage } from '@/lib/ai/adapters/types'
+import type { TabooRetrievalHit } from '@/lib/domain/taboo/taboo-types'
 import type { AnalysisEngineResult, AudienceProfileInput, P0Locale } from '@/lib/types/gifting-types'
 import {
   type PromptAudienceContext,
@@ -77,12 +78,37 @@ export function buildRiskEnhancementPrompt(input: {
   giftProfile: GiftProfile
   audience: AudienceProfileInput
   ruleResult: AnalysisEngineResult
+  retrievalHits?: TabooRetrievalHit[]
 }): string {
   const isZh = input.locale === 'zh'
   const ruleExplanation = input.ruleResult.matchedRules
     .slice(0, 3)
     .map(rule => rule.explanation)
     .join('; ')
+  const retrievalSummary = (input.retrievalHits ?? []).map(hit => {
+    if (isZh) {
+      return [
+        `- [${hit.countryCode}] 品类=${hit.category}`,
+        `命中=${hit.taboo}`,
+        `原因=${hit.reason}`,
+        `替代=${hit.alternative || '无'}`,
+        `相关度=${hit.score.toFixed(1)}`,
+      ].join(' | ')
+    }
+
+    return [
+      `- [${hit.countryCode}] category=${hit.category}`,
+      `match=${hit.taboo}`,
+      `reason=${hit.reason}`,
+      `alternative=${hit.alternative || 'n/a'}`,
+      `relevance=${hit.score.toFixed(1)}`,
+    ].join(' | ')
+  })
+  const retrievalLine = retrievalSummary.length > 0
+    ? retrievalSummary.join('\n')
+    : isZh
+      ? '未检索到高相关禁忌片段。'
+      : 'No high-relevance taboo snippets were retrieved.'
 
   return renderPromptSections({
     roleMission: [
@@ -94,6 +120,9 @@ export function buildRiskEnhancementPrompt(input: {
       isZh
         ? '只能根据给定礼物信息、国家和收礼场景做分析，不要臆造缺失事实。'
         : 'Only analyze from the provided gift, country, and recipient context. Do not invent missing facts.',
+      isZh
+        ? '检索命中仅作为参考证据，必须结合关系深度、场景礼仪和语义细节综合判断，禁止把检索命中当作机械硬规则。'
+        : 'Treat retrieved taboo hits as evidence rather than deterministic rules. Weigh relationship depth, occasion etiquette, and semantics before deciding risk.',
       isZh ? '必须只输出 JSON，不要输出额外解释。返回的所有文案必须是纯中文。' : 'Reply with JSON only and no extra explanation. ALL returned text must be strictly in English.',
     ],
     domainContext: [
@@ -108,6 +137,7 @@ export function buildRiskEnhancementPrompt(input: {
       (isZh ? '场景：' : 'Occasion: ') + (input.audience.sceneTemplate || 'general'),
       (isZh ? '正式程度：' : 'Formality: ') + (input.audience.formality || 'semi-formal'),
       (isZh ? '规则层发现：' : 'Rule-based findings: ') + (ruleExplanation || (isZh ? '暂无规则命中' : 'No rules matched')),
+      (isZh ? '检索增强命中（来自 Excel 规范化语料）：\n' : 'Retrieval-augmented hits (from normalized Excel corpus):\n') + retrievalLine,
       (isZh ? '风险等级：' : 'Risk level: ') + input.ruleResult.riskLevel,
       (isZh ? '风险分数：' : 'Risk score: ') + String(input.ruleResult.riskScore) + '/100',
     ],

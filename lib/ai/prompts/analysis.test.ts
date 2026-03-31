@@ -43,7 +43,7 @@ describe('analysis prompt builders', () => {
     expect(messages[0].content).toContain('## Output Contract')
     expect(messages[0].content).toContain('riskLevel 只能是 Low、Medium、High。')
     expect(messages[1].content).toContain('"country": "Japan"')
-    expect(messages[1].content).toContain('"task": "请输出跨文化礼赠风险分析与建议"')
+    expect(messages[1].content).toContain('"task": "请输出极其详尽、深度个性化、充满人文和社会心理学洞察的跨文化礼赠风险分析与建议报告（字数要充足、细节要拉满）"')
   })
 
   it('builds risk enhancement prompt with explicit sections and JSON contract', () => {
@@ -96,6 +96,19 @@ describe('analysis prompt builders', () => {
         ],
         recommendations: [],
       },
+      retrievalHits: [
+        {
+          id: 'jp-1',
+          countryCode: 'JP',
+          category: 'gift',
+          taboo: 'Avoid clocks in formal gifting.',
+          reason: 'Can imply counting down remaining time.',
+          alternative: 'Choose tea set instead.',
+          source: 'xlsx',
+          storyScore: 4,
+          score: 9.2,
+        },
+      ],
     })
 
     expect(prompt).toContain('## Role / Mission')
@@ -104,5 +117,7 @@ describe('analysis prompt builders', () => {
     expect(prompt).toContain('## Output Contract')
     expect(prompt).toContain('Return JSON with fields: semanticExplanation, personalizedMitigation, alternativeFraming, culturalContext, confidence.')
     expect(prompt).toContain('Rule-based findings: Clocks can imply counting down time.')
+    expect(prompt).toContain('Retrieval-augmented hits (from normalized Excel corpus):')
+    expect(prompt).toContain('Avoid clocks in formal gifting.')
   })
 })

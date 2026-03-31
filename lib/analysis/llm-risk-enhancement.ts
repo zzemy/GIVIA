@@ -9,6 +9,7 @@ import {
 import { extractSafeJsonObject } from '@/lib/ai/guards/safe-json'
 import { buildRiskEnhancementPrompt } from '@/lib/ai/prompts/analysis'
 import { requestDashScopeCompletion } from '@/lib/ai/adapters/dashscope'
+import { retrieveTabooHits } from '@/lib/domain/taboo/taboo-retrieval'
 
 /**
  * LLM-enhanced risk assessment: Add semantic explanations and personalized mitigation suggestions
@@ -61,6 +62,13 @@ export async function enhanceRiskWithLLM(
 
 function buildEnhancementPrompt(input: LLMEnhancementInput): string {
   const sanitizedInput = sanitizeEnhancementInput(input)
+  const retrievalHits = retrieveTabooHits({
+    countryCode: sanitizedInput.countryCode,
+    giftName: sanitizedInput.giftName,
+    giftProfile: sanitizedInput.giftProfile,
+    audience: sanitizedInput.audience,
+    maxHits: 4,
+  })
   const injectionAssessment = detectPromptInjectionInFields([
     sanitizedInput.countryCode,
     sanitizedInput.countryName,
@@ -86,7 +94,10 @@ function buildEnhancementPrompt(input: LLMEnhancementInput): string {
   ])
 
   return `${buildPromptInjectionGuardText(injectionAssessment)}\n\n${buildRiskEnhancementPrompt(
-    sanitizedInput,
+    {
+      ...sanitizedInput,
+      retrievalHits,
+    },
   )}`
 }
 
