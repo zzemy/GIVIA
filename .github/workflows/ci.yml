@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   verify:
-    name: Lint, Test, Build
+    name: Lint, Type Check, Test, Build
     runs-on: ubuntu-latest
 
     steps:
@@ -37,14 +37,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
+      - name: Lint code
+        run: pnpm lint --max-warnings=0
 
       - name: Type check
         run: pnpm exec tsc --noEmit
 
       - name: Test
-        run: pnpm test
+        run: pnpm test --coverage
 
-      - name: Build
+      - name: Build for production
         run: pnpm build

@@ -1,8 +1,6 @@
-const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? ""
-
 export function withBasePath(path: string): string {
   if (!path) {
-    return BASE_PATH || "/"
+    return "/"
   }
 
   // Keep external/data URLs untouched.
@@ -10,6 +8,6 @@ export function withBasePath(path: string): string {
     return path
   }
 
-  const normalized = path.startsWith("/") ? path : `/${path}`
-  return `${BASE_PATH}${normalized}`
+  // Return path as-is since we no longer use sub-path deployment
+  return path.startsWith("/") ? path : `/${path}`
 }

@@ -1,18 +1,8 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === "production";
-const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1];
-const isGitHubPagesBuild =
-  process.env.GITHUB_PAGES === "true" && !!repositoryName;
-const isUserOrOrgPagesRepo = repositoryName?.endsWith(".github.io");
-const pagesBasePath =
-  isGitHubPagesBuild && !isUserOrOrgPagesRepo
-    ? `/${repositoryName}`
-    : undefined;
-
 const internalHost = process.env.TAURI_DEV_HOST || "localhost";
 
-// Enable static export for Tauri production builds.
+// Enable static export for Tauri production builds and Vercel deployment.
 // This makes `pnpm build` generate the `out/` directory that Tauri loads from `src-tauri/tauri.conf.json` (frontendDist: "../out").
 const nextConfig: NextConfig = {
   // Note: This feature is required to use the Next.js Image component in SSG mode.
@@ -20,14 +10,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Configure assetPrefix or else the server won't properly resolve your assets.
-  assetPrefix: isProd ? pagesBasePath : `http://${internalHost}:3000`,
-  basePath: pagesBasePath,
-  trailingSlash: isGitHubPagesBuild,
+  // Configure assetPrefix for development mode.
+  assetPrefix: process.env.NODE_ENV === "production" ? undefined : `http://${internalHost}:3000`,
   output: "export",
-  env: {
-    NEXT_PUBLIC_BASE_PATH: pagesBasePath ?? "",
-  },
 };
 
 export default nextConfig;
