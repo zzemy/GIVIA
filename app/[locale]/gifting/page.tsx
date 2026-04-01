@@ -31,53 +31,10 @@ export default function GiftingPage() {
   const { giftInputProps, countryProps, analysisProps } = workflowPanelsProps
 
   const [currentStep, setCurrentStep] = useState(1)
-  const [devPreviewState, setDevPreviewState] = React.useState({ enabled: false, step: 1 })
-  const isDevPreview = devPreviewState.enabled
-
-  React.useEffect(() => {
-    const syncFromLocation = () => {
-      const nextParams = new URLSearchParams(window.location.search)
-      const enabled = nextParams.get('dev') === '1'
-      const rawStep = Number(nextParams.get('step') ?? 1)
-      const step = Number.isFinite(rawStep) && rawStep >= 1 && rawStep <= 5 ? rawStep : 1
-
-      setDevPreviewState(previous => {
-        if (previous.enabled === enabled && previous.step === step) {
-          return previous
-        }
-
-        return { enabled, step }
-      })
-    }
-
-    syncFromLocation()
-    window.addEventListener('popstate', syncFromLocation)
-
-    return () => window.removeEventListener('popstate', syncFromLocation)
-  }, [])
-
-  const buildGiftingHref = (locale: 'zh' | 'en', step?: number) => {
-    return devPreviewState.enabled ? `/${locale}/gifting?dev=1&step=${step ?? currentStep}` : `/${locale}/gifting`
-  }
 
   const updateStep = (nextStep: number) => {
     setCurrentStep(nextStep)
-    setDevPreviewState(previous => (previous.enabled ? { ...previous, step: nextStep } : previous))
   }
-
-  React.useEffect(() => {
-    if (!isDevPreview) {
-      return
-    }
-
-    if (analysisProps.isAnalyzing || resultsProps) {
-      return
-    }
-
-    if (currentStep !== devPreviewState.step) {
-      setCurrentStep(devPreviewState.step)
-    }
-  }, [analysisProps.isAnalyzing, currentStep, devPreviewState.step, isDevPreview, resultsProps])
 
   React.useEffect(() => {
     if (analysisProps.isAnalyzing && currentStep !== 4) {
@@ -95,28 +52,10 @@ export default function GiftingPage() {
   }, [analysisProps.isAnalyzing, currentStep, feedbackProps.error, resultsProps])
 
   React.useEffect(() => {
-    if (!isDevPreview && currentStep === 5 && !resultsProps) {
+    if (currentStep === 5 && !resultsProps) {
       setCurrentStep(1)
     }
-  }, [isDevPreview, currentStep, resultsProps])
-
-  React.useEffect(() => {
-    if (!isDevPreview && currentStep === 5 && !resultsProps) {
-      setCurrentStep(1)
-    }
-  }, [isDevPreview, currentStep, resultsProps])
-
-  React.useEffect(() => {
-    if (!isDevPreview) {
-      return
-    }
-
-    const nextHref = `/${routeLocale}/gifting?dev=1&step=${currentStep}`
-
-    if (`${window.location.pathname}${window.location.search}` !== nextHref) {
-      router.replace(nextHref, { scroll: false })
-    }
-  }, [currentStep, isDevPreview, routeLocale, router])
+  }, [currentStep, resultsProps])
 
   const editorialContent: Record<number, StepTheme> = {
     1: {
@@ -187,8 +126,8 @@ export default function GiftingPage() {
   }
 
   const currentContent = editorialContent[currentStep] ?? editorialContent[1]
-  const canAdvanceFromStep1 = isDevPreview || Boolean(giftInputProps.giftName.trim() || giftInputProps.giftDescription.trim())
-  const canAdvanceFromStep2 = isDevPreview || Boolean(countryProps.selectedCountry && (countryProps.targetGroup !== 'other' || countryProps.customAudienceGroup.trim()))
+  const canAdvanceFromStep1 = Boolean(giftInputProps.giftName.trim() || giftInputProps.giftDescription.trim())
+  const canAdvanceFromStep2 = Boolean(countryProps.selectedCountry && (countryProps.targetGroup !== 'other' || countryProps.customAudienceGroup.trim()))
 
   const railLabels = [
     isZh ? '礼物对象' : 'Object',
@@ -227,7 +166,6 @@ export default function GiftingPage() {
   const brandTitle = isZh ? '礼智极意' : 'Givia'
   const languageToggleLabel = isZh ? 'EN Edition' : 'ZH Edition'
   const backHomeLabel = isZh ? '返回首页' : 'Back home'
-  const devToggleLabel = isDevPreview ? (isZh ? '退出开发预览' : 'Exit preview') : isZh ? '开发预览' : 'Preview mode'
 
   if (currentStep === 5) {
     return (
@@ -240,13 +178,6 @@ export default function GiftingPage() {
               <p className={`mt-2 text-[2.4rem] tracking-[-0.08em] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif'}`}>{brandTitle}</p>
             </div>
             <div className="flex items-center gap-4">
-              <button
-                type="button"
-                onClick={() => router.push(isDevPreview ? `/${routeLocale}/gifting` : `/${routeLocale}/gifting?dev=1&step=${currentStep}`)}
-                className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
-              >
-                {devToggleLabel}
-              </button>
               <button
                 type="button"
                 onClick={() => router.push(`/${routeLocale}`)}
@@ -275,9 +206,7 @@ export default function GiftingPage() {
             {resultsProps ? (
               <ResultsSection {...resultsProps} onReset={() => {
                   setCurrentStep(1)
-                  if (!isDevPreview) {
-                    router.push(`/${routeLocale}/gifting`)
-                  }
+                  router.push(`/${routeLocale}/gifting`)
                   resultsProps.onReset()
                 }} />
             ) : (
@@ -309,18 +238,7 @@ export default function GiftingPage() {
           <div className="flex items-center gap-4">
             <button
               type="button"
-              onClick={() => router.push(isDevPreview ? `/${routeLocale}/gifting` : `/${routeLocale}/gifting?dev=1&step=${currentStep}`)}
-              className={`inline-flex items-center rounded-full border px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] transition ${
-                isDevPreview
-                  ? 'border-[rgba(45,138,105,0.12)] bg-[#eef6f1] text-[#2d6d55]'
-                  : 'border-[#E5E0D8]/90 bg-white/72 text-[#7d8593] hover:text-[#191614]'
-              }`}
-            >
-              {isDevPreview ? 'DEV PREVIEW' : devToggleLabel}
-            </button>
-            <button
-              type="button"
-              onClick={() => router.push(buildGiftingHref(isZh ? 'en' : 'zh', currentStep))}
+              onClick={() => router.push(`/${isZh ? 'en' : 'zh'}/gifting`)}
               className="inline-flex items-center gap-2 border-b border-[#E5E0D8]/80 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#7d8593] transition hover:text-[#191614]"
             >
               {languageToggleLabel}
@@ -354,12 +272,7 @@ export default function GiftingPage() {
                 <button
                   key={label}
                   type="button"
-                  disabled={!isDevPreview}
-                  onClick={() => {
-                    if (isDevPreview) {
-                      updateStep(stepIndex)
-                    }
-                  }}
+                  disabled={true}
                   className="flex min-w-0 flex-1 flex-col gap-2 text-left"
                 >
                   <span
@@ -395,7 +308,7 @@ export default function GiftingPage() {
             {currentStep === 2 && (
               <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col pt-2">
                 <div className="min-h-0 flex w-full flex-1 flex-col overflow-hidden">
-                  <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => updateStep(1)} onContinue={() => updateStep(3)} devPreview={isDevPreview} />
+                  <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => updateStep(1)} onContinue={() => updateStep(3)} />
                 </div>
               </motion.div>
             )}
