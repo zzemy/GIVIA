@@ -49,7 +49,7 @@ describe('output validator', () => {
       fitScore: 62,
       riskLevel: 'Extreme',
       isTaboo: true,
-      warning: 'x'.repeat(500),
+      warning: 'x'.repeat(3000),
       rescueItem: 'Tea Set',
       rescueReason: 'Safer replacement',
       semanticSignals: ['taboo'],
