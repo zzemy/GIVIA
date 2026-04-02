@@ -25,7 +25,135 @@ export default function Home() {
       <HomeBackground />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_16%,rgba(255,255,255,0.76),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(206,217,242,0.2),transparent_24%),linear-gradient(180deg,rgba(246,241,234,0.82),rgba(249,246,241,0.96))]" />
 
-      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1580px] flex-col px-4 py-4 sm:px-8 xl:px-12 lg:h-full lg:min-h-0">
+      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1580px] flex-col px-4 py-4 sm:px-8 xl:px-12 lg:hidden">
+        <motion.header
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-start justify-between gap-3"
+        >
+          <div>
+            <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[#7e8696]">The Art of Gifting</p>
+            <p className={`mt-2 text-[2rem] tracking-[-0.08em] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>{isZh ? '礼智极意' : 'Givia'}</p>
+            <p className="mt-2 text-[0.72rem] uppercase tracking-[0.18em] text-[#8a919e]">
+              {isZh ? '智联全球文化，礼赠每一份心意' : 'Human tact, cultural intelligence, considered arrival'}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => router.push(`/${isZh ? 'en' : 'zh'}`)}
+            className="mt-1 rounded-full border border-black/8 bg-white/74 px-3 py-2 text-[10px] uppercase tracking-[0.24em] text-[#8e95a2] shadow-[0_10px_24px_-20px_rgba(15,23,42,0.18)] transition hover:text-[#1b1714]"
+          >
+            {isZh ? 'EN' : 'ZH'}
+          </button>
+        </motion.header>
+
+        <div className="mt-5 space-y-4 pb-24">
+          <motion.section
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden rounded-[2rem] border border-black/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,242,236,0.92))] shadow-[0_24px_58px_-40px_rgba(15,23,42,0.24)]"
+          >
+            <div
+              className="relative min-h-[20rem] overflow-hidden px-5 pb-5 pt-6"
+              style={{
+                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(16,13,10,0.38)),url(${routePhotography.wrapped})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.18),transparent_28%)] mix-blend-screen" />
+              <div className="relative flex h-full flex-col justify-between text-white">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/72">{isZh ? 'Mobile editorial shell' : 'Mobile editorial shell'}</p>
+                  <h1 className={`mt-4 text-[2.25rem] leading-[1.02] tracking-[-0.06em] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                    {isZh ? '像小程序一样顺手，像编辑页一样克制。' : 'App-like on mobile, editorial by design.'}
+                  </h1>
+                </div>
+
+                <div className="mt-10 space-y-4">
+                  <p className="max-w-[18rem] text-[0.95rem] leading-7 text-white/86">
+                    {isZh
+                      ? '把礼赠流程压缩成更轻的手机壳层，保留文化判断与文案能力，但让入口、浏览和推进都更像一个原生应用。'
+                      : 'Compress the gifting flow into a lighter mobile shell, keeping cultural reasoning and copy help while making entry and progression feel native.'}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => router.push(`/${locale}/gifting`)}
+                    className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-[11px] font-medium uppercase tracking-[0.22em] text-[#1c1a17] shadow-[0_14px_34px_-24px_rgba(15,23,42,0.42)] transition active:scale-[0.98]"
+                  >
+                    {isZh ? '开始礼赠' : 'Start gifting'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
+          <section className="grid grid-cols-2 gap-3">
+            {[
+              {
+                title: isZh ? '文化风控' : 'Cultural risk',
+                body: isZh ? '先看禁忌和语义联想。' : 'See taboos and cues first.',
+              },
+              {
+                title: isZh ? '表达分寸' : 'Tone control',
+                body: isZh ? '写卡片和措辞更稳妥。' : 'Keep wording and tone proportionate.',
+              },
+              {
+                title: isZh ? '包装方向' : 'Packaging',
+                body: isZh ? '给出可落地的包装建议。' : 'Get an executable packaging direction.',
+              },
+              {
+                title: isZh ? '送达方式' : 'Delivery',
+                body: isZh ? '考虑递送场景与节奏。' : 'Tune delivery timing and context.',
+              },
+            ].map(item => (
+              <div key={item.title} className="rounded-[1.4rem] border border-black/7 bg-white/78 p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-[#8e95a2]">{item.title}</p>
+                <p className="mt-3 text-[0.9rem] leading-6 text-[#1b1714]">{item.body}</p>
+              </div>
+            ))}
+          </section>
+
+          <section className="grid gap-3">
+            <div className="rounded-[1.6rem] border border-black/8 bg-[rgba(255,255,255,0.76)] p-4 shadow-[0_18px_40px_-34px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+              <p className="text-[10px] uppercase tracking-[0.24em] text-[#7f89b4]">{isZh ? '第一眼感官' : 'The first glance'}</p>
+              <p className={`mt-3 text-[1.1rem] leading-tight text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                {isZh
+                  ? '礼物不只是一件物品，它先以姿态、语气和落点被理解。'
+                  : 'A gift is understood first by posture, tone, and where it lands.'}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                routePhotography.wrapped,
+                routePhotography.tea,
+                routePhotography.meeting,
+              ].map((src, index) => (
+                <div
+                  key={src}
+                  className="relative h-28 overflow-hidden rounded-[1.35rem] border border-black/7 shadow-[0_18px_36px_-28px_rgba(15,23,42,0.22)]"
+                  style={{
+                    backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.05),rgba(16,13,10,0.26)),url(${src})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(16,13,10,0.26))]" />
+                  <div className="absolute inset-x-0 bottom-0 p-3 text-[10px] uppercase tracking-[0.2em] text-white/78">
+                    {index === 0 ? (isZh ? '包装' : 'Wrap') : index === 1 ? (isZh ? '文案' : 'Copy') : (isZh ? '递送' : 'Delivery')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <main className="relative z-10 mx-auto hidden min-h-screen w-full max-w-[1580px] flex-col px-4 py-4 sm:px-8 xl:px-12 lg:flex lg:h-full lg:min-h-0">
         <motion.header
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}

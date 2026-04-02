@@ -335,7 +335,7 @@ export function StepAnalysis(props: StepAnalysisProps) {
 
   return (
     <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-0 w-full flex-1 flex-col">
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-visible rounded-[1.6rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.94),rgba(247,241,236,0.9))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.16)] sm:rounded-[2.35rem] xl:overflow-hidden">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-visible rounded-[1.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.94),rgba(247,241,236,0.9))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.16)] sm:rounded-[2.1rem] xl:overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,152,166,0.18),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(205,179,151,0.18),transparent_26%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.56),transparent)]" />
 
@@ -357,7 +357,7 @@ export function StepAnalysis(props: StepAnalysisProps) {
 
             <div className="mt-2">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Scene index' : 'Scene index'}</p>
-              <div className="grid mt-3 gap-2 md:grid-cols-3">
+              <div className="mt-3 grid gap-2 sm:grid-cols-3">
                 {sceneTemplateOptions.map(option => {
                   const active = option.value === sceneTemplate
 
@@ -393,7 +393,7 @@ export function StepAnalysis(props: StepAnalysisProps) {
 
             <div className="mt-2">
               <p className="text-[11px] uppercase tracking-[0.18em] text-[#978f84]">{isZh ? 'Visibility of arrival' : 'Visibility of arrival'}</p>
-              <div className="mt-1.5 grid gap-2 md:grid-cols-3">
+              <div className="mt-1.5 grid gap-2 sm:grid-cols-3">
                 {deliverySettingOptions.map(option => {
                   const active = option.value === deliverySetting
 

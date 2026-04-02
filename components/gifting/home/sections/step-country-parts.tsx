@@ -6,10 +6,10 @@ import { COUNTRIES, POPULAR_COUNTRIES } from '@/lib/countries'
 import type { Locale, SelectOption } from '@/components/gifting/home/types'
 
 export const inputClassName =
-  'mt-3 w-full rounded-[1.25rem] border border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.92)] px-4 py-3 text-[14px] leading-6 text-[#201a16] transition placeholder:text-[#9a9287] focus:border-[rgba(45,138,105,0.26)] focus:bg-white focus:outline-none focus:ring-0'
+  'mt-3 w-full rounded-[1.15rem] border border-[rgba(74,63,51,0.1)] bg-[rgba(255,255,255,0.92)] px-4 py-3 text-[13px] leading-6 text-[#201a16] transition placeholder:text-[#9a9287] focus:border-[rgba(45,138,105,0.26)] focus:bg-white focus:outline-none focus:ring-0 sm:text-[14px]'
 
 const sheetClassName =
-  'overflow-hidden rounded-[1.8rem] border border-[rgba(74,63,51,0.09)] bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,245,238,0.84))] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)]'
+  'overflow-hidden rounded-[1.55rem] border border-[rgba(74,63,51,0.09)] bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(249,245,238,0.84))] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] sm:rounded-[1.8rem]'
 
 export function ChoicePills({
   options,
@@ -32,7 +32,7 @@ export function ChoicePills({
             key={option.value}
             type="button"
             onClick={() => onChange(option.value)}
-            className={`min-w-0 rounded-full border px-3 py-2 text-left text-[10px] uppercase tracking-[0.16em] transition sm:px-4 sm:py-2.5 sm:text-[11px] ${
+            className={`min-w-0 rounded-full border px-3 py-2 text-left text-[9px] uppercase tracking-[0.16em] transition sm:px-4 sm:py-2.5 sm:text-[11px] ${
               active
                 ? 'border-transparent bg-[#ebf4ef] text-[#235543] shadow-[0_16px_28px_-24px_rgba(44,109,85,0.45)]'
                 : 'border-[rgba(74,63,51,0.08)] bg-white/94 text-[#6f675d] hover:border-[rgba(74,63,51,0.16)] hover:text-[#201915]'
@@ -139,7 +139,7 @@ export function PromptSheet({
 }) {
   return (
     <div className={sheetClassName}>
-      <div className="px-4 py-4 sm:px-6 sm:py-5">
+      <div className="px-4 py-3.5 sm:px-6 sm:py-5">
         <p className="text-[10px] uppercase tracking-[0.22em] text-[#9a9287]">{label}</p>
         <div className="mt-3">{children}</div>
       </div>

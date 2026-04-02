@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { MobileAppShell } from '@/components/gifting/mobile/mobile-app-shell'
 import zhMessages from '@/messages/zh.json'
 import enMessages from '@/messages/en.json'
 
@@ -47,5 +48,5 @@ export default async function LocaleLayout({
     notFound()
   }
 
-  return children
+  return <MobileAppShell locale={locale}>{children}</MobileAppShell>
 }

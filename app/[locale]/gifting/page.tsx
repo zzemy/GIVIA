@@ -169,9 +169,78 @@ export default function GiftingPage() {
 
   if (currentStep === 5) {
     return (
-      <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] lg:h-screen lg:overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),radial-gradient(circle_at_86%_14%,rgba(226,212,216,0.28),transparent_26%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 sm:px-8 sm:py-6 lg:h-[100dvh] lg:min-h-0 lg:px-12">
+      <>
+        <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] lg:hidden ${isZh ? 'font-sans-zh' : ''}`}>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),radial-gradient(circle_at_86%_14%,rgba(226,212,216,0.28),transparent_26%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
+          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 pb-24 sm:px-6 sm:py-5">
+            <header className="flex items-start justify-between gap-3">
+              <div>
+                {brandEyebrow ? <p className="text-[0.72rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
+                <p className={`mt-2 text-[1.8rem] tracking-[-0.08em] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif'}`}>{brandTitle}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => router.push(`/${routeLocale}`)}
+                className="inline-flex items-center gap-2 rounded-full border border-[#E5E0D8]/80 bg-white/76 px-3 py-2 text-[10px] uppercase tracking-[0.22em] text-[#7d8593] transition hover:text-[#191614]"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                {backHomeLabel}
+              </button>
+            </header>
+
+            <div className="mt-5 space-y-4">
+              <div className="rounded-[1.7rem] border border-[#E5E0D8]/80 bg-white/80 p-4 shadow-[0_20px_50px_-38px_rgba(0,0,0,0.08)]">
+                <p className={`text-[10px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
+                <h1 className="mt-3 text-[1.95rem] font-serif leading-[0.98] tracking-[-0.06em] text-[#1c1a17]">{currentContent.title}</h1>
+                <p className="mt-3 text-[0.95rem] leading-7 text-[#667085]">{currentContent.desc}</p>
+                <p className="mt-4 rounded-[1.15rem] border border-[#E5E0D8]/80 bg-[#fcfbf8] px-4 py-3 text-[0.92rem] leading-7 text-[#1c1a17]">{currentContent.quote}</p>
+              </div>
+
+              <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
+                {railLabels.map((label, index) => {
+                  const stepIndex = index + 1
+                  const active = stepIndex === currentStep
+                  const reached = stepIndex < currentStep
+
+                  return (
+                    <button key={label} type="button" disabled className="flex min-w-[6.5rem] flex-col gap-2 text-left">
+                      <span
+                        className="h-[2px] rounded-full transition-all"
+                        style={{
+                          backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.34)' : 'rgba(28,26,23,0.1)',
+                        }}
+                      />
+                      <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>
+                        0{stepIndex} {label}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            <main className="mt-4 min-h-0 flex-1">
+              {resultsProps ? (
+                <ResultsSection
+                  {...resultsProps}
+                  onReset={() => {
+                    setCurrentStep(1)
+                    router.push(`/${routeLocale}/gifting`)
+                    resultsProps.onReset()
+                  }}
+                />
+              ) : (
+                <div className="rounded-[1.5rem] border border-[#E5E0D8]/80 bg-white/72 p-8 text-center text-[#98a2b3]">
+                  {isZh ? '报告生成失败，请重试。' : 'Failed to generate the report. Please try again.'}
+                </div>
+              )}
+            </main>
+          </div>
+        </div>
+
+        <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] hidden lg:block lg:h-screen lg:overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),radial-gradient(circle_at_86%_14%,rgba(226,212,216,0.28),transparent_26%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
+          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 sm:px-8 sm:py-6 lg:h-[100dvh] lg:min-h-0 lg:px-12">
           <header className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
             <div>
               {brandEyebrow ? <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
@@ -213,13 +282,202 @@ export default function GiftingPage() {
               <div className="rounded-[2rem] border border-[#E5E0D8]/80 bg-white/72 p-16 text-center text-[#98a2b3]">{isZh ? '报告生成失败，请重试。' : 'Failed to generate the report. Please try again.'}</div>
             )}
           </main>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   return (
-    <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] lg:h-screen lg:overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
+    <>
+      <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] lg:hidden ${isZh ? 'font-sans-zh' : ''}`}>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-[24rem] blur-3xl"
+          style={{
+            background: `radial-gradient(circle at 20% 18%, ${currentContent.glow}, transparent 26%)`,
+          }}
+        />
+
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 pb-24 sm:px-6 sm:py-5">
+          <header className="flex items-start justify-between gap-3">
+            <div>
+              {brandEyebrow ? <p className="text-[0.72rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
+              <p className={`mt-2 text-[1.8rem] tracking-[-0.08em] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif'}`}>{brandTitle}</p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => router.push(`/${isZh ? 'en' : 'zh'}/gifting`)}
+                className="rounded-full border border-[#E5E0D8]/80 bg-white/76 px-3 py-2 text-[10px] uppercase tracking-[0.22em] text-[#7d8593] transition hover:text-[#191614]"
+              >
+                {languageToggleLabel}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push(`/${routeLocale}`)}
+                className="rounded-full border border-[#E5E0D8]/80 bg-white/76 px-3 py-2 text-[10px] uppercase tracking-[0.22em] text-[#7d8593] transition hover:text-[#191614]"
+              >
+                {backHomeLabel}
+              </button>
+            </div>
+          </header>
+
+          <div className="mt-5 space-y-4">
+            <div className="rounded-[1.75rem] border border-[#E5E0D8]/80 bg-white/78 p-4 shadow-[0_20px_50px_-38px_rgba(0,0,0,0.08)]">
+              <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
+              <h1 className="mt-3 text-[1.95rem] font-serif leading-[0.98] tracking-[-0.06em] text-[#1c1a17]">{currentContent.title}</h1>
+              <p className="mt-3 text-[0.95rem] leading-7 text-[#667085]">{currentContent.desc}</p>
+            </div>
+
+            <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
+              {railLabels.map((label, index) => {
+                const stepIndex = index + 1
+                const active = stepIndex === currentStep
+                const reached = stepIndex < currentStep
+
+                return (
+                  <button key={label} type="button" disabled className="flex min-w-[6.5rem] flex-col gap-2 text-left">
+                    <span
+                      className="h-[2px] rounded-full transition-all"
+                      style={{
+                        backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.34)' : 'rgba(28,26,23,0.1)',
+                      }}
+                    />
+                    <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>
+                      0{stepIndex} {label}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <main className="mt-4 min-h-0 flex-1 overflow-visible pb-4">
+            <AnimatePresence mode="wait">
+              {currentStep === 1 && (
+                <motion.div
+                  key="step1-mobile"
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -18 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex min-h-0 w-full flex-1 flex-col"
+                >
+                  <StepGiftInput {...giftInputProps} canContinue={canAdvanceFromStep1} onContinue={() => updateStep(2)} />
+                </motion.div>
+              )}
+
+              {currentStep === 2 && (
+                <motion.div key="step2-mobile" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex min-h-0 w-full flex-col pt-1">
+                  <div className="min-h-0 flex w-full flex-1 flex-col overflow-hidden">
+                    <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => updateStep(1)} onContinue={() => updateStep(3)} />
+                  </div>
+                </motion.div>
+              )}
+
+              {currentStep === 3 && (
+                <motion.div key="step3-mobile" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex min-h-0 w-full flex-col pt-1">
+                  <div className="min-h-0 flex w-full flex-1 flex-col overflow-hidden">
+                    {feedbackProps.error && <div className="mb-4 rounded-[1.35rem] border border-rose-200 bg-rose-50/88 px-4 py-3 text-sm text-rose-700">{feedbackProps.error}</div>}
+                    <StepAnalysis {...analysisProps} onBack={() => updateStep(2)} />
+                  </div>
+                </motion.div>
+              )}
+
+              {currentStep === 4 && (
+                <motion.div key="step4-mobile" initial={{ opacity: 0, scale: 0.985 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.01 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex min-h-full items-center justify-center">
+                  <div className="w-full overflow-hidden rounded-[1.6rem] border border-[#E5E0D8]/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(247,242,236,0.9))] shadow-[0_30px_70px_-48px_rgba(0,0,0,0.05)]">
+                    <div className="grid gap-0">
+                      <div className="relative min-h-[14rem] overflow-hidden bg-[linear-gradient(180deg,rgba(123,88,185,0.08),rgba(40,38,34,0.44)),url(https://images.pexels.com/photos/10479673/pexels-photo-10479673.jpeg?cs=srgb&dl=pexels-jonathanborba-10479673.jpg&fm=jpg)] bg-cover bg-center">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.24),transparent_30%)] mix-blend-screen" />
+                        <div className="relative flex h-full flex-col justify-between p-4">
+                          <p className="text-[10px] uppercase tracking-[0.22em] text-white/68">{isZh ? 'Editorial composition' : 'Editorial composition'}</p>
+                          <p className={`max-w-[14rem] text-[1.1rem] font-serif leading-tight text-white ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                            {isZh ? '系统正在把礼物、关系与文化分寸写成一份真正可送达的终稿。' : 'The system is writing object, relationship, and tact into a dossier that can actually be delivered.'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex h-full flex-col justify-center p-4">
+                        <div className="flex items-center gap-3">
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                            className={`h-4 w-4 rounded-full border-[1.5px] border-transparent border-t-current ${currentContent.accentTextClassName}`}
+                          />
+                          <p className={`text-[11px] uppercase tracking-[0.2em] font-medium ${currentContent.accentTextClassName}`}>{isZh ? '稿件生成中...' : 'Dossier in progress...'}</p>
+                        </div>
+
+                        <div className="mt-4 inline-flex w-fit items-center gap-2 rounded-full border border-[#E5E0D8]/80 bg-white/75 px-3 py-1.5 text-[11px] text-[#475467]">
+                          <span>{isZh ? `已等待 ${analyzingElapsedSeconds} 秒` : `Waiting ${analyzingElapsedSeconds}s`}</span>
+                          <span className="text-[#98a2b3]">·</span>
+                          <span>{loadingStageText}</span>
+                        </div>
+
+                        <motion.h2
+                          animate={{ opacity: [0.5, 1, 0.5] }}
+                          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                          className="mt-5 text-[1.5rem] font-serif leading-[1.08] tracking-[-0.04em] text-[#1c1a17]"
+                        >
+                          {isZh ? '系统正在整理文化风险、表达方式与替代方向。' : 'The system is assembling risk, expression, and better alternatives.'}
+                        </motion.h2>
+
+                        <p className="mt-4 text-[0.95rem] leading-7 text-[#667085]">
+                          {isZh
+                            ? '礼物语义、国家礼仪、关系角色与包装语气正在被交叉校准，准备输出更稳妥、更得体的送达方案。'
+                            : 'Gift semantics, etiquette, relationship roles, and packaging tone are being cross-calibrated to produce a more tactful and fitting route for the gesture.'}
+                        </p>
+
+                        <div className="mt-5 grid gap-3">
+                          {[
+                            isZh ? '礼物语义' : 'Gift semantics',
+                            isZh ? '文化分寸' : 'Cultural tact',
+                            isZh ? '关系语境' : 'Relationship context',
+                          ].map((item, index) => (
+                            <motion.div
+                              key={item}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.3 + index * 0.12, duration: 0.5 }}
+                              className="border-t border-[#E5E0D8]/80 pt-3 text-sm text-[#475467]"
+                            >
+                              <div className="flex items-center gap-2">
+                                <span className="relative flex h-2 w-2">
+                                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${currentContent.accentTextClassName.replace('text-', 'bg-')}`} />
+                                  <span className={`relative inline-flex h-2 w-2 rounded-full ${currentContent.accentTextClassName.replace('text-', 'bg-')}`} />
+                                </span>
+                                {item}
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+
+                        <div className="relative mt-8 h-[2px] w-full overflow-hidden rounded-full bg-[#E5E0D8]/40">
+                          <div
+                            className={`absolute inset-y-0 left-0 rounded-full ${currentContent.accentTextClassName.replace('text-', 'bg-')}`}
+                            style={{ width: `${loadingProgress}%`, opacity: 0.24 }}
+                          />
+                          <motion.div
+                            initial={{ x: '-100%' }}
+                            animate={{ x: '100%' }}
+                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                            className={`absolute inset-y-0 w-1/2 rounded-full ${currentContent.accentTextClassName.replace('text-', 'bg-')}`}
+                          />
+                        </div>
+                        <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-[#98a2b3]">{loadingHintText}</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </main>
+        </div>
+      </div>
+
+      <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] hidden lg:block lg:h-screen lg:overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] blur-3xl"
@@ -413,6 +671,7 @@ export default function GiftingPage() {
           </AnimatePresence>
         </main>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
