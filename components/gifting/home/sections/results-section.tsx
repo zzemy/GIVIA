@@ -205,30 +205,30 @@ export function ResultsSection({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="flex min-h-0 flex-1 flex-col gap-4 overflow-visible sm:gap-6 lg:overflow-hidden"
+      className="flex min-h-0 flex-1 flex-col gap-3 overflow-visible sm:gap-6 lg:overflow-hidden"
     >
-      <div className="flex flex-col gap-4 px-1 sm:px-2 lg:flex-row lg:items-end lg:justify-between">
+      <div className="flex flex-col gap-4 px-0.5 sm:px-2 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-[60rem]">
-          <div className="flex items-center gap-2 mb-3">
+          <div className="mb-3 flex items-center gap-2">
              <span className="flex h-2 w-2 rounded-full bg-[#1c1a17] animate-pulse" />
              <p className="font-mono text-[10px] uppercase tracking-widest text-[#69707d]">{isZh ? '系统决策终稿生成完毕' : 'DECISION DOSSIER GENERATED'}</p>
           </div>
-          <h2 className="text-[1.7rem] font-serif leading-[1.12] tracking-[-0.03em] text-[#1d1a17] sm:text-[2.2rem] md:text-[2.6rem]">
+          <h2 className="text-[1.45rem] font-serif leading-[1.12] tracking-[-0.03em] text-[#1d1a17] sm:text-[2.2rem] md:text-[2.6rem]">
             {summaryTitle}
           </h2>
         </div>
         <Button
           onClick={onReset}
-          className="rounded-full border border-black/8 bg-white/82 px-5 py-3 text-[#495161] shadow-sm transition hover:-translate-y-0.5"
+          className="w-full rounded-full border border-black/8 bg-white/82 px-5 py-3 text-[#495161] shadow-sm transition hover:-translate-y-0.5 sm:w-auto"
         >
           <RotateCcw size={14} className="mr-2" />
           {isZh ? '新的一局' : 'New Session'}
         </Button>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto rounded-[1.1rem] border border-[#e2ddd5] bg-white shadow-sm flex flex-col sm:rounded-[1.5rem]">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto rounded-[1rem] border border-[#e2ddd5] bg-white shadow-sm sm:rounded-[1.5rem]">
         
-        <div className="border-b border-[#e2ddd5] bg-[#faf9f7] px-4 py-4 sm:px-10 sm:py-5 flex flex-wrap gap-x-8 gap-y-3 sm:gap-x-12 sm:gap-y-4">
+        <div className="flex flex-wrap gap-x-8 gap-y-3 border-b border-[#e2ddd5] bg-[#faf9f7] px-3 py-4 sm:gap-x-12 sm:gap-y-4 sm:px-10 sm:py-5">
            <div>
              <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-1">{isZh ? '目标区域 & 对象' : 'TARGET & AUDIENCE'}</p>
              <p className="text-sm text-[#1c1a17] font-medium">{countryLabel} · {selectedAudienceLabel} · {sceneLabel}</p>
@@ -251,7 +251,7 @@ export function ResultsSection({
            </div>
         </div>
 
-        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-12 border-b border-[#e2ddd5]">
+        <div className="border-b border-[#e2ddd5] px-3 py-5 sm:px-10 sm:py-8 lg:py-12">
           <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr] lg:gap-10">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
@@ -313,12 +313,12 @@ export function ResultsSection({
           </div>
         </div>
 
-        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-12 border-b border-[#e2ddd5] bg-[#fcfbf8]">
+        <div className="border-b border-[#e2ddd5] bg-[#fcfbf8] px-3 py-5 sm:px-10 sm:py-8 lg:py-12">
           <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
             {isZh ? '02. 评分拆解与可信度' : '02. SCORE BREAKDOWN & CONFIDENCE'}
           </p>
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
-            <div className="rounded-2xl border border-[#e2ddd5] bg-white p-6">
+          <div className="grid gap-4 lg:grid-cols-[1.1fr_1fr] lg:gap-6">
+            <div className="rounded-[1.25rem] border border-[#e2ddd5] bg-white p-4 sm:rounded-2xl sm:p-6">
               <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-4">{isZh ? '三维评分构成' : 'THREE-DIMENSION SCORE'}</p>
               <div className="space-y-4">
                 {scoreBreakdown.map(item => (
@@ -334,9 +334,9 @@ export function ResultsSection({
                 ))}
               </div>
             </div>
-            <div className="rounded-2xl border border-[#e2ddd5] bg-white p-6">
+            <div className="rounded-[1.25rem] border border-[#e2ddd5] bg-white p-4 sm:rounded-2xl sm:p-6">
               <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-4">{isZh ? '判定摘要' : 'ASSESSMENT SUMMARY'}</p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {conclusionCards.map(card => (
                   <div key={card.label} className="rounded-xl border border-[#ece8e0] bg-[#faf9f7] p-3">
                     <p className="text-[10px] uppercase tracking-wider text-[#98a2b3]">{card.label}</p>
@@ -358,21 +358,21 @@ export function ResultsSection({
         {/* ========================================================================= */}
         {/* NEW AI ALGORITHM PIVOT SECTION (Replaces the fake generic products) */}
         {/* ========================================================================= */}
-        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-14 border-b border-[#e2ddd5] bg-[linear-gradient(170deg,#fcfcfb,#f4f3eb)]">
+        <div className="border-b border-[#e2ddd5] bg-[linear-gradient(170deg,#fcfcfb,#f4f3eb)] px-3 py-5 sm:px-10 sm:py-8 lg:py-14">
           <p className="font-mono text-[11px] uppercase tracking-widest text-indigo-700 border-b border-indigo-700 pb-2 inline-block mb-8">
              {isZh ? '03. 智能解围与降级策略' : '03. AI PIVOT & MITIGATION STRATEGY'}
           </p>
           
-          <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
+          <div className="grid gap-4 lg:grid-cols-2 lg:gap-10">
              
              {/* Dynamic AI Replacement Recommendation (This shows the text from the LLM!) */}
-             <div className="bg-white p-6 sm:p-8 rounded-2xl border border-indigo-500/20 shadow-[0_12px_40px_-20px_rgba(79,70,229,0.15)] relative overflow-hidden">
+             <div className="relative overflow-hidden rounded-[1.25rem] border border-indigo-500/20 bg-white p-4 shadow-[0_12px_40px_-20px_rgba(79,70,229,0.15)] sm:rounded-2xl sm:p-8">
                 <div className="absolute top-0 right-0 p-4">
                   <span className="bg-indigo-50 text-indigo-600 text-[9px] uppercase font-mono tracking-widest px-3 py-1 rounded-full border border-indigo-100">
                     {isAIOverlaySource ? (isZh ? 'AI 动态生成' : 'AI GENERATED') : (isZh ? '规则引擎生成' : 'RULES GENERATED')}
                   </span>
                 </div>
-                <h4 className="font-serif text-[1.18rem] text-[#1c1a17] pr-0 sm:text-[1.4rem] sm:pr-20">{isZh ? '推荐转向：' : 'Pivot to: '}{openingRecommendation}</h4>
+                <h4 className="pr-0 font-serif text-[1.08rem] text-[#1c1a17] sm:pr-20 sm:text-[1.4rem]">{isZh ? '推荐转向：' : 'Pivot to: '}{openingRecommendation}</h4>
                 <div className="mt-6 pt-6 border-t border-indigo-500/10">
                    <p className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest mb-3">{isZh ? '推演逻辑' : 'REASONING'}</p>
                    <p className="text-[0.95rem] leading-[1.8] text-[#4a505a]">
@@ -414,9 +414,9 @@ export function ResultsSection({
              </div>
 
              {/* The Expression Tweaks */}
-             <div className="space-y-6">
+             <div className="space-y-4 sm:space-y-6">
                  {/* Card Tone */}
-                 <div className="bg-white p-5 sm:p-6 rounded-xl border border-[#e2ddd5] shadow-sm relative">
+               <div className="relative rounded-[1.2rem] border border-[#e2ddd5] bg-white p-4 shadow-sm sm:rounded-xl sm:p-6">
                     <p className="font-mono text-[10px] text-[#9aa3b2] uppercase mb-4">{isZh ? '卡片语气校准 (决定性)' : 'CARD TONE CALIBRATION (CRITICAL)'}</p>
                     <p className="text-sm font-medium text-[#1c1a17] mb-3">{isZh ? '基调：' : 'Tone: '} {analysis.greetingCard.tone}</p>
                     <div className="border-l-[3px] border-indigo-400 pl-4 py-1 bg-indigo-50/30 rounded-r-lg">
@@ -427,7 +427,7 @@ export function ResultsSection({
                  </div>
 
                  {/* Packaging Style */}
-                 <div className="bg-white p-5 sm:p-6 rounded-xl border border-[#e2ddd5] shadow-sm">
+                 <div className="rounded-[1.2rem] border border-[#e2ddd5] bg-white p-4 shadow-sm sm:rounded-xl sm:p-6">
                     <p className="font-mono text-[10px] text-[#9aa3b2] uppercase mb-4">{isZh ? '包装视觉规范' : 'PACKAGING GUIDELINES'}</p>
                     <p className="text-sm text-[#5f6672] leading-relaxed mb-3">
                        {isZh ? '建议风格：' : 'Style: '} <strong className="text-[#1c1a17]">{analysis.packaging.style}</strong>
@@ -443,7 +443,7 @@ export function ResultsSection({
           </div>
         </div>
 
-        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-12 border-b border-[#e2ddd5] bg-white">
+        <div className="border-b border-[#e2ddd5] bg-white px-3 py-5 sm:px-10 sm:py-8 lg:py-12">
           <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
             {isZh ? '04. 备选方案与执行清单' : '04. ALTERNATIVES & ACTION CHECKLIST'}
           </p>
@@ -458,7 +458,7 @@ export function ResultsSection({
                 const isFavorite = favoriteRecommendationIds.includes(item.id)
 
                 return (
-                  <div key={item.id} className="rounded-2xl border border-[#e2ddd5] bg-[#fcfbf8] p-5">
+                  <div key={item.id} className="rounded-[1.25rem] border border-[#e2ddd5] bg-[#fcfbf8] p-4 sm:rounded-2xl sm:p-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <h5 className="text-base font-semibold text-[#1c1a17]">
                         {idx + 1}. {itemName || (isZh ? '未命名备选' : 'Unnamed option')}
@@ -503,7 +503,7 @@ export function ResultsSection({
               )}
             </div>
 
-            <div className="rounded-2xl border border-[#e2ddd5] bg-[#faf9f7] p-5">
+            <div className="rounded-[1.25rem] border border-[#e2ddd5] bg-[#faf9f7] p-4 sm:rounded-2xl sm:p-5">
               <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-4">{isZh ? '执行清单（按优先级）' : 'ACTION CHECKLIST (PRIORITY)'}</p>
               <div className="space-y-3">
                 {adviceLines.map(line => (
@@ -524,9 +524,9 @@ export function ResultsSection({
 
         {/* 补充信息 / 高级图层 */}
         {(additionalLayers.length > 0 || mustSendAdvice.length > 0) && (
-          <div className="px-4 py-6 sm:px-10 sm:py-8 border-b border-[#e2ddd5] bg-white grid gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="grid gap-4 border-b border-[#e2ddd5] bg-white px-3 py-5 sm:px-10 sm:py-8 lg:grid-cols-2 lg:gap-8">
             {mustSendAdvice.length > 0 && (
-              <div className="bg-amber-50/50 p-6 rounded-xl border border-amber-200">
+              <div className="rounded-[1.25rem] border border-amber-200 bg-amber-50/50 p-4 sm:rounded-xl sm:p-6">
                  <p className="font-mono text-[10px] text-amber-600 uppercase tracking-widest mb-3 flex items-center gap-2">
                    ⚠️ {isZh ? '硬送降级方案 (如不可替换)' : 'FALLBACK IF UNCHANGEABLE'}
                  </p>
@@ -542,7 +542,7 @@ export function ResultsSection({
                  </p>
                  <div className="space-y-3">
                    {additionalLayers.map(layer => (
-                     <div key={layer.title} className="text-xs bg-[#faf9f7] p-3 rounded border border-[#e8e5df]">
+                     <div key={layer.title} className="rounded border border-[#e8e5df] bg-[#faf9f7] p-3 text-xs">
                        <span className="font-bold text-[#1c1a17] mr-2">{layer.title}:</span>
                        <span className="text-[#5f6672]">{layer.body}</span>
                      </div>
