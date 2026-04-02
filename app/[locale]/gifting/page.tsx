@@ -169,15 +169,15 @@ export default function GiftingPage() {
 
   if (currentStep === 5) {
     return (
-      <div className={`relative min-h-screen overflow-hidden bg-[#f8f3ec] text-[#1c1a17] ${isZh ? 'font-sans-zh' : ''}`}>
+      <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] lg:h-screen lg:overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),radial-gradient(circle_at_86%_14%,rgba(226,212,216,0.28),transparent_26%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-6 py-6 sm:px-8 lg:px-12">
-          <header className="flex items-start justify-between gap-4">
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 sm:px-8 sm:py-6 lg:h-[100dvh] lg:min-h-0 lg:px-12">
+          <header className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
             <div>
               {brandEyebrow ? <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
-              <p className={`mt-2 text-[2.4rem] tracking-[-0.08em] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif'}`}>{brandTitle}</p>
+              <p className={`mt-2 text-[2rem] tracking-[-0.08em] text-[#191614] sm:text-[2.4rem] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif'}`}>{brandTitle}</p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => router.push(`/${routeLocale}`)}
@@ -189,20 +189,20 @@ export default function GiftingPage() {
             </div>
           </header>
 
-          <div className="mt-8 grid gap-6 border-t border-[#E5E0D8]/80 pt-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,18rem)]">
+          <div className="mt-6 grid gap-5 border-t border-[#E5E0D8]/80 pt-4 sm:mt-8 sm:gap-6 sm:pt-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,18rem)]">
             <div>
               <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
-              <h1 className="mt-4 text-[3.3rem] font-serif leading-[0.96] tracking-[-0.06em] text-[#1c1a17] md:text-[4rem]">{currentContent.title}</h1>
-              <p className="mt-4 max-w-[40rem] text-base leading-8 text-[#667085]">{currentContent.desc}</p>
+              <h1 className="mt-4 text-[2.2rem] font-serif leading-[0.98] tracking-[-0.06em] text-[#1c1a17] sm:text-[3rem] md:text-[4rem]">{currentContent.title}</h1>
+              <p className="mt-4 max-w-[40rem] text-[0.98rem] leading-8 text-[#667085] sm:text-base">{currentContent.desc}</p>
             </div>
 
-            <div className="flex flex-col justify-end border-l border-[#E5E0D8]/80 pl-6">
+            <div className="flex flex-col justify-end border-t border-[#E5E0D8]/80 pt-4 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-6">
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">{currentContent.kicker}</p>
-              <p className="mt-3 text-[1.18rem] font-serif leading-tight text-[#1c1a17]">{currentContent.quote}</p>
+              <p className="mt-3 text-[1rem] font-serif leading-tight text-[#1c1a17] sm:text-[1.18rem]">{currentContent.quote}</p>
             </div>
           </div>
 
-          <main className="mt-8 flex-1">
+          <main className="mt-6 flex-1 sm:mt-8">
             {resultsProps ? (
               <ResultsSection {...resultsProps} onReset={() => {
                   setCurrentStep(1)

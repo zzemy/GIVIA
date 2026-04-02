@@ -124,7 +124,7 @@ export function CountrySelector({
               </div>
             </div>
 
-            <div className={`country-selector-scroll overflow-y-auto ${compact ? 'max-h-[18rem] px-4 pb-4 pt-3' : 'max-h-[31rem] px-5 pb-5 pt-4'}`}>
+            <div className={`country-selector-scroll overflow-y-auto ${compact ? 'max-h-[min(18rem,calc(100dvh-13rem))] px-4 pb-4 pt-3' : 'max-h-[min(31rem,calc(100dvh-13rem))] px-5 pb-5 pt-4'}`}>
               {filteredCountries ? (
                 filteredCountries.length > 0 ? (
                   <section>
