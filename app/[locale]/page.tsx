@@ -54,10 +54,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden rounded-[2rem] border border-black/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(247,242,236,0.92))] shadow-[0_24px_58px_-40px_rgba(15,23,42,0.24)]"
+            className="overflow-hidden rounded-[2rem] border border-black/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,243,236,0.94))] shadow-[0_24px_58px_-40px_rgba(15,23,42,0.18)]"
           >
             <div
-              className="relative min-h-[20rem] overflow-hidden px-5 pb-5 pt-6"
+              className="relative min-h-[19rem] overflow-hidden px-5 pb-5 pt-6"
               style={{
                 backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(16,13,10,0.38)),url(${routePhotography.wrapped})`,
                 backgroundSize: 'cover',
@@ -67,54 +67,54 @@ export default function Home() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.18),transparent_28%)] mix-blend-screen" />
               <div className="relative flex h-full flex-col justify-between text-white">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/72">{isZh ? 'Mobile editorial shell' : 'Mobile editorial shell'}</p>
-                  <h1 className={`mt-4 text-[2.25rem] leading-[1.02] tracking-[-0.06em] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
-                    {isZh ? '像小程序一样顺手，像编辑页一样克制。' : 'App-like on mobile, editorial by design.'}
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-white/72">{isZh ? '文化·人情·叙事' : 'Editorial preface'}</p>
+                  <h1 className={`mt-4 text-[2.12rem] leading-[1.04] tracking-[-0.06em] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                    {isZh ? (
+                      <>
+                        在跨越国界之前
+                        <br />
+                        让心意得体着陆
+                      </>
+                    ) : (
+                      'Before a gesture crosses a border, it enters another life.'
+                    )}
                   </h1>
                 </div>
 
                 <div className="mt-10 space-y-4">
                   <p className="max-w-[18rem] text-[0.95rem] leading-7 text-white/86">
                     {isZh
-                      ? '把礼赠流程压缩成更轻的手机壳层，保留文化判断与文案能力，但让入口、浏览和推进都更像一个原生应用。'
-                      : 'Compress the gifting flow into a lighter mobile shell, keeping cultural reasoning and copy help while making entry and progression feel native.'}
+                      ? '我们不制造礼品，而是为你提供一份富有温度的「礼赠纪要」。从禁忌排雷、赠言润色，到递送的呼吸感，让跨国心意不再因为文化折射而失真。'
+                      : 'We prepare an AI-authored gifting dossier. Enter a considered editorial workflow built around cultural tact, relationship, and the manner of arrival.'}
                   </p>
                   <button
                     type="button"
                     onClick={() => router.push(`/${locale}/gifting`)}
                     className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-[11px] font-medium uppercase tracking-[0.22em] text-[#1c1a17] shadow-[0_14px_34px_-24px_rgba(15,23,42,0.42)] transition active:scale-[0.98]"
                   >
-                    {isZh ? '开始礼赠' : 'Start gifting'}
+                    {isZh ? '定制礼赠纪要' : 'Begin the gifting journey'}
                   </button>
                 </div>
               </div>
             </div>
           </motion.section>
 
-          <section className="grid grid-cols-2 gap-3">
-            {[
-              {
-                title: isZh ? '文化风控' : 'Cultural risk',
-                body: isZh ? '先看禁忌和语义联想。' : 'See taboos and cues first.',
-              },
-              {
-                title: isZh ? '表达分寸' : 'Tone control',
-                body: isZh ? '写卡片和措辞更稳妥。' : 'Keep wording and tone proportionate.',
-              },
-              {
-                title: isZh ? '包装方向' : 'Packaging',
-                body: isZh ? '给出可落地的包装建议。' : 'Get an executable packaging direction.',
-              },
-              {
-                title: isZh ? '送达方式' : 'Delivery',
-                body: isZh ? '考虑递送场景与节奏。' : 'Tune delivery timing and context.',
-              },
-            ].map(item => (
-              <div key={item.title} className="rounded-[1.4rem] border border-black/7 bg-white/78 p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] backdrop-blur-xl">
-                <p className="text-[10px] uppercase tracking-[0.22em] text-[#8e95a2]">{item.title}</p>
-                <p className="mt-3 text-[0.9rem] leading-6 text-[#1b1714]">{item.body}</p>
-              </div>
-            ))}
+          <section className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-[1.5rem] border border-black/7 bg-white/80 p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+              <p className="text-[10px] uppercase tracking-[0.22em] text-[#8e95a2]">{isZh ? '风尚理念' : 'Brand note'}</p>
+              <p className={`mt-3 text-[0.98rem] leading-[1.7] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                {isZh
+                  ? '真正高级的礼物，不只被看见。它需要被一种懂分寸的智慧轻轻托起。'
+                  : 'A refined gift is not merely seen. It is gently calibrated against cultural tact.'}
+              </p>
+            </div>
+
+            <div className="rounded-[1.5rem] border border-black/7 bg-white/80 p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+              <p className="text-[10px] uppercase tracking-[0.22em] text-[#8e95a2]">{isZh ? '典藏终稿' : 'Final output'}</p>
+              <p className="mt-3 text-[0.9rem] leading-6 text-[#1b1714]">
+                {isZh ? '详尽的文化适配评估、包装仪式感建议与替代方案。' : 'A structured dossier on cultural fit, wording, packaging, and alternative directions.'}
+              </p>
+            </div>
           </section>
 
           <section className="grid gap-3">
