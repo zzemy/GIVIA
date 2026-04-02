@@ -32,7 +32,7 @@ export function ChoicePills({
             key={option.value}
             type="button"
             onClick={() => onChange(option.value)}
-            className={`min-w-0 rounded-full border px-4 py-2.5 text-left text-[11px] uppercase tracking-[0.16em] transition ${
+            className={`min-w-0 rounded-full border px-3 py-2 text-left text-[10px] uppercase tracking-[0.16em] transition sm:px-4 sm:py-2.5 sm:text-[11px] ${
               active
                 ? 'border-transparent bg-[#ebf4ef] text-[#235543] shadow-[0_16px_28px_-24px_rgba(44,109,85,0.45)]'
                 : 'border-[rgba(74,63,51,0.08)] bg-white/94 text-[#6f675d] hover:border-[rgba(74,63,51,0.16)] hover:text-[#201915]'
@@ -113,7 +113,7 @@ export function InlineCountrySelector({
                   onChange(country.code)
                   setSearchTerm('')
                 }}
-                className="rounded-full border border-[rgba(74,63,51,0.08)] bg-white/92 px-4 py-2 text-[11px] uppercase tracking-[0.16em] text-[#6f675d] transition hover:border-[rgba(74,63,51,0.16)] hover:text-[#201915]"
+                className="rounded-full border border-[rgba(74,63,51,0.08)] bg-white/92 px-3 py-2 text-[10px] uppercase tracking-[0.16em] text-[#6f675d] transition hover:border-[rgba(74,63,51,0.16)] hover:text-[#201915] sm:px-4 sm:text-[11px]"
               >
                 {isZh ? country.nameZh : country.nameEn}
               </button>
@@ -139,7 +139,7 @@ export function PromptSheet({
 }) {
   return (
     <div className={sheetClassName}>
-      <div className="px-5 py-4 sm:px-6 sm:py-5">
+      <div className="px-4 py-4 sm:px-6 sm:py-5">
         <p className="text-[10px] uppercase tracking-[0.22em] text-[#9a9287]">{label}</p>
         <div className="mt-3">{children}</div>
       </div>

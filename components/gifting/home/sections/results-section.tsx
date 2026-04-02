@@ -366,13 +366,13 @@ export function ResultsSection({
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
              
              {/* Dynamic AI Replacement Recommendation (This shows the text from the LLM!) */}
-             <div className="bg-white p-8 rounded-2xl border border-indigo-500/20 shadow-[0_12px_40px_-20px_rgba(79,70,229,0.15)] relative overflow-hidden">
+             <div className="bg-white p-6 sm:p-8 rounded-2xl border border-indigo-500/20 shadow-[0_12px_40px_-20px_rgba(79,70,229,0.15)] relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-4">
                   <span className="bg-indigo-50 text-indigo-600 text-[9px] uppercase font-mono tracking-widest px-3 py-1 rounded-full border border-indigo-100">
                     {isAIOverlaySource ? (isZh ? 'AI 动态生成' : 'AI GENERATED') : (isZh ? '规则引擎生成' : 'RULES GENERATED')}
                   </span>
                 </div>
-                <h4 className="font-serif text-[1.4rem] text-[#1c1a17] pr-20">{isZh ? '推荐转向：' : 'Pivot to: '}{openingRecommendation}</h4>
+                <h4 className="font-serif text-[1.18rem] text-[#1c1a17] pr-0 sm:text-[1.4rem] sm:pr-20">{isZh ? '推荐转向：' : 'Pivot to: '}{openingRecommendation}</h4>
                 <div className="mt-6 pt-6 border-t border-indigo-500/10">
                    <p className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest mb-3">{isZh ? '推演逻辑' : 'REASONING'}</p>
                    <p className="text-[0.95rem] leading-[1.8] text-[#4a505a]">
@@ -416,7 +416,7 @@ export function ResultsSection({
              {/* The Expression Tweaks */}
              <div className="space-y-6">
                  {/* Card Tone */}
-                 <div className="bg-white p-6 rounded-xl border border-[#e2ddd5] shadow-sm relative">
+                 <div className="bg-white p-5 sm:p-6 rounded-xl border border-[#e2ddd5] shadow-sm relative">
                     <p className="font-mono text-[10px] text-[#9aa3b2] uppercase mb-4">{isZh ? '卡片语气校准 (决定性)' : 'CARD TONE CALIBRATION (CRITICAL)'}</p>
                     <p className="text-sm font-medium text-[#1c1a17] mb-3">{isZh ? '基调：' : 'Tone: '} {analysis.greetingCard.tone}</p>
                     <div className="border-l-[3px] border-indigo-400 pl-4 py-1 bg-indigo-50/30 rounded-r-lg">
@@ -427,7 +427,7 @@ export function ResultsSection({
                  </div>
 
                  {/* Packaging Style */}
-                 <div className="bg-white p-6 rounded-xl border border-[#e2ddd5] shadow-sm">
+                 <div className="bg-white p-5 sm:p-6 rounded-xl border border-[#e2ddd5] shadow-sm">
                     <p className="font-mono text-[10px] text-[#9aa3b2] uppercase mb-4">{isZh ? '包装视觉规范' : 'PACKAGING GUIDELINES'}</p>
                     <p className="text-sm text-[#5f6672] leading-relaxed mb-3">
                        {isZh ? '建议风格：' : 'Style: '} <strong className="text-[#1c1a17]">{analysis.packaging.style}</strong>
