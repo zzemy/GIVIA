@@ -335,12 +335,12 @@ export function StepAnalysis(props: StepAnalysisProps) {
 
   return (
     <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-0 w-full flex-1 flex-col">
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.94),rgba(247,241,236,0.9))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.16)]">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-visible rounded-[1.6rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.94),rgba(247,241,236,0.9))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.16)] sm:rounded-[2.35rem] xl:overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(185,152,166,0.18),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(205,179,151,0.18),transparent_26%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.56),transparent)]" />
 
         <div className="relative flex flex-col xl:flex-row min-h-0 flex-1">
-          <div className="relative flex flex-1 xl:flex-[1.04] min-w-0 min-h-[18rem] flex-col border-b border-[rgba(74,63,51,0.1)] px-5 py-4 sm:px-6 sm:py-4 xl:border-r xl:border-b-0 xl:px-7 xl:py-5">
+          <div className="relative flex flex-1 xl:flex-[1.04] min-w-0 min-h-[18rem] flex-col border-b border-[rgba(74,63,51,0.1)] px-4 py-4 sm:px-6 sm:py-4 xl:border-r xl:border-b-0 xl:px-7 xl:py-5">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.2em] text-[#8a6a72]">{isZh ? 'Arrival composition' : 'Arrival composition'}</p>
@@ -428,7 +428,7 @@ export function StepAnalysis(props: StepAnalysisProps) {
             </label>
           </div>
 
-          <div className="relative flex flex-1 xl:flex-[0.96] min-w-0 xl:min-w-[24rem] min-h-0 flex-col px-5 py-4 sm:px-6 sm:py-4 xl:px-7 xl:py-5">
+          <div className="relative flex flex-1 xl:flex-[0.96] min-w-0 xl:min-w-[24rem] min-h-0 flex-col px-4 py-4 sm:px-6 sm:py-4 xl:px-7 xl:py-5">
             <div className="max-w-[42rem]">
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#8f877b]">{isZh ? 'Scene notes' : 'Scene notes'}</p>
               <h2 className="mt-2 max-w-[28rem] text-[1.55rem] leading-[1.02] tracking-[-0.05em] text-[#221c17] sm:text-[1.65rem]">

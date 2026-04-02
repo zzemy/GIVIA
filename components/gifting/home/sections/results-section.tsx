@@ -205,15 +205,15 @@ export function ResultsSection({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden"
+      className="flex min-h-0 flex-1 flex-col gap-4 overflow-visible sm:gap-6 lg:overflow-hidden"
     >
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between px-2">
+      <div className="flex flex-col gap-4 px-1 sm:px-2 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-[60rem]">
           <div className="flex items-center gap-2 mb-3">
              <span className="flex h-2 w-2 rounded-full bg-[#1c1a17] animate-pulse" />
              <p className="font-mono text-[10px] uppercase tracking-widest text-[#69707d]">{isZh ? '系统决策终稿生成完毕' : 'DECISION DOSSIER GENERATED'}</p>
           </div>
-          <h2 className="text-[2.2rem] font-serif leading-[1.1] tracking-[-0.03em] text-[#1d1a17] md:text-[2.6rem]">
+          <h2 className="text-[1.7rem] font-serif leading-[1.12] tracking-[-0.03em] text-[#1d1a17] sm:text-[2.2rem] md:text-[2.6rem]">
             {summaryTitle}
           </h2>
         </div>
@@ -226,9 +226,9 @@ export function ResultsSection({
         </Button>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto rounded-[1.5rem] border border-[#e2ddd5] bg-white shadow-sm flex flex-col">
+      <div className="min-h-0 flex-1 overflow-y-auto rounded-[1.1rem] border border-[#e2ddd5] bg-white shadow-sm flex flex-col sm:rounded-[1.5rem]">
         
-        <div className="border-b border-[#e2ddd5] bg-[#faf9f7] px-6 py-5 sm:px-10 flex flex-wrap gap-x-12 gap-y-4">
+        <div className="border-b border-[#e2ddd5] bg-[#faf9f7] px-4 py-4 sm:px-10 sm:py-5 flex flex-wrap gap-x-8 gap-y-3 sm:gap-x-12 sm:gap-y-4">
            <div>
              <p className="font-mono text-[10px] uppercase tracking-wider text-[#9aa3b2] mb-1">{isZh ? '目标区域 & 对象' : 'TARGET & AUDIENCE'}</p>
              <p className="text-sm text-[#1c1a17] font-medium">{countryLabel} · {selectedAudienceLabel} · {sceneLabel}</p>
@@ -251,8 +251,8 @@ export function ResultsSection({
            </div>
         </div>
 
-        <div className="px-6 py-8 sm:px-10 lg:py-12 border-b border-[#e2ddd5]">
-          <div className="grid lg:grid-cols-[1.5fr_1fr] gap-10">
+        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-12 border-b border-[#e2ddd5]">
+          <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr] lg:gap-10">
             <div>
               <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
                 {isZh ? '01. 情境推算与拦截' : '01. CULTURAL INTERCEPTION'}
@@ -313,7 +313,7 @@ export function ResultsSection({
           </div>
         </div>
 
-        <div className="px-6 py-8 sm:px-10 lg:py-12 border-b border-[#e2ddd5] bg-[#fcfbf8]">
+        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-12 border-b border-[#e2ddd5] bg-[#fcfbf8]">
           <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
             {isZh ? '02. 评分拆解与可信度' : '02. SCORE BREAKDOWN & CONFIDENCE'}
           </p>
@@ -358,12 +358,12 @@ export function ResultsSection({
         {/* ========================================================================= */}
         {/* NEW AI ALGORITHM PIVOT SECTION (Replaces the fake generic products) */}
         {/* ========================================================================= */}
-        <div className="px-6 py-8 sm:px-10 lg:py-14 border-b border-[#e2ddd5] bg-[linear-gradient(170deg,#fcfcfb,#f4f3eb)]">
+        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-14 border-b border-[#e2ddd5] bg-[linear-gradient(170deg,#fcfcfb,#f4f3eb)]">
           <p className="font-mono text-[11px] uppercase tracking-widest text-indigo-700 border-b border-indigo-700 pb-2 inline-block mb-8">
              {isZh ? '03. 智能解围与降级策略' : '03. AI PIVOT & MITIGATION STRATEGY'}
           </p>
           
-          <div className="grid lg:grid-cols-2 gap-10">
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-10">
              
              {/* Dynamic AI Replacement Recommendation (This shows the text from the LLM!) */}
              <div className="bg-white p-8 rounded-2xl border border-indigo-500/20 shadow-[0_12px_40px_-20px_rgba(79,70,229,0.15)] relative overflow-hidden">
@@ -443,7 +443,7 @@ export function ResultsSection({
           </div>
         </div>
 
-        <div className="px-6 py-8 sm:px-10 lg:py-12 border-b border-[#e2ddd5] bg-white">
+        <div className="px-4 py-6 sm:px-10 sm:py-8 lg:py-12 border-b border-[#e2ddd5] bg-white">
           <p className="font-mono text-[11px] uppercase tracking-widest text-[#1c1a17] border-b border-black pb-2 inline-block mb-6">
             {isZh ? '04. 备选方案与执行清单' : '04. ALTERNATIVES & ACTION CHECKLIST'}
           </p>
@@ -524,7 +524,7 @@ export function ResultsSection({
 
         {/* 补充信息 / 高级图层 */}
         {(additionalLayers.length > 0 || mustSendAdvice.length > 0) && (
-          <div className="px-6 py-8 sm:px-10 border-b border-[#e2ddd5] bg-white grid lg:grid-cols-2 gap-8">
+          <div className="px-4 py-6 sm:px-10 sm:py-8 border-b border-[#e2ddd5] bg-white grid gap-6 lg:grid-cols-2 lg:gap-8">
             {mustSendAdvice.length > 0 && (
               <div className="bg-amber-50/50 p-6 rounded-xl border border-amber-200">
                  <p className="font-mono text-[10px] text-amber-600 uppercase tracking-widest mb-3 flex items-center gap-2">

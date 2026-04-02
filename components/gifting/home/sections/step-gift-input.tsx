@@ -162,12 +162,12 @@ export function StepGiftInput({
     <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-0 w-full flex-1 flex-col">
       <input ref={fileInputRef} type="file" accept="image/*" onChange={onFileSelect} className="hidden" />
 
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)]">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-visible rounded-[1.6rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)] sm:rounded-[2.35rem] xl:overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(165,181,214,0.18),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(214,185,155,0.22),transparent_26%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.58),transparent)]" />
 
         <div className="relative grid min-h-0 flex-1 xl:grid-cols-[minmax(21rem,0.84fr)_minmax(0,1.16fr)]">
-          <div className="relative flex min-h-[15rem] flex-col justify-between overflow-hidden border-b border-[rgba(74,63,51,0.1)] px-5 py-5 sm:px-6 sm:py-6 xl:min-h-0 xl:border-r xl:border-b-0 xl:px-7 xl:py-7">
+          <div className="relative flex min-h-[15rem] flex-col justify-between overflow-visible border-b border-[rgba(74,63,51,0.1)] px-4 py-4 sm:px-6 sm:py-6 xl:min-h-0 xl:overflow-hidden xl:border-r xl:border-b-0 xl:px-7 xl:py-7">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f877b]">{isZh ? 'Object stage' : 'Object stage'}</p>
@@ -258,7 +258,7 @@ export function StepGiftInput({
             </div>
           </div>
 
-          <div className="relative flex min-h-0 flex-col px-5 py-5 sm:px-6 sm:py-6 xl:px-7 xl:py-7">
+          <div className="relative flex min-h-0 flex-col px-4 py-4 sm:px-6 sm:py-6 xl:px-7 xl:py-7">
             <div className="max-w-[42rem]">
               <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f877b]">{isZh ? 'Object draft' : 'Object draft'}</p>
               <h2 className={`mt-3 max-w-[34rem] leading-[1] tracking-[-0.05em] text-[#221c17] ${displayClassName} ${isRecognizedState ? 'text-[1.52rem] sm:text-[1.72rem]' : 'text-[1.82rem] sm:text-[2.12rem]'}`}>

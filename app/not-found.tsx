@@ -10,14 +10,14 @@ export default function NotFound() {
     <main className="relative min-h-screen overflow-hidden bg-[#fbf7f1]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_16%,rgba(255,232,210,0.38),transparent_30%),radial-gradient(circle_at_82%_12%,rgba(210,223,251,0.32),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.84),rgba(247,241,233,0.92))]" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-[980px] items-center px-6 py-10 sm:px-8">
-        <section className="w-full rounded-[2.8rem] border border-white/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.86),rgba(248,242,234,0.78))] p-8 shadow-[0_42px_96px_-52px_rgba(15,23,42,0.28)] backdrop-blur-2xl sm:p-12">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-[980px] items-center px-4 py-8 sm:px-8 sm:py-10">
+        <section className="w-full rounded-[1.8rem] border border-white/90 bg-[linear-gradient(145deg,rgba(255,255,255,0.86),rgba(248,242,234,0.78))] p-6 shadow-[0_42px_96px_-52px_rgba(15,23,42,0.28)] backdrop-blur-2xl sm:rounded-[2.8rem] sm:p-12">
           <div className="mx-auto max-w-[38rem] text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-[#5b72d1]/16 bg-[#eef2ff] text-[#5b72d1]">
               <Compass className="h-7 w-7" />
             </div>
             <p className="mt-6 text-[11px] uppercase tracking-[0.24em] text-[#98a2b3]">Page not found</p>
-            <h1 className="mt-4 text-[3.4rem] font-serif leading-[1.02] tracking-[-0.06em] text-[#1d1a17]">The route lost the editorial thread.</h1>
+            <h1 className="mt-4 text-[2.15rem] font-serif leading-[1.04] tracking-[-0.05em] text-[#1d1a17] sm:text-[3.4rem] sm:leading-[1.02] sm:tracking-[-0.06em]">The route lost the editorial thread.</h1>
             <p className="mt-5 text-base leading-8 text-[#69707d]">
               This page does not exist, but the brand experience should still feel composed, calm, and intentional.
             </p>

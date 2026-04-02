@@ -219,7 +219,7 @@ export default function GiftingPage() {
   }
 
   return (
-    <div className={`relative h-screen overflow-hidden bg-[#f8f3ec] text-[#1c1a17] ${isZh ? 'font-sans-zh' : ''}`}>
+    <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] lg:h-screen lg:overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[28rem] blur-3xl"
@@ -228,14 +228,14 @@ export default function GiftingPage() {
         }}
       />
 
-      <div className="relative z-10 mx-auto flex h-[100dvh] w-full max-w-[1520px] flex-col px-6 py-4 sm:px-8 lg:px-12">
-        <header className="flex items-start justify-between gap-4">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 sm:px-8 lg:h-[100dvh] lg:min-h-0 lg:px-12">
+        <header className="flex flex-wrap items-start justify-between gap-3 sm:gap-4">
           <div>
             {brandEyebrow ? <p className="text-[0.78rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
             <p className={`mt-1.5 text-[2rem] text-[#191614] ${isZh ? 'font-serif uppercase tracking-[0.02em]' : 'font-serif tracking-[-0.08em]'}`}>{brandTitle}</p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => router.push(`/${isZh ? 'en' : 'zh'}/gifting`)}
@@ -254,15 +254,15 @@ export default function GiftingPage() {
           </div>
         </header>
 
-        <div className="mt-6 flex items-center gap-6 border-t border-[#E5E0D8]/80 pt-4">
-          <div className="min-w-[8.5rem]">
+        <div className="mt-5 flex items-start gap-4 border-t border-[#E5E0D8]/80 pt-4 sm:mt-6 sm:items-center sm:gap-6">
+          <div className="hidden min-w-[8.5rem] sm:block">
             <p className={`text-[11px] uppercase tracking-[0.3em] ${currentContent.accentTextClassName}`}>{currentContent.chapter}</p>
             <p className="mt-2 text-[11px] uppercase tracking-[0.22em] text-[#98a2b3]">
               {currentContent.kicker} · {isZh ? `步骤 0${currentStep}` : `Step 0${currentStep}`}
             </p>
           </div>
 
-          <div className="flex min-w-0 flex-1 items-center gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto pb-2 sm:gap-3 sm:overflow-visible sm:pb-0">
             {railLabels.map((label, index) => {
               const stepIndex = index + 1
               const active = stepIndex === currentStep
@@ -273,7 +273,7 @@ export default function GiftingPage() {
                   key={label}
                   type="button"
                   disabled={true}
-                  className="flex min-w-0 flex-1 flex-col gap-2 text-left"
+                  className="flex min-w-[6.5rem] flex-1 flex-col gap-2 text-left sm:min-w-0"
                 >
                   <span
                     className="h-[2px] rounded-full transition-all"
@@ -290,7 +290,7 @@ export default function GiftingPage() {
           </div>
         </div>
 
-        <main className="mt-6 min-h-0 flex-1 overflow-hidden pb-4 lg:pb-6">
+        <main className="mt-5 min-h-0 flex-1 overflow-visible pb-4 sm:mt-6 lg:overflow-hidden lg:pb-6">
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
               <motion.div
@@ -306,7 +306,7 @@ export default function GiftingPage() {
             )}
 
             {currentStep === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col pt-2">
+              <motion.div key="step2" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex min-h-0 w-full flex-col pt-2 lg:h-full">
                 <div className="min-h-0 flex w-full flex-1 flex-col overflow-hidden">
                   <StepCountry {...countryProps} canContinue={canAdvanceFromStep2} onBack={() => updateStep(1)} onContinue={() => updateStep(3)} />
                 </div>
@@ -314,7 +314,7 @@ export default function GiftingPage() {
             )}
 
             {currentStep === 3 && (
-              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex h-full min-h-0 w-full flex-col pt-2">
+              <motion.div key="step3" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -18 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="flex min-h-0 w-full flex-col pt-2 lg:h-full">
                 <div className="min-h-0 flex w-full flex-1 flex-col overflow-hidden">
                   {feedbackProps.error && <div className="mb-4 rounded-[1.5rem] border border-rose-200 bg-rose-50/88 px-5 py-3 text-sm text-rose-700">{feedbackProps.error}</div>}
                   <StepAnalysis {...analysisProps} onBack={() => updateStep(2)} />
@@ -323,20 +323,20 @@ export default function GiftingPage() {
             )}
 
             {currentStep === 4 && (
-              <motion.div key="step4" initial={{ opacity: 0, scale: 0.985 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.01 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex h-full items-center justify-center">
-                <div className="w-full max-w-[66rem] overflow-hidden rounded-[3rem] border border-[#E5E0D8]/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(247,242,236,0.9))] shadow-[0_36px_86px_-52px_rgba(0,0,0,0.03)]">
+              <motion.div key="step4" initial={{ opacity: 0, scale: 0.985 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.01 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="flex min-h-full items-center justify-center lg:h-full">
+                <div className="w-full max-w-[66rem] overflow-hidden rounded-[1.8rem] border border-[#E5E0D8]/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.95),rgba(247,242,236,0.9))] shadow-[0_36px_86px_-52px_rgba(0,0,0,0.03)] sm:rounded-[2.2rem] lg:rounded-[3rem]">
                   <div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-                    <div className="relative min-h-[24rem] overflow-hidden bg-[linear-gradient(180deg,rgba(123,88,185,0.08),rgba(40,38,34,0.44)),url(https://images.pexels.com/photos/10479673/pexels-photo-10479673.jpeg?cs=srgb&dl=pexels-jonathanborba-10479673.jpg&fm=jpg)] bg-cover bg-center">
+                    <div className="relative min-h-[16rem] overflow-hidden bg-[linear-gradient(180deg,rgba(123,88,185,0.08),rgba(40,38,34,0.44)),url(https://images.pexels.com/photos/10479673/pexels-photo-10479673.jpeg?cs=srgb&dl=pexels-jonathanborba-10479673.jpg&fm=jpg)] bg-cover bg-center sm:min-h-[24rem]">
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.24),transparent_30%)] mix-blend-screen" />
-                      <div className="relative flex h-full flex-col justify-between p-7">
+                      <div className="relative flex h-full flex-col justify-between p-5 sm:p-7">
                         <p className="text-[11px] uppercase tracking-[0.22em] text-white/68">{isZh ? 'Editorial composition' : 'Editorial composition'}</p>
-                        <p className="max-w-[16rem] text-[1.45rem] font-serif leading-tight text-white">
+                        <p className="max-w-[16rem] text-[1.15rem] font-serif leading-tight text-white sm:text-[1.45rem]">
                           {isZh ? '系统正在把礼物、关系与文化分寸写成一份真正可送达的终稿。' : 'The system is writing object, relationship, and tact into a dossier that can actually be delivered.'}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex h-full flex-col justify-center p-8 sm:p-10">
+                    <div className="flex h-full flex-col justify-center p-5 sm:p-8 lg:p-10">
                       <div className="flex items-center gap-3">
                         <motion.div 
                           animate={{ rotate: 360 }} 
@@ -357,12 +357,12 @@ export default function GiftingPage() {
                       <motion.h2 
                         animate={{ opacity: [0.5, 1, 0.5] }}
                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        className="mt-6 text-[2.7rem] font-serif leading-[1.04] tracking-[-0.04em] text-[#1c1a17]"
+                        className="mt-6 text-[1.95rem] font-serif leading-[1.08] tracking-[-0.04em] text-[#1c1a17] sm:text-[2.3rem] lg:text-[2.7rem]"
                       >
                         {isZh ? '系统正在整理文化风险、表达方式与替代方向。' : 'The system is assembling risk, expression, and better alternatives.'}
                       </motion.h2>
 
-                      <p className="mt-6 max-w-xl text-lg leading-9 text-[#667085]">
+                      <p className="mt-5 max-w-xl text-[1rem] leading-8 text-[#667085] sm:mt-6 sm:text-lg sm:leading-9">
                         {isZh
                           ? '礼物语义、国家礼仪、关系角色与包装语气正在被交叉校准，准备输出更稳妥、更得体的送达方案。'
                           : 'Gift semantics, etiquette, relationship roles, and packaging tone are being cross-calibrated to produce a more tactful and fitting route for the gesture.'}

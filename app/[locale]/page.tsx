@@ -21,20 +21,20 @@ export default function Home() {
   const locale = isZh ? 'zh' : 'en'
 
   return (
-    <div className={`relative h-[100dvh] w-full overflow-hidden bg-[#f6f1ea] text-[#181614] ${isZh ? 'font-sans-zh' : ''}`}>
+    <div className={`relative min-h-screen w-full overflow-x-hidden overflow-y-auto bg-[#f6f1ea] text-[#181614] lg:h-[100dvh] lg:overflow-hidden ${isZh ? 'font-sans-zh' : ''}`}>
       <HomeBackground />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_16%,rgba(255,255,255,0.76),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(206,217,242,0.2),transparent_24%),linear-gradient(180deg,rgba(246,241,234,0.82),rgba(249,246,241,0.96))]" />
 
-      <main className="relative z-10 mx-auto flex h-full w-full max-w-[1580px] flex-col px-6 py-4 sm:px-8 xl:px-12">
+      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1580px] flex-col px-4 py-4 sm:px-8 xl:px-12 lg:h-full lg:min-h-0">
         <motion.header
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-none items-start justify-between gap-4"
+          className="flex flex-none flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
             <p className="text-[0.72rem] uppercase tracking-[0.28em] text-[#7e8696]">The Art of Gifting</p>
-            <p className={`mt-2 text-[2.8rem] tracking-[-0.08em] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>{isZh ? '礼智极意' : 'Givia'}</p>
+            <p className={`mt-2 text-[2.2rem] tracking-[-0.08em] text-[#1b1714] sm:text-[2.8rem] ${isZh ? 'font-display-zh' : 'font-serif'}`}>{isZh ? '礼智极意' : 'Givia'}</p>
             <p className="mt-3 text-[0.78rem] tracking-[0.16em] text-[#8a919e] uppercase">
               {isZh ? '智联全球文化，礼赠每一份心意' : 'Human tact, cultural intelligence, considered arrival'}
             </p>
@@ -43,13 +43,13 @@ export default function Home() {
           <button
             type="button"
             onClick={() => router.push(`/${isZh ? 'en' : 'zh'}`)}
-            className="border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#8e95a2] transition hover:text-[#1b1714] mt-3"
+            className="mt-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#8e95a2] transition hover:text-[#1b1714] sm:mt-3"
           >
             {isZh ? 'EN Edition' : 'ZH Edition'}
           </button>
         </motion.header>
 
-        <div className="grid min-h-0 flex-1 items-center gap-8 py-4 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:gap-16">
+        <div className="grid min-h-0 flex-1 items-start gap-6 py-4 lg:items-center lg:gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:gap-16">
           <motion.section
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ export default function Home() {
                 <span className="h-[1px] w-6 bg-[#7f89b4]/50" />
                 {isZh ? '文化·人情·叙事' : 'Editorial preface'}
               </p>
-              <h1 className={`mt-6 text-[3.6rem] leading-[1.05] tracking-[-0.04em] text-[#1b1714] sm:text-[4.6rem] xl:text-[5.2rem] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+              <h1 className={`mt-5 text-[2.35rem] leading-[1.05] tracking-[-0.04em] text-[#1b1714] sm:mt-6 sm:text-[3.6rem] xl:text-[5.2rem] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                 {isZh ? (
                   <>
                     <span className="inline-block whitespace-nowrap">
@@ -81,7 +81,7 @@ export default function Home() {
                   </>
                 )}
               </h1>
-              <p className="mt-6 max-w-[32rem] text-[1.05rem] leading-relaxed text-[#646c79]">
+              <p className="mt-5 max-w-[32rem] text-[0.98rem] leading-relaxed text-[#646c79] sm:mt-6 sm:text-[1.05rem]">
                 {isZh
                   ? '我们不制造礼品，而是为您提供一份富有温度的「礼赠纪要」。从禁忌排雷、赠言润色，到递送的呼吸感，让跨国心意不再由于文化折射而产生偏差。'
                   : 'We prepare an AI-authored gifting dossier. Enter a considered editorial workflow built entirely around cultural tact, relationship, and the manner of arrival.'}
@@ -106,7 +106,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-8 border-t border-black/10 pt-6">
+              <div className="mt-6 border-t border-black/10 pt-5 sm:mt-8 sm:pt-6">
                 <motion.button
                   type="button"
                   onClick={() => router.push(`/${locale}/gifting`)}
@@ -141,7 +141,7 @@ export default function Home() {
                 transition: { staggerChildren: 0.1, delayChildren: 0.1 }
               }
             }}
-            className="grid h-[85%] max-h-[44rem] min-h-[22rem] gap-3 pb-2 lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:grid-rows-[minmax(0,1fr)_minmax(0,0.82fr)]"
+            className="grid min-h-[20rem] gap-3 pb-2 lg:h-[85%] lg:max-h-[44rem] lg:min-h-[22rem] lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:grid-rows-[minmax(0,1fr)_minmax(0,0.82fr)]"
           >
             <motion.article variants={{
                 hidden: { opacity: 0, y: 16 },

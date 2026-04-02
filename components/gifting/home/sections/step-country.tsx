@@ -457,7 +457,7 @@ export function StepCountry({
 
   return (
     <motion.section initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-0 w-full flex-1 flex-col">
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[2.35rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)]">
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-visible rounded-[1.6rem] border border-[rgba(74,63,51,0.12)] bg-[linear-gradient(160deg,rgba(255,252,247,0.92),rgba(248,242,234,0.88))] shadow-[0_32px_86px_-62px_rgba(36,24,18,0.18)] sm:rounded-[2.35rem] xl:overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(120,152,139,0.15),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(214,185,155,0.18),transparent_28%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(255,255,255,0.58),transparent)]" />
 
@@ -492,7 +492,7 @@ export function StepCountry({
             </div>
           </div>
 
-          <div className="relative flex min-h-0 flex-col px-5 py-4 sm:px-6 sm:py-5 xl:px-7 xl:py-5">
+          <div className="relative flex min-h-0 flex-col px-4 py-4 sm:px-6 sm:py-5 xl:px-7 xl:py-5">
             <div className="flex flex-wrap items-center gap-1.5">
               {scenes.map((scene, index) => {
                 const active = index === sceneIndex
