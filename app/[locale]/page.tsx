@@ -99,52 +99,44 @@ export default function Home() {
             </div>
           </motion.section>
 
-          <section className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[1.5rem] border border-black/7 bg-white/80 p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+          <section className="grid gap-3">
+            <div className="rounded-[1.5rem] border border-black/7 bg-white/76 p-4 shadow-[0_14px_30px_-28px_rgba(15,23,42,0.14)] backdrop-blur-xl">
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#8e95a2]">{isZh ? '风尚理念' : 'Brand note'}</p>
-              <p className={`mt-3 text-[0.98rem] leading-[1.7] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+              <p className={`mt-3 text-[0.98rem] leading-[1.72] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                 {isZh
                   ? '真正高级的礼物，不只被看见。它需要被一种懂分寸的智慧轻轻托起。'
                   : 'A refined gift is not merely seen. It is gently calibrated against cultural tact.'}
               </p>
             </div>
 
-            <div className="rounded-[1.5rem] border border-black/7 bg-white/80 p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+            <div className="rounded-[1.5rem] border border-black/7 bg-white/76 p-4 shadow-[0_14px_30px_-28px_rgba(15,23,42,0.14)] backdrop-blur-xl">
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#8e95a2]">{isZh ? '典藏终稿' : 'Final output'}</p>
               <p className="mt-3 text-[0.9rem] leading-6 text-[#1b1714]">
                 {isZh ? '详尽的文化适配评估、包装仪式感建议与替代方案。' : 'A structured dossier on cultural fit, wording, packaging, and alternative directions.'}
               </p>
             </div>
-                  <p className="mt-4 text-[0.92rem] leading-7 text-white/82">
+
+            <div className="rounded-[1.6rem] border border-black/8 bg-[rgba(255,255,255,0.76)] p-4 shadow-[0_18px_36px_-34px_rgba(15,23,42,0.16)] backdrop-blur-xl">
               <p className="text-[10px] uppercase tracking-[0.24em] text-[#7f89b4]">{isZh ? '第一眼感官' : 'The first glance'}</p>
-              <p className={`mt-3 text-[1.1rem] leading-tight text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+              <p className={`mt-3 text-[1.05rem] leading-tight text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                 {isZh
                   ? '礼物不只是一件物品，它先以姿态、语气和落点被理解。'
                   : 'A gift is understood first by posture, tone, and where it lands.'}
               </p>
-            </div>
-                    className="mt-5 inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-[11px] font-medium uppercase tracking-[0.22em] text-[#1c1a17] shadow-[0_12px_28px_-22px_rgba(15,23,42,0.42)] transition active:scale-[0.98]"
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                routePhotography.wrapped,
-                routePhotography.tea,
-                routePhotography.meeting,
-              ].map((src, index) => (
-                <div
-                  key={src}
-                  className="relative h-28 overflow-hidden rounded-[1.35rem] border border-black/7 shadow-[0_18px_36px_-28px_rgba(15,23,42,0.22)]"
-            <div className="rounded-[1.5rem] border border-black/7 bg-white/76 p-4 shadow-[0_14px_30px_-28px rgba(15,23,42,0.14)] backdrop-blur-xl">
-                    backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.05),rgba(16,13,10,0.26)),url(${src})`,
-              <p className={`mt-3 text-[0.98rem] leading-[1.72] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
-                    backgroundPosition: 'center',
-                  }}
-                >
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(16,13,10,0.26))]" />
-                  <div className="absolute inset-x-0 bottom-0 p-3 text-[10px] uppercase tracking-[0.2em] text-white/78">
-                    {index === 0 ? (isZh ? '包装' : 'Wrap') : index === 1 ? (isZh ? '文案' : 'Copy') : (isZh ? '递送' : 'Delivery')}
-            <div className="rounded-[1.5rem] border border-black/7 bg-white/76 p-4 shadow-[0_14px_30px_-28px rgba(15,23,42,0.14)] backdrop-blur-xl">
-                </div>
-              ))}
+              <div className="mt-4 flex flex-wrap gap-2">
+                {[
+                  isZh ? '包装' : 'Wrap',
+                  isZh ? '文案' : 'Copy',
+                  isZh ? '递送' : 'Delivery',
+                ].map(item => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-[#ddd4c8] bg-[#faf7f1] px-3 py-1.5 text-[10px] uppercase tracking-[0.22em] text-[#6f7682]"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
           </section>
         </div>
