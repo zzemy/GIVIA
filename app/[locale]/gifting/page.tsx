@@ -172,7 +172,7 @@ export default function GiftingPage() {
       <>
         <div className={`relative min-h-screen overflow-x-hidden overflow-y-auto bg-[#f8f3ec] text-[#1c1a17] lg:hidden ${isZh ? 'font-sans-zh' : ''}`}>
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_10%_10%,rgba(255,255,255,0.82),transparent_28%),radial-gradient(circle_at_86%_14%,rgba(226,212,216,0.28),transparent_26%),linear-gradient(180deg,rgba(248,243,236,0.84),rgba(250,247,242,0.98))]" />
-          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 pb-24 sm:px-6 sm:py-5">
+          <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 pb-8 sm:px-6 sm:py-5">
             <header className="flex items-start justify-between gap-3">
               <div>
                 {brandEyebrow ? <p className="text-[0.72rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}
@@ -299,7 +299,7 @@ export default function GiftingPage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 pb-24 sm:px-6 sm:py-5">
+        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1520px] flex-col px-4 py-4 pb-8 sm:px-6 sm:py-5">
           <header className="flex items-start justify-between gap-3">
             <div>
               {brandEyebrow ? <p className="text-[0.72rem] tracking-[0.18em] text-[#7c8490]">{brandEyebrow}</p> : null}

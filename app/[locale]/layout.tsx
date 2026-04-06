@@ -48,5 +48,5 @@ export default async function LocaleLayout({
     notFound()
   }
 
-  return <MobileAppShell locale={locale}>{children}</MobileAppShell>
+  return <MobileAppShell>{children}</MobileAppShell>
 }

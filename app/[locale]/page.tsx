@@ -49,7 +49,7 @@ export default function Home() {
           </button>
         </motion.header>
 
-        <div className="mt-5 space-y-4 pb-24">
+        <div className="mt-5 space-y-4 pb-8">
           <motion.section
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -143,36 +143,37 @@ export default function Home() {
       </main>
 
       <main className="relative z-10 mx-auto hidden min-h-screen w-full max-w-[1580px] flex-col px-4 py-4 sm:px-8 xl:px-12 lg:flex lg:h-full lg:min-h-0">
-            <div className="rounded-[1.6rem] border border-black/8 bg-[rgba(255,255,255,0.76)] p-4 shadow-[0_18px_36px_-34px rgba(15,23,42,0.16)] backdrop-blur-xl">
+        <motion.header
           initial={{ opacity: 0, y: -8 }}
-              <p className={`mt-3 text-[1.05rem] leading-tight text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-none flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
             <p className="text-[0.72rem] uppercase tracking-[0.28em] text-[#7e8696]">The Art of Gifting</p>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                {[
-                  { label: isZh ? '包装' : 'Wrap', src: routePhotography.wrapped },
-                  { label: isZh ? '文案' : 'Copy', src: routePhotography.tea },
-                  { label: isZh ? '递送' : 'Delivery', src: routePhotography.meeting },
-                ].map(item => (
-                  <div
-                    key={item.label}
-                    className="overflow-hidden rounded-[1.15rem] border border-black/7 bg-[#f4efe7]"
-                  >
-                    <div
-                      className="relative h-24"
-                      style={{
-                        backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(16,13,10,0.18)),url(${item.src})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                      }}
-                    />
-                    <div className="px-3 py-2 text-[10px] uppercase tracking-[0.2em] text-[#6f7682]">{item.label}</div>
+            <p className={`mt-2 text-[2.2rem] tracking-[-0.08em] text-[#1b1714] sm:text-[2.8rem] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+              {isZh ? '礼智极意' : 'Givia'}
+            </p>
+            <p className="mt-3 text-[0.78rem] uppercase tracking-[0.16em] text-[#8a919e]">
+              {isZh ? '智联全球文化，礼赠每一份心意' : 'Human tact, cultural intelligence, considered arrival'}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => router.push(`/${isZh ? 'en' : 'zh'}`)}
+            className="mt-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#8e95a2] transition hover:text-[#1b1714] sm:mt-3"
+          >
+            {isZh ? 'EN Edition' : 'ZH Edition'}
+          </button>
+        </motion.header>
+
+        <div className="grid min-h-0 flex-1 items-start gap-6 py-4 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:items-center lg:gap-8 xl:gap-16">
+          <motion.section
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-                ))}
-              </div>
+            transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            className="flex min-h-0 flex-col justify-center lg:pb-8"
           >
             <div className="xl:pl-4">
               <p className="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-[#7f89b4]">
@@ -183,18 +184,20 @@ export default function Home() {
                 {isZh ? (
                   <>
                     <span className="inline-block whitespace-nowrap">
-                      在<em className="font-light italic text-[#7282c6] px-1.5 opacity-90">跨越国界</em>之前
+                      在<em className="px-1.5 font-light italic text-[#7282c6] opacity-90">跨越国界</em>之前
                     </span>
                     <br />
-                    <span className="relative inline-block mt-2">
+                    <span className="relative mt-2 inline-block">
                       <span className="relative z-10">让心意得体着陆</span>
                       <span className="absolute bottom-2 left-0 -z-10 h-4 w-full rounded-sm bg-[#e1e7f5]" />
                     </span>
                   </>
                 ) : (
                   <>
-                    Before a <em className="pr-1.5 font-light italic text-[#7282c6]">gesture</em><br />
-                    crosses a border,<br />
+                    Before a <em className="pr-1.5 font-light italic text-[#7282c6]">gesture</em>
+                    <br />
+                    crosses a border,
+                    <br />
                     it enters <span className="relative inline-block"><span className="relative z-10">another</span><span className="absolute bottom-2 left-0 -z-10 h-3.5 w-full rounded-full bg-[#e1e7f5]" /></span> life.
                   </>
                 )}
@@ -210,7 +213,7 @@ export default function Home() {
                   <p className="text-[10px] uppercase tracking-[0.2em] text-[#98a2b3]">{isZh ? '风尚理念' : 'Brand note'}</p>
                   <p className={`mt-2 text-[1rem] leading-[1.6] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                     {isZh
-                      ? '真正高级的礼物，不只被看见。它需被一种懂分寸的智慧轻轻托起。'
+                      ? '真正高级的礼物，不只被看见。它需要被一种懂分寸的智慧轻轻托起。'
                       : 'A refined gift is not merely seen. It is gently calibrated against cultural tact.'}
                   </p>
                 </div>
@@ -230,14 +233,14 @@ export default function Home() {
                   onClick={() => router.push(`/${locale}/gifting`)}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group flex w-full flex-col items-start justify-between rounded-[1.5rem] bg-transparent p-6 transition-all duration-500 hover:bg-white hover:shadow-[0_8px_40px_rgba(0,0,0,0.06)] border border-black/[0.08] hover:border-transparent sm:flex-row sm:items-center"
+                  className="group flex w-full flex-col items-start justify-between rounded-[1.5rem] border border-black/[0.08] bg-transparent p-6 transition-all duration-500 hover:border-transparent hover:bg-white hover:shadow-[0_8px_40px_rgba(0,0,0,0.06)] sm:flex-row sm:items-center"
                 >
                   <div>
                     <div className="flex items-center gap-2.5">
                       <span className="h-1.5 w-1.5 rounded-full bg-black/10 transition-colors duration-500 group-hover:bg-[#7282c6]" />
-                      <p className="text-[10px] font-medium tracking-[0.28em] text-[#8e95a2] uppercase">{isZh ? '进入主叙事' : 'Enter the editorial'}</p>
+                      <p className="text-[10px] font-medium uppercase tracking-[0.28em] text-[#8e95a2]">{isZh ? '进入主叙事' : 'Enter the editorial'}</p>
                     </div>
-                    <p className="mt-4 text-[1.5rem] font-medium font-sans tracking-[0.1em] text-[#1b1714] sm:mt-2">
+                    <p className="mt-4 text-[1.5rem] font-medium tracking-[0.1em] text-[#1b1714] sm:mt-2">
                       {isZh ? '定制礼赠纪要' : 'Begin the gifting journey'}
                     </p>
                   </div>
@@ -250,20 +253,15 @@ export default function Home() {
           </motion.section>
 
           <motion.section
-            initial="hidden"
-            animate="show"
-            variants={{
-              hidden: { opacity: 0 },
-              show: {
-                opacity: 1,
-                transition: { staggerChildren: 0.1, delayChildren: 0.1 }
-              }
-            }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="grid min-h-[20rem] gap-3 pb-2 lg:h-[85%] lg:max-h-[44rem] lg:min-h-[22rem] lg:grid-cols-[minmax(0,1.04fr)_minmax(0,0.96fr)] lg:grid-rows-[minmax(0,1fr)_minmax(0,0.82fr)]"
           >
-            <motion.article variants={{
+            <motion.article
+              variants={{
                 hidden: { opacity: 0, y: 16 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
               }}
               className="relative overflow-hidden rounded-[2.75rem] shadow-[0_36px_84px_-48px_rgba(15,23,42,0.22)] lg:row-span-2"
               style={{
@@ -274,25 +272,22 @@ export default function Home() {
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(255,255,255,0.22),transparent_28%)] mix-blend-screen" />
               <div className="relative flex h-full flex-col justify-between p-6 text-white sm:p-8">
-                <p className="text-[11px] uppercase tracking-[0.24em] text-white/64">
-                  {isZh ? '视觉与分寸' : 'Packaging & tact'}
-                </p>
+                <p className="text-[11px] uppercase tracking-[0.24em] text-white/64">{isZh ? '视觉与分寸' : 'Packaging & tact'}</p>
                 <div className="max-w-[18rem]">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-white/64">
-                    {isZh ? '第一眼感官' : 'The first glance'}
-                  </p>
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-white/64">{isZh ? '第一眼感官' : 'The first glance'}</p>
                   <p className={`mt-3 text-[1.4rem] leading-snug drop-shadow-sm ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                     {isZh
                       ? '不仅仅是包裹之物，更是它呈现在异国眼前的全部仪态与修养。'
-                      : 'More than the object itself—it is the posture and grace with which it arrives.'}
+                      : 'More than the object itself, it is the posture and grace with which it arrives.'}
                   </p>
                 </div>
               </div>
             </motion.article>
 
-            <motion.article variants={{
+            <motion.article
+              variants={{
                 hidden: { opacity: 0, y: 16 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
               }}
               className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
               style={{
@@ -310,9 +305,10 @@ export default function Home() {
               </div>
             </motion.article>
 
-            <motion.article variants={{
+            <motion.article
+              variants={{
                 hidden: { opacity: 0, y: 16 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+                show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
               }}
               className="relative overflow-hidden rounded-[2.35rem] shadow-[0_30px_72px_-50px_rgba(15,23,42,0.2)]"
               style={{
