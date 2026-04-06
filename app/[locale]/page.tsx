@@ -35,8 +35,8 @@ export default function Home() {
           <div>
             <p className="text-[0.68rem] uppercase tracking-[0.28em] text-[#7e8696]">The Art of Gifting</p>
             <p className={`mt-2 text-[2rem] tracking-[-0.08em] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>{isZh ? '礼智极意' : 'Givia'}</p>
-            <p className="mt-2 text-[0.72rem] uppercase tracking-[0.18em] text-[#8a919e]">
-              {isZh ? '智联全球文化，礼赠每一份心意' : 'Human tact, cultural intelligence, considered arrival'}
+            <p className="mt-2 text-[0.72rem] leading-6 text-[#8a919e]">
+              {isZh ? '把礼物说得体面，把心意送得自然。' : 'Make the gesture feel measured, humane, and quietly assured.'}
             </p>
           </div>
 
@@ -54,21 +54,21 @@ export default function Home() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden rounded-[2rem] border border-black/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(248,243,236,0.94))] shadow-[0_24px_58px_-40px_rgba(15,23,42,0.18)]"
+            className="overflow-hidden rounded-[2rem] border border-black/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(249,245,239,0.96))] shadow-[0_22px_54px_-42px_rgba(15,23,42,0.15)]"
           >
             <div
-              className="relative min-h-[19rem] overflow-hidden px-5 pb-5 pt-6"
+              className="relative overflow-hidden px-5 pt-5"
               style={{
-                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(16,13,10,0.38)),url(${routePhotography.wrapped})`,
+                backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.05),rgba(16,13,10,0.36)),url(${routePhotography.wrapped})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
               }}
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.18),transparent_28%)] mix-blend-screen" />
-              <div className="relative flex h-full flex-col justify-between text-white">
-                <div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_20%,rgba(255,255,255,0.18),transparent_26%),linear-gradient(180deg,rgba(17,14,11,0.02),rgba(17,14,11,0.5))]" />
+              <div className="relative flex min-h-[22rem] flex-col justify-end text-white">
+                <div className="max-w-[18rem] pb-5">
                   <p className="text-[10px] uppercase tracking-[0.28em] text-white/72">{isZh ? '文化·人情·叙事' : 'Editorial preface'}</p>
-                  <h1 className={`mt-4 text-[2.12rem] leading-[1.04] tracking-[-0.06em] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
+                  <h1 className={`mt-4 text-[2rem] leading-[1.05] tracking-[-0.06em] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                     {isZh ? (
                       <>
                         在跨越国界之前
@@ -115,10 +115,7 @@ export default function Home() {
                 {isZh ? '详尽的文化适配评估、包装仪式感建议与替代方案。' : 'A structured dossier on cultural fit, wording, packaging, and alternative directions.'}
               </p>
             </div>
-          </section>
-
-          <section className="grid gap-3">
-            <div className="rounded-[1.6rem] border border-black/8 bg-[rgba(255,255,255,0.76)] p-4 shadow-[0_18px_40px_-34px_rgba(15,23,42,0.18)] backdrop-blur-xl">
+                  <p className="mt-4 text-[0.92rem] leading-7 text-white/82">
               <p className="text-[10px] uppercase tracking-[0.24em] text-[#7f89b4]">{isZh ? '第一眼感官' : 'The first glance'}</p>
               <p className={`mt-3 text-[1.1rem] leading-tight text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                 {isZh
@@ -126,7 +123,7 @@ export default function Home() {
                   : 'A gift is understood first by posture, tone, and where it lands.'}
               </p>
             </div>
-
+                    className="mt-5 inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-[11px] font-medium uppercase tracking-[0.22em] text-[#1c1a17] shadow-[0_12px_28px_-22px_rgba(15,23,42,0.42)] transition active:scale-[0.98]"
             <div className="grid grid-cols-3 gap-3">
               {[
                 routePhotography.wrapped,
@@ -136,16 +133,16 @@ export default function Home() {
                 <div
                   key={src}
                   className="relative h-28 overflow-hidden rounded-[1.35rem] border border-black/7 shadow-[0_18px_36px_-28px_rgba(15,23,42,0.22)]"
-                  style={{
+            <div className="rounded-[1.5rem] border border-black/7 bg-white/76 p-4 shadow-[0_14px_30px_-28px rgba(15,23,42,0.14)] backdrop-blur-xl">
                     backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.05),rgba(16,13,10,0.26)),url(${src})`,
-                    backgroundSize: 'cover',
+              <p className={`mt-3 text-[0.98rem] leading-[1.72] text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
                     backgroundPosition: 'center',
                   }}
                 >
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(16,13,10,0.26))]" />
                   <div className="absolute inset-x-0 bottom-0 p-3 text-[10px] uppercase tracking-[0.2em] text-white/78">
                     {index === 0 ? (isZh ? '包装' : 'Wrap') : index === 1 ? (isZh ? '文案' : 'Copy') : (isZh ? '递送' : 'Delivery')}
-                  </div>
+            <div className="rounded-[1.5rem] border border-black/7 bg-white/76 p-4 shadow-[0_14px_30px_-28px rgba(15,23,42,0.14)] backdrop-blur-xl">
                 </div>
               ))}
             </div>
@@ -154,35 +151,36 @@ export default function Home() {
       </main>
 
       <main className="relative z-10 mx-auto hidden min-h-screen w-full max-w-[1580px] flex-col px-4 py-4 sm:px-8 xl:px-12 lg:flex lg:h-full lg:min-h-0">
-        <motion.header
+            <div className="rounded-[1.6rem] border border-black/8 bg-[rgba(255,255,255,0.76)] p-4 shadow-[0_18px_36px_-34px rgba(15,23,42,0.16)] backdrop-blur-xl">
           initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
+              <p className={`mt-3 text-[1.05rem] leading-tight text-[#1b1714] ${isZh ? 'font-display-zh' : 'font-serif'}`}>
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-none flex-wrap items-start justify-between gap-3 sm:gap-4"
         >
           <div>
             <p className="text-[0.72rem] uppercase tracking-[0.28em] text-[#7e8696]">The Art of Gifting</p>
-            <p className={`mt-2 text-[2.2rem] tracking-[-0.08em] text-[#1b1714] sm:text-[2.8rem] ${isZh ? 'font-display-zh' : 'font-serif'}`}>{isZh ? '礼智极意' : 'Givia'}</p>
-            <p className="mt-3 text-[0.78rem] tracking-[0.16em] text-[#8a919e] uppercase">
-              {isZh ? '智联全球文化，礼赠每一份心意' : 'Human tact, cultural intelligence, considered arrival'}
-            </p>
-          </div>
-          
-          <button
-            type="button"
-            onClick={() => router.push(`/${isZh ? 'en' : 'zh'}`)}
-            className="mt-2 border-b border-black/10 pb-2 text-[11px] uppercase tracking-[0.24em] text-[#8e95a2] transition hover:text-[#1b1714] sm:mt-3"
-          >
-            {isZh ? 'EN Edition' : 'ZH Edition'}
-          </button>
-        </motion.header>
-
-        <div className="grid min-h-0 flex-1 items-start gap-6 py-4 lg:items-center lg:gap-8 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:gap-16">
-          <motion.section
-            initial={{ opacity: 0, y: 16 }}
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: isZh ? '包装' : 'Wrap', src: routePhotography.wrapped },
+                  { label: isZh ? '文案' : 'Copy', src: routePhotography.tea },
+                  { label: isZh ? '递送' : 'Delivery', src: routePhotography.meeting },
+                ].map(item => (
+                  <div
+                    key={item.label}
+                    className="overflow-hidden rounded-[1.15rem] border border-black/7 bg-[#f4efe7]"
+                  >
+                    <div
+                      className="relative h-24"
+                      style={{
+                        backgroundImage: `linear-gradient(180deg,rgba(255,255,255,0.08),rgba(16,13,10,0.18)),url(${item.src})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                      }}
+                    />
+                    <div className="px-3 py-2 text-[10px] uppercase tracking-[0.2em] text-[#6f7682]">{item.label}</div>
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col justify-center min-h-0 lg:pb-8"
+                ))}
+              </div>
           >
             <div className="xl:pl-4">
               <p className="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-[#7f89b4]">
