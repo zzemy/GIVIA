@@ -559,22 +559,22 @@ export function StepCountry({
           </div>
         </div>
 
-        <div className="relative border-t border-[rgba(74,63,51,0.1)] bg-[rgba(255,252,247,0.72)] px-5 py-3 sm:px-6 xl:px-6">
+        <div className="relative border-t border-[rgba(74,63,51,0.1)] bg-[rgba(255,252,247,0.72)] px-4 py-3 sm:px-6 xl:px-6">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="min-w-0">
               <p className="text-[10px] uppercase tracking-[0.22em] text-[#8f877b]">{isZh ? 'AI checkpoint' : 'AI checkpoint'}</p>
-              <p className="mt-2 text-[15px] leading-7 text-[#1f1915]">{checkpoint.title}</p>
-              <div className="mt-1 flex items-start gap-2 text-[13px] leading-6 text-[#5a544b]">
+              <p className="mt-2 text-[0.92rem] leading-6 text-[#1f1915] sm:text-[15px] sm:leading-7">{checkpoint.title}</p>
+              <div className="mt-1 flex items-start gap-2 text-[0.82rem] leading-6 text-[#5a544b] sm:text-[13px]">
                 <AlertCircle className="mt-1 h-3.5 w-3.5 shrink-0 text-[#3f7a65]" />
                 <span className="max-w-[44rem]">{checkpoint.note}</span>
               </div>
             </div>
 
-            <div className="flex shrink-0 items-center gap-3">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
               <button
                 type="button"
                 onClick={handleSceneBack}
-                className="inline-flex items-center gap-2 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/82 px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] text-[#5c5a55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[rgba(74,63,51,0.12)] bg-white/82 px-4 py-2.5 text-[10px] uppercase tracking-[0.14em] text-[#5c5a55] transition hover:-translate-y-0.5 hover:shadow-[0_18px_44px_-30px_rgba(36,24,18,0.18)] sm:w-auto sm:px-5 sm:text-[11px] sm:tracking-[0.18em]"
               >
                 <ArrowLeft className="h-4 w-4" />
                 {sceneIndex === 0 ? (isZh ? '返回上一步' : 'Back') : isZh ? '回到上一幕' : 'Previous scene'}
@@ -584,7 +584,7 @@ export function StepCountry({
                 type="button"
                 onClick={handleSceneContinue}
                 disabled={!currentScene.canProceed}
-                className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[11px] uppercase tracking-[0.18em] transition ${
+                className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-[10px] uppercase tracking-[0.14em] transition sm:w-auto sm:px-5 sm:text-[11px] sm:tracking-[0.18em] ${
                   currentScene.canProceed
                     ? 'bg-[#2d8a69] text-white shadow-[0_20px_44px_-28px_rgba(45,138,105,0.54)] hover:-translate-y-0.5 hover:bg-[#247357]'
                     : 'cursor-not-allowed bg-[#d7d1c8] text-white/82'

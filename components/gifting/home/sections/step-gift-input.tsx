@@ -170,8 +170,8 @@ export function StepGiftInput({
           <div className="relative flex min-h-[15rem] flex-col justify-between overflow-visible border-b border-[rgba(74,63,51,0.1)] px-4 py-4 sm:px-6 sm:py-6 xl:min-h-0 xl:overflow-hidden xl:border-r xl:border-b-0 xl:px-7 xl:py-7">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f877b]">{isZh ? 'Object stage' : 'Object stage'}</p>
-                <p className={`mt-3 max-w-[22rem] text-[1.55rem] leading-[1.04] tracking-[-0.04em] text-[#201915] sm:text-[1.9rem] ${displayClassName}`}>
+                <p className="text-[10px] uppercase tracking-[0.26em] text-[#8f877b] sm:text-[11px]">{isZh ? 'Object stage' : 'Object stage'}</p>
+                <p className={`mt-2.5 max-w-[22rem] text-[1.22rem] leading-[1.08] tracking-[-0.03em] text-[#201915] sm:mt-3 sm:text-[1.9rem] ${displayClassName}`}>
                   {stageHeading}
                 </p>
               </div>
@@ -196,19 +196,19 @@ export function StepGiftInput({
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_14%,rgba(255,244,225,0.26),transparent_30%),radial-gradient(circle_at_78%_20%,rgba(255,255,255,0.08),transparent_26%)] mix-blend-screen" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_44%,rgba(21,15,11,0.16)_100%)]" />
                   <div className="absolute inset-x-0 bottom-0 h-[44%] bg-[linear-gradient(180deg,rgba(19,14,11,0),rgba(19,14,11,0.58))]" />
-                  <div className="relative p-6 sm:p-7">
-                    <p className="text-[11px] uppercase tracking-[0.22em] text-white/66">{isZh ? 'Upload key image' : 'Upload key image'}</p>
-                    <p className={`mt-4 max-w-[18rem] text-[1.72rem] leading-[1.08] text-white sm:text-[2rem] ${displayClassName}`}>
+                  <div className="relative p-5 sm:p-7">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-white/66 sm:text-[11px]">{isZh ? 'Upload key image' : 'Upload key image'}</p>
+                    <p className={`mt-3 max-w-[18rem] text-[1.32rem] leading-[1.12] text-white sm:mt-4 sm:text-[2rem] ${displayClassName}`}>
                       {stageUploadTitle}
                     </p>
                   </div>
-                  <div className="relative p-6 sm:p-7">
-                    <p className="max-w-[23rem] text-sm leading-7 text-white/84">
+                  <div className="relative p-5 sm:p-7">
+                    <p className="max-w-[23rem] text-[0.84rem] leading-6 text-white/84 sm:text-sm sm:leading-7">
                       {isZh
                         ? '一张能看清材质、包装与用途的图，会比一串空泛形容词更快把对象说清楚。'
                         : 'A photograph that reveals material, packaging, and use will clarify the object faster than vague adjectives.'}
                     </p>
-                    <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/22 bg-white/8 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-white/88 transition group-hover:bg-white/14">
+                    <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-white/22 bg-white/8 px-4 py-2 text-[10px] uppercase tracking-[0.16em] text-white/88 transition group-hover:bg-white/14 sm:text-[11px]">
                       <Upload size={13} />
                       {isZh ? '选择图像' : 'Select image'}
                     </div>
@@ -219,12 +219,12 @@ export function StepGiftInput({
                   <Image src={imagePreview} alt="Gift preview" fill unoptimized className="object-cover" />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(18,14,11,0.38))]" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_14%,rgba(255,255,255,0.22),transparent_28%)] mix-blend-screen" />
-                  <div className="relative flex h-full flex-col justify-between p-6 text-white sm:p-7">
+                  <div className="relative flex h-full flex-col justify-between p-5 text-white sm:p-7">
                     <div>
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-white/66">{isZh ? 'Object image' : 'Object image'}</p>
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-white/66 sm:text-[11px]">{isZh ? 'Object image' : 'Object image'}</p>
                     </div>
                     <div className="space-y-4">
-                      <p className="max-w-[24rem] text-sm leading-7 text-white/84">
+                      <p className="max-w-[24rem] text-[0.84rem] leading-6 text-white/84 sm:text-sm sm:leading-7">
                         {recognitionLabel
                           ? isZh
                             ? `当前识别对象：${recognitionLabel}`
@@ -233,11 +233,11 @@ export function StepGiftInput({
                             ? '现在可以让 AI 给出候选名称和对象描述。'
                             : 'You can now ask the AI for candidate naming and object description.'}
                       </p>
-                      <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.18em] text-white/86">
-                        <button type="button" onClick={() => fileInputRef.current?.click()} className="rounded-full border border-white/24 bg-white/10 px-4 py-2 transition hover:bg-white/16">
+                      <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.16em] text-white/86 sm:gap-3 sm:text-[11px]">
+                        <button type="button" onClick={() => fileInputRef.current?.click()} className="rounded-full border border-white/24 bg-white/10 px-3.5 py-2 transition hover:bg-white/16 sm:px-4">
                           {isZh ? '替换图像' : 'Replace image'}
                         </button>
-                        <button type="button" onClick={onClearSelectedImage} className="rounded-full border border-white/24 bg-white/10 px-4 py-2 transition hover:bg-white/16">
+                        <button type="button" onClick={onClearSelectedImage} className="rounded-full border border-white/24 bg-white/10 px-3.5 py-2 transition hover:bg-white/16 sm:px-4">
                           {isZh ? '移除图像' : 'Remove image'}
                         </button>
                       </div>
@@ -250,7 +250,7 @@ export function StepGiftInput({
             <div className="mt-4 flex items-end justify-between gap-2 border-t border-[rgba(74,63,51,0.1)] pt-4">
               <div className="space-y-2">
                 {chapterNotes.map(line => (
-                  <p key={line} className="text-sm leading-7 text-[#70685f]">
+                  <p key={line} className="text-[0.85rem] leading-6 text-[#70685f] sm:text-sm sm:leading-7">
                     {line}
                   </p>
                 ))}
@@ -261,11 +261,11 @@ export function StepGiftInput({
           <div className="relative flex min-h-0 flex-col px-4 py-4 sm:px-6 sm:py-6 xl:px-7 xl:py-7">
             <div className="max-w-[42rem]">
               <p className="text-[11px] uppercase tracking-[0.28em] text-[#8f877b]">{isZh ? 'Object draft' : 'Object draft'}</p>
-              <h2 className={`mt-3 max-w-[34rem] leading-[1] tracking-[-0.05em] text-[#221c17] ${displayClassName} ${isRecognizedState ? 'text-[1.52rem] sm:text-[1.72rem]' : 'text-[1.82rem] sm:text-[2.12rem]'}`}>
+              <h2 className={`mt-3 max-w-[34rem] leading-[1.04] tracking-[-0.04em] text-[#221c17] ${displayClassName} ${isRecognizedState ? 'text-[1.26rem] sm:text-[1.72rem]' : 'text-[1.36rem] sm:text-[2.12rem]'}`}>
                 {draftHeading}
               </h2>
               {!isRecognizedState && (
-                <p className="mt-3 max-w-[38rem] text-[0.92rem] leading-7 text-[#70675f]">
+                <p className="mt-3 max-w-[38rem] text-[0.84rem] leading-6 text-[#70675f] sm:text-[0.92rem] sm:leading-7">
                   {isZh
                     ? '名称与描述是这一页唯一需要被确认的核心内容。AI 可以先给候选稿，但真正进入下一步的，必须是你认可后的对象文字。'
                     : 'Naming and description are the only core layers that must be confirmed here. The AI may draft candidates first, but only the text you accept should move forward.'}
@@ -277,8 +277,8 @@ export function StepGiftInput({
               <article>
                 <div className="flex items-end justify-between gap-2">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#978f84]">{isZh ? 'Gift naming' : 'Gift naming'}</p>
-                    <p className={`mt-1.5 text-[1.06rem] leading-tight text-[#231d18] ${displayClassName}`}>
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#978f84] sm:text-[11px]">{isZh ? 'Gift naming' : 'Gift naming'}</p>
+                    <p className={`mt-1.5 text-[0.98rem] leading-tight text-[#231d18] sm:text-[1.06rem] ${displayClassName}`}>
                       {isZh ? '先给它一个准确、优雅、没有歧义的名称。' : 'Begin with a name that is precise, elegant, and free of ambiguity.'}
                     </p>
                   </div>
@@ -305,7 +305,7 @@ export function StepGiftInput({
                   value={giftName}
                   onChange={event => onGiftNameChange(event.target.value)}
                   placeholder={isZh ? '例如：真丝围巾、木盒茶器、签字钢笔' : 'e.g. silk scarf, tea set in a wooden box, signing pen'}
-                  className={`${fieldClassName} mt-3`}
+                  className={`${fieldClassName} mt-3 text-[14px] sm:text-[15px]`}
                 />
                 {suggestedGiftName && suggestedNameApplied && (
                   <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[#7f8798]">{isZh ? 'AI 名称建议已写入' : 'AI naming suggestion applied'}</p>
@@ -315,8 +315,8 @@ export function StepGiftInput({
               <article>
                 <div className="flex items-end justify-between gap-2">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#978f84]">{isZh ? 'Object description' : 'Object description'}</p>
-                    <p className={`mt-1.5 text-[1.06rem] leading-tight text-[#231d18] ${displayClassName}`}>
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#978f84] sm:text-[11px]">{isZh ? 'Object description' : 'Object description'}</p>
+                    <p className={`mt-1.5 text-[0.98rem] leading-tight text-[#231d18] sm:text-[1.06rem] ${displayClassName}`}>
                       {isZh ? '写它的外观、材质、包装和第一层气质。' : 'Write its appearance, material, packaging, and first layer of mood.'}
                     </p>
                   </div>
@@ -362,7 +362,7 @@ export function StepGiftInput({
                       ? '写下礼物的外观、颜色、材质、包装、用途，以及它给人的第一眼印象。'
                       : 'Describe the object’s look, color, material, packaging, function, and the first impression it gives.'
                   }
-                  className={`${fieldClassName} mt-3 min-h-[5rem] resize-none overflow-hidden`}
+                  className={`${fieldClassName} mt-3 min-h-[6.5rem] resize-none overflow-hidden text-[14px] sm:min-h-[5rem] sm:text-[15px]`}
                 />
                 {suggestedGiftDescription && suggestedDescriptionApplied && (
                   <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[#7f8798]">{isZh ? 'AI 描述建议已写入' : 'AI description suggestion applied'}</p>
@@ -399,18 +399,18 @@ export function StepGiftInput({
               {showAiNotes && (
                 <div className="grid gap-2 rounded-[1.25rem] border border-[rgba(74,63,51,0.08)] bg-[rgba(255,255,255,0.52)] px-4 py-4">
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#978f84]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#978f84] sm:text-[11px]">{isZh ? 'Cultural cue' : 'Cultural cue'}</p>
                     <input
                       id="vision-label"
                       value={visionLabel}
                       onChange={event => onVisionLabelChange(event.target.value)}
                       placeholder={isZh ? '例如：低调商务、收藏感、节庆问候、轻奢家居' : 'e.g. understated business, collectible, festive greeting, refined homeware'}
-                      className={`${fieldClassName} mt-2.5`}
+                      className={`${fieldClassName} mt-2.5 text-[14px] sm:text-[15px]`}
                     />
                   </div>
 
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-[#978f84]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#978f84] sm:text-[11px]">{isZh ? 'Editorial note' : 'Editorial note'}</p>
                     <textarea
                       ref={visionDescriptionRef}
                       id="vision-description"
@@ -425,7 +425,7 @@ export function StepGiftInput({
                           ? '只有当这份礼物有明显文化暗示时，再补充它可能引发的联想与氛围。'
                           : 'Only add this when the object carries a strong cultural cue that may change the reading.'
                       }
-                      className={`${fieldClassName} mt-2.5 min-h-[5rem] resize-none overflow-hidden`}
+                      className={`${fieldClassName} mt-2.5 min-h-[6rem] resize-none overflow-hidden text-[14px] sm:min-h-[5rem] sm:text-[15px]`}
                     />
                   </div>
                 </div>
@@ -450,13 +450,13 @@ export function StepGiftInput({
               <p className="mt-1.5 text-sm leading-6 text-[#69645f]">{checkpointBody}</p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3 xl:justify-end">
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3 xl:justify-end">
               {shouldShowRecognizeAction && (
                 <button
                   type="button"
                   onClick={onRecognize}
                   disabled={!canRecognize || isRecognizing}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#24201b] px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-[#17130f] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#24201b] px-4 py-3 text-[10px] uppercase tracking-[0.16em] text-white transition hover:-translate-y-0.5 hover:bg-[#17130f] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 sm:w-auto sm:px-5 sm:text-[11px] sm:tracking-[0.18em]"
                 >
                   <Sparkles size={12} />
                   {isRecognizing ? (isZh ? `识别中 ${recognizingElapsedSeconds}s` : `Reading ${recognizingElapsedSeconds}s`) : isZh ? '开始识别' : 'Run recognition'}
@@ -467,7 +467,7 @@ export function StepGiftInput({
                 <button
                   type="button"
                   onClick={onContinue}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#24201b] px-5 py-3 text-[11px] uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-[#17130f]"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#24201b] px-4 py-3 text-[10px] uppercase tracking-[0.16em] text-white transition hover:-translate-y-0.5 hover:bg-[#17130f] sm:w-auto sm:px-5 sm:text-[11px] sm:tracking-[0.18em]"
                 >
                   {isZh ? '我确认，进入下一步' : 'I confirm, continue'}
                   <ArrowRight size={13} />
