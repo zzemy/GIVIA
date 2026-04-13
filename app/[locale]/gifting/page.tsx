@@ -139,7 +139,7 @@ export default function GiftingPage() {
 
   const renderMobileRail = () => (
     <div className="rounded-[1.2rem] border border-[#E5E0D8]/80 bg-white/78 p-2 shadow-[0_14px_28px_-24px_rgba(0,0,0,0.22)]">
-      <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
+      <div className="flex min-w-0 gap-1">
         {railLabels.map((label, index) => {
           const stepIndex = index + 1
           const active = stepIndex === currentStep
@@ -150,7 +150,7 @@ export default function GiftingPage() {
               key={label}
               type="button"
               disabled
-              className={`relative flex min-w-[6.8rem] shrink-0 flex-col rounded-[0.95rem] border px-2.5 py-2 text-left transition disabled:opacity-100 ${
+              className={`relative flex min-w-0 flex-1 flex-col rounded-[0.95rem] border px-1.5 py-2 text-left transition disabled:opacity-100 ${
                 active
                   ? 'border-transparent text-[#1c1a17] shadow-[0_10px_22px_-18px_rgba(0,0,0,0.38)]'
                   : reached
@@ -166,7 +166,7 @@ export default function GiftingPage() {
               }
             >
               <div className="flex items-center justify-between">
-                <span className={`text-[10px] uppercase tracking-[0.2em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>0{stepIndex}</span>
+                <span className={`text-[10px] uppercase tracking-[0.16em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>0{stepIndex}</span>
                 <span
                   className="h-1.5 w-1.5 rounded-full"
                   style={{
@@ -174,7 +174,7 @@ export default function GiftingPage() {
                   }}
                 />
               </div>
-              <span className="mt-1 truncate text-[10px] uppercase tracking-[0.16em]">{label}</span>
+              <span className="mt-1 truncate text-[9px] uppercase tracking-[0.1em]">{label}</span>
               <span className="mt-2 h-[2px] w-full rounded-full bg-[rgba(28,26,23,0.08)]">
                 <span
                   className="block h-full rounded-full transition-all"
