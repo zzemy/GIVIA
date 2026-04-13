@@ -50,7 +50,7 @@ const fieldClassName =
 
 const stagePhotography = {
   editorial: {
-    src: '/editorial/gift2.jpg?v=2',
+    src: '/editorial/object-stage.jpg?v=1',
     position: 'center 34%',
   },
 }

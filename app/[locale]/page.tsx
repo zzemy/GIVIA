@@ -7,11 +7,11 @@ import { HomeBackground } from '@/components/gifting/home/sections/home-backgrou
 
 const routePhotography = {
   wrapped:
-    '/editorial/hero-family.jpg?v=2',
+    '/editorial/home-wrapped.jpg?v=1',
   tea:
-    '/editorial/hero-festival.jpg?v=2',
+    '/editorial/home-tea.jpg?v=1',
   meeting:
-    '/editorial/hero.jpg?v=2',
+    '/editorial/home-meeting.jpg?v=1',
 }
 
 export default function Home() {

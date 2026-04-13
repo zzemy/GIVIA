@@ -205,7 +205,7 @@ export function ResultsSection({
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="flex min-h-0 flex-1 flex-col gap-3 overflow-visible sm:gap-6 lg:overflow-hidden"
+      className="flex min-h-0 flex-1 flex-col gap-3 overflow-visible sm:gap-6 lg:overflow-visible"
     >
       <div className="flex flex-col gap-4 px-0.5 sm:px-2 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-[60rem]">
