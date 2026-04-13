@@ -137,6 +137,60 @@ export default function GiftingPage() {
     isZh ? '终稿报告' : 'Dossier',
   ]
 
+  const renderMobileRail = () => (
+    <div className="rounded-[1.2rem] border border-[#E5E0D8]/80 bg-white/78 p-2 shadow-[0_14px_28px_-24px_rgba(0,0,0,0.22)]">
+      <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
+        {railLabels.map((label, index) => {
+          const stepIndex = index + 1
+          const active = stepIndex === currentStep
+          const reached = stepIndex < currentStep
+
+          return (
+            <button
+              key={label}
+              type="button"
+              disabled
+              className={`relative flex min-w-[6.8rem] shrink-0 flex-col rounded-[0.95rem] border px-2.5 py-2 text-left transition disabled:opacity-100 ${
+                active
+                  ? 'border-transparent text-[#1c1a17] shadow-[0_10px_22px_-18px_rgba(0,0,0,0.38)]'
+                  : reached
+                    ? 'border-[rgba(28,26,23,0.14)] bg-white/92 text-[#2a2825]'
+                    : 'border-[rgba(28,26,23,0.08)] bg-white/66 text-[#98a2b3]'
+              }`}
+              style={
+                active
+                  ? {
+                      background: `linear-gradient(145deg, ${currentContent.accent}1f, rgba(255,255,255,0.97))`,
+                    }
+                  : undefined
+              }
+            >
+              <div className="flex items-center justify-between">
+                <span className={`text-[10px] uppercase tracking-[0.2em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>0{stepIndex}</span>
+                <span
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{
+                    backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.36)' : 'rgba(28,26,23,0.16)',
+                  }}
+                />
+              </div>
+              <span className="mt-1 truncate text-[10px] uppercase tracking-[0.16em]">{label}</span>
+              <span className="mt-2 h-[2px] w-full rounded-full bg-[rgba(28,26,23,0.08)]">
+                <span
+                  className="block h-full rounded-full transition-all"
+                  style={{
+                    width: active ? '100%' : reached ? '72%' : '28%',
+                    backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.32)' : 'rgba(28,26,23,0.18)',
+                  }}
+                />
+              </span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+
   const analyzingElapsedSeconds = analysisProps.analyzingElapsedSeconds
   const expectedMinSeconds = 8
   const expectedMaxSeconds = 20
@@ -196,27 +250,7 @@ export default function GiftingPage() {
                 <p className="mt-4 rounded-[1.15rem] border border-[#E5E0D8]/80 bg-[#fcfbf8] px-4 py-3 text-[0.92rem] leading-7 text-[#1c1a17]">{currentContent.quote}</p>
               </div>
 
-              <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
-                {railLabels.map((label, index) => {
-                  const stepIndex = index + 1
-                  const active = stepIndex === currentStep
-                  const reached = stepIndex < currentStep
-
-                  return (
-                    <button key={label} type="button" disabled className="flex min-w-[6.5rem] flex-col gap-2 text-left">
-                      <span
-                        className="h-[2px] rounded-full transition-all"
-                        style={{
-                          backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.34)' : 'rgba(28,26,23,0.1)',
-                        }}
-                      />
-                      <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>
-                        0{stepIndex} {label}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
+              {renderMobileRail()}
             </div>
 
             <main className="mt-4 min-h-0 flex-1">
@@ -331,27 +365,7 @@ export default function GiftingPage() {
               <p className="mt-3 text-[0.95rem] leading-7 text-[#667085]">{currentContent.desc}</p>
             </div>
 
-            <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
-              {railLabels.map((label, index) => {
-                const stepIndex = index + 1
-                const active = stepIndex === currentStep
-                const reached = stepIndex < currentStep
-
-                return (
-                  <button key={label} type="button" disabled className="flex min-w-[6.5rem] flex-col gap-2 text-left">
-                    <span
-                      className="h-[2px] rounded-full transition-all"
-                      style={{
-                        backgroundColor: active ? currentContent.accent : reached ? 'rgba(28,26,23,0.34)' : 'rgba(28,26,23,0.1)',
-                      }}
-                    />
-                    <span className={`truncate text-[10px] uppercase tracking-[0.18em] ${active ? 'text-[#1c1a17]' : 'text-[#98a2b3]'}`}>
-                      0{stepIndex} {label}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
+            {renderMobileRail()}
           </div>
 
           <main className="mt-4 min-h-0 flex-1 overflow-visible pb-4">
