@@ -39,6 +39,16 @@
   <em>中文首页、礼赠流程与终稿生成界面。</em>
 </p>
 
+## 运行模式
+
+Givia 有两种运行方式：
+
+- **Web 模式**：`pnpm dev` 启动 Next.js，本地地址为 `http://localhost:3000`
+- **桌面模式**：`pnpm tauri dev` 以原生窗口运行同一套应用
+- **生产构建**：`pnpm build` 生成静态 `out/` 目录，供 Tauri 和静态托管使用
+
+当前项目在 `next.config.ts` 中启用了 `output: "export"`，因此生产壳层是静态导出的。
+
 ---
 
 ## 在一份礼物被接受之前，它会先被理解
@@ -155,7 +165,11 @@ Givia 最终交付的，不只是一个答案。
 - Framer Motion
 - Jest + Testing Library
 - GitHub Actions
-- `src-tauri/` 下的可选桌面封装
+- `src-tauri/` 下的 Tauri v2 桌面封装
+
+## 本地资源
+
+首页与礼赠流程中使用的编辑风格图片已经统一放在 `public/editorial/` 下，避免外链图片失效。
 
 ## 目录结构
 
@@ -173,8 +187,13 @@ Givia 最终交付的，不只是一个答案。
 │   │   └── vision-recognize/route.ts
 │   └── page.tsx
 ├── components/
+│   ├── gifting/
+│   │   ├── home/
+│   │   └── mobile/
+│   └── ui/
 ├── lib/
 ├── public/
+│   └── editorial/
 └── src-tauri/
 ```
 
@@ -186,6 +205,12 @@ pnpm dev
 ```
 
 打开 `http://localhost:3000`。
+
+如果要运行桌面端：
+
+```bash
+pnpm tauri dev
+```
 
 ## 可用脚本
 
@@ -231,6 +256,8 @@ pnpm test:coverage
 - `/api/*` 功能必须部署到具备服务端能力的平台
 
 因此，Pages 适合承载静态品牌与流程壳层，不适合作为完整 AI 能力的生产环境。
+
+Tauri 构建同样依赖生成出来的 `out/` 目录，所以打包前需要先确保 `pnpm build` 成功。
 
 ## 品牌说明
 

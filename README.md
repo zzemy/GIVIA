@@ -39,6 +39,16 @@
   <em>English landing, workflow, and dossier-like composition.</em>
 </p>
 
+## Runtime model
+
+Givia runs in two modes:
+
+- **Web mode**: `pnpm dev` starts the Next.js app at `http://localhost:3000`
+- **Desktop mode**: `pnpm tauri dev` opens the same app inside a native Tauri window
+- **Production build**: `pnpm build` generates the static `out/` directory used by Tauri and static hosting
+
+The project uses `output: "export"` in `next.config.ts`, so the production shell is static by design.
+
 ---
 
 ## Before a gift is accepted, it is interpreted
@@ -155,7 +165,11 @@ The product is currently organized into five visible chapters:
 - Framer Motion
 - Jest + Testing Library
 - GitHub Actions
-- Optional Tauri wrapper in `src-tauri/`
+- Tauri v2 desktop wrapper in `src-tauri/`
+
+## Local assets
+
+Editorial photography and workflow visuals are stored locally in `public/editorial/` and used throughout the landing page and gifting flow.
 
 ## Project structure
 
@@ -173,8 +187,13 @@ The product is currently organized into five visible chapters:
 │   │   └── vision-recognize/route.ts
 │   └── page.tsx
 ├── components/
+│   ├── gifting/
+│   │   ├── home/
+│   │   └── mobile/
+│   └── ui/
 ├── lib/
 ├── public/
+│   └── editorial/
 └── src-tauri/
 ```
 
@@ -186,6 +205,12 @@ pnpm dev
 ```
 
 Open `http://localhost:3000`.
+
+To run the desktop wrapper:
+
+```bash
+pnpm tauri dev
+```
 
 ## Available scripts
 
@@ -231,6 +256,8 @@ The project currently uses static export for the shell (`output: "export"`), whi
 - `/api/*` features require a server-capable deployment target
 
 So Pages is suitable for the static brand and workflow shell, but not for the full live AI-backed behavior.
+
+Tauri builds also read from the generated `out/` directory, so `pnpm build` must succeed before packaging.
 
 ## Brand
 
