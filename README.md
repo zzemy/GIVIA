@@ -14,12 +14,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/zzemy/GIVIA/actions/workflows/ci.yml">
-    <img src="https://github.com/zzemy/GIVIA/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
-  </a>
-  <a href="https://github.com/zzemy/GIVIA/actions/workflows/deploy-pages.yml">
-    <img src="https://github.com/zzemy/GIVIA/actions/workflows/deploy-pages.yml/badge.svg" alt="Pages Status" />
-  </a>
   <img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16" />
   <img src="https://img.shields.io/badge/React-19-149eca?logo=react&logoColor=white" alt="React 19" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white" alt="TypeScript 5" />
